@@ -21,3 +21,4 @@ vendor/
 *.sql
 DATA/
 
+!*.md

@@ -7,3 +7,4 @@
 # Database
 *.sql
 DATA/
+!*.md
