@@ -1,0 +1,23 @@
+# Binaries
+main
+main.exe
+
+# Environment
+# .env
+
+# Go build cache
+*.test
+*.out
+
+# Vendor
+vendor/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Database
+*.sql
+DATA/
+

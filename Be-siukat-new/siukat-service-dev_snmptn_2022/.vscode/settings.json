@@ -1,0 +1,10 @@
+{
+    "editor.tabSize": 4,
+    "editor.formatOnSave": true,
+    "editor.detectIndentation": false,
+    "javascript.preferences.quoteStyle": "double",
+    "files.eol": "\r\n",
+    "[javascript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+}

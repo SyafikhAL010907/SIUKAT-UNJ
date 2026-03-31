@@ -1,0 +1,31 @@
+doctype html
+html
+  head
+    title= "Table UKT New"
+  body
+    table(border=1)
+        tr
+            th No
+            th ID Kelompok
+            th Kode Prodi
+            th Jalur
+            th I
+            th II
+            th III
+            th IV
+            th V
+            th VI
+            th VII
+            th VIII
+
+        - var prodi = jalur = null
+        each val, key in groupBy
+            tr
+                td= key+1
+                td= val.id_golongan
+                td= val.kode_prodi
+                td= val.jalur
+                - var newGroup = ukt.filter((x) => x.kode_prodi === val.kode_prodi && x.jalur === val.jalur)
+                each v, k in newGroup
+                    td= v.besar_ukt
+

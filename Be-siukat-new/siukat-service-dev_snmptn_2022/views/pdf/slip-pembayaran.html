@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!--<meta http-equiv="X-UA-Compatible" content="IE=edge">-->
+    <title>Slip Pengantar Pembayaran</title>
+    <style>
+        body {
+            font-size: 9pt;
+        }
+
+        @page {
+            /*margin: 55px 75px;*/
+        }
+
+        .checklist {
+            font-family: DejaVu Sans, sans-serif;
+        }
+
+        p {
+            text-align: justify;
+            text-indent: 3em;
+        }
+
+        hr {
+            color: #efefef;
+        }
+
+        div.wrapper {
+            border: 1px dashed #666;
+        }
+
+        div.container {
+            padding: 0 10px 10px 10px;
+        }
+
+        div.box-note {
+            padding: 15px;
+            background-color: #ffffcc;
+            font-size: small;
+            border: 1px solid #fff5cc;
+        }
+
+        img.head {
+            width: 100%;
+        }
+
+        table {
+            border-collapse: collapse;
+        }
+
+        table.header tr td {
+            text-align: center;
+            padding: 0;
+        }
+
+        table.nomor tr td {
+            text-align: left;
+            padding: 0;
+        }
+
+        table.data {
+            width: 100%;
+        }
+
+        table.data tr td {
+            text-transform: capitalize;
+        }
+
+        p.footer-link {
+            color: green;
+        }
+
+        .bold {
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .break {
+            page-break-before: always;
+        }
+
+        #table-header {
+            font-size: large;
+            padding: 10px 0 10px 0;
+        }
+
+        #table-header td {
+            text-align: center;
+        }
+
+        #table-header td:first-child,
+        #table-header td:last-child {
+            width: 20%;
+        }
+
+        #table-header td img {
+            max-width: 110px;
+            max-height: 70px;
+        }
+    </style>
+</head>
+
+<body>
+    Lembar 1 Untuk Mahasiswa
+    <div class="wrapper">
+        <!-- <img class="head" src="http://192.168.4.174:3001/img/bayar_head.jpg" /> -->
+        <table id="table-header">
+            <tr>
+                <td><img src="http://192.168.4.174:3001/img/unj.png" /></td>
+            </tr>
+            <tr>
+                <td>
+                    SISTEM INFORMASI UANG KULIAH TUNGGAL (UKT)<br />
+                    UNIVERSITAS NEGERI JAKARTA
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="http://192.168.4.174:3001/img/mandiri.png" />&nbsp;&nbsp;
+                    <img src="http://192.168.4.174:3001/img/Logo-BNI.jpg" />&nbsp;&nbsp;
+                    <img src="http://192.168.4.174:3001/img/bank-btn.jpg" />
+                </td>
+            </tr>
+        </table>
+        <hr />
+        <div style="text-align: center; text-transform: uppercase;">
+            <h4>Slip Pengantar Pembayaran UKT</h4>
+        </div>
+        <div class="container">
+            <table class="data">
+                <tr>
+                    <td width="20%"><b>Kode Pembayaran</b></td>
+                    <td width="2%">:</td>
+                    <td>
+                        <b>
+                            <!-- <%= '211' + cmahasiswa.no_peserta %> -->
+                            <%= cmahasiswa.no_peserta %>
+                            <!-- <%= '21' + (info.stage_detail === 'snmptn' ? '1' : (info.stage_detail === 'japres' ? '2' : (info.stage === 'mandiri' ? '3' : ''))) + cmahasiswa.no_peserta %> -->
+                        </b>
+                    </td>
+                    <td rowspan="5" style="
+                text-align: center;
+                background-color: #ffe6e6;
+                border: 1px solid #ffcccc;
+              ">
+                        <% if (cmahasiswa.no_peserta.length==12) { %> Jumlah yang harus
+                            dibayarkan<br />
+                            <b>Rp <%= cmahasiswa.golongan_id==='KJMU' ? '3600000' :
+                                    ukt[cmahasiswa.golongan_id].toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1," )
+                                    %></b>
+                            <% }else{ %>
+                                <table align="center">
+                                    <tr>
+                                        <td>UKT</td>
+                                        <td>:</td>
+                                        <td>
+                                            Rp <%= cmahasiswa.golongan_id==='KJMU' ? '3600000' :
+                                                ukt[cmahasiswa.golongan_id].toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"
+                                                ) %>
+                                        </td>
+                                    </tr>
+                                    <% if (info.stage !='snmptn' ) { %>
+                                        <tr>
+                                            <td>SPU</td>
+                                            <td>:</td>
+                                            <td>
+                                                Rp <%=
+                                                    cmahasiswa.spu.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"
+                                                    ) %><br />
+                                            </td>
+                                        </tr>
+                                        <% } %>
+                                            <tr>
+                                                <td colspan="3"><b>Jumlah yang harus dibayarkan</b></td>
+                                            </tr>
+                                            <tr>
+                                                <td><b>Total</b></td>
+                                                <td><b>:</b></td>
+                                                <td>
+                                                    <b>Rp <%= (cmahasiswa.golongan_id==='KJMU' ? '3600000' :
+                                                            (ukt[cmahasiswa.golongan_id] +
+                                                            cmahasiswa.spu).toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"
+                                                            ) ) %></b>
+                                                </td>
+                                            </tr>
+                                </table>
+                                <% } %>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Nama</td>
+                    <td>:</td>
+                    <td>
+                        <%= cmahasiswa.nama_cmahasiswa %>
+                    </td>
+                </tr>
+                <tr>
+                    <td>No. Peserta</td>
+                    <td>:</td>
+                    <td>
+                        <%= cmahasiswa.no_peserta %>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Program Studi</td>
+                    <td>:</td>
+                    <td>
+                        <%= cmahasiswa.prodi.nama %>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Fakultas</td>
+                    <td>:</td>
+                    <td>
+                        <%= cmahasiswa.fakultas.nama %>
+                    </td>
+                </tr>
+            </table>
+            <br />
+            <div class="box-note">
+                <b>Catatan:</b>
+                <ul>
+                    <!-- <li>
+              Pembayaran dapat dilakukan pada tanggal <%= info.pembayaran %> di
+              Bank BTN atau Bank Mandiri seluruh Indonesia
+            </li> -->
+                    <!-- <li>
+              Bank Mandiri : Fakultas Ekonomi, Fakultas Ilmu Sosial, Fakultas
+              Teknik
+            </li>
+            <li>
+              Bank BTN : Fakultas Ilmu Pendidikan, Fakultas Bahasa dan Seni,
+              Fakultas Matematika dan IPA, Fakultas Ilmu Olahraga, Fakultas
+              Pendidikan Psikologi
+            </li> -->
+                    <li>
+                        Pembayaran bisa dilakukan melalui Teller dan E-Banking (ATM,
+                        Internet Banking dan Mobile Banking) di semua cabang Bank Mandiri,
+                        Bank BNI, Bank BTN seluruh Indonesia, pada tanggal <%= info.pembayaran %>
+                    </li>
+                    <li>
+                        Tata cara pembayaran dapat dilihat pada laman
+                        http://penmaba.unj.ac.id/faq/
+                    </li>
+                    <li>
+                        Biaya Uang Kulih Tunggal (UKT) dan Sumbangan Pengembangan
+                        Universitas (SPU) yg sudah dibayarkan tidak dapat dikembalikan,
+                        berlaku untuk semua jenjang.
+                    </li>
+                </ul>
+            </div>
+            <br />
+            <table width="100%">
+                <tr>
+                    <td>
+                        <%= cmahasiswa.no_peserta %>
+                    </td>
+                    <td style="text-align: right; font-style: italic;">
+                        Sistem Informasi UKT - Universitas Negeri Jakarta
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="break"></div>
+    Lembar 2 Untuk Bank
+    <div class="wrapper">
+        <!-- <img class="head" src="http://192.168.4.174:3001/img/bayar_head.jpg" /> -->
+        <table id="table-header">
+            <tr>
+                <td><img src="http://192.168.4.174:3001/img/unj.png" /></td>
+            </tr>
+            <tr>
+                <td>
+                    SISTEM INFORMASI UANG KULIAH TUNGGAL (UKT)<br />
+                    UNIVERSITAS NEGERI JAKARTA
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="http://192.168.4.174:3001/img/mandiri.png" />&nbsp;&nbsp;
+                    <img src="http://192.168.4.174:3001/img/Logo-BNI.jpg" />&nbsp;&nbsp;
+                    <img src="http://192.168.4.174:3001/img/bank-btn.jpg" />
+                </td>
+            </tr>
+        </table>
+        <hr />
+        <div style="text-align: center; text-transform: uppercase;">
+            <h4>Slip Pengantar Pembayaran UKT</h4>
+        </div>
+        <div class="container">
+            <table class="data">
+                <tr>
+                    <td width="20%"><b>Kode Pembayaran</b></td>
+                    <td width="2%">:</td>
+                    <td>
+                        <b>
+                            <!-- <%= '211' + cmahasiswa.no_peserta %> -->
+                            <%= cmahasiswa.no_peserta %>
+                            <!-- <%= '21' + (info.stage_detail === 'snmptn' ? '1' : (info.stage_detail === 'japres' ? '2' : (info.stage === 'mandiri' ? '3' : ''))) + cmahasiswa.no_peserta %> -->
+                        </b>
+                    </td>
+                    <td rowspan="5" style="
+                text-align: center;
+                background-color: #ffe6e6;
+                border: 1px solid #ffcccc;
+              ">
+                        <% if (cmahasiswa.no_peserta.length==12) { %> Jumlah yang harus
+                            dibayarkan<br />
+                            <b>Rp <%= cmahasiswa.golongan_id==='KJMU' ? '3600000' :
+                                    ukt[cmahasiswa.golongan_id].toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1," )
+                                    %></b>
+                            <% }else{ %>
+                                <table align="center">
+                                    <tr>
+                                        <td>UKT</td>
+                                        <td>:</td>
+                                        <td>
+                                            Rp <%= cmahasiswa.golongan_id==='KJMU' ? '3600000' :
+                                                ukt[cmahasiswa.golongan_id].toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"
+                                                ) %>
+                                        </td>
+                                    </tr>
+                                    <% if (info.stage !='snmptn' ) { %>
+                                        <tr>
+                                            <td>SPU</td>
+                                            <td>:</td>
+                                            <td>
+                                                Rp <%=
+                                                    cmahasiswa.spu.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"
+                                                    ) %><br />
+                                            </td>
+                                        </tr>
+                                        <% } %>
+                                            <tr>
+                                                <td colspan="3"><b>Jumlah yang harus dibayarkan</b></td>
+                                            </tr>
+                                            <tr>
+                                                <td><b>Total</b></td>
+                                                <td><b>:</b></td>
+                                                <td>
+                                                    <b>Rp <%= (cmahasiswa.golongan_id==='KJMU' ? '3600000' :
+                                                            (ukt[cmahasiswa.golongan_id] +
+                                                            cmahasiswa.spu).toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"
+                                                            ) ) %></b>
+                                                </td>
+                                            </tr>
+                                </table>
+                                <% } %>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Nama</td>
+                    <td>:</td>
+                    <td>
+                        <%= cmahasiswa.nama_cmahasiswa %>
+                    </td>
+                </tr>
+                <tr>
+                    <td>No. Peserta</td>
+                    <td>:</td>
+                    <td>
+                        <%= cmahasiswa.no_peserta %>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Program Studi</td>
+                    <td>:</td>
+                    <td>
+                        <%= cmahasiswa.prodi.nama %>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Fakultas</td>
+                    <td>:</td>
+                    <td>
+                        <%= cmahasiswa.fakultas.nama %>
+                    </td>
+                </tr>
+            </table>
+            <br />
+            <div class="box-note">
+                <b>Catatan:</b>
+                <ul>
+                    <!-- <li>
+              Pembayaran dapat dilakukan pada tanggal <%= info.pembayaran %> di
+              Bank BTN atau Bank Mandiri seluruh Indonesia
+            </li> -->
+                    <!-- <li>
+              Bank Mandiri : Fakultas Ekonomi, Fakultas Ilmu Sosial, Fakultas
+              Teknik
+            </li>
+            <li>
+              Bank BTN : Fakultas Ilmu Pendidikan, Fakultas Bahasa dan Seni,
+              Fakultas Matematika dan IPA, Fakultas Ilmu Olahraga, Fakultas
+              Pendidikan Psikologi
+            </li> -->
+                    <li>
+                        Pembayaran bisa dilakukan melalui Teller dan E-Banking (ATM,
+                        Internet Banking dan Mobile Banking) di semua cabang Bank Mandiri,
+                        Bank BNI, Bank BTN seluruh Indonesia, pada tanggal <%= info.pembayaran %>
+                    </li>
+                    <li>
+                        Tata cara pembayaran dapat dilihat pada laman
+                        http://penmaba.unj.ac.id/faq/
+                    </li>
+                    <li>
+                        Biaya Uang Kulih Tunggal (UKT) dan Sumbangan Pengembangan
+                        Universitas (SPU) yg sudah dibayarkan tidak dapat dikembalikan,
+                        berlaku untuk semua jenjang.
+                    </li>
+                </ul>
+            </div>
+            <br />
+            <table width="100%">
+                <tr>
+                    <td>
+                        <%= cmahasiswa.no_peserta %>
+                    </td>
+                    <td style="text-align: right; font-style: italic;">
+                        Sistem Informasi UKT - Universitas Negeri Jakarta
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="break"></div>
+    Lembar 3 Untuk BAKHUM
+    <div class="wrapper">
+        <!-- <img class="head" src="http://192.168.4.174:3001/img/bayar_head.jpg" /> -->
+        <table id="table-header">
+            <tr>
+                <td><img src="http://192.168.4.174:3001/img/unj.png" /></td>
+            </tr>
+            <tr>
+                <td>
+                    SISTEM INFORMASI UANG KULIAH TUNGGAL (UKT)<br />
+                    UNIVERSITAS NEGERI JAKARTA
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="http://192.168.4.174:3001/img/mandiri.png" />&nbsp;&nbsp;
+                    <img src="http://192.168.4.174:3001/img/Logo-BNI.jpg" />&nbsp;&nbsp;
+                    <img src="http://192.168.4.174:3001/img/bank-btn.jpg" />
+                </td>
+            </tr>
+        </table>
+        <hr />
+        <div style="text-align: center; text-transform: uppercase;">
+            <h4>Slip Pengantar Pembayaran UKT</h4>
+        </div>
+        <div class="container">
+            <table class="data">
+                <tr>
+                    <td width="20%"><b>Kode Pembayaran</b></td>
+                    <td width="2%">:</td>
+                    <td>
+                        <b>
+                            <!-- <%= '211' + cmahasiswa.no_peserta %> -->
+                            <%= cmahasiswa.no_peserta %>
+                            <!-- <%= '21' + (info.stage_detail === 'snmptn' ? '1' : (info.stage_detail === 'japres' ? '2' : (info.stage === 'mandiri' ? '3' : ''))) + cmahasiswa.no_peserta %> -->
+                        </b>
+                    </td>
+                    <td rowspan="5" style="
+                text-align: center;
+                background-color: #ffe6e6;
+                border: 1px solid #ffcccc;
+              ">
+                        <% if (cmahasiswa.no_peserta.length==12) { %> Jumlah yang harus
+                            dibayarkan<br />
+                            <b>Rp <%= cmahasiswa.golongan_id==='KJMU' ? '3600000' :
+                                    ukt[cmahasiswa.golongan_id].toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1," )
+                                    %></b>
+                            <% }else{ %>
+                                <table align="center">
+                                    <tr>
+                                        <td>UKT</td>
+                                        <td>:</td>
+                                        <td>
+                                            Rp <%= cmahasiswa.golongan_id==='KJMU' ? '3600000' :
+                                                ukt[cmahasiswa.golongan_id].toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"
+                                                ) %>
+                                        </td>
+                                    </tr>
+                                    <% if (info.stage !='snmptn' ) { %>
+                                        <tr>
+                                            <td>SPU</td>
+                                            <td>:</td>
+                                            <td>Rp <%= cmahasiswa.spu %><br /></td>
+                                        </tr>
+                                        <% } %>
+                                            <tr>
+                                                <td colspan="3"><b>Jumlah yang harus dibayarkan</b></td>
+                                            </tr>
+                                            <tr>
+                                                <td><b>Total</b></td>
+                                                <td><b>:</b></td>
+                                                <td>
+                                                    <b>Rp <%= (cmahasiswa.golongan_id==='KJMU' ? '3600000' :
+                                                            (ukt[cmahasiswa.golongan_id] +
+                                                            cmahasiswa.spu).toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"
+                                                            ) ) %></b>
+                                                </td>
+                                            </tr>
+                                </table>
+                                <% } %>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Nama</td>
+                    <td>:</td>
+                    <td>
+                        <%= cmahasiswa.nama_cmahasiswa %>
+                    </td>
+                </tr>
+                <tr>
+                    <td>No. Peserta</td>
+                    <td>:</td>
+                    <td>
+                        <%= cmahasiswa.no_peserta %>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Program Studi</td>
+                    <td>:</td>
+                    <td>
+                        <%= cmahasiswa.prodi.nama %>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Fakultas</td>
+                    <td>:</td>
+                    <td>
+                        <%= cmahasiswa.fakultas.nama %>
+                    </td>
+                </tr>
+            </table>
+            <br />
+            <div class="box-note">
+                <b>Catatan:</b>
+                <ul>
+                    <!-- <li>
+              Pembayaran dapat dilakukan pada tanggal <%= info.pembayaran %> di
+              Bank BTN atau Bank Mandiri seluruh Indonesia
+            </li> -->
+                    <!-- <li>
+              Bank Mandiri : Fakultas Ekonomi, Fakultas Ilmu Sosial, Fakultas
+              Teknik
+            </li>
+            <li>
+              Bank BTN : Fakultas Ilmu Pendidikan, Fakultas Bahasa dan Seni,
+              Fakultas Matematika dan IPA, Fakultas Ilmu Olahraga, Fakultas
+              Pendidikan Psikologi
+            </li> -->
+                    <li>
+                        Pembayaran bisa dilakukan melalui Teller dan E-Banking (ATM,
+                        Internet Banking dan Mobile Banking) di semua cabang Bank Mandiri,
+                        Bank BNI, Bank BTN seluruh Indonesia, pada tanggal <%= info.pembayaran %>
+                    </li>
+                    <li>
+                        Tata cara pembayaran dapat dilihat pada laman
+                        http://penmaba.unj.ac.id/faq/
+                    </li>
+                    <li>
+                        Biaya Uang Kulih Tunggal (UKT) dan Sumbangan Pengembangan
+                        Universitas (SPU) yg sudah dibayarkan tidak dapat dikembalikan,
+                        berlaku untuk semua jenjang.
+                    </li>
+                </ul>
+            </div>
+            <br />
+            <table width="100%">
+                <tr>
+                    <td>
+                        <%= cmahasiswa.no_peserta %>
+                    </td>
+                    <td style="text-align: right; font-style: italic;">
+                        Sistem Informasi UKT - Universitas Negeri Jakarta
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>

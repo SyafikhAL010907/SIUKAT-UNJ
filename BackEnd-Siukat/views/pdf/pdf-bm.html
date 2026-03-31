@@ -1,0 +1,54 @@
+﻿<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>Rekapitulasi Sistem Informasi Uang Kuliah Tunggal </title>
+        <style>
+            table tr th{
+                text-align: center;
+                text-transform: uppercase
+            }
+            table tr td, table tr th{
+                border: solid 1px #000;
+                padding: 5px;
+            }
+            h3, h4{
+                text-transform: uppercase;
+                text-align: center
+            }
+            .text-center{
+                text-align: center
+            }
+        </style>
+    </head>
+    <body>
+        <h3>Rekapitulasi Sistem Informasi Uang Kuliah Tunggal <br/>Universitas Negeri Jakarta<br/></h3>
+        <h4>Bidik Misi</h4>
+        <br/>
+        <table width="100%" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Nomor Pendaftaran</th>
+                    <th>Nama Lengkap</th>
+                    <th>Fakultas</th>
+                    <th>Program Studi</th>
+                    <th>Besar UKT</th>
+                    <th>NIM</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for(var i=0; i < rows.length; i++) { %>
+                <tr>
+                    <td class="text-center"><%= i+1 %></td>
+                    <td class="text-center"><%= rows[i].no_peserta %></td>
+                    <td><%= rows[i].nama_cmahasiswa %></td>
+                    <td><%= rows[i].fakultas.nama %></td>
+                    <td><%= rows[i].prodi.nama %></td>
+                    <td class="text-center">Rp. <%= (rows[i].ukt[rows[i].golongan_id]) ? rows[i].ukt[rows[i].golongan_id] : "-"  %></td>
+                    <td class="text-center"><%= rows[i].no_registrasi %></td>
+                </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </body>
+</html>

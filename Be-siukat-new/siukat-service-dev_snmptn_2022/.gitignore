@@ -1,0 +1,9 @@
+/node_modules
+/public/uploads
+
+.env
+.env.local
+.env.development
+# Database
+*.sql
+DATA/

@@ -1,0 +1,118 @@
+package routes
+
+import (
+	"BackEnd-Siukat/config"
+	"BackEnd-Siukat/middlewares"
+	"BackEnd-Siukat/models"
+	"BackEnd-Siukat/services"
+	"net/http"
+	"time"
+
+	"github.com/gin-gonic/gin"
+)
+
+func IbuRoutes(r *gin.RouterGroup) {
+	ibuGroup := r.Group("/ibu")
+	ibuService := services.IbuService{}
+
+	// Endpoint publik (tanpa JWT)
+	ibuGroup.GET("/get-ibu/:no_peserta", func(c *gin.Context) {
+		noPeserta := c.Param("no_peserta")
+		var ibu models.Ibu
+		// Prioritaskan sanggah dulu, fallback ke original — Parity dengan Node.js
+		err := config.DB.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
+			Where("no_peserta = ? AND atribut = ?", noPeserta, "sanggah").First(&ibu).Error
+		if err != nil {
+			err = config.DB.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
+				Where("no_peserta = ? AND atribut = ?", noPeserta, "original").First(&ibu).Error
+		}
+		if err != nil {
+			c.JSON(http.StatusOK, gin.H{"msg": "data tidak ditemukan"})
+			return
+		}
+		c.JSON(http.StatusOK, ibu)
+	})
+
+	// Endpoint yang butuh Auth
+	authGroup := ibuGroup.Group("/")
+	authGroup.Use(middlewares.JwtAuth())
+
+	// POST /ibu/add
+	authGroup.POST("/add", func(c *gin.Context) {
+		var req models.Ibu
+		if err := c.ShouldBindJSON(&req); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		res, err := ibuService.Add(req, "original")
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, res)
+	})
+
+	// PUT /ibu/edit — Fix #3: Parity dengan routes/ibu.js Node.js
+	// Menambahkan logika file upload KTP/Slip + AddLog sebelum update
+	authGroup.PUT("/edit", func(c *gin.Context) {
+		noPeserta, _ := c.Get("no_peserta")
+		np := noPeserta.(string)
+
+		statusIbu := c.PostForm("status_ibu")
+
+		// Build struct dari form data
+		req := models.Ibu{
+			NamaIbu:  c.PostForm("nama_ibu"),
+			StatusIbu: statusIbu,
+		}
+
+		if statusIbu != "wafat" {
+			req.NikIbu = c.PostForm("nik_ibu")
+			req.TeleponIbu = c.PostForm("telepon_ibu")
+			req.AlamatIbu = c.PostForm("alamat_ibu")
+			req.PekerjaanIbu = c.PostForm("pekerjaan_ibu")
+			req.TempatLahirIbu = c.PostForm("tempat_lahir_ibu")
+
+			// File upload KTP — parity dengan multer Node.js
+			fileKtp, errKtp := c.FormFile("file_scan_ktp_ibu")
+			if errKtp == nil {
+				filename := np + "_ktp_ibu_" + fileKtp.Filename
+				c.SaveUploadedFile(fileKtp, "public/uploads/"+filename)
+				req.ScanKtpIbu = filename
+			}
+
+			// File upload Slip Gaji
+			fileSlip, errSlip := c.FormFile("file_scan_slip_ibu")
+			if errSlip == nil {
+				filename := np + "_slip_ibu_" + fileSlip.Filename
+				c.SaveUploadedFile(fileSlip, "public/uploads/"+filename)
+				req.ScanSlipIbu = filename
+			}
+		}
+
+		// STEP 1: Ambil data lama untuk di-log (sebelum update) — parity dengan Node.js
+		var existing models.Ibu
+		config.DB.Where("no_peserta = ? AND atribut = ?", np, "original").First(&existing)
+		now := time.Now()
+		ibuService.AddLog(existing, "original", np, &now)
+
+		// STEP 2: Update data
+		res, err := ibuService.Edit(req, np, "original")
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, res)
+	})
+
+	// GET /ibu/get-ibu — Mengambil data ibu user yang login
+	authGroup.GET("/get-ibu", func(c *gin.Context) {
+		noPeserta, _ := c.Get("no_peserta")
+		res, err := ibuService.GetByLoggedIn(noPeserta.(string))
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, res)
+	})
+}
