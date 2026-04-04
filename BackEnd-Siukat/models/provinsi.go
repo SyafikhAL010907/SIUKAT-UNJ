@@ -1,9 +1,10 @@
 package models
 
-// Provinsi adalah representasi tabel ref_provinsi
 type Provinsi struct {
-	Kode string `gorm:"primaryKey;type:varchar(255)" json:"kode"`
-	Nama string `gorm:"type:varchar(255)" json:"nama"`
+	ProvinsiID   string `gorm:"primaryKey;column:provinsi_id;type:varchar(255)" json:"provinsi_id"`
+	ProvinsiNama string `gorm:"column:provinsi_nama;type:varchar(255)" json:"provinsi_nama"`
 }
 
-func (Provinsi) TableName() string { return "ref_provinsi" }
+func (Provinsi) TableName() string {
+	return "ref_provinsi"
+}

@@ -1,16 +1,23 @@
 package models
 
-import "gorm.io/gorm"
+import "time"
 
-// LogKendaraan menyimpan log perubahan data kendaraan
 type LogKendaraan struct {
-	IdLogKendaraan int            `gorm:"primaryKey;autoIncrement" json:"id_log_kendaraan"`
-	NoPeserta      string         `gorm:"type:varchar(255)" json:"no_peserta"`
-	PajakMotor     float64        `gorm:"type:int" json:"pajak_motor"`
-	PajakMobil     float64        `gorm:"type:int" json:"pajak_mobil"`
-	Atribut        string         `gorm:"type:enum('original','sanggah')" json:"atribut"`
-	Executor       string         `gorm:"type:varchar(255)" json:"executor"`
-	DeletedAt      gorm.DeletedAt `gorm:"index" json:"deleted_at"`
+	IDLogKendaraan int        `gorm:"primaryKey;column:id_log_kendaraan" json:"id_log_kendaraan"`
+	NoPeserta      string     `gorm:"column:no_peserta;type:varchar(255)" json:"no_peserta"`
+	StatusMotor    string     `gorm:"column:status_motor;type:enum('memiliki','tidak_memiliki')" json:"status_motor"`
+	JumlahMotor    int        `gorm:"column:jumlah_motor" json:"jumlah_motor"`
+	PajakMotor     int        `gorm:"column:pajak_motor" json:"pajak_motor"`
+	ScanMotor      string     `gorm:"column:scan_motor;type:varchar(255)" json:"scan_motor"`
+	StatusMobil    string     `gorm:"column:status_mobil;type:enum('memiliki','tidak_memiliki')" json:"status_mobil"`
+	JumlahMobil    int        `gorm:"column:jumlah_mobil" json:"jumlah_mobil"`
+	PajakMobil     int        `gorm:"column:pajak_mobil" json:"pajak_mobil"`
+	ScanMobil      string     `gorm:"column:scan_mobil;type:varchar(255)" json:"scan_mobil"`
+	Atribut        string     `gorm:"column:atribut;type:enum('original','sanggah')" json:"atribut"`
+	Executor       string     `gorm:"column:executor;type:varchar(255)" json:"executor"`
+	Timestamp      *time.Time `gorm:"column:timestamp;type:datetime" json:"timestamp"`
 }
 
-func (LogKendaraan) TableName() string { return "tb_log_kendaraan" }
+func (LogKendaraan) TableName() string {
+	return "log_kendaraan"
+}

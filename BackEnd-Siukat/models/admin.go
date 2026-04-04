@@ -1,14 +1,12 @@
 package models
 
-import "gorm.io/gorm"
-
-// Admin merupakan GORM Model untuk tabel tb_admin
 type Admin struct {
-	IdAdmin   int            `gorm:"primaryKey;autoIncrement" json:"id_admin"`
-	Username  string         `gorm:"type:varchar(255)" json:"username"`
-	Password  string         `gorm:"type:varchar(255)" json:"password"`
-	Role      string         `gorm:"type:varchar(255)" json:"role"`
-	DeletedAt gorm.DeletedAt `gorm:"index" json:"deleted_at"`
+	Username    string `gorm:"primaryKey;column:username;type:varchar(255)" json:"username"`
+	NamaLengkap string `gorm:"column:nama_lengkap;type:varchar(255)" json:"nama_lengkap"`
+	NoTelepon   string `gorm:"column:no_telepon;type:varchar(255)" json:"no_telepon"`
+	Role        string `gorm:"column:role;type:enum('developer','operator','validator')" json:"role"`
 }
 
-func (Admin) TableName() string { return "tb_admin" }
+func (Admin) TableName() string {
+	return "tb_admin"
+}

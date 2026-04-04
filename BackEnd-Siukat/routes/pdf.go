@@ -81,8 +81,8 @@ func PdfRoutes(r *gin.RouterGroup) {
 		}
 
 		// Tarik UKT berdasarkan Golongan & Mayor
-		var ukt models.UktKategori
-		config.DB.Where("major_id = ?", mhs.ProdiCMahasiswa).First(&ukt)
+		var ukt models.Ukt
+		config.DB.Where("major_id = ?", mhs.ProdiCmahasiswa).First(&ukt)
 
 		// Karena kita mendelegasikan PDF creation ke Golang HTML Templates:
 		// Variabel data (ekuivalen obj di NodeJS)

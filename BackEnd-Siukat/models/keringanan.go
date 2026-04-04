@@ -1,14 +1,13 @@
 package models
 
-import "gorm.io/gorm"
-
-// Keringanan merupakan GORM Model untuk tabel tb_keringanan
 type Keringanan struct {
-	IdKeringanan int            `gorm:"primaryKey;autoIncrement" json:"id_keringanan"`
-	NoPeserta    string         `gorm:"type:varchar(255)" json:"no_peserta"`
-	Alasan       string         `gorm:"type:text" json:"alasan"`
-	Status       string         `gorm:"type:enum('pending','diterima','ditolak')" json:"status"`
-	DeletedAt    gorm.DeletedAt `gorm:"index" json:"deleted_at"`
+	IDKeringanan   int    `gorm:"primaryKey;column:id_keringanan" json:"id_keringanan"`
+	NoPeserta      string `gorm:"column:no_peserta;type:varchar(255)" json:"no_peserta"`
+	ScanKeringanan string `gorm:"column:scan_keringanan;type:varchar(255)" json:"scan_keringanan"`
+	Flag           string `gorm:"column:flag;type:enum('menunggu','ditolak','diterima')" json:"flag"`
+	Atribut        string `gorm:"column:atribut;type:enum('original','sanggah')" json:"atribut"`
 }
 
-func (Keringanan) TableName() string { return "tb_keringanan" }
+func (Keringanan) TableName() string {
+	return "tb_keringanan"
+}

@@ -56,7 +56,6 @@ class Login extends Component {
                 }
             }, 1000);
         }
-        console.log(process.env.REACT_APP_API_URL)
     }
 
     componentWillUnmount() {
@@ -127,7 +126,7 @@ class Login extends Component {
                                         Universitas Negeri Jakarta -{' '}
                                         {/* {stage == "sbmptn" ? "Jalur Prestasi" : "SNMPTN"} */}
                                         <span style={{ textTransform: 'uppercase' }}>
-                                            {stage_detail == 'mandiri' ? 'Mandiri Ujian Tulis' : stage_detail}
+                                            {stage_detail === 'mandiri' ? 'Mandiri Ujian Tulis' : stage_detail}
                                         </span>
                                     </span>
                                 </div>
@@ -264,11 +263,11 @@ class Login extends Component {
                             <Alert >
                                 <h5 style={{ textAlign: 'center' }}>Bagi peserta selain {' '}
                                     <span style={{ textTransform: 'uppercase' }}>
-                                        {stage_detail == 'mandiri' ? 'Mandiri Ujian Tulis' : stage_detail}
+                                        {stage_detail === 'mandiri' ? 'Mandiri Ujian Tulis' : stage_detail}
                                     </span>, silahkan klik tombol berikut</h5>
                                 <hr />
                                 <Row>
-                                    {stage_detail != 'snbp' && (
+                                    {stage_detail !== 'snbp' && (
                                         <Col className="text-center">
                                             {/* <h5>SNMPTN</h5> */}
                                             <Button
@@ -283,7 +282,7 @@ class Login extends Component {
                                             </Button>
                                         </Col>
                                     )}
-                                    {stage_detail != 'japres' && (
+                                    {stage_detail !== 'japres' && (
                                         <Col className="text-center">
                                             {/* <h5>Jalur Prestasi</h5> */}
                                             <Button
@@ -298,7 +297,7 @@ class Login extends Component {
                                             </Button>
                                         </Col>
                                     )}
-                                    {stage_detail != 'sbmptn' && (
+                                    {stage_detail !== 'sbmptn' && (
                                         <Col className="text-center">
                                             {/* <h5>SBMPTN</h5> */}
                                             <Button
@@ -313,7 +312,7 @@ class Login extends Component {
                                             </Button>
                                         </Col>
                                     )}
-                                    {stage_detail != 'mandiri' && (
+                                    {stage_detail !== 'mandiri' && (
                                         <Col className="text-center">
                                             {/* <h5>Mandiri</h5> */}
                                             <Button

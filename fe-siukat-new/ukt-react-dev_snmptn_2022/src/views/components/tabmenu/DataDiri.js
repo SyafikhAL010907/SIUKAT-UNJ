@@ -113,8 +113,8 @@ class DataDiri extends React.Component {
                                 <tr>
                                     <td>Status KIPK</td>
                                     <td>
-                                        {this.props.verifikasi.result_kipk == null ||
-                                            this.props.verifikasi.result_kipk == ''
+                                        {this.props.verifikasi.result_kipk === null ||
+                                            this.props.verifikasi.result_kipk === ''
                                             ? 'Tidak'
                                             : this.props.verifikasi.result_kipk}
                                     </td>
@@ -144,9 +144,9 @@ class DataDiri extends React.Component {
                 {this.props.info.stage_detail === 'sbmptn' && (
                     <Col md={12} xs={12}>
                         {!(
-                            this.props.verifikasi.result_kipk == 'tidak_lolos' ||
-                            this.props.verifikasi.result_kipk == null ||
-                            this.props.verifikasi.result_kipk == ''
+                            this.props.verifikasi.result_kipk === 'tidak_lolos' ||
+                            this.props.verifikasi.result_kipk === null ||
+                            this.props.verifikasi.result_kipk === ''
                         ) && (
                                 <InformasiKIPK
                                     cardStyles="text-center"

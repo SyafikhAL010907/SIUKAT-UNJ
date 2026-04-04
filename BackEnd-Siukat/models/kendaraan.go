@@ -1,15 +1,19 @@
 package models
 
-import "gorm.io/gorm"
-
-// Kendaraan merupakan GORM Model untuk tabel tb_kendaraan
 type Kendaraan struct {
-	IdKendaraan int            `gorm:"primaryKey;autoIncrement" json:"id_kendaraan"`
-	NoPeserta   string         `gorm:"type:varchar(255)" json:"no_peserta"`
-	PajakMotor  float64        `gorm:"type:int" json:"pajak_motor"`
-	PajakMobil  float64        `gorm:"type:int" json:"pajak_mobil"`
-	Atribut     string         `gorm:"type:enum('original','sanggah')" json:"atribut"`
-	DeletedAt   gorm.DeletedAt `gorm:"index" json:"deleted_at"`
+	IDKendaraan int    `gorm:"primaryKey;column:id_kendaraan" json:"id_kendaraan"`
+	NoPeserta   string `gorm:"column:no_peserta;type:varchar(255)" json:"no_peserta"`
+	StatusMotor string `gorm:"column:status_motor;type:enum('ada','tidak')" json:"status_motor"`
+	JumlahMotor int    `gorm:"column:jumlah_motor" json:"jumlah_motor"`
+	PajakMotor  int    `gorm:"column:pajak_motor" json:"pajak_motor"`
+	ScanMotor   string `gorm:"column:scan_motor;type:varchar(255)" json:"scan_motor"`
+	StatusMobil string `gorm:"column:status_mobil;type:enum('ada','tidak')" json:"status_mobil"`
+	JumlahMobil int    `gorm:"column:jumlah_mobil" json:"jumlah_mobil"`
+	PajakMobil  int    `gorm:"column:pajak_mobil" json:"pajak_mobil"`
+	ScanMobil   string `gorm:"column:scan_mobil;type:varchar(255)" json:"scan_mobil"`
+	Atribut     string `gorm:"column:atribut;type:enum('original','sanggah')" json:"atribut"`
 }
 
-func (Kendaraan) TableName() string { return "tb_kendaraan" }
+func (Kendaraan) TableName() string {
+	return "tb_kendaraan"
+}

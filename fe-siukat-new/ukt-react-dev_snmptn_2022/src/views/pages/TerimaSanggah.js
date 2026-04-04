@@ -12,8 +12,6 @@ import {
 } from "reactstrap";
 import {
     DataDiri,
-    JadwalKlarifikasi,
-    KetentuanKlarifikasi,
     NominalUKT,
     VerifikasiSNMPTN,
 } from "../components";
@@ -154,11 +152,11 @@ class TerimaSanggah extends React.Component {
                     this.props.verifikasi.result_akademik === "lolos") ||
                     this.props.info.stage !== "snbp") && (
                         <div>
-                            {this.props.keringanan?.flag == null ? null :
+                            {this.props.keringanan?.flag === null ? null :
                                 <Row>
                                     <Col md={2} xs={12}></Col>
                                     <Col md={8} xs={12}>
-                                        {this.props.keringanan?.flag == 'diterima' &&
+                                        {this.props.keringanan?.flag === 'diterima' &&
                                             <Card body color="green" inverse >
                                                 <div>
                                                     Permohonan sanggah UKT Anda diterima.
@@ -167,7 +165,7 @@ class TerimaSanggah extends React.Component {
                                                 </div>
                                             </Card>
                                         }
-                                        {this.props.keringanan?.flag == 'menunggu' &&
+                                        {this.props.keringanan?.flag === 'menunggu' &&
                                             <Card body color="green" outlined >
                                                 <div>
                                                     Camaba dan Orang tua camaba (tidak bisa di wakilkan) di wajibkan untuk datang untuk melakukan wawancara dan Validasi data di Kampus UNJ dengan membawa data pendukung pada :
@@ -180,7 +178,7 @@ class TerimaSanggah extends React.Component {
                                                 </div>
                                             </Card>
                                         }
-                                        {this.props.keringanan?.flag == 'ditolak' &&
+                                        {this.props.keringanan?.flag === 'ditolak' &&
                                             <Card body color="danger" inverse >
                                                 <div>
                                                     Mohon maaf permohonan sanggah UKT Anda ditolak.
@@ -190,7 +188,7 @@ class TerimaSanggah extends React.Component {
                                             </Card>
                                         }
                                         <br />
-                                        {!this.props.keringanan?.flag || this.props.keringanan?.flag == 'diterima' || this.props.keringanan?.flag == 'ditolak' ?
+                                        {!this.props.keringanan?.flag || this.props.keringanan?.flag === 'diterima' || this.props.keringanan?.flag === 'ditolak' ?
                                             <Card body color="green" outline >
                                                 <div>
                                                     Bagi yang tidak ada perubahan data yang disebabkan kondisi luar biasa, maka proses selanjutnya Mengklik tombol <b>TERIMA</b> dan silahkan

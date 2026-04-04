@@ -1,10 +1,11 @@
 package models
 
-// Kecamatan adalah representasi tabel ref_kecamatan
 type Kecamatan struct {
-	Kode   string `gorm:"primaryKey;type:varchar(255)" json:"kode"`
-	Kabkot string `gorm:"type:varchar(255)" json:"kabkot"`
-	Nama   string `gorm:"type:varchar(255)" json:"nama"`
+	KecamID   string `gorm:"primaryKey;column:kecam_id;type:varchar(255)" json:"kecam_id"`
+	KecamNama string `gorm:"column:kecam_nama;type:varchar(255)" json:"kecam_nama"`
+	KabID     string `gorm:"column:kab_id;type:varchar(255)" json:"kab_id"`
 }
 
-func (Kecamatan) TableName() string { return "ref_kecamatan" }
+func (Kecamatan) TableName() string {
+	return "ref_kecamatan"
+}

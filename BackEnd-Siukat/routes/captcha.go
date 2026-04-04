@@ -10,13 +10,10 @@ import (
 
 func CaptchaRoutes(r *gin.RouterGroup) {
 	group := r.Group("/captcha")
-	group.GET("/rand", func(c *gin.Context) {
+	group.GET("", func(c *gin.Context) {
 		var data models.Captcha
-		// Gunakan Raw Order rand() di mysql
+		// Gunakan Raw Order rand() di mysql — Mirroring logic RAND() Node.js
 		config.DB.Order("RAND()").First(&data)
-		c.JSON(http.StatusOK, gin.H{
-			"id_pertanyaan": data.Id,
-			"pertanyaan":    data.Pertanyaan,
-		})
+		c.JSON(http.StatusOK, data)
 	})
 }

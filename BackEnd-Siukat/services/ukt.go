@@ -31,23 +31,23 @@ func vFourthFifth(kendaraan float64) float64 {
 	return kendaraan / 12
 }
 
-func decisionMaker(ikb float64, ukt models.UktKategori) string {
+func decisionMaker(ikb float64, ukt models.Ukt) string {
 	uktTemp := "VIII"
-	if ikb <= ukt.I {
+	if ikb <= float64(ukt.I) {
 		uktTemp = "I"
-	} else if ikb <= ukt.II {
+	} else if ikb <= float64(ukt.II) {
 		uktTemp = "II"
-	} else if ikb <= ukt.III {
+	} else if ikb <= float64(ukt.III) {
 		uktTemp = "III"
-	} else if ikb <= ukt.IV {
+	} else if ikb <= float64(ukt.IV) {
 		uktTemp = "IV"
-	} else if ikb <= ukt.V {
+	} else if ikb <= float64(ukt.V) {
 		uktTemp = "V"
-	} else if ikb <= ukt.VI {
+	} else if ikb <= float64(ukt.VI) {
 		uktTemp = "VI"
-	} else if ikb <= ukt.VII {
+	} else if ikb <= float64(ukt.VII) {
 		uktTemp = "VII"
-	} else if ikb <= ukt.VIII {
+	} else if ikb <= float64(ukt.VIII) {
 		uktTemp = "VIII"
 	}
 	return uktTemp
@@ -96,16 +96,16 @@ func (s *UKTService) ComputeUkt(noPeserta string, atribut string) (map[string]in
 	db.Where("id = ?", 1).First(&bobot) // Default fetch id=1
 	data["bobot"] = bobot
 
-	var ukt models.UktKategori
-	db.Where("major_id = ? AND entrance = ?", cmahasiswa.ProdiCMahasiswa, cmahasiswa.JalurCMahasiswa).First(&ukt)
+	var ukt models.Ukt
+	db.Where("major_id = ? AND entrance = ?", cmahasiswa.ProdiCmahasiswa, cmahasiswa.JalurCmahasiswa).First(&ukt)
 	data["ukt"] = ukt
 
 	// Kalkulasi V1 - V5
-	v1 := vFirst(ibu.PenghasilanIbu, ayah.PenghasilanAyah, ibu.SampinganIbu, ayah.SampinganAyah, wali.KesanggupanWali, float64(cmahasiswa.PenghasilanCMahasiswa), pendukung.Tanggungan)
-	v2 := vSecond(rumah.BiayaPbb, rumah.JumlahKepalaKeluarga, rumah.BiayaKontrak, bobot.Pbb, bobot.Kontrak)
-	v3 := vThird(listrik.Pengeluaran)
-	v4 := vFourthFifth(kendaraan.PajakMotor)
-	v5 := vFourthFifth(kendaraan.PajakMobil)
+	v1 := vFirst(float64(ibu.PenghasilanIbu), float64(ayah.PenghasilanAyah), float64(ibu.SampinganIbu), float64(ayah.SampinganAyah), float64(wali.KesanggupanWali), float64(cmahasiswa.PenghasilanCmahasiswa), float64(pendukung.Tanggungan))
+	v2 := vSecond(float64(rumah.BiayaPbb), float64(rumah.JumlahKepalaKeluarga), float64(rumah.BiayaKontrak), float64(bobot.Pbb), float64(bobot.Kontrak))
+	v3 := vThird(float64(listrik.Pengeluaran))
+	v4 := vFourthFifth(float64(kendaraan.PajakMotor))
+	v5 := vFourthFifth(float64(kendaraan.PajakMobil))
 
 	// Bobot Av1 - Ev5
 	av1 := v1 * 6 * bobot.A
@@ -182,14 +182,14 @@ func (s *UKTService) JustCompute(noPeserta string, atribut string) (map[string]i
 	var bobot models.Bobot
 	db.Where("id = ?", 1).First(&bobot)
 	
-	var ukt models.UktKategori
-	db.Where("major_id = ? AND entrance = ?", cmahasiswa.ProdiCMahasiswa, cmahasiswa.JalurCMahasiswa).First(&ukt)
+	var ukt models.Ukt
+	db.Where("major_id = ? AND entrance = ?", cmahasiswa.ProdiCmahasiswa, cmahasiswa.JalurCmahasiswa).First(&ukt)
 
-	v1 := vFirst(ibu.PenghasilanIbu, ayah.PenghasilanAyah, ibu.SampinganIbu, ayah.SampinganAyah, wali.KesanggupanWali, float64(cmahasiswa.PenghasilanCMahasiswa), pendukung.Tanggungan)
-	v2 := vSecond(rumah.BiayaPbb, rumah.JumlahKepalaKeluarga, rumah.BiayaKontrak, bobot.Pbb, bobot.Kontrak)
-	v3 := vThird(listrik.Pengeluaran)
-	v4 := vFourthFifth(kendaraan.PajakMotor)
-	v5 := vFourthFifth(kendaraan.PajakMobil)
+	v1 := vFirst(float64(ibu.PenghasilanIbu), float64(ayah.PenghasilanAyah), float64(ibu.SampinganIbu), float64(ayah.SampinganAyah), float64(wali.KesanggupanWali), float64(cmahasiswa.PenghasilanCmahasiswa), float64(pendukung.Tanggungan))
+	v2 := vSecond(float64(rumah.BiayaPbb), float64(rumah.JumlahKepalaKeluarga), float64(rumah.BiayaKontrak), float64(bobot.Pbb), float64(bobot.Kontrak))
+	v3 := vThird(float64(listrik.Pengeluaran))
+	v4 := vFourthFifth(float64(kendaraan.PajakMotor))
+	v5 := vFourthFifth(float64(kendaraan.PajakMobil))
 
 	av1 := v1 * 6 * bobot.A
 	bv2 := v2 * 6 * bobot.B
@@ -209,4 +209,48 @@ func (s *UKTService) JustCompute(noPeserta string, atribut string) (map[string]i
 	data["ikb"], data["choosenUkt"] = ikb, choosenUkt
 
 	return data, nil
+}
+
+// ByCmahasiswa resolves the UKT nominal for a single student profile
+func (s *UKTService) ByCmahasiswa(mhs models.CMahasiswa) (int, error) {
+	var ukt models.Ukt
+	err := config.DB.Where("major_id = ? AND entrance = ?", mhs.ProdiCmahasiswa, mhs.JalurCmahasiswa).First(&ukt).Error
+	if err != nil {
+		return 0, err
+	}
+
+	switch mhs.GolonganID {
+	case "I":
+		return ukt.I, nil
+	case "II":
+		return ukt.II, nil
+	case "III":
+		return ukt.III, nil
+	case "IV":
+		return ukt.IV, nil
+	case "V":
+		return ukt.V, nil
+	case "VI":
+		return ukt.VI, nil
+	case "VII":
+		return ukt.VII, nil
+	case "VIII":
+		return ukt.VIII, nil
+	default:
+		return 0, nil
+	}
+}
+
+// PerCmahasiswa handles batch resolution of UKT nominals for a slice of students
+func (s *UKTService) PerCmahasiswa(students []models.CMahasiswa) ([]map[string]interface{}, error) {
+	var results []map[string]interface{}
+	for _, mhs := range students {
+		nominal, _ := s.ByCmahasiswa(mhs)
+		item := map[string]interface{}{
+			"student": mhs,
+			"nominal": nominal,
+		}
+		results = append(results, item)
+	}
+	return results, nil
 }

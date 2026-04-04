@@ -99,6 +99,56 @@ func AyahRoutes(r *gin.RouterGroup) {
 		c.JSON(http.StatusOK, res)
 	})
 
+	authGroup.PUT("/edit/:no_peserta", func(c *gin.Context) {
+		noPeserta := c.Param("no_peserta")
+		np := noPeserta
+		
+		statusAyah := c.PostForm("status_ayah")
+		data := map[string]interface{}{
+			"nama_ayah":        c.PostForm("nama_ayah"),
+			"status_ayah":      statusAyah,
+			"tempat_lahir_ayah": c.PostForm("tempat_lahir_ayah"),
+		}
+
+		if statusAyah != "wafat" {
+			data["nik_ayah"] = c.PostForm("nik_ayah")
+			data["telepon_ayah"] = c.PostForm("telepon_ayah")
+			data["alamat_ayah"] = c.PostForm("alamat_ayah")
+			data["provinsi_ayah"] = c.PostForm("provinsi_ayah")
+			data["kabkot_ayah"] = c.PostForm("kabkot_ayah")
+			data["kecamatan_ayah"] = c.PostForm("kecamatan_ayah")
+			data["pekerjaan_ayah"] = c.PostForm("pekerjaan_ayah")
+			data["penghasilan_ayah"] = c.PostForm("penghasilan_ayah")
+			data["sampingan_ayah"] = c.PostForm("sampingan_ayah")
+
+			fileKtp, errKtp := c.FormFile("file_scan_ktp_ayah")
+			if errKtp == nil {
+				filename := np + "_" + fileKtp.Filename
+				c.SaveUploadedFile(fileKtp, "public/uploads/"+filename)
+				data["scan_ktp_ayah"] = filename
+			}
+
+			fileSlip, errSlip := c.FormFile("file_scan_slip_ayah")
+			if errSlip == nil {
+				filename := np + "_" + fileSlip.Filename
+				c.SaveUploadedFile(fileSlip, "public/uploads/"+filename)
+				data["scan_slip_ayah"] = filename
+			}
+		}
+
+		var ayah models.Ayah
+		config.DB.Where("no_peserta = ? AND atribut = ?", np, "sanggah").First(&ayah)
+		now := time.Now()
+		ayahService.AddLog(ayah, "sanggah", np, &now)
+
+		res, err := ayahService.Edit(data, np, "sanggah")
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, res)
+	})
+
 	// GET /ayah/get-ayah
 	authGroup.GET("/get-ayah", func(c *gin.Context) {
 		noPeserta, _ := c.Get("no_peserta")

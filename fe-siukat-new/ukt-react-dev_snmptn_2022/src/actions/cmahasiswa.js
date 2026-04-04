@@ -1,4 +1,4 @@
-import { notif, errLog } from '../global';
+import { notif, errLog, getToken } from '../global';
 import { cmahasiswa, kabkot, kecamatan } from '../api';
 
 export function getByLoggedIn(token){
@@ -61,19 +61,23 @@ export function fetchAllData(token){
 }
 
 export function updateFlagUktTinggi(data, token){
+    const activeToken = token || getToken();
+    console.log('DEBUG ACTION: updateFlagUktTinggi - Active Token:', activeToken);
     return {
         type: 'FETCH_CMAHASISWA',
-        payload: cmahasiswa.updateFlagUktTinggi(data, token).then((response) => {
-            return cmahasiswa.getByLoggedIn(token);
+        payload: cmahasiswa.updateFlagUktTinggi(data, activeToken).then((response) => {
+            return cmahasiswa.getByLoggedIn(activeToken);
         })
     };
 }
 
 export function updateFlagUktRendah(token){
+    const activeToken = token || getToken();
+    console.log('DEBUG ACTION: updateFlagUktRendah - Active Token:', activeToken);
     return {
         type: 'FETCH_CMAHASISWA',
-        payload: cmahasiswa.updateFlagUktRendah(token).then((response) => {
-            return cmahasiswa.getByLoggedIn(token);
+        payload: cmahasiswa.updateFlagUktRendah(activeToken).then((response) => {
+            return cmahasiswa.getByLoggedIn(activeToken);
         })
     };
 }

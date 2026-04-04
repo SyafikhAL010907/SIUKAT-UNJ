@@ -65,21 +65,52 @@ func (s *AyahService) CheckData(noPeserta string, uktTinggi string) (bool, error
 		return false, err
 	}
 
-	valid := true
-	if ayah.StatusAyah != "wafat" {
-		if uktTinggi != "ya" {
-			if ayah.PekerjaanAyah == "" || ayah.PenghasilanAyah == 0 {
-				valid = false // Basic validation
-			}
-		}
-		if ayah.NamaAyah == "" {
-			valid = false
-		}
-	} else if ayah.StatusAyah == "wafat" {
-		if ayah.NamaAyah == "" {
-			valid = false
+	// Replicating Node.js "delete and check" logic using a map
+	data := map[string]interface{}{
+		"no_peserta":         ayah.NoPeserta,
+		"status_ayah":       ayah.StatusAyah,
+		"nama_ayah":         ayah.NamaAyah,
+		"nik_ayah":          ayah.NikAyah,
+		"telepon_ayah":      ayah.TeleponAyah,
+		"alamat_ayah":       ayah.AlamatAyah,
+		"provinsi_ayah":     ayah.ProvinsiAyah,
+		"kabkot_ayah":       ayah.KabkotAyah,
+		"kecamatan_ayah":    ayah.KecamatanAyah,
+		"pekerjaan_ayah":    ayah.PekerjaanAyah,
+		"penghasilan_ayah":  ayah.PenghasilanAyah,
+		"sampingan_ayah":    ayah.SampinganAyah,
+		"scan_ktp_ayah":     ayah.ScanKtpAyah,
+		"scan_slip_ayah":    ayah.ScanSlipAyah,
+		"tempat_lahir_ayah": ayah.TempatLahirAyah,
+		"tanggal_lahir_ayah": ayah.TanggalLahirAyah,
+		"atribut":           ayah.Atribut,
+	}
+
+	if ayah.StatusAyah == "wafat" {
+		// Only name is required
+		return ayah.NamaAyah != "", nil
+	}
+
+	if uktTinggi == "ya" {
+		delete(data, "nik_ayah")
+		delete(data, "pekerjaan_ayah")
+		delete(data, "penghasilan_ayah")
+		delete(data, "scan_ktp_ayah")
+		delete(data, "scan_slip_ayah")
+	}
+
+	if ayah.PekerjaanAyah == 11 { // Tidak bekerja
+		delete(data, "penghasilan_ayah")
+		delete(data, "scan_slip_ayah")
+	}
+
+	delete(data, "sampingan_ayah")
+
+	for _, val := range data {
+		if val == nil || val == "" || val == 0 {
+			return false, nil
 		}
 	}
 
-	return valid, nil
+	return true, nil
 }

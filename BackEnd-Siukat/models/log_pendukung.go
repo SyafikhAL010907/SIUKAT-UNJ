@@ -1,15 +1,19 @@
 package models
 
-import "gorm.io/gorm"
+import "time"
 
-// LogPendukung menyimpan log perubahan data pendukung
 type LogPendukung struct {
-	IdLogPendukung int            `gorm:"primaryKey;autoIncrement" json:"id_log_pendukung"`
-	NoPeserta      string         `gorm:"type:varchar(255)" json:"no_peserta"`
-	Tanggungan     float64        `gorm:"type:int" json:"tanggungan"`
-	Atribut        string         `gorm:"type:enum('original','sanggah')" json:"atribut"`
-	Executor       string         `gorm:"type:varchar(255)" json:"executor"`
-	DeletedAt      gorm.DeletedAt `gorm:"index" json:"deleted_at"`
+	IDLogPendukung          int        `gorm:"primaryKey;column:id_log_pendukung" json:"id_log_pendukung"`
+	NoPeserta               string     `gorm:"column:no_peserta;type:varchar(255)" json:"no_peserta"`
+	Tanggungan              int        `gorm:"column:tanggungan" json:"tanggungan"`
+	ScanPernyataanUktTinggi string     `gorm:"column:scan_pernyataan_ukt_tinggi;type:varchar(255)" json:"scan_pernyataan_ukt_tinggi"`
+	ScanPernyataanKebenaran string     `gorm:"column:scan_pernyataan_kebenaran;type:varchar(255)" json:"scan_pernyataan_kebenaran"`
+	ScanKk                  string     `gorm:"column:scan_kk;type:varchar(255)" json:"scan_kk"`
+	Atribut                 string     `gorm:"column:atribut;type:enum('original','sanggah')" json:"atribut"`
+	Executor                string     `gorm:"column:executor;type:varchar(255)" json:"executor"`
+	Timestamp               *time.Time `gorm:"column:timestamp;type:datetime" json:"timestamp"`
 }
 
-func (LogPendukung) TableName() string { return "tb_log_pendukung" }
+func (LogPendukung) TableName() string {
+	return "log_pendukung"
+}

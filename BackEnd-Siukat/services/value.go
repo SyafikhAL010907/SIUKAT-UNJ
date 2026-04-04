@@ -47,7 +47,7 @@ func (s *ValueService) AddLog(v models.Value, executor string, timestamp time.Ti
 		Ikb:       v.Ikb,
 		Atribut:   atribut,
 		Executor:  executor,
-		Timestamp: timestamp,
+		Timestamp: &timestamp,
 	}
 
 	err := db.Create(&logVal).Error

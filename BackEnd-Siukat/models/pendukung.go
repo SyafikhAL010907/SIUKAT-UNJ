@@ -1,14 +1,15 @@
 package models
 
-import "gorm.io/gorm"
-
-// Pendukung merupakan GORM Model untuk tabel tb_pendukung
 type Pendukung struct {
-	IdPendukung int            `gorm:"primaryKey;autoIncrement" json:"id_pendukung"`
-	NoPeserta   string         `gorm:"type:varchar(255)" json:"no_peserta"`
-	Tanggungan  float64        `gorm:"type:int" json:"tanggungan"`
-	Atribut     string         `gorm:"type:enum('original','sanggah')" json:"atribut"`
-	DeletedAt   gorm.DeletedAt `gorm:"index" json:"deleted_at"`
+	IDPendukung             int    `gorm:"primaryKey;column:id_pendukung" json:"id_pendukung"`
+	NoPeserta               string `gorm:"column:no_peserta;type:varchar(255)" json:"no_peserta"`
+	Tanggungan              int    `gorm:"column:tanggungan" json:"tanggungan"`
+	ScanPernyataanUktTinggi string `gorm:"column:scan_pernyataan_ukt_tinggi;type:varchar(255)" json:"scan_pernyataan_ukt_tinggi"`
+	ScanPernyataanKebenaran string `gorm:"column:scan_pernyataan_kebenaran;type:varchar(255)" json:"scan_pernyataan_kebenaran"`
+	ScanKk                  string `gorm:"column:scan_kk;type:varchar(255)" json:"scan_kk"`
+	Atribut                 string `gorm:"column:atribut;type:enum('original','sanggah')" json:"atribut"`
 }
 
-func (Pendukung) TableName() string { return "tb_pendukung" }
+func (Pendukung) TableName() string {
+	return "tb_pendukung"
+}

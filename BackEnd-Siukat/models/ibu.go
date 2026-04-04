@@ -1,37 +1,33 @@
 package models
 
-import (
-	"time"
+import "time"
 
-	"gorm.io/gorm"
-)
-
-// Ibu merupakan GORM Model untuk tabel tb_ibu — Full fields sesuai ibu.js
 type Ibu struct {
-	IdIbu           int            `gorm:"primaryKey;autoIncrement" json:"id_ibu"`
-	NoPeserta       string         `gorm:"type:varchar(255)" json:"no_peserta"`
-	StatusIbu       string         `gorm:"type:enum('hidup','wafat','bercerai')" json:"status_ibu"`
-	NamaIbu         string         `gorm:"type:varchar(255)" json:"nama_ibu"`
-	NikIbu          string         `gorm:"type:varchar(255)" json:"nik_ibu"`
-	TeleponIbu      string         `gorm:"type:varchar(255)" json:"telepon_ibu"`
-	AlamatIbu       string         `gorm:"type:text" json:"alamat_ibu"`
-	ProvinsiIbu     int            `gorm:"type:int" json:"provinsi_ibu"`
-	KabkotIbu       int            `gorm:"type:int" json:"kabkot_ibu"`
-	KecamatanIbu    int            `gorm:"type:int" json:"kecamatan_ibu"`
-	PekerjaanIbu    string         `gorm:"type:varchar(255)" json:"pekerjaan_ibu"`
-	PenghasilanIbu  float64        `gorm:"type:decimal" json:"penghasilan_ibu"`
-	SampinganIbu    float64        `gorm:"type:decimal" json:"sampingan_ibu"`
-	ScanKtpIbu      string         `gorm:"type:varchar(255)" json:"scan_ktp_ibu"`
-	ScanSlipIbu     string         `gorm:"type:varchar(255)" json:"scan_slip_ibu"`
-	TempatLahirIbu  string         `gorm:"type:varchar(255)" json:"tempat_lahir_ibu"`
-	TanggalLahirIbu *time.Time     `gorm:"type:date" json:"tanggal_lahir_ibu"`
-	Atribut         string         `gorm:"type:enum('original','sanggah')" json:"atribut"`
+	IDIbu            int        `gorm:"primaryKey;column:id_ibu" json:"id_ibu"`
+	NoPeserta        string     `gorm:"column:no_peserta;type:varchar(255)" json:"no_peserta"`
+	StatusIbu        string     `gorm:"column:status_ibu;type:enum('hidup','wafat')" json:"status_ibu"`
+	NamaIbu          string     `gorm:"column:nama_ibu;type:varchar(255)" json:"nama_ibu"`
+	NikIbu           string     `gorm:"column:nik_ibu;type:varchar(255)" json:"nik_ibu"`
+	TeleponIbu       string     `gorm:"column:telepon_ibu;type:varchar(255)" json:"telepon_ibu"`
+	AlamatIbu        string     `gorm:"column:alamat_ibu;type:text" json:"alamat_ibu"`
+	ProvinsiIbu      string     `gorm:"column:provinsi_ibu;type:varchar(255)" json:"provinsi_ibu"`
+	KabkotIbu        string     `gorm:"column:kabkot_ibu;type:varchar(255)" json:"kabkot_ibu"`
+	KecamatanIbu     string     `gorm:"column:kecamatan_ibu;type:varchar(255)" json:"kecamatan_ibu"`
+	PekerjaanIbu     int        `gorm:"column:pekerjaan_ibu" json:"pekerjaan_ibu"`
+	PenghasilanIbu   int        `gorm:"column:penghasilan_ibu" json:"penghasilan_ibu"`
+	SampinganIbu     int        `gorm:"column:sampingan_ibu" json:"sampingan_ibu"`
+	ScanKtpIbu       string     `gorm:"column:scan_ktp_ibu;type:varchar(255)" json:"scan_ktp_ibu"`
+	ScanSlipIbu      string     `gorm:"column:scan_slip_ibu;type:varchar(255)" json:"scan_slip_ibu"`
+	TempatLahirIbu   string     `gorm:"column:tempat_lahir_ibu;type:varchar(255)" json:"tempat_lahir_ibu"`
+	TanggalLahirIbu  *time.Time `gorm:"column:tanggal_lahir_ibu;type:date" json:"tanggal_lahir_ibu"`
+	Atribut          string     `gorm:"column:atribut;type:enum('original','sanggah')" json:"atribut"`
 
-	DeletedAt gorm.DeletedAt `gorm:"index" json:"deleted_at"`
-
-	Provinsi  Provinsi  `gorm:"foreignKey:ProvinsiIbu" json:"provinsi"`
-	Kabkot    Kabkot    `gorm:"foreignKey:KabkotIbu" json:"kabkot"`
-	Kecamatan Kecamatan `gorm:"foreignKey:KecamatanIbu" json:"kecamatan"`
+	Provinsi  *Provinsi  `gorm:"foreignKey:ProvinsiIbu;references:ProvinsiID" json:"provinsi,omitempty"`
+	Kabkot    *Kabkot    `gorm:"foreignKey:KabkotIbu;references:KabID" json:"kabkot,omitempty"`
+	Kecamatan *Kecamatan `gorm:"foreignKey:KecamatanIbu;references:KecamID" json:"kecamatan,omitempty"`
+	Pekerjaan *Pekerjaan `gorm:"foreignKey:PekerjaanIbu;references:Kode" json:"pekerjaan,omitempty"`
 }
 
-func (Ibu) TableName() string { return "tb_ibu" }
+func (Ibu) TableName() string {
+	return "tb_ibu"
+}

@@ -10,9 +10,12 @@ import (
 
 func PekerjaanRoutes(r *gin.RouterGroup) {
 	group := r.Group("/pekerjaan")
+
 	group.GET("/all", func(c *gin.Context) {
-		var data []models.Pekerjaan
-		config.DB.Find(&data)
-		c.JSON(http.StatusOK, data)
+		var pkj []models.Pekerjaan
+		config.DB.Find(&pkj)
+		c.JSON(http.StatusOK, pkj)
 	})
+	
+	// Bio_pekerjaan dibuang (The BIO PURGE Is Active)
 }

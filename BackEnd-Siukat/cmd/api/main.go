@@ -13,6 +13,8 @@ import (
 
 func main() {
 	// 1. Load Enviroment Variables dari file .env
+	// Dikarenakan dieksekusi via "go run cmd/api/main.go" dari root, 
+	// godotenv akan mencari .env di root project.
 	if err := godotenv.Load(); err != nil {
 		log.Println("Note: .env file not found, using system environment variables")
 	}
@@ -31,16 +33,20 @@ func main() {
 	configCors := cors.DefaultConfig()
 	configCors.AllowOrigins = []string{
 		"http://siukat.unj.ac.id",
-		// Masukkan origin lain jika perlu, misal: "http://localhost:3000"
+		"http://localhost:3000",
+		"http://localhost:3001",
 	}
 	configCors.AllowMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"}
 	configCors.AllowHeaders = []string{"Origin", "Content-Type", "Accept", "Authorization"}
 	r.Use(cors.New(configCors))
 
 	// Serve file statis (img, pdf pengumuman, foto upload mahasiswa)
+	// Path relatif terhadap root project eksekusi
 	r.Static("/public", "./public")
+	
 	// Render Views HTML Template untuk endpoint PDF
-	r.LoadHTMLGlob("views/pdf/*.html")
+	// Path relatif terhadap root project eksekusi
+	// r.LoadHTMLGlob("views/pdf/*.html")
 
 	// 5. Inisialisasi Routes
 	routes.SetupRoutes(r)

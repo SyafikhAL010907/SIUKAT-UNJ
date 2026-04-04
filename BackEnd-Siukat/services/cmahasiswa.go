@@ -19,8 +19,8 @@ type CMahasiswaService struct{}
 func GenerateTagihan(info models.Info, noPeserta string) (string, error) {
 	year := time.Now().Format("06") // "YY" — identik dengan moment().format("YY")
 
-	// Prioritas: dari DB (info.StatusPenilaian), fallback ke env STAGE
-	stageSource := info.StatusPenilaian
+	// Prioritas: dari DB (info.Stage), fallback ke env STAGE
+	stageSource := info.Stage
 	if stageSource == "" {
 		stageSource = os.Getenv("STAGE")
 	}
@@ -80,32 +80,30 @@ func (s *CMahasiswaService) AddLog(user models.CMahasiswa, executor string, time
 	db := config.DB
 	logMhs := models.LogCMahasiswa{
 		NoPeserta:              user.NoPeserta,
-		NamaCMahasiswa:         user.NamaCMahasiswa,
-		BidikMisiCMahasiswa:    user.BidikMisiCMahasiswa,
-		FakultasCMahasiswa:     user.FakultasCMahasiswa,
-		ProdiCMahasiswa:        user.ProdiCMahasiswa,
-		JalurCMahasiswa:        user.JalurCMahasiswa,
-		SosmedCMahasiswa:       user.SosmedCMahasiswa,
-		AlamatCMahasiswa:       user.AlamatCMahasiswa,
-		ProvinsiCMahasiswa:     user.ProvinsiCMahasiswa,
-		KabkotCMahasiswa:       user.KabkotCMahasiswa,
-		KecamatanCMahasiswa:    user.KecamatanCMahasiswa,
-		GenderCMahasiswa:       user.GenderCMahasiswa,
-		TeleponCMahasiswa:      user.TeleponCMahasiswa,
-		GoldarCMahasiswa:       user.GoldarCMahasiswa,
-		TempatLahirCMahasiswa:  user.TempatLahirCMahasiswa,
-		TanggalLahirCMahasiswa: user.TanggalLahirCMahasiswa,
-		FotoCMahasiswa:         user.FotoCMahasiswa,
-		PenghasilanCMahasiswa:  user.PenghasilanCMahasiswa,
-		GolonganId:             user.GolonganId,
+		NamaCmahasiswa:         user.NamaCmahasiswa,
+		BidikMisiCmahasiswa:    user.BidikMisiCmahasiswa,
+		FakultasCmahasiswa:     user.FakultasCmahasiswa,
+		ProdiCmahasiswa:        user.ProdiCmahasiswa,
+		JalurCmahasiswa:        user.JalurCmahasiswa,
+		SosmedCmahasiswa:       user.SosmedCmahasiswa,
+		AlamatCmahasiswa:       user.AlamatCmahasiswa,
+		ProvinsiCmahasiswa:     user.ProvinsiCmahasiswa,
+		KabkotCmahasiswa:       user.KabkotCmahasiswa,
+		KecamatanCmahasiswa:    user.KecamatanCmahasiswa,
+		GenderCmahasiswa:       user.GenderCmahasiswa,
+		TeleponCmahasiswa:      user.TeleponCmahasiswa,
+		GoldarCmahasiswa:       user.GoldarCmahasiswa,
+		TempatLahirCmahasiswa:  user.TempatLahirCmahasiswa,
+		TanggalLahirCmahasiswa: user.TanggalLahirCmahasiswa,
+		FotoCmahasiswa:         user.FotoCmahasiswa,
+		PenghasilanCmahasiswa:  user.PenghasilanCmahasiswa,
+		GolonganID:             user.GolonganID,
 		UktTinggi:              user.UktTinggi,
 		Flag:                   user.Flag,
 		WaktuSelesai:           user.WaktuSelesai,
 		Atribut:                user.Atribut,
 		Tagihan:                user.Tagihan,
 		NoRegistrasi:           user.NoRegistrasi,
-		Spu:                    user.Spu,
-		Penalty:                user.Penalty,
 		Executor:               executor,
 		Timestamp:              timestamp,
 	}
@@ -142,27 +140,51 @@ func (s *CMahasiswaService) CheckData(noPeserta string) (bool, error) {
 		return false, err
 	}
 
-	// Field wajib untuk SEMUA mahasiswa
-	// Catatan: FakultasCMahasiswa dan ProdiCMahasiswa bertipe int di model
-	if mhs.NamaCMahasiswa == "" ||
-		mhs.AlamatCMahasiswa == "" ||
-		mhs.JalurCMahasiswa == "" ||
-		mhs.FakultasCMahasiswa == 0 ||
-		mhs.ProdiCMahasiswa == 0 ||
-		mhs.GenderCMahasiswa == "" ||
-		mhs.TeleponCMahasiswa == "" ||
-		mhs.TempatLahirCMahasiswa == "" ||
-		mhs.TanggalLahirCMahasiswa == nil {
-		return false, nil
+	// Replicating Node.js "delete and check" logic using a map
+	data := map[string]interface{}{
+		"no_peserta":               mhs.NoPeserta,
+		"nama_cmahasiswa":         mhs.NamaCmahasiswa,
+		"bidik_misi_cmahasiswa":    mhs.BidikMisiCmahasiswa,
+		"fakultas_cmahasiswa":     mhs.FakultasCmahasiswa,
+		"prodi_cmahasiswa":        mhs.ProdiCmahasiswa,
+		"jalur_cmahasiswa":        mhs.JalurCmahasiswa,
+		"sosmed_cmahasiswa":       mhs.SosmedCmahasiswa,
+		"alamat_cmahasiswa":       mhs.AlamatCmahasiswa,
+		"provinsi_cmahasiswa":     mhs.ProvinsiCmahasiswa,
+		"kabkot_cmahasiswa":       mhs.KabkotCmahasiswa,
+		"kecamatan_cmahasiswa":    mhs.KecamatanCmahasiswa,
+		"gender_cmahasiswa":       mhs.GenderCmahasiswa,
+		"telepon_cmahasiswa":      mhs.TeleponCmahasiswa,
+		"goldar_cmahasiswa":       mhs.GoldarCmahasiswa,
+		"tempat_lahir_cmahasiswa": mhs.TempatLahirCmahasiswa,
+		"tanggal_lahir_cmahasiswa": mhs.TanggalLahirCmahasiswa,
+		"foto_cmahasiswa":         mhs.FotoCmahasiswa,
+		"penghasilan_cmahasiswa":  mhs.PenghasilanCmahasiswa,
+		"golongan_id":             mhs.GolonganID,
+		"ukt_tinggi":              mhs.UktTinggi,
+		"flag":                   mhs.Flag,
+		"waktu_selesai":           mhs.WaktuSelesai,
+		"atribut":                mhs.Atribut,
+		"tagihan":                mhs.Tagihan,
+		"no_registrasi":          mhs.NoRegistrasi,
+		"spu":                    mhs.Spu,
+		"penalty":                mhs.Penalty,
 	}
 
-	// Jika ukt_tinggi != "ya", cek golongan dan foto
-	if mhs.UktTinggi != "ya" {
-		if mhs.GolonganId == "" {
-			return false, nil
-		}
-		// Foto wajib untuk semua
-		if mhs.FotoCMahasiswa == "" {
+	delete(data, "tagihan")
+	delete(data, "no_registrasi")
+	delete(data, "penghasilan_cmahasiswa")
+	delete(data, "spu")
+	delete(data, "penalty")
+
+	if mhs.UktTinggi == "ya" {
+		delete(data, "sosmed_cmahasiswa")
+	} else {
+		delete(data, "golongan_id")
+	}
+
+	for _, val := range data {
+		if val == nil || val == "" || val == 0 {
 			return false, nil
 		}
 	}

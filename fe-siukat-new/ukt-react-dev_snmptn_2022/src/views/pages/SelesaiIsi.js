@@ -4,7 +4,7 @@ import {
     Row, Col, Button,
     Card, CardTitle
 } from 'reactstrap';
-import { notif, cookies, cookieName } from '../../global';
+import { notif, cookies, cookieName, removeToken } from '../../global';
 import { Redirect } from 'react-router-dom';
 import { cmahasiswa, info } from '../../actions';
 import { files } from '../../api';
@@ -24,7 +24,7 @@ class SelesaiIsi extends React.Component {
     }
     logout(e) {
         e.preventDefault();
-        cookies.remove(cookieName, { path: '/' });
+        removeToken();
         this.props.history.push('/');
         notif('Berhasil!', 'Anda sudah keluar', 'success');
     }

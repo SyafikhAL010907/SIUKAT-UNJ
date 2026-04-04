@@ -14,6 +14,14 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 	cmahasiswaGroup := r.Group("/cmahasiswa")
 	
 	cmahasiswaService := services.CMahasiswaService{}
+	userService := services.UsersService{}
+	ayahService := services.AyahService{}
+	ibuService := services.IbuService{}
+	kendaraanService := services.KendaraanService{}
+	waliService := services.WaliService{}
+	rumahService := services.RumahService{}
+	listrikService := services.ListrikService{}
+	pendukungService := services.PendukungService{}
 
 	// GET /cmahasiswa/all (tanpa auth JWT di Node.js asli)
 	cmahasiswaGroup.GET("/all", func(c *gin.Context) {
@@ -26,11 +34,10 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 	})
 
 	// Pemasangan Auth Middleware untuk endpoint di bawahnya
-	authGroup := cmahasiswaGroup.Group("/")
-	authGroup.Use(middlewares.JwtAuth())
+	cmahasiswaGroup.Use(middlewares.JwtAuth())
 
 	// GET /cmahasiswa/no-peserta/:no_peserta
-	authGroup.GET("/no-peserta/:no_peserta", func(c *gin.Context) {
+	cmahasiswaGroup.GET("/no-peserta/:no_peserta", func(c *gin.Context) {
 		noPeserta := c.Param("no_peserta")
 		res, err := cmahasiswaService.GetCmahasiswa(noPeserta)
 		if err != nil {
@@ -41,7 +48,7 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 	})
 
 	// POST /cmahasiswa/add
-	authGroup.POST("/add", func(c *gin.Context) {
+	cmahasiswaGroup.POST("/add", func(c *gin.Context) {
 		var req models.CMahasiswa
 		if err := c.ShouldBindJSON(&req); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -60,7 +67,7 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 	})
 
 	// PUT /cmahasiswa/ukt-tinggi
-	authGroup.PUT("/ukt-tinggi", func(c *gin.Context) {
+	cmahasiswaGroup.PUT("/ukt-tinggi", func(c *gin.Context) {
 		noPeserta, _ := c.Get("no_peserta")
 		
 		var req struct {
@@ -77,7 +84,7 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 	})
 
 	// PUT /cmahasiswa/ukt-tinggi-tidak
-	authGroup.PUT("/ukt-tinggi-tidak", func(c *gin.Context) {
+	cmahasiswaGroup.PUT("/ukt-tinggi-tidak", func(c *gin.Context) {
 		noPeserta, _ := c.Get("no_peserta")
 		
 		err := cmahasiswaService.UktTinggiTidak(noPeserta.(string))
@@ -89,7 +96,7 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 	})
 
 	// PUT /cmahasiswa/flag-terima
-	authGroup.PUT("/flag-terima", func(c *gin.Context) {
+	cmahasiswaGroup.PUT("/flag-terima", func(c *gin.Context) {
 		noPeserta, _ := c.Get("no_peserta")
 
 		err := cmahasiswaService.FlagTerima(noPeserta.(string))
@@ -101,7 +108,7 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 	})
 
 	// PUT /cmahasiswa/flag-klarifikasi
-	authGroup.PUT("/flag-klarifikasi", func(c *gin.Context) {
+	cmahasiswaGroup.PUT("/flag-klarifikasi", func(c *gin.Context) {
 		noPeserta, _ := c.Get("no_peserta")
 
 		err := cmahasiswaService.FlagKlarifikasi(noPeserta.(string))
@@ -115,7 +122,7 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 	})
 
 	// GET /cmahasiswa/flag-batal-klarifikasi/:no_peserta
-	authGroup.GET("/flag-batal-klarifikasi/:no_peserta", func(c *gin.Context) {
+	cmahasiswaGroup.GET("/flag-batal-klarifikasi/:no_peserta", func(c *gin.Context) {
 		noPeserta := c.Param("no_peserta")
 		
 		err := cmahasiswaService.FlagBatalKlarifikasi(noPeserta)
@@ -133,7 +140,7 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 	})
 
 	// GET /cmahasiswa/flag-selesai-klarifikasi/:no_peserta
-	authGroup.GET("/flag-selesai-klarifikasi/:no_peserta", func(c *gin.Context) {
+	cmahasiswaGroup.GET("/flag-selesai-klarifikasi/:no_peserta", func(c *gin.Context) {
 		noPeserta := c.Param("no_peserta")
 		
 		err := cmahasiswaService.FlagSelesaiKlarifikasi(noPeserta)
@@ -149,4 +156,44 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 		}
 		c.JSON(http.StatusOK, res)
 	})
+
+	// GET /cmahasiswa/verifikasi
+	cmahasiswaGroup.GET("/verifikasi", func(c *gin.Context) {
+		noPeserta, _ := c.Get("no_peserta")
+		np := noPeserta.(string)
+		
+		user, err := userService.GetUser(np)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal memverifikasi data"})
+			return
+		}
+
+		userMhs, _ := cmahasiswaService.GetCmahasiswa(np)
+
+		cMhsRes, _ := cmahasiswaService.CheckData(np)
+		ayahRes, _ := ayahService.CheckData(np, userMhs.UktTinggi)
+		ibuRes, _ := ibuService.CheckData(np, userMhs.UktTinggi)
+		kenRes, _ := kendaraanService.CheckData(np)
+		waliRes, _ := waliService.CheckData(np, userMhs.UktTinggi)
+		rmhRes, _ := rumahService.CheckData(np)
+		lstRes, _ := listrikService.CheckData(np)
+		pdkRes, _ := pendukungService.CheckData(np, userMhs.UktTinggi)
+		pdkVerRes, _ := pendukungService.CheckDataVerifikasi(np, userMhs.UktTinggi)
+
+		isVerified := cMhsRes && ayahRes && ibuRes && kenRes && waliRes && rmhRes && lstRes && pdkRes && pdkVerRes
+
+		c.JSON(http.StatusOK, gin.H{
+			"data": user,
+			"cmahasiswa": cMhsRes,
+			"ayah": ayahRes,
+			"ibu": ibuRes,
+			"kendaraan": kenRes,
+			"wali": waliRes,
+			"rumah": rmhRes,
+			"listrik": lstRes,
+			"pendukung": pdkRes,
+			"verifikasi": isVerified,
+		})
+	})
+
 }

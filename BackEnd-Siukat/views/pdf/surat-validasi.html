@@ -1,4 +1,4 @@
-﻿<!DOCTYPE HTML>
+<!DOCTYPE HTML>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -391,6 +391,201 @@
                             <i>Sistem UKT Online - Universitas Negeri Jakarta</i>
                         </td>
                         <td style="text-align:right">
+                <tr>
+                    <td></td>
+                    <td>Pekerjaan</td>
+                    <td><%= ayah.pekerjaan_ayah ? ayah.pekerjaan.nama : "-" %></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Pendapatan</td>
+                    <td><%= ayah.penghasilan_ayah ? ayah.penghasilan_ayah : "-" %></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Penghasilan Sampingan</td>
+                    <td><%= ayah.sampingan_ayah ? ayah.sampingan_ayah : "-" %></td>
+                </tr>
+
+                <!--Data Ibu-->
+                <tr>
+                    <td></td>
+                    <td colspan="2" class="bold">Data Ibu</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Nama Ibu</td>
+                    <td><%= ibu.nama_ibu %></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>NIK</td>
+                    <td><%= ibu.nik_ibu ? ibu.nik_ibu : "-" %></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Alamat</td>
+                    <td><%= ibu.alamat_ibu %> Kec. <%= ibu.kecamatan_ibu ? ibu.kecamatan.kecam_nama : "-" %> , <%= ibu.kabkot_ibu ? ibu.kabkot.kab_nama : "-" %> - <%= ibu.provinsi_ibu ? ibu.provinsi.provinsi_nama : "-" %></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Tempat, Tanggal Lahir</td>
+                    <td><%= ibu.tempat_lahir_ibu ? ibu.tempat_lahir_ibu : "-" %>, <%= ibu.tanggal_lahir_ibu ? ibu.tanggal_lahir_ibu : "-" %></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Pekerjaan</td>
+                    <td><%= ibu.pekerjaan_ibu ? ibu.pekerjaan.nama : "-" %></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Pendapatan</td>
+                    <td><%= ibu.penghasilan_ibu ? ibu.penghasilan_ibu : "-" %></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Penghasilan Sampingan</td>
+                    <td><%= ibu.sampingan_ibu ? ibu.sampingan_ibu : "-" %></td>
+                </tr>
+                <!--Data Wali-->
+                <tr>
+                    <td width="5%" class="bold">D.</td>
+                    <td colspan="2" class="bold">Data Wali</td>
+                    <td width="10%" >Paraf Calon Mahasiswa</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Nama Wali</td>
+                    <td><%= wali.nama_wali ? wali.nama_wali : "-" %></td>
+                    <td rowspan="3"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Alamat</td>
+                    <td><%= wali.alamat_wali ? wali.alamat_wali : "-" %></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Komitmen Pembiayaan per Bulan</td>
+                    <td><%= wali.kesanggupan_wali ? wali.kesanggupan_wali : "-" %></td>
+                </tr>
+            </table>
+        </div>
+        <div class="page-break"></div>        
+        <div class="frame">
+            <table class="data">
+                <!--Listrik-->
+                <tr>
+                    <td width="5%" class="bold">E.</td>
+                    <td colspan="2" class="bold">Data Beban Listrik PLN</td>
+                    <td width="10%" >Paraf Calon Mahasiswa</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Nomor Pelanggan</td>
+                    <td><%= listrik.no_pelanggan %></td>
+                    <td rowspan="3"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Jenis Pemakaian Listrik</td>
+                    <td><%= listrik.jenis_pemakaian %></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Total Biaya Pemakaian Listrik (3 Bulan Terakhir)</td>
+                    <td><%= listrik.pengeluaran %></td>
+                </tr>
+
+                <!--Kendaraan-->
+                <tr>
+                    <td width="5%" class="bold">F.</td>
+                    <td colspan="2" class="bold">Data Kendaraan (yang dimiliki anggota keluarga dalam 1 KK)</td>
+                    <td width="10%" >Paraf Calon Mahasiswa</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Jumlah Motor</td>
+                    <td><%= kendaraan.jumlah_motor %></td>
+                    <td rowspan="4"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Total Semua Biaya Pajak Motor per Tahun</td>
+                    <td><%= kendaraan.pajak_motor %></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Jumlah Mobil</td>
+                    <td><%= kendaraan.jumlah_mobil %></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Total Semua Biaya Pajak Mobil per Tahun</td>
+                    <td><%= kendaraan.pajak_mobil %></td>
+                </tr>
+            </table>
+            <div class="page-break"></div>  
+			<br/><br/><br/>
+            <p>Dengan ini kami menyatakan bahwa data yang dilampirkan di atas adalah benar adanya. Apabila di kemudian hari ditemukan bahwa data tersebut tidak benar atau palsu, maka kami bersedia untuk mempertanggungjawabkannya di muka hukum dan status mahasiswa dibatalkan.</p>
+            <table class="tanda-tangan">
+                <tr>
+                    <td width="50%"></td>
+                    <td width="50%">................, .................................. <%= tahun %><br/></td>
+                </tr>
+                <tr>
+                    <td width="50%">Orang Tua</td>
+                    <td width="50%">Calon Mahasiswa</td>
+                </tr>
+                <tr>
+                    <td><br/><br/><br/><br/><br/>..........................................................</td>
+                    <td><br/><br/><small>Materai 6000</small><br/><br/><br/><%= cmahasiswa.nama_cmahasiswa.toUpperCase() %></td>
+                </tr>
+                <tr>
+                    <td>NIK. ................................................</td>
+                    <td>NIK. ................................................</td>
+                </tr>
+                <tr>
+                    <td colspan=2 style="text-align: center"><br/>Mengetahui</td>
+                </tr>
+                <tr>
+                    <td width="50%"><br/>Tetangga 1 (Depan/Belakang/Kanan/Kiri)<sup>*</sup></td>
+                    <td width="50%"><br/>Tetangga 2 (Depan/Belakang/Kanan/Kiri)<sup>*</sup></td>
+                </tr>
+                <tr>
+                    <td><br/><br/><br/><br/><br/>..........................................................</td>
+                    <td><br/><br/><br/><br/><br/>..........................................................</td>
+                </tr>
+                <tr>
+                    <td>NIK. ................................................</td>
+                    <td>NIK. ................................................</td>
+                </tr>
+                <tr>
+                    <td width="50%"><br/>Ketua RW</td>
+                    <td width="50%"><br/>Ketua RT</td>
+                </tr>
+                <tr>
+                    <td><br/><br/><br/><br/><br/>..........................................................</td>
+                    <td><br/><br/><br/><br/><br/>..........................................................</td>
+                </tr>
+                <tr>
+                    <td>NIK. ................................................</td>
+                    <td>NIK. ................................................</td>
+                </tr>
+            </table>
+            <br/>
+            *Coret yang tidak perlu
+        </div>
+
+
+
+        <!-- <div class="footer">
+                <table style="width: 100%;">
+                    <tr>
+                        <td style="width: 80%">
+                            <i>Sistem UKT Online - Universitas Negeri Jakarta</i>
+                        </td>
+                        <td style="text-align:right">
                             Halaman <span class="pagenum"></span> Dari 3
                         </td>
                     </tr>
@@ -403,7 +598,7 @@
                         <i><%= cmahasiswa.no_peserta %> <%= cmahasiswa.nama_cmahasiswa %> - Sistem UKT Universitas Negeri Jakarta</i>
                     </td>
                     <td style="text-align:right" class="font-9">
-                        Halaman {{page}} dari {{pages}}
+                        Halaman PAGE dari PAGES
                     </td>
                 </tr>
             </table>

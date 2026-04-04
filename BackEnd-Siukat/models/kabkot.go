@@ -1,10 +1,11 @@
 package models
 
-// Kabkot adalah representasi tabel ref_kabkot
 type Kabkot struct {
-	Kode     string `gorm:"primaryKey;type:varchar(255)" json:"kode"`
-	Provinsi string `gorm:"type:varchar(255)" json:"provinsi"`
-	Nama     string `gorm:"type:varchar(255)" json:"nama"`
+	KabID      string `gorm:"primaryKey;column:kab_id;type:varchar(255)" json:"kab_id"`
+	KabNama    string `gorm:"column:kab_nama;type:varchar(255)" json:"kab_nama"`
+	ProvinsiID string `gorm:"column:provinsi_id;type:varchar(255)" json:"provinsi_id"`
 }
 
-func (Kabkot) TableName() string { return "ref_kabkot" }
+func (Kabkot) TableName() string {
+	return "ref_kabupaten"
+}

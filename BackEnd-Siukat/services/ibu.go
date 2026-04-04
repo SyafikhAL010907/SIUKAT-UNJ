@@ -111,24 +111,50 @@ func (s *IbuService) CheckData(noPeserta string, uktTinggi string) (bool, error)
 		return false, err
 	}
 
+	// Replicating Node.js "delete and check" logic using a map
+	data := map[string]interface{}{
+		"no_peserta":         ibu.NoPeserta,
+		"status_ibu":       ibu.StatusIbu,
+		"nama_ibu":         ibu.NamaIbu,
+		"nik_ibu":          ibu.NikIbu,
+		"telepon_ibu":      ibu.TeleponIbu,
+		"alamat_ibu":       ibu.AlamatIbu,
+		"provinsi_ibu":     ibu.ProvinsiIbu,
+		"kabkot_ibu":       ibu.KabkotIbu,
+		"kecamatan_ibu":    ibu.KecamatanIbu,
+		"pekerjaan_ibu":    ibu.PekerjaanIbu,
+		"penghasilan_ibu":  ibu.PenghasilanIbu,
+		"sampingan_ibu":    ibu.SampinganIbu,
+		"scan_ktp_ibu":     ibu.ScanKtpIbu,
+		"scan_slip_ibu":    ibu.ScanSlipIbu,
+		"tempat_lahir_ibu": ibu.TempatLahirIbu,
+		"tanggal_lahir_ibu": ibu.TanggalLahirIbu,
+		"atribut":           ibu.Atribut,
+	}
+
 	if ibu.StatusIbu == "wafat" {
+		// Only name is required
 		return ibu.NamaIbu != "", nil
 	}
 
-	// Kalau ukt_tinggi == ya, skip field-field dokumen
-	if uktTinggi != "ya" {
-		if ibu.NikIbu == "" || ibu.PekerjaanIbu == "" || ibu.PenghasilanIbu == 0 {
-			return false, nil
-		}
-		// Kalau pekerjaan bukan "tidak bekerja" (kode 11), scan slip wajib
-		if ibu.PekerjaanIbu != "11" && ibu.ScanSlipIbu == "" {
-			return false, nil
-		}
+	if uktTinggi == "ya" {
+		delete(data, "nik_ibu")
+		delete(data, "pekerjaan_ibu")
+		delete(data, "penghasilan_ibu")
+		delete(data, "scan_ktp_ibu")
+		delete(data, "scan_slip_ibu")
 	}
 
-	// Field wajib selalu ada
-	if ibu.NamaIbu == "" || ibu.AlamatIbu == "" {
-		return false, nil
+	if ibu.PekerjaanIbu == 11 { // Tidak bekerja
+		delete(data, "penghasilan_ibu")
+	}
+
+	delete(data, "sampingan_ibu")
+
+	for _, val := range data {
+		if val == nil || val == "" || val == 0 {
+			return false, nil
+		}
 	}
 
 	return true, nil

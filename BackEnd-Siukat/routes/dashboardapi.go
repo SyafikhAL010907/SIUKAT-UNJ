@@ -1,36 +1,31 @@
 package routes
 
 import (
-	"BackEnd-Siukat/middlewares"
 	"BackEnd-Siukat/services"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
-func DashboardRoutes(r *gin.RouterGroup) {
-	group := r.Group("/dashboardapi")
-	
-	// Sesuai nodejs: membutuhkan autentikasi
-	group.Use(middlewares.JwtAuth())
+func DashboardApiRoutes(r *gin.RouterGroup) {
+	group := r.Group("/dashboard")
+	dashboardService := services.DashboardService{}
 
-	srv := services.DashboardService{}
-
-	group.GET("/chart", func(c *gin.Context) {
-		res, err := srv.DashboardSummary()
+	group.GET("/data", func(c *gin.Context) {
+		data, err := dashboardService.DashboardSummary()
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			c.Status(http.StatusInternalServerError)
 			return
 		}
-		c.JSON(http.StatusOK, res)
+		c.JSON(http.StatusOK, data)
 	})
 
 	group.GET("/meta", func(c *gin.Context) {
-		res, err := srv.DashboardMeta()
+		data, err := dashboardService.DashboardMeta()
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			c.Status(http.StatusInternalServerError)
 			return
 		}
-		c.JSON(http.StatusOK, res)
+		c.JSON(http.StatusOK, data)
 	})
 }

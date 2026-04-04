@@ -1,9 +1,10 @@
 package models
 
-// Fakultas adalah representasi tabel ref_fakultas
 type Fakultas struct {
-	Kode string `gorm:"primaryKey;type:varchar(255)" json:"kode"`
-	Nama string `gorm:"type:varchar(255)" json:"nama"`
+	Kode int    `gorm:"primaryKey;column:kode" json:"kode"`
+	Nama string `gorm:"column:nama;type:varchar(255)" json:"nama"`
 }
 
-func (Fakultas) TableName() string { return "ref_fakultas" }
+func (Fakultas) TableName() string {
+	return "ref_fakultas"
+}

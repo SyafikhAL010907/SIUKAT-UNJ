@@ -18,7 +18,6 @@ import { cmahasiswa, verifikasi, info } from '../../actions';
 import { connect } from 'react-redux';
 import { notif } from '../../global';
 import UNJ from '../dist/img/unj.png';
-import { Link } from 'react-router-dom';
 
 import ReactToPrint from 'react-to-print';
 
@@ -85,7 +84,7 @@ class ComponentToPrint extends React.Component {
                             <td>|</td>
                             <td>
                                 <h5>
-                                    {this.props.cmahasiswa.no_peserta.charAt(0) == '8'
+                                    {this.props.cmahasiswa.no_peserta.charAt(0) === '8'
                                         ? 'JAPRES'
                                         : this.props.info.stage.toUpperCase()}
                                 </h5>
@@ -217,13 +216,13 @@ class Terima extends React.Component {
                 '-' +
                 this.props.cmahasiswa.prodi?.jenjang.slice(-1),
             stage:
-                this.props.cmahasiswa.no_peserta.charAt(0) == '8'
+                this.props.cmahasiswa.no_peserta.charAt(0) === '8'
                     ? 'JAPRES'
                     : this.props.info.stage_detail.toUpperCase(),
-            beasiswa: this.props.verifikasi.result_kipk == 'lolos' ? 'YA' : 'TIDAK',
+            beasiswa: this.props.verifikasi.result_kipk === 'lolos' ? 'YA' : 'TIDAK',
             keterangan: '-',
             keterangan_beasiswa:
-                this.props.verifikasi.result_kipk == 'lolos' ? 'KIPK' : '-',
+                this.props.verifikasi.result_kipk === 'lolos' ? 'KIPK' : '-',
             nama_lengkap: this.props.cmahasiswa.nama_cmahasiswa
         };
         console.log(requestBody, this.props.verifikasi);
@@ -317,8 +316,8 @@ class Terima extends React.Component {
         }
         // console.log(this.state.modal);
 
-        // const biodataIsBelumLengkap = true;
-        const biodataIsBelumLengkap = parseInt(this.props?.cmahasiswa?.bio_cmahasiswa?.flag_lengkap) === 0;
+        // bio_ system removed — biodata gating no longer applies
+        const biodataIsBelumLengkap = false;
 
         return (
             <div>

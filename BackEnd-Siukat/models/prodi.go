@@ -1,11 +1,14 @@
 package models
 
-// Prodi adalah representasi tabel ref_prodi
 type Prodi struct {
-	Kode     int    `gorm:"primaryKey;autoIncrement" json:"kode"`
-	Fakultas string `gorm:"type:varchar(255)" json:"fakultas"`
-	Program  string `gorm:"type:varchar(255)" json:"program"`
-	Nama     string `gorm:"type:varchar(255)" json:"nama"`
+	Kode     string `gorm:"primaryKey;column:kode;type:varchar(255)" json:"kode"`
+	Jalur    int    `gorm:"column:jalur" json:"jalur"`
+	Nama     string `gorm:"column:nama;type:varchar(255)" json:"nama"`
+	Jenjang  string `gorm:"column:jenjang;type:varchar(255)" json:"jenjang"`
+	KodeFak  int    `gorm:"column:kode_fak" json:"kode_fak"`
+	KodeLama string `gorm:"column:kode_lama;type:varchar(255)" json:"kode_lama"`
 }
 
-func (Prodi) TableName() string { return "ref_prodi" }
+func (Prodi) TableName() string {
+	return "ref_prodi"
+}

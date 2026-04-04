@@ -11,7 +11,7 @@ import {
 } from 'reactstrap';
 import { Link, Redirect } from 'react-router-dom';
 import { withCookies } from 'react-cookie';
-import { notif, cookies, cookieName } from '../../global';
+import { notif, cookies, cookieName, removeToken } from '../../global';
 
 class Navigation extends React.Component {
     constructor(props) {
@@ -70,7 +70,7 @@ class Navigation extends React.Component {
     }
     logout(e) {
         e.preventDefault();
-        cookies.remove(cookieName, { path: '/' });
+        removeToken();
         this.props.router.history.push('/');
         notif('Berhasil!', 'Anda berhasil keluar', 'success');
     }

@@ -6,3 +6,10 @@
  cd fe-siukat-new/ukt-react-dev_snmptn_2022
  npm install
  npm run dev
+
+cd BackEnd-Siukat > go run cmd/api/main.go
+go build ./cmd/api/main.go
+
+
+Nomor Peserta: 925111008305
+Password (ddmmyyyy): 16092006 (berdasarkan tanggal lahir 16 September 2006)

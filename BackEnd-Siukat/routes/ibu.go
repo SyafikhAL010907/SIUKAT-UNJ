@@ -6,6 +6,7 @@ import (
 	"BackEnd-Siukat/models"
 	"BackEnd-Siukat/services"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -16,6 +17,14 @@ func IbuRoutes(r *gin.RouterGroup) {
 	ibuService := services.IbuService{}
 
 	// Endpoint publik (tanpa JWT)
+	ibuGroup.GET("/all", func(c *gin.Context) {
+		var data []models.Ibu
+		if err := config.DB.Find(&data).Error; err != nil {
+			c.JSON(http.StatusInternalServerError, err)
+			return
+		}
+		c.JSON(http.StatusOK, data)
+	})
 	ibuGroup.GET("/get-ibu/:no_peserta", func(c *gin.Context) {
 		noPeserta := c.Param("no_peserta")
 		var ibu models.Ibu
@@ -70,7 +79,9 @@ func IbuRoutes(r *gin.RouterGroup) {
 			req.NikIbu = c.PostForm("nik_ibu")
 			req.TeleponIbu = c.PostForm("telepon_ibu")
 			req.AlamatIbu = c.PostForm("alamat_ibu")
-			req.PekerjaanIbu = c.PostForm("pekerjaan_ibu")
+			if pkj, errArg := strconv.Atoi(c.PostForm("pekerjaan_ibu")); errArg == nil {
+				req.PekerjaanIbu = pkj
+			}
 			req.TempatLahirIbu = c.PostForm("tempat_lahir_ibu")
 
 			// File upload KTP — parity dengan multer Node.js
@@ -98,6 +109,53 @@ func IbuRoutes(r *gin.RouterGroup) {
 
 		// STEP 2: Update data
 		res, err := ibuService.Edit(req, np, "original")
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, res)
+	})
+
+	authGroup.PUT("/edit/:no_peserta", func(c *gin.Context) {
+		noPeserta := c.Param("no_peserta")
+		np := noPeserta
+
+		statusIbu := c.PostForm("status_ibu")
+		req := models.Ibu{
+			NamaIbu:   c.PostForm("nama_ibu"),
+			StatusIbu: statusIbu,
+		}
+
+		if statusIbu != "wafat" {
+			req.NikIbu = c.PostForm("nik_ibu")
+			req.TeleponIbu = c.PostForm("telepon_ibu")
+			req.AlamatIbu = c.PostForm("alamat_ibu")
+			if pkj, errArg := strconv.Atoi(c.PostForm("pekerjaan_ibu")); errArg == nil {
+				req.PekerjaanIbu = pkj
+			}
+			req.TempatLahirIbu = c.PostForm("tempat_lahir_ibu")
+
+			fileKtp, errKtp := c.FormFile("file_scan_ktp_ibu")
+			if errKtp == nil {
+				filename := np + "_ktp_ibu_" + fileKtp.Filename
+				c.SaveUploadedFile(fileKtp, "public/uploads/"+filename)
+				req.ScanKtpIbu = filename
+			}
+
+			fileSlip, errSlip := c.FormFile("file_scan_slip_ibu")
+			if errSlip == nil {
+				filename := np + "_slip_ibu_" + fileSlip.Filename
+				c.SaveUploadedFile(fileSlip, "public/uploads/"+filename)
+				req.ScanSlipIbu = filename
+			}
+		}
+
+		var existing models.Ibu
+		config.DB.Where("no_peserta = ? AND atribut = ?", np, "sanggah").First(&existing)
+		now := time.Now()
+		ibuService.AddLog(existing, "sanggah", np, &now)
+
+		res, err := ibuService.Edit(req, np, "sanggah")
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return

@@ -1,31 +1,26 @@
 package models
 
-import (
-	"time"
-	"gorm.io/gorm"
-)
+import "time"
 
-// LogValue merupakan mirror dari tb_log_value
 type LogValue struct {
-	IdLogValue int            `gorm:"primaryKey;autoIncrement" json:"id_log_value"`
-	NoPeserta  string         `gorm:"type:varchar(255)" json:"no_peserta"`
-	V1         float64        `gorm:"type:decimal" json:"v1"`
-	V2         float64        `gorm:"type:decimal" json:"v2"`
-	V3         float64        `gorm:"type:decimal" json:"v3"`
-	V4         float64        `gorm:"type:decimal" json:"v4"`
-	V5         float64        `gorm:"type:decimal" json:"v5"`
-	Av1        float64        `gorm:"type:decimal" json:"av1"`
-	Bv2        float64        `gorm:"type:decimal" json:"bv2"`
-	Cv3        float64        `gorm:"type:decimal" json:"cv3"`
-	Dv4        float64        `gorm:"type:decimal" json:"dv4"`
-	Ev5        float64        `gorm:"type:decimal" json:"ev5"`
-	Ikb        float64        `gorm:"type:decimal" json:"ikb"`
-	Atribut    string         `gorm:"type:enum('original','sanggah')" json:"atribut"`
-	Executor   string         `gorm:"type:varchar(255)" json:"executor"`
-	Timestamp  time.Time      `gorm:"type:datetime" json:"timestamp"`
-	DeletedAt  gorm.DeletedAt `gorm:"index" json:"deleted_at"`
+	IDLogValue int        `gorm:"primaryKey;column:id_log_value" json:"id_log_value"`
+	NoPeserta  int        `gorm:"column:no_peserta" json:"no_peserta"`
+	V1         int        `gorm:"column:v1" json:"v1"`
+	V2         int        `gorm:"column:v2" json:"v2"`
+	V3         int        `gorm:"column:v3" json:"v3"`
+	V4         int        `gorm:"column:v4" json:"v4"`
+	V5         int        `gorm:"column:v5" json:"v5"`
+	Av1        int        `gorm:"column:av1" json:"av1"`
+	Bv2        int        `gorm:"column:bv2" json:"bv2"`
+	Cv3        int        `gorm:"column:cv3" json:"cv3"`
+	Dv4        int        `gorm:"column:dv4" json:"dv4"`
+	Ev5        int        `gorm:"column:ev5" json:"ev5"`
+	Ikb        int        `gorm:"column:ikb" json:"ikb"`
+	Atribut    string     `gorm:"column:atribut;type:enum('original','sanggah')" json:"atribut"`
+	Executor   string     `gorm:"column:executor;type:varchar(255)" json:"executor"`
+	Timestamp  *time.Time `gorm:"column:timestamp;type:datetime" json:"timestamp"`
 }
 
 func (LogValue) TableName() string {
-	return "tb_log_value" // assuming table name is tb_log_value
+	return "log_value"
 }

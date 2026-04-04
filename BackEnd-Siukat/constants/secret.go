@@ -6,7 +6,7 @@ import "os"
 func GetJWTSecret() string {
 	secret := os.Getenv("SECRET")
 	if secret == "" {
-		return "siukat_default_secret_key_change_in_production"
+		return "rahasia_negara_siukat_2026_unj"
 	}
 	return secret
 }

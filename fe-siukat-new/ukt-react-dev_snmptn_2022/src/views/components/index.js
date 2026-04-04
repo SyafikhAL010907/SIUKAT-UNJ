@@ -47,12 +47,6 @@ import DataKendaraanSeleksi from './form/ukt-seleksi/DataKendaraanSeleksi';
 import DataPendukungSeleksi from './form/ukt-seleksi/DataPendukungSeleksi';
 import VerifikasiSeleksi from './form/ukt-seleksi/VerifikasiSeleksi';
 
-import BiodataPribadi from './form/biodata/BiodataPribadi';
-import BiodataOrangTua from './form/biodata/BiodataOrangTua';
-import DataSekolah from './form/biodata/DataSekolah';
-import BiodataInfo from './BiodataInfo';
-import BiodataVerifikasi from './form/biodata/BiodataVerifikasi';
-
 export {
     Navigation,
     TabMenu,
@@ -95,10 +89,5 @@ export {
     DataKendaraanSeleksi,
     DataPendukungSeleksi,
     VerifikasiSeleksi,
-    BiodataPribadi,
-    BiodataOrangTua,
-    DataSekolah,
-    BiodataInfo,
-    BiodataVerifikasi,
     InfoBiodata,
 };

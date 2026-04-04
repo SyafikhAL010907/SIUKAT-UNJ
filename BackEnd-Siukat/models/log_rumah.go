@@ -1,17 +1,24 @@
 package models
 
-import "gorm.io/gorm"
+import "time"
 
-// LogRumah menyimpan log perubahan data rumah
 type LogRumah struct {
-	IdLogRumah           int            `gorm:"primaryKey;autoIncrement" json:"id_log_rumah"`
-	NoPeserta            string         `gorm:"type:varchar(255)" json:"no_peserta"`
-	BiayaPbb             float64        `gorm:"type:int" json:"biaya_pbb"`
-	JumlahKepalaKeluarga float64        `gorm:"type:int" json:"jumlah_kepala_keluarga"`
-	BiayaKontrak         float64        `gorm:"type:int" json:"biaya_kontrak"`
-	Atribut              string         `gorm:"type:enum('original','sanggah')" json:"atribut"`
-	Executor             string         `gorm:"type:varchar(255)" json:"executor"`
-	DeletedAt            gorm.DeletedAt `gorm:"index" json:"deleted_at"`
+	IDLogRumah           int        `gorm:"primaryKey;column:id_log_rumah" json:"id_log_rumah"`
+	NoPeserta            string     `gorm:"column:no_peserta;type:varchar(255)" json:"no_peserta"`
+	StatusKepemilikan    string     `gorm:"column:status_kepemilikan;type:enum('milik_sendiri','bersama_saudara','kontrak','menumpang')" json:"status_kepemilikan"`
+	LuasTanah            string     `gorm:"column:luas_tanah;type:varchar(255)" json:"luas_tanah"`
+	LuasBangunan         string     `gorm:"column:luas_bangunan;type:varchar(255)" json:"luas_bangunan"`
+	StatusSertifikat     string     `gorm:"column:status_sertifikat;type:enum('hak_milik','hak_guna_bangunan','tanpa_sertifikat','tanah_girik','lainnya')" json:"status_sertifikat"`
+	BiayaPbb             int        `gorm:"column:biaya_pbb" json:"biaya_pbb"`
+	ScanPbb              string     `gorm:"column:scan_pbb;type:varchar(255)" json:"scan_pbb"`
+	BiayaKontrak         int        `gorm:"column:biaya_kontrak" json:"biaya_kontrak"`
+	ScanKontrak          string     `gorm:"column:scan_kontrak;type:varchar(255)" json:"scan_kontrak"`
+	JumlahKepalaKeluarga int        `gorm:"column:jumlah_kepala_keluarga" json:"jumlah_kepala_keluarga"`
+	Atribut              string     `gorm:"column:atribut;type:enum('original','sanggah')" json:"atribut"`
+	Executor             string     `gorm:"column:executor;type:varchar(255)" json:"executor"`
+	Timestamp            *time.Time `gorm:"column:timestamp;type:datetime" json:"timestamp"`
 }
 
-func (LogRumah) TableName() string { return "tb_log_rumah" }
+func (LogRumah) TableName() string {
+	return "log_rumah"
+}

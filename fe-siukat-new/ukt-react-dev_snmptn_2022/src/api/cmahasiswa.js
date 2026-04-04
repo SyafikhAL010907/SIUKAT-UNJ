@@ -52,6 +52,7 @@ export function updateData(token, input) {
 }
 
 export function updateFlagUktTinggi(data, token) {
+    console.log('DEBUG API: updateFlagUktTinggi - Token:', token);
     return new Promise((resolve, reject) => {
         axios
             .put(service + '/cmahasiswa/ukt-tinggi', data, {
@@ -75,6 +76,7 @@ export function updateFlagUktTinggi(data, token) {
 }
 
 export function updateFlagUktRendah(token) {
+    console.log('DEBUG API: updateFlagUktRendah - Token:', token);
     return new Promise((resolve, reject) => {
         axios
             .put(

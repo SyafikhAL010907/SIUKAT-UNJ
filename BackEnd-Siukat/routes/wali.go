@@ -44,6 +44,19 @@ func WaliRoutes(r *gin.RouterGroup) {
 		c.JSON(http.StatusOK, res)
 	})
 
+	authGroup.PUT("/edit/:no_peserta", func(c *gin.Context) {
+		noPeserta := c.Param("no_peserta")
+		var data map[string]interface{}
+		c.ShouldBindJSON(&data)
+
+		res, err := srv.Edit(data, noPeserta, "sanggah")
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, res)
+	})
+
 	authGroup.GET("/get-wali", func(c *gin.Context) {
 		noPeserta, _ := c.Get("no_peserta")
 		res, err := srv.GetByLoggedIn(noPeserta.(string))

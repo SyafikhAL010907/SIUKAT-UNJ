@@ -5,7 +5,7 @@ import Ukt from './Ukt';
 import Biodata from './Biodata';
 import Petunjuk from './Petunjuk';
 import { withCookies } from 'react-cookie';
-import { cookies, cookieName, notif } from '../../global';
+import { getToken, removeToken, notif } from '../../global';
 
 class Layout extends React.Component {
     constructor(props) {
@@ -16,13 +16,13 @@ class Layout extends React.Component {
     }
     UNSAFE_componentWillMount() {
         this.setState({
-            isLogin: cookies.get(cookieName),
+            isLogin: getToken(),
         });
-        // this.props.dispatch(cmahasiswa.getByLoggedIn(cookies.get(cookieName)))
+        // this.props.dispatch(cmahasiswa.getByLoggedIn(getToken()))
     }
     render() {
-        if (cookies.get(cookieName) === undefined) {
-            cookies.remove(cookieName, { path: '/' });
+        if (getToken() === undefined || getToken() === null) {
+            removeToken();
             notif('Sesi Telah Habis!', 'Silakan masuk kembali', 'error');
             return <Redirect to="/" />;
         }

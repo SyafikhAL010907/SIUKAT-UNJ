@@ -18,7 +18,7 @@ func UktRoutes(r *gin.RouterGroup) {
 	uktService := services.UKTService{}
 
 	// GET /ukt
-	uktGroup.GET("/", func(c *gin.Context) {
+	uktGroup.GET("", func(c *gin.Context) {
 		// Dapatkan noPeserta dari jwt context hasil dari Auth Middleware
 		noPeserta, _ := c.Get("no_peserta")
 
@@ -30,8 +30,8 @@ func UktRoutes(r *gin.RouterGroup) {
 		}
 
 		// ukt findOne logic
-		var ukt models.UktKategori
-		if err := config.DB.Where("major_id = ? AND entrance = ?", user.CMahasiswa.ProdiCMahasiswa, user.CMahasiswa.JalurCMahasiswa).First(&ukt).Error; err != nil {
+		var ukt models.Ukt
+		if err := config.DB.Where("major_id = ? AND entrance = ?", user.CMahasiswa.ProdiCmahasiswa, user.CMahasiswa.JalurCmahasiswa).First(&ukt).Error; err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
@@ -58,7 +58,8 @@ func UktRoutes(r *gin.RouterGroup) {
 		// cmahasiswa.selesaiIsi() digantikan update flag manual di sini
 		// di Node.js cmahasiswa.selesaiIsi() memutasi flag menjadi "selesai_isi" atau "pengumuman"
 		flagResult := "selesai_isi"
-		if info.StatusPenilaian == "pengumuman" { // Ilustrasi mock logic selesaiIsi
+		stageSource := info.Stage
+		if stageSource == "" { // Ilustrasi mock logic selesaiIsi
 			flagResult = "pengumuman"
 		}
 		config.DB.Model(&models.CMahasiswa{}).Where("no_peserta = ?", np).Update("flag", flagResult)

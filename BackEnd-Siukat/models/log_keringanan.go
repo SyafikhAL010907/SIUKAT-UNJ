@@ -1,15 +1,17 @@
 package models
 
-import "gorm.io/gorm"
+import "time"
 
-// LogKeringanan menyimpan log perubahan data keringanan
 type LogKeringanan struct {
-	IdLogKeringanan int            `gorm:"primaryKey;autoIncrement" json:"id_log_keringanan"`
-	NoPeserta       string         `gorm:"type:varchar(255)" json:"no_peserta"`
-	Alasan          string         `gorm:"type:text" json:"alasan"`
-	Status          string         `gorm:"type:varchar(255)" json:"status"`
-	Executor        string         `gorm:"type:varchar(255)" json:"executor"`
-	DeletedAt       gorm.DeletedAt `gorm:"index" json:"deleted_at"`
+	IDLogKeringanan int        `gorm:"primaryKey;column:id_log_keringanan" json:"id_log_keringanan"`
+	NoPeserta       string     `gorm:"column:no_peserta;type:varchar(255)" json:"no_peserta"`
+	ScanKeringanan  string     `gorm:"column:scan_keringanan;type:varchar(255)" json:"scan_keringanan"`
+	Flag            string     `gorm:"column:flag;type:enum('menunggu','ditolak','diterima')" json:"flag"`
+	Atribut         string     `gorm:"column:atribut;type:enum('original','sanggah')" json:"atribut"`
+	Executor        string     `gorm:"column:executor;type:varchar(255)" json:"executor"`
+	Timestamp       *time.Time `gorm:"column:timestamp;type:datetime" json:"timestamp"`
 }
 
-func (LogKeringanan) TableName() string { return "tb_log_keringanan" }
+func (LogKeringanan) TableName() string {
+	return "log_keringanan"
+}

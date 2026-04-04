@@ -1,14 +1,15 @@
 package models
 
-// DataSekolah merupakan GORM Model untuk tabel tb_data_sekolah
 type DataSekolah struct {
-	IdDataSekolah  int    `gorm:"primaryKey;autoIncrement" json:"id_data_sekolah"`
-	NoPeserta      string `gorm:"type:varchar(255)" json:"no_peserta"`
-	NamaSekolah    string `gorm:"type:varchar(255)" json:"nama_sekolah"`
-	JenjangSekolah string `gorm:"type:varchar(255)" json:"jenjang_sekolah"`
-	StatusSekolah  string `gorm:"type:varchar(255)" json:"status_sekolah"`
-	ProvinsiSekolah string `gorm:"type:varchar(255)" json:"provinsi_sekolah"`
-	KabkotSekolah  string `gorm:"type:varchar(255)" json:"kabkot_sekolah"`
+	Npsn              string `gorm:"primaryKey;column:npsn;type:varchar(255)" json:"npsn"`
+	NamaSekolah       string `gorm:"column:nama_sekolah;type:varchar(255)" json:"nama_sekolah"`
+	JenisSekolah      string `gorm:"column:jenis_sekolah;type:varchar(255)" json:"jenis_sekolah"`
+	NamaKabupaten     string `gorm:"column:nama_kabupaten;type:varchar(255)" json:"nama_kabupaten"`
+	NamaProvinsi      string `gorm:"column:nama_provinsi;type:varchar(255)" json:"nama_provinsi"`
+	AkreditasiSekolah string `gorm:"column:akreditasi_sekolah;type:varchar(255)" json:"akreditasi_sekolah"`
+	Kepemilikan       string `gorm:"column:kepemilikan;type:varchar(255)" json:"kepemilikan"`
 }
 
-func (DataSekolah) TableName() string { return "tb_data_sekolah" }
+func (DataSekolah) TableName() string {
+	return "data_sekolah"
+}

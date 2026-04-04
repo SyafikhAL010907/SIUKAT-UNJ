@@ -7,7 +7,7 @@ import { captcha } from '../../../actions'
 import { auth } from '../../../api'
 import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { notif, cookies, cookieName } from '../../../global';
+import { notif, setToken, cookies, cookieName } from '../../../global';
 
 class FormLogin extends React.Component {
     constructor(props) {
@@ -50,7 +50,7 @@ class FormLogin extends React.Component {
             tombolMasuk: 'Mohon Menunggu'
         })
         auth.login(this.state).then(res => {
-            cookies.set(cookieName, res.token, { path: "/" })
+            setToken(res.token);
             notif("Berhasil!", "Anda berhasil masuk", "success")
             const flag = res.flag
             this.setState({
@@ -92,7 +92,7 @@ class FormLogin extends React.Component {
                     <Label for="no_peserta">
                         Nomor Peserta {" "}
                         <span style={{ textTransform: "uppercase" }}>
-                            {stage_detail == 'mandiri' ? 'Mandiri Ujian Tulis' : stage_detail}
+                            {stage_detail === 'mandiri' ? 'Mandiri Ujian Tulis' : stage_detail}
                         </span>
                     </Label>
                     <Input type="text" name="no_peserta" id="no_peserta" placeholder="01234567890" onChange={this.handleNomorPendaftaran.bind(this)} disabled={!online} required />
@@ -110,7 +110,7 @@ class FormLogin extends React.Component {
                 </FormGroup>
                 {!open_login && (
                     <FormGroup>
-                        <Card block style={{ borderRadius: '10px' }} color="danger">
+                        <Card body style={{ borderRadius: '10px' }} color="danger">
                             <CardTitle style={{ textAlign: "center" }}>Pengisian data ekonomi blm dibuka
                                 {/* <Button color="danger" block disabled>Pengisian data ekonomi blm dibuka</Button> */}
                             </CardTitle>

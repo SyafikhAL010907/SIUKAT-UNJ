@@ -15,6 +15,7 @@ func JwtAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
 		if authHeader == "" {
+			fmt.Println("DEBUG AUTH: Missing Authorization Header")
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization header is required"})
 			c.Abort()
 			return
@@ -22,12 +23,14 @@ func JwtAuth() gin.HandlerFunc {
 
 		parts := strings.Split(authHeader, " ")
 		if len(parts) != 2 || parts[0] != "Bearer" {
+			fmt.Printf("DEBUG AUTH: Malformed Header: %v\n", authHeader)
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization header format must be Bearer {token}"})
 			c.Abort()
 			return
 		}
 
 		tokenString := parts[1]
+		fmt.Printf("DEBUG AUTH: Token String: '%s'\n", tokenString)
 		secret := os.Getenv("SECRET") // Sesuai dengan constants/secret.js
 
 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
@@ -38,6 +41,7 @@ func JwtAuth() gin.HandlerFunc {
 		})
 
 		if err != nil || !token.Valid {
+			fmt.Printf("DEBUG AUTH: Invalid Token: %v, Secret length: %d\n", err, len(secret))
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid or expired token"})
 			c.Abort()
 			return

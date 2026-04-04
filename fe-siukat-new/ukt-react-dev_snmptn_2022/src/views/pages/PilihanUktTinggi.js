@@ -15,7 +15,7 @@ import {
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { ukt, cmahasiswa } from '../../actions';
-import { rupiah, cookies, cookieName } from '../../global';
+import { rupiah, getToken } from '../../global';
 
 const IconCheck = () => <i className="fa fa-check"></i>;
 
@@ -42,8 +42,8 @@ class PilihanUktTinggi extends React.Component {
     }
 
     UNSAFE_componentWillMount() {
-        this.props.dispatch(ukt.getByLoggedIn(cookies.get(cookieName)));
-        this.props.dispatch(cmahasiswa.fetchAllData(cookies.get(cookieName)));
+        this.props.dispatch(ukt.getByLoggedIn(getToken()));
+        this.props.dispatch(cmahasiswa.fetchAllData(getToken()));
     }
 
     toggleBersedia() {
@@ -81,17 +81,19 @@ class PilihanUktTinggi extends React.Component {
     }
 
     klikBersedia() {
+        console.log('DEBUG COMPONENT: klikBersedia - Token from getToken:', getToken());
         this.props.dispatch(
             cmahasiswa.updateFlagUktTinggi(
                 { golongan_id: this.state.kategori },
-                cookies.get(cookieName)
+                getToken()
             )
         );
     }
 
     klikTidakBersedia() {
+        console.log('DEBUG COMPONENT: klikTidakBersedia - Token from getToken:', getToken());
         this.props.dispatch(
-            cmahasiswa.updateFlagUktRendah(cookies.get(cookieName))
+            cmahasiswa.updateFlagUktRendah(getToken())
         );
     }
 
