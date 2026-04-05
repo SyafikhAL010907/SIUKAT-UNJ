@@ -200,7 +200,7 @@ func AuthRoutes(r *gin.RouterGroup) {
 		srv := services.UsersService{}
 		res, err := srv.GetUser(noPeserta.(string))
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
 		c.JSON(http.StatusOK, res)

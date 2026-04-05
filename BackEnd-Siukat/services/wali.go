@@ -25,8 +25,17 @@ func (s *WaliService) Edit(data map[string]interface{}, noPeserta string, atribu
 
 func (s *WaliService) GetByLoggedIn(noPeserta string) (models.Wali, error) {
 	var res models.Wali
-	err := config.DB.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").Where("no_peserta = ?", noPeserta).First(&res).Error
-	return res, err
+	
+	// 1. Fetch main record without preloads first
+	if err := config.DB.Where("no_peserta = ?", noPeserta).First(&res).Error; err != nil {
+		// Return empty object if not found
+		return models.Wali{NoPeserta: noPeserta}, nil
+	}
+
+	// 2. Separately try to load associations
+	_ = config.DB.Model(&res).Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").First(&res).Error
+
+	return res, nil
 }
 
 func (s *WaliService) AddLog(user models.Wali, atribut string, executor string, timestamp *time.Time) error {

@@ -63,7 +63,7 @@ let FormPendukungSeleksi = (props) => {
                     <Col md={4}>
                         <a
                             href={
-                                storage + '/' + props.initialValues.no_peserta + '/' + scan_kk
+                                storage + '/' + scan_kk
                             }
                             target="_blank"
                             rel="noopener noreferrer"

@@ -36,9 +36,16 @@ class Ayah extends React.Component {
                                 <tr>
                                     <td>Alamat</td>
                                     <td>:</td>
-                                    {this.props.ayah.provinsi !== 0 &&
-                                        <td>{this.props.ayah.alamat_ayah + ', ' + this.props.ayah.kecamatan.kecam_nama + ', ' + this.props.ayah.kabkot.kab_nama + ', ' + this.props.ayah.provinsi.provinsi_nama}</td>
-                                    }
+                                {this.props.ayah.provinsi ? (
+                                    <td>
+                                        {this.props.ayah.alamat_ayah + ', ' + 
+                                         (this.props.ayah.kecamatan?.kecam_nama || '-') + ', ' + 
+                                         (this.props.ayah.kabkot?.kab_nama || '-') + ', ' + 
+                                         (this.props.ayah.provinsi?.provinsi_nama || '-')}
+                                    </td>
+                                ) : (
+                                    <td>-</td>
+                                )}
                                 </tr>
                                 <tr>
                                     <td>Nomor Telepon</td>

@@ -87,8 +87,6 @@ let FormSuratKebenaran = (props) => {
                             href={
                                 storage +
                                 '/' +
-                                props.initialValues.no_peserta +
-                                '/' +
                                 scan_pernyataan_kebenaran
                             }
                             target="_blank"

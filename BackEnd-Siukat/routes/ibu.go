@@ -83,6 +83,21 @@ func IbuRoutes(r *gin.RouterGroup) {
 				req.PekerjaanIbu = pkj
 			}
 			req.TempatLahirIbu = c.PostForm("tempat_lahir_ibu")
+			if tgl, errTgl := time.Parse("2006-01-02", c.PostForm("tanggal_lahir_ibu")); errTgl == nil {
+				req.TanggalLahirIbu = &tgl
+			}
+
+			// Mapping IDs and Income
+			req.ProvinsiIbu = c.PostForm("provinsi_ibu")
+			req.KabkotIbu = c.PostForm("kabkot_ibu")
+			req.KecamatanIbu = c.PostForm("kecamatan_ibu")
+			
+			if pen, errPen := strconv.Atoi(c.PostForm("penghasilan_ibu")); errPen == nil {
+				req.PenghasilanIbu = pen
+			}
+			if sam, errSam := strconv.Atoi(c.PostForm("sampingan_ibu")); errSam == nil {
+				req.SampinganIbu = sam
+			}
 
 			// --- LOGIKA DINAMIS & EFISIENSI (CLEANUP) ---
 			var student models.CMahasiswa

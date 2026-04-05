@@ -31,9 +31,16 @@ class Wali extends React.Component {
                                 <tr>
                                     <td>Alamat</td>
                                     <td>:</td>
-                                    {this.props.wali.provinsi !== 0 &&
-                                        <td>{this.props.wali.alamat_wali + ', ' + this.props.wali.kecamatan.kecam_nama + ', ' + this.props.wali.kabkot.kab_nama + ', ' + this.props.wali.provinsi.provinsi_nama}</td>
-                                    }
+                                {this.props.wali.provinsi ? (
+                                    <td>
+                                        {this.props.wali.alamat_wali + ', ' + 
+                                         (this.props.wali.kecamatan?.kecam_nama || '-') + ', ' + 
+                                         (this.props.wali.kabkot?.kab_nama || '-') + ', ' + 
+                                         (this.props.wali.provinsi?.provinsi_nama || '-')}
+                                    </td>
+                                ) : (
+                                    <td>-</td>
+                                )}
                                 </tr>
                             </tbody>
                         )}

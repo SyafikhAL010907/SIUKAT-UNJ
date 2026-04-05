@@ -37,7 +37,7 @@ class Kendaraan extends React.Component {
                                     <td>STNK Motor</td>
                                     <td>:</td>
                                     <td>
-                                        <a href={storage + '/' + this.props.kendaraan.no_peserta + '/' + this.props.kendaraan.scan_motor} target="_blank" rel="noopener noreferrer">
+                                        <a href={storage + '/' + this.props.kendaraan.scan_motor} target="_blank" rel="noopener noreferrer">
                                             <Button color="primary" size="sm"><i className="fa fa-download"></i> Lihat STNK Motor</Button>
                                         </a>
                                     </td>
@@ -69,7 +69,7 @@ class Kendaraan extends React.Component {
                                     <td>STNK Mobil</td>
                                     <td>:</td>
                                     <td>
-                                        <a href={storage + '/' + this.props.kendaraan.no_peserta + '/' + this.props.kendaraan.scan_mobil} target="_blank" rel="noopener noreferrer">
+                                        <a href={storage + '/' + this.props.kendaraan.scan_mobil} target="_blank" rel="noopener noreferrer">
                                             <Button color="primary" size="sm"><i className="fa fa-download"></i> Lihat STNK Mobil</Button>
                                         </a>
                                     </td>

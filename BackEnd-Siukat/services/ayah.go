@@ -54,8 +54,17 @@ func (s *AyahService) AddLog(user models.Ayah, atribut string, executor string, 
 func (s *AyahService) GetByLoggedIn(noPeserta string) (models.Ayah, error) {
 	db := config.DB
 	var ayah models.Ayah
-	err := db.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").Where("no_peserta = ?", noPeserta).First(&ayah).Error
-	return ayah, err
+	
+	// 1. Fetch main record without preloads first to avoid crash on broken relations
+	if err := db.Where("no_peserta = ?", noPeserta).First(&ayah).Error; err != nil {
+		// If not found, return empty Ayah object instead of error to avoid 500 in controller
+		return models.Ayah{NoPeserta: noPeserta}, nil
+	}
+
+	// 2. Separately try to load associations
+	_ = db.Model(&ayah).Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").First(&ayah).Error
+	
+	return ayah, nil
 }
 
 func (s *AyahService) CheckData(noPeserta string, uktTinggi string) (bool, error) {

@@ -52,6 +52,8 @@ func (s *IbuService) Edit(req models.Ibu, noPeserta string, atribut string) (mod
 		data["pekerjaan_ibu"] = req.PekerjaanIbu
 		data["penghasilan_ibu"] = req.PenghasilanIbu
 		data["sampingan_ibu"] = req.SampinganIbu
+		data["scan_ktp_ibu"] = req.ScanKtpIbu
+		data["scan_slip_ibu"] = req.ScanSlipIbu
 		data["tempat_lahir_ibu"] = req.TempatLahirIbu
 		data["tanggal_lahir_ibu"] = req.TanggalLahirIbu
 	}
@@ -98,9 +100,17 @@ func (s *IbuService) AddLog(user models.Ibu, atribut string, executor string, ti
 func (s *IbuService) GetByLoggedIn(noPeserta string) (models.Ibu, error) {
 	db := config.DB
 	var ibu models.Ibu
-	err := db.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
-		Where("no_peserta = ?", noPeserta).First(&ibu).Error
-	return ibu, err
+
+	// 1. Fetch main record without preloads first
+	if err := db.Where("no_peserta = ?", noPeserta).First(&ibu).Error; err != nil {
+		// Return empty object if not found to prevent 500 error in route
+		return models.Ibu{NoPeserta: noPeserta}, nil
+	}
+
+	// 2. Separately try to load associations
+	_ = db.Model(&ibu).Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").First(&ibu).Error
+
+	return ibu, nil
 }
 
 // CheckData — parity dengan ibu.prototype.checkData di Node.js

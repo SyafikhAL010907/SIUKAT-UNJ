@@ -131,8 +131,6 @@ let FormAyahSeleksi = (props) => {
                                     href={
                                         storage +
                                         '/' +
-                                        props.initialValues.no_peserta +
-                                        '/' +
                                         props.initialValues.scan_ktp_ayah
                                     }
                                     target="_blank"
@@ -349,8 +347,6 @@ let FormAyahSeleksi = (props) => {
                                     <a
                                         href={
                                             storage +
-                                            '/' +
-                                            props.initialValues.no_peserta +
                                             '/' +
                                             props.initialValues.scan_slip_ayah
                                         }

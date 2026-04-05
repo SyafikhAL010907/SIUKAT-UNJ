@@ -33,7 +33,7 @@ class Listrik extends React.Component {
                                 <td>Bukti Tagihan Listrik</td>
                                 <td>:</td>
                                 <td>
-                                    <a href={storage + '/' + this.props.listrik.no_peserta + '/' + this.props.listrik.scan_listrik} target="_blank" rel="noopener noreferrer">
+                                    <a href={storage + '/' + this.props.listrik.scan_listrik} target="_blank" rel="noopener noreferrer">
                                         <Button color="primary" size="sm"><i className="fa fa-download"></i> Lihat Bukti Tagihan Listrik</Button>
                                     </a>
                                 </td>

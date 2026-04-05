@@ -232,8 +232,6 @@ let FormWaliSeleksi = (props) => {
                                     href={
                                         storage +
                                         '/' +
-                                        props.initialValues.no_peserta +
-                                        '/' +
                                         props.initialValues.scan_wali
                                     }
                                     target="_blank"

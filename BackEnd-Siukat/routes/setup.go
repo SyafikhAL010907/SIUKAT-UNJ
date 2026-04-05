@@ -6,6 +6,8 @@ import "github.com/gin-gonic/gin"
 // Parity dengan app.js / router di Node.js (semua endpoint digabung di sini)
 func SetupRoutes(r *gin.Engine) {
 	api := r.Group("/api/v1")
+	api.Static("/img", "./public/img")
+	api.Static("/uploads", "./uploads")
 
 	// === Index ===
 	IndexRoutes(api)

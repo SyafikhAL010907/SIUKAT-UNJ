@@ -41,8 +41,6 @@ class Ayah extends React.Component {
                                             href={
                                                 storage +
                                                 '/' +
-                                                this.props.ayah.no_peserta +
-                                                '/' +
                                                 this.props.ayah.scan_ktp_ayah
                                             }
                                             target="_blank"
@@ -72,9 +70,9 @@ class Ayah extends React.Component {
                                                 ', ' +
                                                 this.props.ayah.kecamatan?.kecam_nama +
                                                 ', ' +
-                                                this.props.ayah.kabkot.kab_nama +
+                                                this.props.ayah.kabkot?.kab_nama +
                                                 ', ' +
-                                                this.props.ayah.provinsi.provinsi_nama}
+                                                this.props.ayah.provinsi?.provinsi_nama}
                                         </td>
                                     )}
                                 </tr>
@@ -82,7 +80,7 @@ class Ayah extends React.Component {
                                     <td>Pekerjaan</td>
                                     <td>:</td>
                                     {this.props.ayah.pekerjaan !== undefined && (
-                                        <td>{this.props.ayah.pekerjaan.nama}</td>
+                                        <td>{this.props.ayah.pekerjaan?.nama}</td>
                                     )}
                                 </tr>
                                 <tr>
@@ -111,8 +109,6 @@ class Ayah extends React.Component {
                                         <a
                                             href={
                                                 storage +
-                                                '/' +
-                                                this.props.ayah.no_peserta +
                                                 '/' +
                                                 this.props.ayah.scan_slip_ayah
                                             }

@@ -41,8 +41,6 @@ class Ibu extends React.Component {
                                             href={
                                                 storage +
                                                 '/' +
-                                                this.props.ibu.no_peserta +
-                                                '/' +
                                                 this.props.ibu.scan_ktp_ibu
                                             }
                                             target="_blank"
@@ -72,9 +70,9 @@ class Ibu extends React.Component {
                                                 ', ' +
                                                 this.props.ibu.kecamatan?.kecam_nama +
                                                 ', ' +
-                                                this.props.ibu.kabkot.kab_nama +
+                                                this.props.ibu.kabkot?.kab_nama +
                                                 ', ' +
-                                                this.props.ibu.provinsi.provinsi_nama}
+                                                this.props.ibu.provinsi?.provinsi_nama}
                                         </td>
                                     )}
                                 </tr>
@@ -111,8 +109,6 @@ class Ibu extends React.Component {
                                         <a
                                             href={
                                                 storage +
-                                                '/' +
-                                                this.props.ibu.no_peserta +
                                                 '/' +
                                                 this.props.ibu.scan_slip_ibu
                                             }

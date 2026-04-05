@@ -133,8 +133,6 @@ let FormKendaraanSeleksi = (props) => {
                                     href={
                                         storage +
                                         '/' +
-                                        props.initialValues.no_peserta +
-                                        '/' +
                                         props.initialValues.scan_motor
                                     }
                                     target="_blank"
@@ -250,8 +248,6 @@ let FormKendaraanSeleksi = (props) => {
                                 <a
                                     href={
                                         storage +
-                                        '/' +
-                                        props.initialValues.no_peserta +
                                         '/' +
                                         props.initialValues.scan_mobil
                                     }

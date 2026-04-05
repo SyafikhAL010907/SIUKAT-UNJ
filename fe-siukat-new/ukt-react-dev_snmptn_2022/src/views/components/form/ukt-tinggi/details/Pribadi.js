@@ -13,7 +13,7 @@ class Pribadi extends React.Component {
             <Row>
                 <Col md={3}>
                     {this.props.cmahasiswa.foto_cmahasiswa && (
-                        <img src={storage + '/' + this.props.cmahasiswa.no_peserta + '/' + this.props.cmahasiswa.foto_cmahasiswa} className="img-thumbnail img-responsive" alt="foto-cmahasiswa" />
+                        <img src={storage + '/' + this.props.cmahasiswa.foto_cmahasiswa} className="img-thumbnail img-responsive" alt="foto-cmahasiswa" />
                     )}
                 </Col>
                 <Col md={9}>
@@ -37,9 +37,16 @@ class Pribadi extends React.Component {
                             <tr>
                                 <td>Alamat</td>
                                 <td>:</td>
-                                {this.props.cmahasiswa.provinsi !== 0 &&
-                                    <td>{this.props.cmahasiswa.alamat_cmahasiswa + ', ' + this.props.cmahasiswa.kecamatan.kecam_nama + ', ' + this.props.cmahasiswa.kabkot.kab_nama + ', ' + this.props.cmahasiswa.provinsi.provinsi_nama}</td>
-                                }
+                                {this.props.cmahasiswa.provinsi ? (
+                                    <td>
+                                        {this.props.cmahasiswa.alamat_cmahasiswa + ', ' + 
+                                         (this.props.cmahasiswa.kecamatan?.kecam_nama || '-') + ', ' + 
+                                         (this.props.cmahasiswa.kabkot?.kab_nama || '-') + ', ' + 
+                                         (this.props.cmahasiswa.provinsi?.provinsi_nama || '-')}
+                                    </td>
+                                ) : (
+                                    <td>-</td>
+                                )}
                             </tr>
                             <tr>
                                 <td>Nomor Telepon</td>

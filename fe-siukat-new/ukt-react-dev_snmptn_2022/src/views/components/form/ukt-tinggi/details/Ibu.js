@@ -36,9 +36,16 @@ class Ibu extends React.Component {
                                 <tr>
                                     <td>Alamat</td>
                                     <td>:</td>
-                                    {this.props.ibu.provinsi !== 0 &&
-                                        <td>{this.props.ibu.alamat_ibu + ', ' + this.props.ibu.kecamatan.kecam_nama + ', ' + this.props.ibu.kabkot.kab_nama + ', ' + this.props.ibu.provinsi.provinsi_nama}</td>
-                                    }
+                                {this.props.ibu.provinsi ? (
+                                    <td>
+                                        {this.props.ibu.alamat_ibu + ', ' + 
+                                         (this.props.ibu.kecamatan?.kecam_nama || '-') + ', ' + 
+                                         (this.props.ibu.kabkot?.kab_nama || '-') + ', ' + 
+                                         (this.props.ibu.provinsi?.provinsi_nama || '-')}
+                                    </td>
+                                ) : (
+                                    <td>-</td>
+                                )}
                                 </tr>
                                 <tr>
                                     <td>Nomor Telepon</td>

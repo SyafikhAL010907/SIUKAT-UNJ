@@ -130,8 +130,6 @@ let FormIbuSeleksi = (props) => {
                                     href={
                                         storage +
                                         '/' +
-                                        props.initialValues.no_peserta +
-                                        '/' +
                                         props.initialValues.scan_ktp_ibu
                                     }
                                     target="_blank"
@@ -351,8 +349,6 @@ let FormIbuSeleksi = (props) => {
                                     <a
                                         href={
                                             storage +
-                                            '/' +
-                                            props.initialValues.no_peserta +
                                             '/' +
                                             props.initialValues.scan_slip_ibu
                                         }

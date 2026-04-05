@@ -19,9 +19,13 @@ class Pendukung extends React.Component {
                                 <td>Surat Pernyataan</td>
                                 <td>:</td>
                                 <td>
-                                    <a href={storage + '/' + this.props.pendukung.no_peserta + '/' + ((this.props.pendukung.scan_pernyataan_ukt_tinggi !== '') ? this.props.pendukung.scan_pernyataan_ukt_tinggi : '')} target="_blank" rel="noopener noreferrer">
-                                        <Button color="primary" size="sm"><i className="fa fa-download"></i> Lihat Surat Pernyataan Kebenaran</Button>
-                                    </a>
+                                    {this.props.pendukung && this.props.pendukung.no_peserta ? (
+                                        <a href={storage + '/' + ((this.props.pendukung.scan_pernyataan_ukt_tinggi !== '') ? this.props.pendukung.scan_pernyataan_ukt_tinggi : '')} target="_blank" rel="noopener noreferrer">
+                                            <Button color="primary" size="sm"><i className="fa fa-download"></i> Lihat Surat Pernyataan Kebenaran</Button>
+                                        </a>
+                                    ) : (
+                                        <span>-</span>
+                                    )}
                                 </td>
                             </tr>
                         </tbody>

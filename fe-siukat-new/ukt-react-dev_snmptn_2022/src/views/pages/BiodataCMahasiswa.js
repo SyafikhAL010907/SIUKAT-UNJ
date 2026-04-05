@@ -1,11 +1,4 @@
 import React from 'react';
-import {
-    Row,
-    Col,
-    Card,
-    CardTitle,
-    Alert,
-} from 'reactstrap';
 import { cmahasiswa, info } from '../../actions';
 import { cookies, cookieName } from '../../global';
 import { connect } from 'react-redux';

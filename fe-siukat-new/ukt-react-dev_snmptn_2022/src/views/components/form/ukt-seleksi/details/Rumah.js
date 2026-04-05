@@ -59,7 +59,7 @@ class Rumah extends React.Component {
                                     <td>Bukti Tagihan PBB</td>
                                     <td>:</td>
                                     <td>
-                                        <a href={storage + '/' + this.props.rumah.no_peserta + '/' + this.props.rumah.scan_pbb} target="_blank" rel="noopener noreferrer">
+                                        <a href={storage + '/' + this.props.rumah.scan_pbb} target="_blank" rel="noopener noreferrer">
                                             <Button color="primary" size="sm"><i className="fa fa-download"></i> Lihat Bukti Tagihan PBB</Button>
                                         </a>
                                     </td>
@@ -78,7 +78,7 @@ class Rumah extends React.Component {
                                     <td>Surat Perjanjian Kontrak</td>
                                     <td>:</td>
                                     <td>
-                                        <a href={storage + '/' + this.props.rumah.no_peserta + '/' + this.props.rumah.scan_kontrak} target="_blank" rel="noopener noreferrer">
+                                        <a href={storage + '/' + this.props.rumah.scan_kontrak} target="_blank" rel="noopener noreferrer">
                                             <Button color="primary" size="sm"><i className="fa fa-download"></i> Lihat Surat Perjanjian Kontrak</Button>
                                         </a>
                                     </td>

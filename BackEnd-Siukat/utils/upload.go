@@ -42,16 +42,17 @@ func HandleDynamicUpload(c *gin.Context, file *multipart.FileHeader, namaMahasis
 	sanitizedBase := SanitizeString(base)
 	finalFilename := sanitizedBase + ext
 
-	// 5. Construct Final Path for SaveUploadedFile (using / for DB portability)
-	finalPath := filepath.Join(targetDir, finalFilename)
-	
+	// 5. Construct Final Path for SaveUploadedFile
+	finalSavePath := filepath.Join(targetDir, finalFilename)
+
 	// Save file (Gin uses os.Create which will overwrite if exists)
-	if err := c.SaveUploadedFile(file, finalPath); err != nil {
+	if err := c.SaveUploadedFile(file, finalSavePath); err != nil {
 		return "", fmt.Errorf("failed to save file: %v", err)
 	}
 
-	// Return relative path for database storage (standardize to forward slashes)
-	dbPath := filepath.ToSlash(finalPath)
+	// Return relative path for database storage (uploads/Folder/File.ext)
+	// Standardize to forward slashes for DB portability
+	dbPath := filepath.ToSlash(filepath.Join("uploads", folderName, finalFilename))
 	return dbPath, nil
 }
 
@@ -63,6 +64,7 @@ func DeleteOldFile(filePath string) {
 	}
 	
 	// Check if file exists before attempting removal
+	// filePath now includes "uploads/" if coming from HandleDynamicUpload
 	if _, err := os.Stat(filePath); err == nil {
 		fmt.Printf("🧹 STORAGE CLEANUP: Removing old file [%s]\n", filePath)
 		err := os.Remove(filePath)

@@ -7,6 +7,7 @@ import (
 	"BackEnd-Siukat/services"
 	"BackEnd-Siukat/utils"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -66,8 +67,16 @@ func AyahRoutes(r *gin.RouterGroup) {
 			data["kabkot_ayah"] = c.PostForm("kabkot_ayah")
 			data["kecamatan_ayah"] = c.PostForm("kecamatan_ayah")
 			data["pekerjaan_ayah"] = c.PostForm("pekerjaan_ayah")
-			data["penghasilan_ayah"] = c.PostForm("penghasilan_ayah")
-			data["sampingan_ayah"] = c.PostForm("sampingan_ayah")
+			
+			if pen, errPen := strconv.Atoi(c.PostForm("penghasilan_ayah")); errPen == nil {
+				data["penghasilan_ayah"] = pen
+			}
+			if sam, errSam := strconv.Atoi(c.PostForm("sampingan_ayah")); errSam == nil {
+				data["sampingan_ayah"] = sam
+			}
+			if tgl, errTgl := time.Parse("2006-01-02", c.PostForm("tanggal_lahir_ayah")); errTgl == nil {
+				data["tanggal_lahir_ayah"] = &tgl
+			}
 
 			// --- LOGIKA DINAMIS & EFISIENSI (CLEANUP) ---
 			// 1. Ambil data CMahasiswa untuk folder name

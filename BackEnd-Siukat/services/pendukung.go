@@ -61,8 +61,11 @@ func (s *PendukungService) AddLog(user models.Pendukung, atribut string, executo
 
 func (s *PendukungService) GetByLoggedIn(noPeserta string) (models.Pendukung, error) {
 	var res models.Pendukung
-	err := config.DB.Where("no_peserta = ?", noPeserta).First(&res).Error
-	return res, err
+	if err := config.DB.Where("no_peserta = ?", noPeserta).First(&res).Error; err != nil {
+		// Return empty object if not found
+		return models.Pendukung{NoPeserta: noPeserta}, nil
+	}
+	return res, nil
 }
 
 func (s *PendukungService) CheckData(noPeserta string, uktTinggi string) (bool, error) {

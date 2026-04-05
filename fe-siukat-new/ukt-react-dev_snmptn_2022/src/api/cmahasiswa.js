@@ -17,15 +17,37 @@ export function getByLoggedIn(token) {
                 },
             })
             .then((response) => {
-                response.data.tanggal_lahir_cmahasiswa = dateConverter(
-                    response.data.tanggal_lahir_cmahasiswa
-                );
-                resolve(response.data);
+                console.log('DEBUG API: getByLoggedIn Response:', response.data);
+                if (response.data && typeof response.data === 'object') {
+                    // Check if it's a student or admin (student has no_peserta)
+                    const data = response.data;
+                    
+                    // Safe conversion of date
+                    if (data.tanggal_lahir_cmahasiswa) {
+                        data.tanggal_lahir_cmahasiswa = dateConverter(
+                            data.tanggal_lahir_cmahasiswa
+                        );
+                    }
+                    resolve(data);
+                } else {
+                    const errorMsg = 'Format data dari server tidak sesuai atau kosong';
+                    notif('Terjadi kesalahan!', errorMsg, 'error');
+                    console.error('ERROR API: Invalid response structure:', response.data);
+                    reject(errorMsg);
+                }
             })
             .catch((err) => {
-                cookies.remove(cookieName, { path: '/' });
-                notif('Terjadi kesalahan!', errLog(err.response), 'error');
-                reject(err.response);
+                console.error('ERROR API: getByLoggedIn Catch:', err);
+                // Pass the whole error object to errLog
+                const errorMessage = errLog(err);
+                
+                // Only remove cookies if it's an Auth error (401)
+                if (err.response?.status === 401) {
+                    cookies.remove(cookieName, { path: '/' });
+                }
+                
+                notif('Terjadi kesalahan!', errorMessage, 'error');
+                reject(err);
             });
     });
 }

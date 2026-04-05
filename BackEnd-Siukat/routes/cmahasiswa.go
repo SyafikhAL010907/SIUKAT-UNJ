@@ -5,6 +5,7 @@ import (
 	"BackEnd-Siukat/models"
 	"BackEnd-Siukat/services"
 	"BackEnd-Siukat/utils"
+	"mime/multipart"
 	"net/http"
 	"time"
 
@@ -229,6 +230,115 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 			"message": "Foto profil berhasil diperbarui",
 			"path":    savedPath,
 		})
+	})
+
+	// PUT /cmahasiswa/edit (Parity dengan Node.js biodata update + Upload Foto)
+	cmahasiswaGroup.PUT("/edit", func(c *gin.Context) {
+		noPeserta, _ := c.Get("no_peserta")
+		np := noPeserta.(string)
+
+		student, err := cmahasiswaService.GetCmahasiswa(np)
+		if err != nil {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Data mahasiswa tidak ditemukan"})
+			return
+		}
+
+		updateData := make(map[string]interface{})
+
+		// 1. Cek Content-Type
+		contentType := c.GetHeader("Content-Type")
+		if contentType == "application/json" {
+			// Kasus A: Update JSON Murnian
+			if err := c.ShouldBindJSON(&updateData); err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON: " + err.Error()})
+				return
+			}
+		} else {
+			// Kasus B: Multipart/Form (Termasuk Foto)
+			form, err := c.MultipartForm()
+			if err == nil {
+				// Ambil semua field form secara dinamis
+				for key, values := range form.Value {
+					if len(values) > 0 {
+						updateData[key] = values[0]
+					}
+				}
+
+				// Cek File Foto Profil (Mendukung key 'foto' atau 'file_foto_cmahasiswa')
+				var fileHeader *multipart.FileHeader
+				if f, ok := form.File["foto"]; ok && len(f) > 0 {
+					fileHeader = f[0]
+				} else if f, ok := form.File["file_foto_cmahasiswa"]; ok && len(f) > 0 {
+					fileHeader = f[0]
+				}
+
+				if fileHeader != nil {
+					// Cleanup foto lama
+					utils.DeleteOldFile(student.FotoCmahasiswa)
+
+					// Upload baru
+					savedPath, errUpload := utils.HandleDynamicUpload(c, fileHeader, student.NamaCmahasiswa, np)
+					if errUpload == nil {
+						updateData["foto_cmahasiswa"] = savedPath
+					} else {
+						c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal mengupload foto profil: " + errUpload.Error()})
+						return
+					}
+				}
+			} else {
+				// Fallback ke PostForm jika bukan multipart tapi form-urlencoded
+				c.Request.ParseForm()
+				for key, values := range c.Request.PostForm {
+					if len(values) > 0 {
+						updateData[key] = values[0]
+					}
+				}
+			}
+		}
+
+		// Filter Valid DB Fields (mencegah 500 jika ada field isian form tambahan)
+		validFields := map[string]bool{
+			"nama_cmahasiswa":         true,
+			"bidik_misi_cmahasiswa":    true,
+			"fakultas_cmahasiswa":     true,
+			"prodi_cmahasiswa":        true,
+			"jalur_cmahasiswa":        true,
+			"sosmed_cmahasiswa":       true,
+			"alamat_cmahasiswa":       true,
+			"provinsi_cmahasiswa":     true,
+			"kabkot_cmahasiswa":       true,
+			"kecamatan_cmahasiswa":    true,
+			"gender_cmahasiswa":       true,
+			"telepon_cmahasiswa":      true,
+			"goldar_cmahasiswa":       true,
+			"tempat_lahir_cmahasiswa": true,
+			"tanggal_lahir_cmahasiswa": true,
+			"foto_cmahasiswa":         true,
+			"penghasilan_cmahasiswa":  true,
+			"golongan_id":             true,
+			"ukt_tinggi":              true,
+			"flag":                   true,
+			"tagihan":                true,
+			"no_registrasi":          true,
+			"spu":                    true,
+			"penalty":                true,
+		}
+
+		filteredData := make(map[string]interface{})
+		for k, v := range updateData {
+			if validFields[k] {
+				filteredData[k] = v
+			}
+		}
+
+		// Jalankan Update
+		res, err := cmahasiswaService.Edit(filteredData, np, "original")
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal merubah data mahasiswa: " + err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, res)
 	})
 
 }

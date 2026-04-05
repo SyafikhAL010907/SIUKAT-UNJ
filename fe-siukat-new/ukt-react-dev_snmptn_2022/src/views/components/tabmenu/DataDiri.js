@@ -13,23 +13,44 @@ class DataDiri extends React.Component {
         this.props.dispatch(verifikasi.fetchVerifikasi(cookies.get(cookieName)));
     }
     render() {
+        const { cmahasiswa, info, verifikasi } = this.props;
+
+        if (!cmahasiswa || Object.keys(cmahasiswa).length === 0) {
+            return (
+                <div className="text-center p-5">
+                    <i className="fa fa-spinner fa-spin fa-2x mb-3"></i>
+                    <p>Memuat data diri mahasiswa...</p>
+                </div>
+            );
+        }
+
+        // Safe access to verifikasi and info with defaults
+        const safeVerifikasi = verifikasi || {};
+        const safeInfo = info || {};
+
         return (
             <Row>
                 <Col md={3} xs={12}>
-                    {this.props.cmahasiswa.foto_cmahasiswa && (
+                    {cmahasiswa.foto_cmahasiswa ? (
                         <img
                             src={
-                                storage +
-                                '/' +
-                                this.props.cmahasiswa.no_peserta +
-                                '/' +
-                                this.props.cmahasiswa.foto_cmahasiswa
+                                cmahasiswa.foto_cmahasiswa?.startsWith('http') 
+                                ? cmahasiswa.foto_cmahasiswa 
+                                : storage + '/' + cmahasiswa.foto_cmahasiswa
                             }
                             className="img-thumbnail img-responsive"
                             alt="foto-cmahasiswa"
+                            onError={(e) => {
+                                if (!e.target.dataset.triedFallback) {
+                                    e.target.dataset.triedFallback = 'true';
+                                    e.target.src = service + '/img/profile.png';
+                                } else {
+                                    e.target.onerror = null;
+                                    e.target.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+                                }
+                            }}
                         />
-                    )}
-                    {this.props.cmahasiswa.foto_cmahasiswa === '' && (
+                    ) : (
                         <img
                             src={service + '/img/profile.png'}
                             className="img-thumbnail img-responsive"
@@ -42,95 +63,43 @@ class DataDiri extends React.Component {
                         <tbody>
                             <tr>
                                 <td>Nomor Peserta</td>
-                                <td>{this.props.cmahasiswa.no_peserta}</td>
+                                <td>{cmahasiswa.no_peserta || '-'}</td>
                             </tr>
                             <tr>
                                 <td>Nama</td>
-                                <td>{this.props.cmahasiswa.nama_cmahasiswa}</td>
+                                <td>{cmahasiswa.nama_cmahasiswa || '-'}</td>
                             </tr>
-                            {/* {((this.props.cmahasiswa.flag === "pengumuman" || this.props.cmahasiswa.flag === "terima_ukt" || this.props.cmahasiswa.flag === "sanggah_ukt" || this.props.cmahasiswa.flag === "selesai_sanggah")
-                                && this.props.cmahasiswa.bidik_misi_cmahasiswa === "Ya"
-                                && (this.props.verifikasi.result_akademik === "lolos" || this.props.verifikasi.result_akademik === "belum_verifikasi")
-                            ) &&
-                                <tr>
-                                    <td className={classNames({
-                                        "bg-green": this.props.verifikasi.result_bidikmisi === "lolos",
-                                        "bg-warning": this.props.verifikasi.result_bidikmisi === "belum_verifikasi",
-                                        "bg-danger": this.props.verifikasi.result_bidikmisi === "tidak_lolos",
-                                        "bg-danger": this.props.verifikasi.result_bidikmisi === ""
-                                    })} width="40%">Hasil Verifikasi Bidik Misi</td>
-                                    <td className={classNames({
-                                        "bg-green h4": this.props.verifikasi.result_bidikmisi === "lolos",
-                                        "bg-warning h4": this.props.verifikasi.result_bidikmisi === "belum_verifikasi",
-                                        "bg-danger h4": this.props.verifikasi.result_bidikmisi === "tidak_lolos",
-                                        "bg-danger h4": this.props.verifikasi.result_bidikmisi === "",
-                                    })}>{classNames({
-                                        "Lolos": this.props.verifikasi.result_bidikmisi === "lolos",
-                                        "Belum Selesai Verifikasi": this.props.verifikasi.result_bidikmisi === "belum_verifikasi",
-                                        "Tidak Lolos": this.props.verifikasi.result_bidikmisi === "tidak_lolos",
-                                        "Belum Verifikasi": this.props.verifikasi.result_bidikmisi === "",
-                                    })}
-                                    </td>
-                                </tr>
-                            }
-                            {(
-                                (this.props.cmahasiswa.flag === "belum_isi"
-                                    || this.props.cmahasiswa.flag === "pengisian"
-                                    || this.props.cmahasiswa.flag === "selesai_isi")
-
-                                || this.props.cmahasiswa.bidik_misi_cmahasiswa === "Tidak") &&
-                                <tr>
-                                    <td width="30%">Status Bidik Misi</td>
-                                    <td>{this.props.cmahasiswa.bidik_misi_cmahasiswa}</td>
-                                </tr>
-                            } */}
                             <tr>
                                 <td>Program Studi</td>
-                                {this.props.cmahasiswa.prodi !== undefined && (
-                                    <td>{this.props.cmahasiswa.prodi.nama}</td>
-                                )}
+                                <td>{cmahasiswa.prodi?.nama || cmahasiswa.prodi_cmahasiswa || '-'}</td>
                             </tr>
                             <tr>
                                 <td>Fakultas</td>
-                                {this.props.cmahasiswa.fakultas !== undefined && (
-                                    <td>{this.props.cmahasiswa.fakultas.nama}</td>
-                                )}
+                                <td>{cmahasiswa.fakultas?.nama || '-'}</td>
                             </tr>
                         </tbody>
                     </Table>
                 </Col>
-                {/* </Row> */}
-                {/* <Row> */}
-                {this.props.info.stage === 'snbp' && (
+                {safeInfo.stage === 'snbp' && (
                     <Col md={12} xs={12}>
                         <h3>Hasil Verifikasi</h3>
                         <Table responsive striped bordered>
                             <tbody>
                                 <tr>
                                     <td>Verifikasi Akademik</td>
-                                    <td>{this.props.verifikasi.result_akademik}</td>
+                                    <td>{safeVerifikasi.result_akademik || '-'}</td>
                                 </tr>
                                 <tr>
                                     <td>Status KIPK</td>
                                     <td>
-                                        {this.props.verifikasi.result_kipk === null ||
-                                            this.props.verifikasi.result_kipk === ''
+                                        {!safeVerifikasi.result_kipk
                                             ? 'Tidak'
-                                            : this.props.verifikasi.result_kipk}
+                                            : safeVerifikasi.result_kipk}
                                     </td>
                                 </tr>
-                                {/* <tr>
-                <td>Status KJMU</td>
-                <td>
-                  {this.props.verifikasi.result_kjmu == null ||
-                  this.props.verifikasi.result_kjmu == ""
-                    ? "Tidak"
-                    : this.props.verifikasi.result_kjmu}
-                </td>
-              </tr> */}
                             </tbody>
                         </Table>
-                        {this.props.verifikasi.result_akademik === 'belum_verifikasi' && (
+                        {safeVerifikasi.result_akademik === 'belum_verifikasi' && (
                             <VerifikasiSNMPTN
                                 cardStyles="text-center"
                                 content="Belum Melakukan Verifikasi SNBP"
@@ -141,12 +110,11 @@ class DataDiri extends React.Component {
                         )}
                     </Col>
                 )}
-                {this.props.info.stage_detail === 'sbmptn' && (
+                {safeInfo.stage_detail === 'sbmptn' && (
                     <Col md={12} xs={12}>
                         {!(
-                            this.props.verifikasi.result_kipk === 'tidak_lolos' ||
-                            this.props.verifikasi.result_kipk === null ||
-                            this.props.verifikasi.result_kipk === ''
+                            safeVerifikasi.result_kipk === 'tidak_lolos' ||
+                            !safeVerifikasi.result_kipk
                         ) && (
                                 <InformasiKIPK
                                     cardStyles="text-center"

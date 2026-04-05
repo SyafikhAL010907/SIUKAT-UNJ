@@ -13,7 +13,7 @@ class Pribadi extends React.Component {
             <Row>
                 <Col md={3}>
                     {this.props.cmahasiswa.foto_cmahasiswa && (
-                        <img src={storage + '/' + this.props.cmahasiswa.no_peserta + '/' + this.props.cmahasiswa.foto_cmahasiswa} className="img-thumbnail img-responsive" alt="foto-cmahasiswa" />
+                        <img src={storage + '/' + this.props.cmahasiswa.foto_cmahasiswa} className="img-thumbnail img-responsive" alt="foto-cmahasiswa" />
                     )}
                 </Col>
                 <Col md={9}>

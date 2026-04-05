@@ -33,46 +33,44 @@ class Wali extends React.Component {
                                     <td>Alamat</td>
                                     <td>:</td>
                                     {this.props.wali.provinsi !== null && (
-                                        <td>
-                                            {this.props.wali.alamat_wali +
-                                                ', ' +
-                                                this.props.wali.kecamatan.kecam_nama +
-                                                ', ' +
-                                                this.props.wali.kabkot.kab_nama +
-                                                ', ' +
-                                                this.props.wali.provinsi.provinsi_nama}
-                                        </td>
-                                    )}
-                                </tr>
-                                <tr>
-                                    <td>Komitmen Pembiayaan</td>
-                                    <td>:</td>
-                                    <td>
-                                        {rupiah(this.props.wali.kesanggupan_wali)} <b>/ bulan</b>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Surat Komitmen Pembiayaan Pendukung</td>
-                                    <td>:</td>
-                                    <td>
-                                        <a
-                                            href={
-                                                storage +
-                                                '/' +
-                                                this.props.wali.no_peserta +
-                                                '/' +
-                                                this.props.wali.scan_wali
-                                            }
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                        >
-                                            <Button color="primary" size="sm">
-                                                <i className="fa fa-download"></i> Lihat Surat Komitmen
+                                 <td>
+                                    {this.props.wali.alamat_wali +
+                                        ', ' +
+                                        this.props.wali.kecamatan?.kecam_nama +
+                                        ', ' +
+                                        this.props.wali.kabkot?.kab_nama +
+                                        ', ' +
+                                        this.props.wali.provinsi?.provinsi_nama}
+                                </td>
+                            )}
+                        </tr>
+                        <tr>
+                            <td>Komitmen Pembiayaan</td>
+                            <td>:</td>
+                            <td>
+                                {rupiah(this.props.wali.kesanggupan_wali)} <b>/ bulan</b>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Surat Komitmen Pembiayaan Pendukung</td>
+                            <td>:</td>
+                            <td>
+                                <a
+                                    href={
+                                        storage +
+                                        '/' +
+                                        this.props.wali.scan_wali
+                                    }
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <Button color="primary" size="sm">
+                                        <i className="fa fa-download"></i> Lihat Surat Komitmen
                         Pembiayaan Pendukung
-                                            </Button>
-                                        </a>
-                                    </td>
-                                </tr>
+                                    </Button>
+                                </a>
+                            </td>
+                        </tr>
                             </tbody>
                         )}
                     </Table>

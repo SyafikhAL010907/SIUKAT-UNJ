@@ -238,8 +238,6 @@ Rp. 0.</li>
                                         href={
                                             storage +
                                             '/' +
-                                            props.initialValues.no_peserta +
-                                            '/' +
                                             props.initialValues.scan_pbb
                                         }
                                         target="_blank"
@@ -306,8 +304,6 @@ Rp. 0.</li>
                                     <a
                                         href={
                                             storage +
-                                            '/' +
-                                            props.initialValues.no_peserta +
                                             '/' +
                                             props.initialValues.scan_kontrak
                                         }

@@ -11,7 +11,7 @@ import {
 } from 'reactstrap';
 import { Link, Redirect } from 'react-router-dom';
 import { withCookies } from 'react-cookie';
-import { notif, cookies, cookieName, removeToken } from '../../global';
+import { notif, cookies, cookieName, removeToken, baseUrl } from '../../global';
 
 class Navigation extends React.Component {
     constructor(props) {
@@ -33,11 +33,6 @@ class Navigation extends React.Component {
                     href: '/main/petunjuk',
                     icon: 'fa fa-arrow-right',
                     title: 'Petunjuk Khusus',
-                },
-                {
-                    href: '/main/biodata',
-                    icon: 'fa fa-user',
-                    title: 'Biodata',
                 },
                 {
                     href: '/main/ukt',
@@ -84,7 +79,7 @@ class Navigation extends React.Component {
                 <Container>
                     <NavbarBrand href="/">
                         <img
-                            src={UNJ}
+                            src={baseUrl + '/public/img/unj.png'}
                             alt="Logo UNJ"
                             style={{ width: '40px', verticalAlign: 'middle' }}
                         />{' '}

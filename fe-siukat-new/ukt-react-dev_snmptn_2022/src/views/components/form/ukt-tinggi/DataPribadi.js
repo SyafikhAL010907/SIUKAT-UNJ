@@ -217,11 +217,9 @@ let FormDataPribadi = (props) => {
                             <FormText color="muted">Foto Anda saat ini:</FormText>
                             <img
                                 src={
-                                    storage +
-                                    '/' +
-                                    props.initialValues.no_peserta +
-                                    '/' +
-                                    props.initialValues.foto_cmahasiswa
+                                    props.initialValues.foto_cmahasiswa?.startsWith('http') 
+                                    ? props.initialValues.foto_cmahasiswa 
+                                    : storage + '/' + props.initialValues.foto_cmahasiswa
                                 }
                                 className="img-thumbnail img-responsive"
                                 alt="foto-cmahasiswa"

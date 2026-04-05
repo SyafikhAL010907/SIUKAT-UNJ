@@ -9,7 +9,6 @@ import {
     FormGroup,
     Label,
     FormText,
-    Row
 } from 'reactstrap';
 import { Field, reduxForm, reset, formValueSelector } from 'redux-form';
 import {
@@ -48,8 +47,6 @@ let FormSanggah = (props) => {
                             href={
                                 storage +
                                 '/' +
-                                props.initialValues?.no_peserta +
-                                '/' +
                                 props.initialValues?.scan_keringanan
                             }
                             target="_blank"
@@ -78,9 +75,6 @@ let FormSanggah = (props) => {
     );
 };
 class UnggahSanggah extends React.Component {
-    constructor (props) {
-        super(props);
-    }
     UNSAFE_componentWillMount() {
         this.props.dispatch(keringanan.getData(cookies.get(cookieName)));
     }

@@ -47,6 +47,14 @@ class TabMenu extends React.Component {
         }
     }
     render() {
+        if (!this.props.cmahasiswa || Object.keys(this.props.cmahasiswa).length === 0) {
+            return (
+                <div className="text-center p-5">
+                    <i className="fa fa-spinner fa-spin fa-2x mb-3"></i>
+                    <p>Memuat menu sistem UKT...</p>
+                </div>
+            );
+        }
         // const flag = this.props.cmahasiswa.flag
         // console.log(flag)
         // if (flag === 'terima_ukt' || flag === 'pengumuman' || flag === 'sanggah_ukt' ) {

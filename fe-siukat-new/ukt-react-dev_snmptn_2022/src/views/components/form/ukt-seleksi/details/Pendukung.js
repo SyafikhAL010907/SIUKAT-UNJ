@@ -23,7 +23,7 @@ class Pendukung extends React.Component {
                                 <td>Kartu Keluarga</td>
                                 <td>:</td>
                                 <td>
-                                    <a href={storage + '/' + this.props.pendukung.no_peserta + '/' + this.props.pendukung.scan_kk} target="_blank" rel="noopener noreferrer">
+                                    <a href={storage + '/' + this.props.pendukung.scan_kk} target="_blank" rel="noopener noreferrer">
                                         <Button color="primary" size="sm"><i className="fa fa-download"></i> Lihat Kartu Keluarga</Button>
                                     </a>
                                 </td>
