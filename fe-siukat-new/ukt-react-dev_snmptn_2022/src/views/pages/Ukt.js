@@ -9,11 +9,10 @@ class Ukt extends React.Component {
     render() {
         return (
             <div>
-                <Navigation router={this.props} />
                 <Loading>
                     <UktLoader />
                 </Loading>
-                <Container className="margin-top-90">
+                <div>
                     <Route exact path={this.props.match.path} component={PilihanUktTinggi} />
                     <Route path={this.props.match.path + '/tinggi'} component={UktTinggi} />
                     <Route path={this.props.match.path + '/seleksi'} component={Seleksi} />
@@ -22,8 +21,7 @@ class Ukt extends React.Component {
                     <Route path={this.props.match.path + '/terima-sanggah'} component={TerimaSanggah} />
                     <Route path={this.props.match.path + '/terima'} component={Terima} />
                     <Route path={this.props.match.path + '/sanggah'} component={Klarifikasi} />
-                    <Footer />
-                </Container>
+                </div>
             </div>
         );
     }

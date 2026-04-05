@@ -4,6 +4,7 @@ import './dist/libraries/font-awesome-4.7.0/css/font-awesome.min.css';
 import 'react-day-picker/lib/style.css';
 import './dist/css/loader.css';
 import './dist/css/styles.css';
+import './dist/css/sidebar.css';
 import Login from './pages/Login';
 import Layout from './pages/Layout';
 import {

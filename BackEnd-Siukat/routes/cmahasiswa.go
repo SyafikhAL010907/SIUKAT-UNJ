@@ -296,8 +296,9 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 			}
 		}
 
-		// Filter Valid DB Fields (mencegah 500 jika ada field isian form tambahan)
+		// Filter Valid DB Fields
 		validFields := map[string]bool{
+			"no_peserta":              true, // Ditambahkan agar bisa diubah
 			"nama_cmahasiswa":         true,
 			"bidik_misi_cmahasiswa":    true,
 			"fakultas_cmahasiswa":     true,
@@ -331,7 +332,25 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 			}
 		}
 
-		// Jalankan Update
+		// LOGIKA SINKRONISASI IDENTITAS & FOLDER (Request USER)
+		newName, okName := filteredData["nama_cmahasiswa"].(string)
+		if !okName { newName = student.NamaCmahasiswa }
+		
+		newNP, okNP := filteredData["no_peserta"].(string)
+		if !okNP { newNP = np }
+
+		// Jika ada perubahan Nama atau NoPeserta, jalankan sinkronisasi
+		if newName != student.NamaCmahasiswa || newNP != np {
+			errSync := cmahasiswaService.UpdateIdentity(student.NamaCmahasiswa, np, newName, newNP)
+			if errSync != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal sinkronisasi identitas: " + errSync.Error()})
+				return
+			}
+			// Update variabel np agar proses selanjutnya (Update DB lainnya) menggunakan NoPeserta yang baru
+			np = newNP
+		}
+
+		// Jalankan Update untuk sisa field lainnya
 		res, err := cmahasiswaService.Edit(filteredData, np, "original")
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal merubah data mahasiswa: " + err.Error()})

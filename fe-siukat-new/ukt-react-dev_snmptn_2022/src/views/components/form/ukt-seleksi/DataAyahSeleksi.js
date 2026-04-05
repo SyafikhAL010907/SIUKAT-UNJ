@@ -21,7 +21,7 @@ import {
     AlertFormLengkap,
     AlertFormBelumLengkap,
 } from '../';
-import { ayah, pekerjaan, kabkot, kecamatan } from '../../../../actions';
+import { ayah, pekerjaan, kabkot, kecamatan, provinsi } from '../../../../actions';
 import { connect } from 'react-redux';
 import { cookies, cookieName, rupiah, storage } from '../../../../global';
 
@@ -44,7 +44,7 @@ let FormAyahSeleksi = (props) => {
     const handleProvinsi = (e) => {
         dispatch(kabkot.fetchForAyah(e.target.value));
         dispatch(
-            kecamatan.fetchForAyah({ type: 'FETCH_KECAMATAN_FULFILLED', payload: [] })
+            { type: 'FETCH_KECAMATAN_AYAH_FULFILLED', payload: [] }
         );
     };
     const handleKabkot = (e) => {
@@ -414,6 +414,7 @@ let FormAyahSeleksi = (props) => {
 class DataAyahSeleksi extends React.Component {
     UNSAFE_componentWillMount() {
         this.props.dispatch(pekerjaan.fetchPekerjaan(cookies.get(cookieName)));
+        this.props.dispatch(provinsi.fetchProvinsi());
         this.props.dispatch(ayah.fetchAllData(cookies.get(cookieName)));
     }
     submitForm = (values) => {
@@ -483,10 +484,6 @@ FormAyahSeleksi = connect(
             ref_kecamatan_ayah: store.kecamatan.kecamatan_ayah,
             ref_pekerjaan: store.pekerjaan.pekerjaan,
         };
-    },
-    {
-        kabkot,
-        kecamatan,
     }
 )(FormAyahSeleksi);
 

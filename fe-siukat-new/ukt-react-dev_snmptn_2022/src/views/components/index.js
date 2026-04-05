@@ -1,4 +1,5 @@
 import Navigation from './Navigation';
+import TopHeader from './TopHeader';
 import TabMenu from './TabMenu';
 import Footer from './Footer';
 import Bantuan from './Bantuan';
@@ -49,6 +50,7 @@ import VerifikasiSeleksi from './form/ukt-seleksi/VerifikasiSeleksi';
 
 export {
     Navigation,
+    TopHeader,
     TabMenu,
     Footer,
     Bantuan,

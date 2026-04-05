@@ -1,44 +1,92 @@
 import React from 'react';
-import { Route, Redirect } from 'react-router-dom';
+import { Route, Redirect, Switch } from 'react-router-dom';
+import { connect } from 'react-redux';
 import Info from './Info';
 import Ukt from './Ukt';
 import Biodata from './Biodata';
 import Petunjuk from './Petunjuk';
 import { withCookies } from 'react-cookie';
 import { getToken, removeToken, notif } from '../../global';
+import { Navigation, TopHeader } from '../components';
+import { cmahasiswa } from '../../actions';
 
 class Layout extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             isLogin: undefined,
+            collapsed: false,
+            openMobile: false,
         };
     }
+
     UNSAFE_componentWillMount() {
+        const token = getToken();
         this.setState({
-            isLogin: getToken(),
+            isLogin: token,
         });
-        // this.props.dispatch(cmahasiswa.getByLoggedIn(getToken()))
+
+        // Fetch student data on mount
+        if (token) {
+            this.props.dispatch(cmahasiswa.getByLoggedIn(token));
+        }
     }
+
+    toggleCollapse = () => {
+        this.setState({ collapsed: !this.state.collapsed });
+    }
+
+    toggleMobile = () => {
+        this.setState({ openMobile: !this.state.openMobile });
+    }
+
     render() {
         if (getToken() === undefined || getToken() === null) {
             removeToken();
             notif('Sesi Telah Habis!', 'Silakan masuk kembali', 'error');
             return <Redirect to="/" />;
         }
+
+        const { collapsed, openMobile } = this.state;
+        const { studentData } = this.props;
+
         return (
-            <div>
-                <Route exact path={this.props.match.path} component={Info} />
-                <Route path={this.props.match.path + '/biodata'} component={Biodata} />
-                <Route path={this.props.match.path + '/ukt'} component={Ukt} />
-                <Route
-                    path={this.props.match.path + '/petunjuk'}
-                    match={this.props.match}
-                    component={Petunjuk}
+            <div className="app-wrapper">
+                {/* Sidebar Component (formerly Navigation) */}
+                <Navigation 
+                    collapsed={collapsed} 
+                    openMobile={openMobile} 
+                    toggleMobile={this.toggleMobile}
+                    router={this.props}
+                    studentData={studentData}
                 />
+
+                {/* Main Content Area */}
+                <main className={`main-area ${collapsed ? 'collapsed' : ''}`}>
+                    <TopHeader 
+                        collapsed={collapsed}
+                        toggleCollapse={this.toggleCollapse}
+                        toggleMobile={this.toggleMobile}
+                        studentData={studentData}
+                    />
+
+                    <div className="content-panel">
+                        <Switch>
+                            <Route exact path={this.props.match.path} component={Info} />
+                            <Route path={this.props.match.path + '/biodata'} component={Biodata} />
+                            <Route path={this.props.match.path + '/ukt'} component={Ukt} />
+                            <Route
+                                path={this.props.match.path + '/petunjuk'}
+                                component={Petunjuk}
+                            />
+                        </Switch>
+                    </div>
+                </main>
             </div>
         );
     }
 }
 
-export default withCookies(Layout);
+export default connect((store) => ({
+    studentData: store.cmahasiswa.cmahasiswa,
+}))(withCookies(Layout));

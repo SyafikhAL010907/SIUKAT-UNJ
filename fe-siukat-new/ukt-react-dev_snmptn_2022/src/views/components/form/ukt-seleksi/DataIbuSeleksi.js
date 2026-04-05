@@ -21,7 +21,7 @@ import {
     AlertFormLengkap,
     AlertFormBelumLengkap,
 } from '../';
-import { ibu, pekerjaan, kabkot, kecamatan } from '../../../../actions';
+import { ibu, pekerjaan, kabkot, kecamatan, provinsi } from '../../../../actions';
 import { connect } from 'react-redux';
 import { cookies, cookieName, rupiah, storage } from '../../../../global';
 
@@ -44,7 +44,7 @@ let FormIbuSeleksi = (props) => {
     const handleProvinsi = (e) => {
         dispatch(kabkot.fetchForIbu(e.target.value));
         dispatch(
-            kecamatan.fetchForIbu({ type: 'FETCH_KECAMATAN_FULFILLED', payload: [] })
+            { type: 'FETCH_KECAMATAN_IBU_FULFILLED', payload: [] }
         );
     };
     const handleKabkot = (e) => {
@@ -416,6 +416,7 @@ let FormIbuSeleksi = (props) => {
 class DataIbuSeleksi extends React.Component {
     UNSAFE_componentWillMount() {
         this.props.dispatch(pekerjaan.fetchPekerjaan(cookies.get(cookieName)));
+        this.props.dispatch(provinsi.fetchProvinsi());
         this.props.dispatch(ibu.fetchAllData(cookies.get(cookieName)));
     }
     submitForm = (values) => {
@@ -484,10 +485,6 @@ FormIbuSeleksi = connect(
             ref_kecamatan_ibu: store.kecamatan.kecamatan_ibu,
             ref_pekerjaan: store.pekerjaan.pekerjaan,
         };
-    },
-    {
-        kabkot,
-        kecamatan,
     }
 )(FormIbuSeleksi);
 

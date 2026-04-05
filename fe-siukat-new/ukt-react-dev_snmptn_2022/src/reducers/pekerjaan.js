@@ -1,5 +1,5 @@
 export default function reducer(state={
-    pekerjaan: {},
+    pekerjaan: [],
     fetching: false,
     fetched: false,
     error: null

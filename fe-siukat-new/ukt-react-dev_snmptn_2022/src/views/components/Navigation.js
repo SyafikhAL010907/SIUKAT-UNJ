@@ -1,103 +1,107 @@
 import React from 'react';
-import UNJ from '../dist/img/unj.png';
-import {
-    Collapse,
-    Navbar,
-    NavbarToggler,
-    NavbarBrand,
-    Nav,
-    NavItem,
-    Container,
-} from 'reactstrap';
-import { Link, Redirect } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { withCookies } from 'react-cookie';
-import { notif, cookies, cookieName, removeToken, baseUrl } from '../../global';
+import { notif, cookies, cookieName, removeToken, baseUrl, storage } from '../../global';
 
 class Navigation extends React.Component {
     constructor(props) {
         super(props);
-
-        this.toggle = this.toggle.bind(this);
-        this.renderMenus = this.renderMenus.bind(this);
         this.logout = this.logout.bind(this);
-
         this.state = {
-            isOpen: false,
             listNav: [
                 {
                     href: '/main',
-                    icon: 'fa fa-info-circle',
+                    icon: 'fa fa-home',
                     title: 'Informasi',
                 },
                 {
                     href: '/main/petunjuk',
-                    icon: 'fa fa-arrow-right',
+                    icon: 'fa fa-book',
                     title: 'Petunjuk Khusus',
                 },
                 {
                     href: '/main/ukt',
-                    icon: 'fa fa-file',
+                    icon: 'fa fa-file-text',
                     title: 'UKT',
                 },
             ],
         };
     }
-    toggle() {
-        this.setState({
-            isOpen: !this.state.isOpen,
-        });
-    }
-    renderMenus() {
-        return this.state.listNav.map((data, key) => (
-            <NavItem key={key}>
-                <a
-                    href={data.href}
-                    className={
-                        this.props.router.match.path === data.href
-                            ? 'nav-link-active nav-link'
-                            : 'nav-link'
-                    }
-                >
-                    <i className={data.icon}></i> {data.title}
-                </a>
-            </NavItem>
-        ));
-    }
+
     logout(e) {
         e.preventDefault();
         removeToken();
-        this.props.router.history.push('/');
+        if (this.props.router && this.props.router.history) {
+            this.props.router.history.push('/');
+        } else {
+            window.location.href = '/';
+        }
         notif('Berhasil!', 'Anda berhasil keluar', 'success');
     }
+
     render() {
-        if (cookies.get(cookieName) === undefined) {
-            notif('Sesi Telah Habis!', 'Silakan masuk kembali', 'error');
-            return <Redirect to="/" />;
-        }
+        const { collapsed, openMobile, toggleMobile, studentData } = this.props;
+        const student = studentData || {};
+        
+        const photoUrl = student.foto_cmahasiswa 
+            ? (student.foto_cmahasiswa.startsWith('http') ? student.foto_cmahasiswa : storage + '/' + student.foto_cmahasiswa)
+            : `https://ui-avatars.com/api/?name=${encodeURIComponent(student.nama_cmahasiswa || 'User')}&background=0f6d3f&color=fff`;
+
         return (
-            <Navbar color="green" dark fixed="true" expand="md" className="nav-fixed">
-                <Container>
-                    <NavbarBrand href="/">
+            <React.Fragment>
+                {/* Mobile Overlay */}
+                <div 
+                    className={`sidebar-overlay ${openMobile ? 'open' : ''}`} 
+                    onClick={toggleMobile}
+                />
+
+                <aside className={`sidebar-container ${collapsed ? 'collapsed' : ''} ${openMobile ? 'open-mobile' : ''}`}>
+                    {/* Header: Logo + Title */}
+                    <div className="sidebar-header">
                         <img
                             src={baseUrl + '/public/img/unj.png'}
                             alt="Logo UNJ"
-                            style={{ width: '40px', verticalAlign: 'middle' }}
-                        />{' '}
-            Sistem Informasi UKT
-                    </NavbarBrand>
-                    <NavbarToggler onClick={this.toggle} />
-                    <Collapse isOpen={this.state.isOpen} navbar>
-                        <Nav className="ml-auto" navbar>
-                            {this.renderMenus()}
-                            <NavItem>
-                                <Link to="#" className="nav-link" onClick={this.logout}>
-                                    <i className="fa fa-sign-out"></i> Keluar
-                                </Link>
-                            </NavItem>
-                        </Nav>
-                    </Collapse>
-                </Container>
-            </Navbar>
+                            className="sidebar-logo-img"
+                        />
+                        {!collapsed && (
+                            <div className="sidebar-brand-text">
+                                <h1 className="sidebar-brand-title">SIUKAT</h1>
+                                <p className="sidebar-brand-subtitle">Sistem Informasi UKT</p>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Menu Body */}
+                    <div className="sidebar-menu">
+                        {this.state.listNav.map((item, index) => (
+                            <NavLink 
+                                key={index}
+                                to={item.href} 
+                                exact={item.href === '/main'}
+                                className="nav-item-custom"
+                                activeClassName="active"
+                                onClick={openMobile ? toggleMobile : null}
+                                title={collapsed ? item.title : ''}
+                            >
+                                <div className="nav-icon-wrapper">
+                                    <i className={item.icon}></i>
+                                </div>
+                                {!collapsed && <span className="nav-label">{item.title}</span>}
+                            </NavLink>
+                        ))}
+                    </div>
+
+                    {/* Bottom: Logout */}
+                    <div className="sidebar-footer">
+                        <a href="#logout" className="logout-link-sidebar" onClick={this.logout} title={collapsed ? 'Keluar' : ''}>
+                            <div className="nav-icon-wrapper">
+                                <i className="fa fa-sign-out"></i>
+                            </div>
+                            {!collapsed && <span className="nav-label">Keluar</span>}
+                        </a>
+                    </div>
+                </aside>
+            </React.Fragment>
         );
     }
 }

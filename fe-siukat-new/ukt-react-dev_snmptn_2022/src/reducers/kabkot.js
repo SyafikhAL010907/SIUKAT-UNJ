@@ -1,8 +1,8 @@
 export default function reducer(state={
-    kabkot_cmahasiswa: {},
-    kabkot_ayah: {},
-    kabkot_ibu: {},
-    kabkot_wali: {},
+    kabkot_cmahasiswa: [],
+    kabkot_ayah: [],
+    kabkot_ibu: [],
+    kabkot_wali: [],
     fetching: false,
     fetched: false,
     error: null

@@ -3,6 +3,7 @@ package services
 import (
 	"BackEnd-Siukat/config"
 	"BackEnd-Siukat/models"
+	"BackEnd-Siukat/utils"
 	"errors"
 	"fmt"
 	"os"
@@ -276,4 +277,66 @@ func (s *CMahasiswaService) CekTagihan(noPeserta string) (models.CMahasiswa, err
 	var mhs models.CMahasiswa
 	err := config.DB.Where("no_peserta = ? AND tagihan IS NOT NULL AND tagihan != ''", noPeserta).First(&mhs).Error
 	return mhs, err
+}
+
+// UpdateIdentity — Sinkronisasi Nama, NoPeserta, dan Path Folder di seluruh Database & Filesystem.
+// Ini dieksekusi jika user mengubah Nama Lengkap atau Nomor Peserta di form biodata.
+func (s *CMahasiswaService) UpdateIdentity(oldName, oldNP, newName, newNP string) error {
+	db := config.DB
+
+	// 1. Sinkronisasi Folder Fisik (Rename/Merge) di /uploads
+	if err := utils.SyncStudentFolder(oldName, oldNP, newName, newNP); err != nil {
+		return fmt.Errorf("gagal sinkronisasi folder fisik: %v", err)
+	}
+
+	// 2. Hitung nama folder lama & baru untuk replacement di DB path
+	oldFolder := fmt.Sprintf("%s_%s", utils.SanitizeString(oldName), oldNP)
+	newFolder := fmt.Sprintf("%s_%s", utils.SanitizeString(newName), newNP)
+
+	// Jika tidak ada perubahan folder, dan no_peserta ttp sama, ttp return nil
+	if oldFolder == newFolder && oldNP == newNP {
+		return nil
+	}
+
+	// 3. Jalankan Update Database secara massal (Atomic Transaction)
+	return db.Transaction(func(tx *gorm.DB) error {
+		// A. Update NoPeserta di tabel utama dan semua tabel pendukung jika NoPeserta berubah
+		if oldNP != newNP {
+			tables := []string{
+				"tb_user", "tb_cmahasiswa", "tb_ayah", "tb_ibu", "tb_wali",
+				"tb_rumah", "tb_listrik", "tb_kendaraan", "tb_pendukung",
+				"tb_verifikasi", "tb_summary_data", "tb_bobot_ekonomi",
+			}
+			for _, table := range tables {
+				if err := tx.Exec(fmt.Sprintf("UPDATE %s SET no_peserta = ? WHERE no_peserta = ?", table), newNP, oldNP).Error; err != nil {
+					return fmt.Errorf("failed to update no_peserta in %s: %v", table, err)
+				}
+			}
+		}
+
+		// B. Update Semua Path File (Replace Folder Name di string path)
+		fileColumns := map[string][]string{
+			"tb_cmahasiswa": {"foto_cmahasiswa"},
+			"tb_ayah":      {"scan_ktp_ayah", "scan_slip_ayah"},
+			"tb_ibu":       {"scan_ktp_ibu", "scan_slip_ibu"},
+			"tb_wali":      {"scan_wali"},
+			"tb_rumah":      {"scan_pbb", "scan_kontrak"},
+			"tb_listrik":    {"scan_listrik"},
+			"tb_kendaraan":  {"scan_stnk"},
+			"tb_pendukung":  {"scan_pernyataan_ukt_tinggi", "scan_pernyataan_kebenaran", "scan_kk"},
+		}
+
+		targetNP := newNP // NoPeserta baru (karena sudah diupdate di atas jika berubah)
+
+		for table, columns := range fileColumns {
+			for _, col := range columns {
+				query := fmt.Sprintf("UPDATE %s SET %s = REPLACE(%s, ?, ?) WHERE no_peserta = ?", table, col, col)
+				if err := tx.Exec(query, oldFolder, newFolder, targetNP).Error; err != nil {
+					return fmt.Errorf("failed to update paths in %s.%s: %v", table, col, err)
+				}
+			}
+		}
+
+		return nil
+	})
 }

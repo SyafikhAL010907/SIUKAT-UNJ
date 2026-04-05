@@ -1,5 +1,5 @@
 export default function reducer(state={
-    provinsi: {},
+    provinsi: [],
     fetching: false,
     fetched: false,
     error: null

@@ -41,10 +41,10 @@ let FormDataPribadiSeleksi = (props) => {
     const handleProvinsi = (e) => {
         dispatch(kabkot.fetchForCmahasiswa(e.target.value));
         dispatch(
-            kecamatan.fetchForCmahasiswa({
+            {
                 type: 'FETCH_KECAMATAN_MHS_FULFILLED',
                 payload: [],
-            })
+            }
         );
     };
     const handleKabkot = (e) => {
@@ -390,10 +390,6 @@ FormDataPribadiSeleksi = connect(
             ref_kabkot: store.kabkot.kabkot_cmahasiswa,
             ref_kecamatan: store.kecamatan.kecamatan_cmahasiswa,
         };
-    },
-    {
-        kabkot,
-        kecamatan,
     }
 )(FormDataPribadiSeleksi);
 

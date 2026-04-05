@@ -26,11 +26,10 @@ class Petunjuk extends React.Component{
     render() {
         return (
             <div>
-                <Navigation router={this.props}/>
                 <Loading>
                     <UktLoader/>
                 </Loading>
-                <Container className="margin-top-90">
+                <div>
                     <div className="margin-top-20">
                         <Row>
                             <Col md="3" xs="12">
@@ -73,9 +72,8 @@ class Petunjuk extends React.Component{
                                 </TabContent>
                             </Col>
                         </Row>
-                        <Footer/>
                     </div>
-                </Container>
+                </div>
             </div>
         );
     }

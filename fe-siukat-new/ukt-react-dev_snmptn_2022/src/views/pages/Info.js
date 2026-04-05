@@ -13,13 +13,12 @@ class Info extends React.Component {
   };
   render() {
     return (
-      <div>
-        <Navigation router={this.props} />
+      <div key={this.props.location.key}>
         <Loading>
           <UktLoader />
         </Loading>
-        <Container key={this.props.location.key} className="margin-top-90">
-          <div className="text-center margin-top-20">
+        <div>
+          <div className="text-center">
             <img src={WelcomeBanner} width="100%" alt="welcome banner" />
           </div>
           <Card
@@ -86,19 +85,9 @@ class Info extends React.Component {
                   Mulai Pengisian Biodata
                 </Button>
               </div>
-              {/* <div className="text-center">
-                <Button
-                  color="primary"
-                  type="button"
-                  onClick={this.goToBiodata}
-                >
-                  Mulai Pengisian Biodata
-                </Button>
-              </div> */}
             </Col>
           </Row>
-          <Footer />
-        </Container>
+        </div>
       </div>
     );
   }

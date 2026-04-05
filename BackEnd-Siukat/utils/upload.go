@@ -73,3 +73,53 @@ func DeleteOldFile(filePath string) {
 		}
 	}
 }
+
+// SyncStudentFolder — Mengganti nama folder (Rename) di sistem file jika Nama atau NoPeserta berubah.
+// Jika folder tujuan sudah ada, maka isi folder lama dipindahkan ke dalam folder tujuan.
+func SyncStudentFolder(oldName, oldNP, newName, newNP string) error {
+	// 1. Calculate sanitized folder names
+	// Kita pakai SanitizeString yang sudah ada di file ini
+	oldFolder := fmt.Sprintf("%s_%s", SanitizeString(oldName), oldNP)
+	newFolder := fmt.Sprintf("%s_%s", SanitizeString(newName), newNP)
+
+	if oldFolder == newFolder {
+		return nil // Tidak ada perubahan folder, aman jaya!
+	}
+
+	oldPath := filepath.Join("uploads", oldFolder)
+	newPath := filepath.Join("uploads", newFolder)
+
+	// 2. Cek apakah folder lama ada
+	if _, err := os.Stat(oldPath); os.IsNotExist(err) {
+		// Folder lama tidak ada, mungkin belum pernah upload. Lanjut saja.
+		return nil
+	}
+
+	// 3. Cek apakah folder baru sudah ada
+	if _, err := os.Stat(newPath); err == nil {
+		// Folder baru sudah ada (mungkin user pernah iseng create manual atau gonta-ganti nama sebelumnya)
+		// Kita pindahkan isi folder lama ke folder baru (Merge content)
+		fmt.Printf("📦 STORAGE SYNC: Merging [%s] into existing [%s]\n", oldPath, newPath)
+		entries, err := os.ReadDir(oldPath)
+		if err != nil {
+			return err
+		}
+		for _, entry := range entries {
+			oldFile := filepath.Join(oldPath, entry.Name())
+			newFile := filepath.Join(newPath, entry.Name())
+			// Pindahkan file satu-persatu (Rename)
+			os.Rename(oldFile, newFile)
+		}
+		// Hapus folder lama yang sudah kosong melompong
+		os.Remove(oldPath)
+	} else {
+		// Folder baru belum ada, langsung ganti nama folder utuh (Instan!)
+		fmt.Printf("🚚 STORAGE SYNC: Renaming folder [%s] -> [%s]\n", oldPath, newPath)
+		err := os.Rename(oldPath, newPath)
+		if err != nil {
+			return fmt.Errorf("failed to sync directory: %v", err)
+		}
+	}
+
+	return nil
+}

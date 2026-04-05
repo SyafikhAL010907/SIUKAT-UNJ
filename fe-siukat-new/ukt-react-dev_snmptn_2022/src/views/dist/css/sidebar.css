@@ -1,0 +1,400 @@
+/* ============================================================
+   MODERN SIDEBAR & LAYOUT STYLES
+   Environment: React Class Components, Reactstrap
+   Theme: Emerald Green #0f6d3f
+   ============================================================ */
+
+.app-wrapper {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f8fafc;
+    overflow-x: hidden;
+}
+
+/* SIDEBAR CONTAINER */
+.sidebar-container {
+    background-color: #0f6d3f; /* Premium Emerald */
+    color: #ffffff;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1050;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.08);
+    width: 260px;
+}
+
+.sidebar-container.collapsed {
+    width: 80px;
+}
+
+/* MOBILE RESPONSIVENESS */
+@media (max-width: 768px) {
+    .sidebar-container {
+        transform: translateX(-100%);
+        width: 280px;
+    }
+    .sidebar-container.open-mobile {
+        transform: translateX(0);
+    }
+    .sidebar-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(2px);
+        z-index: 1040;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+    }
+    .sidebar-overlay.open {
+        opacity: 1;
+        pointer-events: auto;
+    }
+}
+
+/* SIDEBAR HEADER */
+.sidebar-header {
+    padding: 24px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    overflow: hidden;
+    min-height: 90px;
+}
+
+.sidebar-logo-img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.sidebar-brand-text {
+    transition: opacity 0.2s;
+    white-space: nowrap;
+}
+
+.sidebar-brand-title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-family: 'Playfair Display', serif; /* Or fallback */
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.sidebar-brand-subtitle {
+    margin: 0;
+    font-size: 0.65rem;
+    opacity: 0.7;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+/* SIDEBAR MENU */
+.sidebar-menu {
+    flex: 1;
+    padding: 16px 12px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.2) transparent;
+}
+
+.nav-item-custom {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    margin-bottom: 4px;
+    border-radius: 12px;
+    color: rgba(255, 255, 255, 0.8) !important;
+    text-decoration: none !important;
+    transition: all 0.2s;
+    gap: 12px;
+}
+
+.nav-item-custom:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffffff !important;
+    transform: translateX(4px);
+}
+
+.nav-item-custom.active {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #ffffff !important;
+    font-weight: 600;
+}
+
+.nav-icon-wrapper {
+    width: 24px;
+    display: flex;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+/* MAIN AREA */
+.main-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-left: 260px;
+}
+
+.main-area.collapsed {
+    margin-left: 80px;
+}
+
+@media (max-width: 768px) {
+    .main-area, .main-area.collapsed {
+        margin-left: 0;
+    }
+}
+
+/* TOP HEADER */
+.top-header-container {
+    height: 70px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #edf2f7;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.toggle-btn {
+    background: transparent;
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    color: #4a5568;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.toggle-btn:hover {
+    background-color: #f7fafc;
+    color: #0f6d3f;
+}
+
+.header-title-text {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #1a202c;
+    margin: 0;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.profile-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.profile-info {
+    text-align: right;
+}
+
+.profile-name {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #2d3748;
+    margin: 0;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.profile-role {
+    font-size: 0.7rem;
+    color: #a0aec0;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.profile-avatar-container {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid #f0fdf4;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.profile-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* SIDEBAR FOOTER */
+.sidebar-footer {
+    padding: 16px 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logout-link-sidebar {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    border-radius: 12px;
+    color: #ffdce0 !important;
+    text-decoration: none !important;
+    transition: all 0.2s;
+    gap: 12px;
+}
+
+.logout-link-sidebar:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffffff !important;
+}
+
+/* CONTENT PANEL */
+.content-panel {
+    padding: 32px;
+    flex: 1;
+}
+
+@media (max-width: 640px) {
+    .content-panel {
+        padding: 20px;
+    }
+}
+
+/* ============================================================
+   TERMINAL PROFILE STYLES
+   ============================================================ */
+
+.sidebar-profile-terminal {
+    margin: 20px 16px;
+    background: #1a1a1a;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease;
+}
+
+.terminal-header {
+    background: #2d2d2d;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.terminal-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+}
+
+.terminal-dot.red { background: #ff5f56; }
+.terminal-dot.yellow { background: #ffbd2e; }
+.terminal-dot.green { background: #27c93f; }
+
+.terminal-title {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 10px;
+    color: #888;
+    margin-left: auto;
+    text-transform: lowercase;
+    letter-spacing: 0.5px;
+}
+
+.terminal-body {
+    padding: 20px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.terminal-avatar-container {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 2px solid #0f6d3f;
+    overflow: hidden;
+    background: #252525;
+    box-shadow: 0 0 15px rgba(15, 109, 63, 0.3);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.terminal-avatar-container:hover {
+    transform: scale(1.1) rotate(5deg);
+    border-color: #27c93f;
+    box-shadow: 0 0 20px rgba(39, 201, 63, 0.5);
+}
+
+.terminal-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.terminal-info {
+    width: 100%;
+    font-family: 'Consolas', 'Courier New', Courier, monospace;
+    font-size: 11px;
+    line-height: 1.5;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.terminal-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 4px;
+}
+
+.terminal-row:last-child {
+    margin-bottom: 0;
+}
+
+.terminal-prompt {
+    color: #27c93f;
+    font-weight: bold;
+    user-select: none;
+}
+
+.terminal-value {
+    color: #e0e0e0;
+    word-break: break-all;
+}
+
+.terminal-value.name {
+    color: #5db0ff;
+    font-weight: bold;
+}
+
+.terminal-value.id {
+    color: #f694ff;
+}

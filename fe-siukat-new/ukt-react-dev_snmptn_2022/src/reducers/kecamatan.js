@@ -1,8 +1,8 @@
 export default function reducer(state={
-    kecamatan_cmahasiswa: {},
-    kecamatan_ayah: {},
-    kecamatan_ibu: {},
-    kecamatan_wali: {},
+    kecamatan_cmahasiswa: [],
+    kecamatan_ayah: [],
+    kecamatan_ibu: [],
+    kecamatan_wali: [],
     fetching: false,
     fetched: false,
     error: null

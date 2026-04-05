@@ -19,7 +19,7 @@ import {
     AlertFormLengkap,
     AlertFormBelumLengkap,
 } from '../';
-import { wali, kabkot, kecamatan } from '../../../../actions';
+import { wali, kabkot, kecamatan, provinsi } from '../../../../actions';
 import { files } from '../../../../api';
 import { connect } from 'react-redux';
 import { cookies, cookieName, rupiah, storage } from '../../../../global';
@@ -42,10 +42,10 @@ let FormWaliSeleksi = (props) => {
     const handleProvinsi = (e) => {
         dispatch(kabkot.fetchForWali(e.target.value));
         dispatch(
-            kecamatan.fetchForWali({
+            {
                 type: 'FETCH_KECAMATAN_WALI_FULFILLED',
                 payload: [],
-            })
+            }
         );
     };
     const handleKabkot = (e) => {
@@ -265,6 +265,7 @@ let FormWaliSeleksi = (props) => {
 };
 class DataWaliSeleksi extends React.Component {
     UNSAFE_componentWillMount() {
+        this.props.dispatch(provinsi.fetchProvinsi());
         this.props.dispatch(wali.fetchAllData(cookies.get(cookieName)));
         this.setState({
             textUnduhWali: 'Unduh Contoh Surat Komitmen Wali',
@@ -346,10 +347,6 @@ FormWaliSeleksi = connect(
             ref_kabkot_wali: store.kabkot.kabkot_wali,
             ref_kecamatan_wali: store.kecamatan.kecamatan_wali,
         };
-    },
-    {
-        kabkot,
-        kecamatan,
     }
 )(FormWaliSeleksi);
 
