@@ -233,15 +233,25 @@ func (s *CMahasiswaService) GetCmahasiswa(noPeserta string) (models.CMahasiswa, 
 	db := config.DB
 	var mhs models.CMahasiswa
 
-	// Cek sanggah dulu, fallback ke original — Parity dengan Node.js
+	// 1. Cek sanggah dulu dengan Preload (Relasi Lengkap)
 	err := db.Preload("Fakultas").Preload("Prodi").Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
 		Where("no_peserta = ? AND atribut = ?", noPeserta, "sanggah").First(&mhs).Error
 	if err == nil {
 		return mhs, nil
 	}
 
+	// 2. Cek original dengan Preload (Relasi Lengkap)
 	err = db.Preload("Fakultas").Preload("Prodi").Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
 		Where("no_peserta = ?", noPeserta).First(&mhs).Error
+	if err == nil {
+		return mhs, nil
+	}
+
+	// 3. FALLBACK: Kalau Preload gagal (mungkin data di tabel referensi belum ada),
+	// kita tarik MURNI data dari tb_cmahasiswa tanpa Preload (Supaya Nama tetap dapet).
+	fmt.Printf("⚠️ WARNING: Preload gagal untuk %s, mencoba ambil data murni...\n", noPeserta)
+	err = db.Where("no_peserta = ?", noPeserta).First(&mhs).Error
+	
 	return mhs, err
 }
 

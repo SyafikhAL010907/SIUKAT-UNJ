@@ -5,6 +5,7 @@ import (
 	"BackEnd-Siukat/middlewares"
 	"BackEnd-Siukat/models"
 	"BackEnd-Siukat/services"
+	"BackEnd-Siukat/utils"
 	"net/http"
 	"time"
 
@@ -68,19 +69,39 @@ func AyahRoutes(r *gin.RouterGroup) {
 			data["penghasilan_ayah"] = c.PostForm("penghasilan_ayah")
 			data["sampingan_ayah"] = c.PostForm("sampingan_ayah")
 
-			// File Handling Map Parity
+			// --- LOGIKA DINAMIS & EFISIENSI (CLEANUP) ---
+			// 1. Ambil data CMahasiswa untuk folder name
+			var student models.CMahasiswa
+			config.DB.Where("no_peserta = ?", np).First(&student)
+
+			// 2. Ambil data Ayah lama untuk hapus file lama (Cleanup)
+			var oldAyah models.Ayah
+			config.DB.Where("no_peserta = ? AND atribut = ?", np, "original").First(&oldAyah)
+
+			// 3. Handle Upload KTP
 			fileKtp, errKtp := c.FormFile("file_scan_ktp_ayah")
 			if errKtp == nil {
-				filename := np + "_" + fileKtp.Filename
-				c.SaveUploadedFile(fileKtp, "public/uploads/"+filename)
-				data["scan_ktp_ayah"] = filename
+				// Hapus file KTP lama
+				utils.DeleteOldFile(oldAyah.ScanKtpAyah)
+				
+				// Simpan file baru secara dinamis
+				newPath, err := utils.HandleDynamicUpload(c, fileKtp, student.NamaCmahasiswa, np)
+				if err == nil {
+					data["scan_ktp_ayah"] = newPath
+				}
 			}
 
+			// 4. Handle Upload Slip Gaji
 			fileSlip, errSlip := c.FormFile("file_scan_slip_ayah")
 			if errSlip == nil {
-				filename := np + "_" + fileSlip.Filename
-				c.SaveUploadedFile(fileSlip, "public/uploads/"+filename)
-				data["scan_slip_ayah"] = filename
+				// Hapus file Slip lama
+				utils.DeleteOldFile(oldAyah.ScanSlipAyah)
+				
+				// Simpan file baru secara dinamis
+				newPath, err := utils.HandleDynamicUpload(c, fileSlip, student.NamaCmahasiswa, np)
+				if err == nil {
+					data["scan_slip_ayah"] = newPath
+				}
 			}
 		}
 
@@ -121,18 +142,29 @@ func AyahRoutes(r *gin.RouterGroup) {
 			data["penghasilan_ayah"] = c.PostForm("penghasilan_ayah")
 			data["sampingan_ayah"] = c.PostForm("sampingan_ayah")
 
+			// --- LOGIKA DINAMIS & EFISIENSI (CLEANUP) - SANGGAH ---
+			var student models.CMahasiswa
+			config.DB.Where("no_peserta = ?", np).First(&student)
+
+			var oldAyah models.Ayah
+			config.DB.Where("no_peserta = ? AND atribut = ?", np, "sanggah").First(&oldAyah)
+
 			fileKtp, errKtp := c.FormFile("file_scan_ktp_ayah")
 			if errKtp == nil {
-				filename := np + "_" + fileKtp.Filename
-				c.SaveUploadedFile(fileKtp, "public/uploads/"+filename)
-				data["scan_ktp_ayah"] = filename
+				utils.DeleteOldFile(oldAyah.ScanKtpAyah)
+				newPath, err := utils.HandleDynamicUpload(c, fileKtp, student.NamaCmahasiswa, np)
+				if err == nil {
+					data["scan_ktp_ayah"] = newPath
+				}
 			}
 
 			fileSlip, errSlip := c.FormFile("file_scan_slip_ayah")
 			if errSlip == nil {
-				filename := np + "_" + fileSlip.Filename
-				c.SaveUploadedFile(fileSlip, "public/uploads/"+filename)
-				data["scan_slip_ayah"] = filename
+				utils.DeleteOldFile(oldAyah.ScanSlipAyah)
+				newPath, err := utils.HandleDynamicUpload(c, fileSlip, student.NamaCmahasiswa, np)
+				if err == nil {
+					data["scan_slip_ayah"] = newPath
+				}
 			}
 		}
 

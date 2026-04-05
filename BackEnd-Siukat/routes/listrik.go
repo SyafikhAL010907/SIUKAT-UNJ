@@ -5,6 +5,7 @@ import (
 	"BackEnd-Siukat/middlewares"
 	"BackEnd-Siukat/models"
 	"BackEnd-Siukat/services"
+	"BackEnd-Siukat/utils"
 	"net/http"
 	"strconv"
 	"time"
@@ -52,15 +53,22 @@ func ListrikRoutes(r *gin.RouterGroup) {
 			req.Pengeluaran = p
 		}
 
-		fileScan, errScan := c.FormFile("file_scan_listrik")
-		if errScan == nil {
-			filename := np + "_listrik_" + fileScan.Filename
-			c.SaveUploadedFile(fileScan, "public/uploads/"+filename)
-			req.ScanListrik = filename
-		}
+		// --- LOGIKA DINAMIS & EFISIENSI (CLEANUP) ---
+		var student models.CMahasiswa
+		config.DB.Where("no_peserta = ?", np).First(&student)
 
 		var existing models.Listrik
 		config.DB.Where("no_peserta = ? AND atribut = ?", np, "original").First(&existing)
+
+		fileScan, errScan := c.FormFile("file_scan_listrik")
+		if errScan == nil {
+			utils.DeleteOldFile(existing.ScanListrik)
+			newPath, err := utils.HandleDynamicUpload(c, fileScan, student.NamaCmahasiswa, np)
+			if err == nil {
+				req.ScanListrik = newPath
+			}
+		}
+
 		now := time.Now()
 		srv.AddLog(existing, "original", np, &now)
 
@@ -85,15 +93,22 @@ func ListrikRoutes(r *gin.RouterGroup) {
 			req.Pengeluaran = p
 		}
 
-		fileScan, errScan := c.FormFile("file_scan_listrik")
-		if errScan == nil {
-			filename := np + "_listrik_" + fileScan.Filename
-			c.SaveUploadedFile(fileScan, "public/uploads/"+filename)
-			req.ScanListrik = filename
-		}
+		// --- LOGIKA DINAMIS & EFISIENSI (CLEANUP) - SANGGAH ---
+		var student models.CMahasiswa
+		config.DB.Where("no_peserta = ?", np).First(&student)
 
 		var existing models.Listrik
 		config.DB.Where("no_peserta = ? AND atribut = ?", np, "sanggah").First(&existing)
+
+		fileScan, errScan := c.FormFile("file_scan_listrik")
+		if errScan == nil {
+			utils.DeleteOldFile(existing.ScanListrik)
+			newPath, err := utils.HandleDynamicUpload(c, fileScan, student.NamaCmahasiswa, np)
+			if err == nil {
+				req.ScanListrik = newPath
+			}
+		}
+
 		now := time.Now()
 		srv.AddLog(existing, "sanggah", np, &now)
 

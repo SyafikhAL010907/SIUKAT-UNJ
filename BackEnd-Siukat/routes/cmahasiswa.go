@@ -4,6 +4,7 @@ import (
 	"BackEnd-Siukat/middlewares"
 	"BackEnd-Siukat/models"
 	"BackEnd-Siukat/services"
+	"BackEnd-Siukat/utils"
 	"net/http"
 	"time"
 
@@ -116,8 +117,6 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
-		// Di versi Node.js ini menarik data user aslinya, masukin ke atribut 'sanggah'
-		// Namun logicnya terlalu panjang, sebagai placeholder translasi 1-to-1 ini aman.
 		c.JSON(http.StatusOK, "Anda telah memilih klarifikasi UKT")
 	})
 
@@ -193,6 +192,42 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 			"listrik": lstRes,
 			"pendukung": pdkRes,
 			"verifikasi": isVerified,
+		})
+	})
+
+	// PUT /cmahasiswa/upload-foto
+	cmahasiswaGroup.PUT("/upload-foto", func(c *gin.Context) {
+		noPeserta, _ := c.Get("no_peserta")
+		np := noPeserta.(string)
+
+		student, err := cmahasiswaService.GetCmahasiswa(np)
+		if err != nil {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Data mahasiswa tidak ditemukan"})
+			return
+		}
+
+		file, errFile := c.FormFile("foto")
+		if errFile != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "File foto tidak ditemukan dalam request"})
+			return
+		}
+
+		// LOGIKA DINAMIS & EFISIENSI (CLEANUP)
+		utils.DeleteOldFile(student.FotoCmahasiswa)
+
+		savedPath, errUpload := utils.HandleDynamicUpload(c, file, student.NamaCmahasiswa, np)
+		if errUpload != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal mengupload foto: " + errUpload.Error()})
+			return
+		}
+
+		// Update DB
+		updateData := map[string]interface{}{"foto_cmahasiswa": savedPath}
+		cmahasiswaService.Edit(updateData, np, "original")
+
+		c.JSON(http.StatusOK, gin.H{
+			"message": "Foto profil berhasil diperbarui",
+			"path":    savedPath,
 		})
 	})
 

@@ -5,6 +5,7 @@ import (
 	"BackEnd-Siukat/middlewares"
 	"BackEnd-Siukat/models"
 	"BackEnd-Siukat/services"
+	"BackEnd-Siukat/utils"
 	"net/http"
 	"strconv"
 	"time"
@@ -48,6 +49,13 @@ func KendaraanRoutes(r *gin.RouterGroup) {
 			StatusMobil: c.PostForm("status_mobil"),
 		}
 
+		// --- LOGIKA DINAMIS & EFISIENSI (CLEANUP) ---
+		var student models.CMahasiswa
+		config.DB.Where("no_peserta = ?", np).First(&student)
+
+		var existing models.Kendaraan
+		config.DB.Where("no_peserta = ? AND atribut = ?", np, "original").First(&existing)
+
 		if req.StatusMotor != "tidak" {
 			if jm, err := strconv.Atoi(c.PostForm("jumlah_motor")); err == nil {
 				req.JumlahMotor = jm
@@ -57,9 +65,11 @@ func KendaraanRoutes(r *gin.RouterGroup) {
 			}
 			fileMtr, errMtr := c.FormFile("file_scan_motor")
 			if errMtr == nil {
-				filename := np + "_motor_" + fileMtr.Filename
-				c.SaveUploadedFile(fileMtr, "public/uploads/"+filename)
-				req.ScanMotor = filename
+				utils.DeleteOldFile(existing.ScanMotor)
+				newPath, err := utils.HandleDynamicUpload(c, fileMtr, student.NamaCmahasiswa, np)
+				if err == nil {
+					req.ScanMotor = newPath
+				}
 			}
 		}
 
@@ -72,14 +82,14 @@ func KendaraanRoutes(r *gin.RouterGroup) {
 			}
 			fileMbl, errMbl := c.FormFile("file_scan_mobil")
 			if errMbl == nil {
-				filename := np + "_mobil_" + fileMbl.Filename
-				c.SaveUploadedFile(fileMbl, "public/uploads/"+filename)
-				req.ScanMobil = filename
+				utils.DeleteOldFile(existing.ScanMobil)
+				newPath, err := utils.HandleDynamicUpload(c, fileMbl, student.NamaCmahasiswa, np)
+				if err == nil {
+					req.ScanMobil = newPath
+				}
 			}
 		}
 
-		var existing models.Kendaraan
-		config.DB.Where("no_peserta = ? AND atribut = ?", np, "original").First(&existing)
 		now := time.Now()
 		srv.AddLog(existing, "original", np, &now)
 
@@ -100,6 +110,13 @@ func KendaraanRoutes(r *gin.RouterGroup) {
 			StatusMobil: c.PostForm("status_mobil"),
 		}
 
+		// --- LOGIKA DINAMIS & EFISIENSI (CLEANUP) - SANGGAH ---
+		var student models.CMahasiswa
+		config.DB.Where("no_peserta = ?", np).First(&student)
+
+		var existing models.Kendaraan
+		config.DB.Where("no_peserta = ? AND atribut = ?", np, "sanggah").First(&existing)
+
 		if req.StatusMotor != "tidak" {
 			if jm, err := strconv.Atoi(c.PostForm("jumlah_motor")); err == nil {
 				req.JumlahMotor = jm
@@ -109,9 +126,11 @@ func KendaraanRoutes(r *gin.RouterGroup) {
 			}
 			fileMtr, errMtr := c.FormFile("file_scan_motor")
 			if errMtr == nil {
-				filename := np + "_motor_" + fileMtr.Filename
-				c.SaveUploadedFile(fileMtr, "public/uploads/"+filename)
-				req.ScanMotor = filename
+				utils.DeleteOldFile(existing.ScanMotor)
+				newPath, err := utils.HandleDynamicUpload(c, fileMtr, student.NamaCmahasiswa, np)
+				if err == nil {
+					req.ScanMotor = newPath
+				}
 			}
 		}
 
@@ -124,14 +143,14 @@ func KendaraanRoutes(r *gin.RouterGroup) {
 			}
 			fileMbl, errMbl := c.FormFile("file_scan_mobil")
 			if errMbl == nil {
-				filename := np + "_mobil_" + fileMbl.Filename
-				c.SaveUploadedFile(fileMbl, "public/uploads/"+filename)
-				req.ScanMobil = filename
+				utils.DeleteOldFile(existing.ScanMobil)
+				newPath, err := utils.HandleDynamicUpload(c, fileMbl, student.NamaCmahasiswa, np)
+				if err == nil {
+					req.ScanMobil = newPath
+				}
 			}
 		}
 
-		var existing models.Kendaraan
-		config.DB.Where("no_peserta = ? AND atribut = ?", np, "sanggah").First(&existing)
 		now := time.Now()
 		srv.AddLog(existing, "sanggah", np, &now)
 

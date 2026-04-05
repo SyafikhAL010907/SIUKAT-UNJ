@@ -5,6 +5,7 @@ import (
 	"BackEnd-Siukat/middlewares"
 	"BackEnd-Siukat/models"
 	"BackEnd-Siukat/services"
+	"BackEnd-Siukat/utils"
 	"net/http"
 	"strconv"
 	"time"
@@ -48,29 +49,43 @@ func PendukungRoutes(r *gin.RouterGroup) {
 			req.Tanggungan = t
 		}
 
-		fileUkt, errUkt := c.FormFile("file_scan_pernyataan_ukt_tinggi")
-		if errUkt == nil {
-			filename := np + "_ukt_" + fileUkt.Filename
-			c.SaveUploadedFile(fileUkt, "public/uploads/"+filename)
-			req.ScanPernyataanUktTinggi = filename
-		}
-
-		fileKeb, errKeb := c.FormFile("file_scan_pernyataan_kebenaran")
-		if errKeb == nil {
-			filename := np + "_kebenaran_" + fileKeb.Filename
-			c.SaveUploadedFile(fileKeb, "public/uploads/"+filename)
-			req.ScanPernyataanKebenaran = filename
-		}
-
-		fileKk, errKk := c.FormFile("file_scan_kk")
-		if errKk == nil {
-			filename := np + "_kk_" + fileKk.Filename
-			c.SaveUploadedFile(fileKk, "public/uploads/"+filename)
-			req.ScanKk = filename
-		}
+		// --- LOGIKA DINAMIS & EFISIENSI (CLEANUP) ---
+		var student models.CMahasiswa
+		config.DB.Where("no_peserta = ?", np).First(&student)
 
 		var existing models.Pendukung
 		config.DB.Where("no_peserta = ? AND atribut = ?", np, "original").First(&existing)
+
+		// File UKT Tinggi
+		fileUkt, errUkt := c.FormFile("file_scan_pernyataan_ukt_tinggi")
+		if errUkt == nil {
+			utils.DeleteOldFile(existing.ScanPernyataanUktTinggi)
+			newPath, err := utils.HandleDynamicUpload(c, fileUkt, student.NamaCmahasiswa, np)
+			if err == nil {
+				req.ScanPernyataanUktTinggi = newPath
+			}
+		}
+
+		// File Kebenaran Data
+		fileKeb, errKeb := c.FormFile("file_scan_pernyataan_kebenaran")
+		if errKeb == nil {
+			utils.DeleteOldFile(existing.ScanPernyataanKebenaran)
+			newPath, err := utils.HandleDynamicUpload(c, fileKeb, student.NamaCmahasiswa, np)
+			if err == nil {
+				req.ScanPernyataanKebenaran = newPath
+			}
+		}
+
+		// File KK
+		fileKk, errKk := c.FormFile("file_scan_kk")
+		if errKk == nil {
+			utils.DeleteOldFile(existing.ScanKk)
+			newPath, err := utils.HandleDynamicUpload(c, fileKk, student.NamaCmahasiswa, np)
+			if err == nil {
+				req.ScanKk = newPath
+			}
+		}
+
 		now := time.Now()
 		srv.AddLog(existing, "original", np, &now)
 
@@ -91,29 +106,40 @@ func PendukungRoutes(r *gin.RouterGroup) {
 			req.Tanggungan = t
 		}
 
+		// --- LOGIKA DINAMIS & EFISIENSI (CLEANUP) - SANGGAH ---
+		var student models.CMahasiswa
+		config.DB.Where("no_peserta = ?", np).First(&student)
+
+		var existing models.Pendukung
+		config.DB.Where("no_peserta = ? AND atribut = ?", np, "sanggah").First(&existing)
+
 		fileUkt, errUkt := c.FormFile("file_scan_pernyataan_ukt_tinggi")
 		if errUkt == nil {
-			filename := np + "_ukt_" + fileUkt.Filename
-			c.SaveUploadedFile(fileUkt, "public/uploads/"+filename)
-			req.ScanPernyataanUktTinggi = filename
+			utils.DeleteOldFile(existing.ScanPernyataanUktTinggi)
+			newPath, err := utils.HandleDynamicUpload(c, fileUkt, student.NamaCmahasiswa, np)
+			if err == nil {
+				req.ScanPernyataanUktTinggi = newPath
+			}
 		}
 
 		fileKeb, errKeb := c.FormFile("file_scan_pernyataan_kebenaran")
 		if errKeb == nil {
-			filename := np + "_kebenaran_" + fileKeb.Filename
-			c.SaveUploadedFile(fileKeb, "public/uploads/"+filename)
-			req.ScanPernyataanKebenaran = filename
+			utils.DeleteOldFile(existing.ScanPernyataanKebenaran)
+			newPath, err := utils.HandleDynamicUpload(c, fileKeb, student.NamaCmahasiswa, np)
+			if err == nil {
+				req.ScanPernyataanKebenaran = newPath
+			}
 		}
 
 		fileKk, errKk := c.FormFile("file_scan_kk")
 		if errKk == nil {
-			filename := np + "_kk_" + fileKk.Filename
-			c.SaveUploadedFile(fileKk, "public/uploads/"+filename)
-			req.ScanKk = filename
+			utils.DeleteOldFile(existing.ScanKk)
+			newPath, err := utils.HandleDynamicUpload(c, fileKk, student.NamaCmahasiswa, np)
+			if err == nil {
+				req.ScanKk = newPath
+			}
 		}
 
-		var existing models.Pendukung
-		config.DB.Where("no_peserta = ? AND atribut = ?", np, "sanggah").First(&existing)
 		now := time.Now()
 		srv.AddLog(existing, "sanggah", np, &now)
 

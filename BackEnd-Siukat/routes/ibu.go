@@ -5,11 +5,11 @@ import (
 	"BackEnd-Siukat/middlewares"
 	"BackEnd-Siukat/models"
 	"BackEnd-Siukat/services"
+	"BackEnd-Siukat/utils"
+	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
 	"time"
-
-	"github.com/gin-gonic/gin"
 )
 
 func IbuRoutes(r *gin.RouterGroup) {
@@ -84,20 +84,31 @@ func IbuRoutes(r *gin.RouterGroup) {
 			}
 			req.TempatLahirIbu = c.PostForm("tempat_lahir_ibu")
 
-			// File upload KTP — parity dengan multer Node.js
+			// --- LOGIKA DINAMIS & EFISIENSI (CLEANUP) ---
+			var student models.CMahasiswa
+			config.DB.Where("no_peserta = ?", np).First(&student)
+
+			var oldIbu models.Ibu
+			config.DB.Where("no_peserta = ? AND atribut = ?", np, "original").First(&oldIbu)
+
+			// File upload KTP
 			fileKtp, errKtp := c.FormFile("file_scan_ktp_ibu")
 			if errKtp == nil {
-				filename := np + "_ktp_ibu_" + fileKtp.Filename
-				c.SaveUploadedFile(fileKtp, "public/uploads/"+filename)
-				req.ScanKtpIbu = filename
+				utils.DeleteOldFile(oldIbu.ScanKtpIbu)
+				newPath, err := utils.HandleDynamicUpload(c, fileKtp, student.NamaCmahasiswa, np)
+				if err == nil {
+					req.ScanKtpIbu = newPath
+				}
 			}
 
 			// File upload Slip Gaji
 			fileSlip, errSlip := c.FormFile("file_scan_slip_ibu")
 			if errSlip == nil {
-				filename := np + "_slip_ibu_" + fileSlip.Filename
-				c.SaveUploadedFile(fileSlip, "public/uploads/"+filename)
-				req.ScanSlipIbu = filename
+				utils.DeleteOldFile(oldIbu.ScanSlipIbu)
+				newPath, err := utils.HandleDynamicUpload(c, fileSlip, student.NamaCmahasiswa, np)
+				if err == nil {
+					req.ScanSlipIbu = newPath
+				}
 			}
 		}
 
@@ -135,18 +146,29 @@ func IbuRoutes(r *gin.RouterGroup) {
 			}
 			req.TempatLahirIbu = c.PostForm("tempat_lahir_ibu")
 
+			// --- LOGIKA DINAMIS & EFISIENSI (CLEANUP) - SANGGAH ---
+			var student models.CMahasiswa
+			config.DB.Where("no_peserta = ?", np).First(&student)
+
+			var oldIbu models.Ibu
+			config.DB.Where("no_peserta = ? AND atribut = ?", np, "sanggah").First(&oldIbu)
+
 			fileKtp, errKtp := c.FormFile("file_scan_ktp_ibu")
 			if errKtp == nil {
-				filename := np + "_ktp_ibu_" + fileKtp.Filename
-				c.SaveUploadedFile(fileKtp, "public/uploads/"+filename)
-				req.ScanKtpIbu = filename
+				utils.DeleteOldFile(oldIbu.ScanKtpIbu)
+				newPath, err := utils.HandleDynamicUpload(c, fileKtp, student.NamaCmahasiswa, np)
+				if err == nil {
+					req.ScanKtpIbu = newPath
+				}
 			}
 
 			fileSlip, errSlip := c.FormFile("file_scan_slip_ibu")
 			if errSlip == nil {
-				filename := np + "_slip_ibu_" + fileSlip.Filename
-				c.SaveUploadedFile(fileSlip, "public/uploads/"+filename)
-				req.ScanSlipIbu = filename
+				utils.DeleteOldFile(oldIbu.ScanSlipIbu)
+				newPath, err := utils.HandleDynamicUpload(c, fileSlip, student.NamaCmahasiswa, np)
+				if err == nil {
+					req.ScanSlipIbu = newPath
+				}
 			}
 		}
 

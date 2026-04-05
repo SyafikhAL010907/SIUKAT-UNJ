@@ -5,6 +5,7 @@ import (
 	"BackEnd-Siukat/middlewares"
 	"BackEnd-Siukat/models"
 	"BackEnd-Siukat/services"
+	"BackEnd-Siukat/utils"
 	"net/http"
 	"strconv"
 	"time"
@@ -47,6 +48,13 @@ func RumahRoutes(r *gin.RouterGroup) {
 			StatusKepemilikan: c.PostForm("status_kepemilikan"),
 		}
 
+		// --- LOGIKA DINAMIS & EFISIENSI (CLEANUP) ---
+		var student models.CMahasiswa
+		config.DB.Where("no_peserta = ?", np).First(&student)
+
+		var oldRumah models.Rumah
+		config.DB.Where("no_peserta = ? AND atribut = ?", np, "original").First(&oldRumah)
+
 		switch req.StatusKepemilikan {
 		case "milik_sendiri":
 			req.LuasTanah = c.PostForm("luas_tanah")
@@ -57,9 +65,11 @@ func RumahRoutes(r *gin.RouterGroup) {
 			}
 			filePbb, errPbb := c.FormFile("file_scan_pbb")
 			if errPbb == nil {
-				filename := np + "_pbb_" + filePbb.Filename
-				c.SaveUploadedFile(filePbb, "public/uploads/"+filename)
-				req.ScanPbb = filename
+				utils.DeleteOldFile(oldRumah.ScanPbb)
+				newPath, err := utils.HandleDynamicUpload(c, filePbb, student.NamaCmahasiswa, np)
+				if err == nil {
+					req.ScanPbb = newPath
+				}
 			}
 		case "bersama_saudara":
 			req.LuasTanah = c.PostForm("luas_tanah")
@@ -72,9 +82,11 @@ func RumahRoutes(r *gin.RouterGroup) {
 			}
 			filePbb, errPbb := c.FormFile("file_scan_pbb")
 			if errPbb == nil {
-				filename := np + "_pbb_" + filePbb.Filename
-				c.SaveUploadedFile(filePbb, "public/uploads/"+filename)
-				req.ScanPbb = filename
+				utils.DeleteOldFile(oldRumah.ScanPbb)
+				newPath, err := utils.HandleDynamicUpload(c, filePbb, student.NamaCmahasiswa, np)
+				if err == nil {
+					req.ScanPbb = newPath
+				}
 			}
 		case "kontrak":
 			if bk, err := strconv.Atoi(c.PostForm("biaya_kontrak")); err == nil {
@@ -82,9 +94,11 @@ func RumahRoutes(r *gin.RouterGroup) {
 			}
 			fileKtr, errKtr := c.FormFile("file_scan_kontrak")
 			if errKtr == nil {
-				filename := np + "_kontrak_" + fileKtr.Filename
-				c.SaveUploadedFile(fileKtr, "public/uploads/"+filename)
-				req.ScanKontrak = filename
+				utils.DeleteOldFile(oldRumah.ScanKontrak)
+				newPath, err := utils.HandleDynamicUpload(c, fileKtr, student.NamaCmahasiswa, np)
+				if err == nil {
+					req.ScanKontrak = newPath
+				}
 			}
 		}
 
@@ -109,6 +123,13 @@ func RumahRoutes(r *gin.RouterGroup) {
 			StatusKepemilikan: c.PostForm("status_kepemilikan"),
 		}
 
+		// --- LOGIKA DINAMIS & EFISIENSI (CLEANUP) - SANGGAH ---
+		var student models.CMahasiswa
+		config.DB.Where("no_peserta = ?", np).First(&student)
+
+		var oldRumah models.Rumah
+		config.DB.Where("no_peserta = ? AND atribut = ?", np, "sanggah").First(&oldRumah)
+
 		switch req.StatusKepemilikan {
 		case "milik_sendiri":
 			req.LuasTanah = c.PostForm("luas_tanah")
@@ -119,9 +140,11 @@ func RumahRoutes(r *gin.RouterGroup) {
 			}
 			filePbb, errPbb := c.FormFile("file_scan_pbb")
 			if errPbb == nil {
-				filename := np + "_pbb_" + filePbb.Filename
-				c.SaveUploadedFile(filePbb, "public/uploads/"+filename)
-				req.ScanPbb = filename
+				utils.DeleteOldFile(oldRumah.ScanPbb)
+				newPath, err := utils.HandleDynamicUpload(c, filePbb, student.NamaCmahasiswa, np)
+				if err == nil {
+					req.ScanPbb = newPath
+				}
 			}
 		case "bersama_saudara":
 			req.LuasTanah = c.PostForm("luas_tanah")
@@ -134,9 +157,11 @@ func RumahRoutes(r *gin.RouterGroup) {
 			}
 			filePbb, errPbb := c.FormFile("file_scan_pbb")
 			if errPbb == nil {
-				filename := np + "_pbb_" + filePbb.Filename
-				c.SaveUploadedFile(filePbb, "public/uploads/"+filename)
-				req.ScanPbb = filename
+				utils.DeleteOldFile(oldRumah.ScanPbb)
+				newPath, err := utils.HandleDynamicUpload(c, filePbb, student.NamaCmahasiswa, np)
+				if err == nil {
+					req.ScanPbb = newPath
+				}
 			}
 		case "kontrak":
 			if bk, err := strconv.Atoi(c.PostForm("biaya_kontrak")); err == nil {
@@ -144,9 +169,11 @@ func RumahRoutes(r *gin.RouterGroup) {
 			}
 			fileKtr, errKtr := c.FormFile("file_scan_kontrak")
 			if errKtr == nil {
-				filename := np + "_kontrak_" + fileKtr.Filename
-				c.SaveUploadedFile(fileKtr, "public/uploads/"+filename)
-				req.ScanKontrak = filename
+				utils.DeleteOldFile(oldRumah.ScanKontrak)
+				newPath, err := utils.HandleDynamicUpload(c, fileKtr, student.NamaCmahasiswa, np)
+				if err == nil {
+					req.ScanKontrak = newPath
+				}
 			}
 		}
 
