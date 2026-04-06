@@ -1,0 +1,41 @@
+{
+  "name": "ukt-admin-react",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": ".",
+  "dependencies": {
+    "axios": "^0.16.2",
+    "bootstrap": "^4.0.0-beta",
+    "chart.js": "^2.7.1",
+    "jquery": "^3.2.1",
+    "moment": "^2.19.2",
+    "react": "^16.3.0",
+    "react-addons-css-transition-group": "^15.6.2",
+    "react-bootstrap-table": "^4.3.1",
+    "react-chartjs-2": "^2.6.4",
+    "react-cookie": "^2.1.1",
+    "react-csv": "^1.0.14",
+    "react-day-picker": "^6.2.1",
+    "react-dom": "^16.3.0",
+    "react-redux": "^5.0.6",
+    "react-router": "^4.2.0",
+    "react-router-dom": "^4.2.2",
+    "react-scripts": "1.0.13",
+    "react-transition-group": "^2.2.1",
+    "reactstrap": "^6.3.0",
+    "redux": "^3.7.2",
+    "redux-form": "^7.1.1",
+    "redux-global-loader": "^1.0.2",
+    "redux-logger": "^3.0.6",
+    "redux-promise-middleware": "^4.4.2",
+    "redux-thunk": "^2.2.0",
+    "sweetalert": "^2.0.8",
+    "universal-cookie": "^2.1.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
