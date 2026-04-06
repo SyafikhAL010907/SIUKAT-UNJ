@@ -10,7 +10,6 @@ import {
     Label,
     FormText
 } from 'reactstrap';
-import { Link } from 'react-router-dom';
 import { Field, reduxForm, reset, formValueSelector } from 'redux-form';
 import {
     InputBs,
@@ -33,7 +32,7 @@ let FormListrikSeleksi = (props) => {
     } = props;
     return (
         <Form onSubmit={handleSubmit}>
-            <FormGroup row>
+            <FormGroup row className="mb-4">
                 <Label for="no_pelanggan" md={3}>Nomor Pelanggan</Label>
                 <Col md={9}>
                     <Field
@@ -45,7 +44,7 @@ let FormListrikSeleksi = (props) => {
                     />
                 </Col>
             </FormGroup>
-            <FormGroup row>
+            <FormGroup row className="mb-4">
                 <Label for="jenis_pemakaian" md={3}>Status Listrik</Label>
                 <Col md={4}>
                     <FormGroup check>
@@ -71,7 +70,7 @@ let FormListrikSeleksi = (props) => {
                 </Col>
             </FormGroup>
 
-            <FormGroup row>
+            <FormGroup row className="mb-4">
                 <Label md={3} xs={12}>Biaya Listrik</Label>
                 <Col md={5} xs={12}>
                     <Field
@@ -95,7 +94,7 @@ let FormListrikSeleksi = (props) => {
                     <Alert color="success">{rupiah(pengeluaran)}</Alert>
                 </Col>
             </FormGroup>
-            <FormGroup row>
+            <FormGroup row className="mb-4">
                 <Label for="file_scan_listrik" md={3}>Bukti Tagihan Listrik</Label>
                 <Col md={5}>
                     <Field
@@ -133,18 +132,17 @@ let FormListrikSeleksi = (props) => {
                 )}
             </FormGroup>
 
-            <FormGroup row>
-                <Col md={{ size: 9 }} xs="12">
+            <FormGroup row className="mt-5 border-top pt-4 mb-0">
+                <Col md={{ size: 8 }} xs="12">
                     {!props.allow ? <AlertFormBelumLengkap /> : <AlertFormLengkap />}
                 </Col>
-                <Col md={{ size: 3 }} xs="12">
+                <Col md={{ size: 4 }} xs="12">
                     <Button
                         type="submit"
-                        color="success"
-                        block
+                        className="modern-btn-primary w-100 py-3 shadow-sm font-weight-bold"
                         disabled={pristine || submitting}
                     >
-                        <i className="fa fa-save"></i> Simpan
+                        <i className="fa fa-save mr-2"></i> Simpan Data Listrik
                     </Button>
                 </Col>
             </FormGroup>
@@ -173,27 +171,11 @@ class DataListrikSeleksi extends React.Component {
 
     render() {
         return (
-            <Card body>
-                <CardTitle>Data Listrik</CardTitle>
-                <Alert color="warning">
-                    <span>
-                        <i className="fa fa-info-circle"></i> Data pemakaian listrik calon mahasiswa
-                        <br />
-                        Informasi lebih lanjut mengenai tagihan listrik, silakan hubungi:
-                    </span>
-                    <ul>
-                        <li>
-                            <i className="fa fa-globe"></i>
-                            <Link
-                                to="http://www.pln.co.id"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                {' '}Website PLN</Link>
-                        </li>
-                        <li><i className="fa fa-phone"></i> (kode area) 123</li>
-                    </ul>
-
+            <Card className="premium-card p-4 p-md-5">
+                <CardTitle tag="h4" className="mb-4">Data Listrik</CardTitle>
+                <Alert color="warning" className="rounded-lg border-0 shadow-sm mb-4">
+                    <i className="fa fa-info-circle mr-2"></i>
+                    <strong>Seluruh kolom pada Data Listrik Wajib Diisi</strong>
                 </Alert>
                 <FormListrikSeleksi
                     onSubmit={this.submitForm}

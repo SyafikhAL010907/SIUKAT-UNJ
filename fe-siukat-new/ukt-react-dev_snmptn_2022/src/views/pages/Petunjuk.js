@@ -1,10 +1,10 @@
 import React from 'react';
-import { Container, Row, Col,
+import { Row, Col,
     TabContent, TabPane,
-    ListGroup, ListGroupItem, } from 'reactstrap';
+    ListGroup, ListGroupItem, Card } from 'reactstrap';
 import classnames from 'classnames';
 import { Loading }  from 'redux-global-loader';
-import { Navigation, Footer, Bantuan, UktLoader,
+import { Bantuan, UktLoader,
     GabungBerkas, UkuranBerkas, TagihanListrik } from '../components';
 
 class Petunjuk extends React.Component{
@@ -30,44 +30,47 @@ class Petunjuk extends React.Component{
                     <UktLoader/>
                 </Loading>
                 <div>
-                    <div className="margin-top-20">
+                    <div className="mt-4">
                         <Row>
                             <Col md="3" xs="12">
-                                <ListGroup className="tab-pane-menu">
+                                <ListGroup className="modern-sidebar-menu shadow-sm mb-3">
                                     <ListGroupItem 
                                         className={classnames({ active: this.state.activeTab === '1' })} 
                                         onClick={(e) => { this.toggle(e, '1'); }}
-                                        tag="a" 
-                                        href="">
+                                    >
                                         <i className="fa fa-flash"></i> Memeriksa Tagihan Listrik
                                     </ListGroupItem>
                                     <ListGroupItem 
                                         className={classnames({ active: this.state.activeTab === '2' })} 
                                         onClick={(e) => { this.toggle(e, '2'); }}
-                                        tag="a" 
-                                        href="">
+                                    >
                                         <i className="fa fa-file"></i> Menggabungkan Hasil Scan
                                     </ListGroupItem>
                                     <ListGroupItem 
                                         className={classnames({ active: this.state.activeTab === '3' })} 
                                         onClick={(e) => { this.toggle(e, '3'); }}
-                                        tag="a" 
-                                        href="">
+                                    >
                                         <i className="fa fa-image"></i> Mengubah Ukuran Berkas
                                     </ListGroupItem>
                                 </ListGroup>
-                                <Bantuan/>
+                                <Bantuan />
                             </Col>
-                            <Col md="9" xs="12">
-                                <TabContent activeTab={this.state.activeTab} className="tab-pane-content">
-                                    <TabPane tabId="1">
-                                        <TagihanListrik/>
+                            <Col md="9" xs="12" className="d-flex flex-column">
+                                <TabContent activeTab={this.state.activeTab} className="h-100">
+                                    <TabPane tabId="1" className="h-100">
+                                        <Card className="premium-card">
+                                            <TagihanListrik/>
+                                        </Card>
                                     </TabPane>
-                                    <TabPane tabId="2">
-                                        <GabungBerkas/>
+                                    <TabPane tabId="2" className="h-100">
+                                        <Card className="premium-card">
+                                            <GabungBerkas/>
+                                        </Card>
                                     </TabPane>
-                                    <TabPane tabId="3">
-                                        <UkuranBerkas/>
+                                    <TabPane tabId="3" className="h-100">
+                                        <Card className="premium-card">
+                                            <UkuranBerkas/>
+                                        </Card>
                                     </TabPane>
                                 </TabContent>
                             </Col>

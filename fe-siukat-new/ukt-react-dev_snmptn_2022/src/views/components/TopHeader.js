@@ -14,14 +14,6 @@ class TopHeader extends React.Component {
         return (
             <header className="top-header-container">
                 <div className="header-left">
-                    {/* Unified Toggle Button */}
-                    <button 
-                        className="toggle-btn" 
-                        onClick={() => window.innerWidth > 768 ? toggleCollapse() : toggleMobile()}
-                    >
-                        <i className={`fa fa-bars ${collapsed ? 'fa-rotate-180' : ''}`}></i>
-                    </button>
-
                     <h2 className="header-title-text hidden-xs">Dashboard SIUKAT</h2>
                 </div>
 

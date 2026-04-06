@@ -56,6 +56,7 @@ class Layout extends React.Component {
                 <Navigation 
                     collapsed={collapsed} 
                     openMobile={openMobile} 
+                    toggleCollapse={this.toggleCollapse}
                     toggleMobile={this.toggleMobile}
                     router={this.props}
                     studentData={studentData}

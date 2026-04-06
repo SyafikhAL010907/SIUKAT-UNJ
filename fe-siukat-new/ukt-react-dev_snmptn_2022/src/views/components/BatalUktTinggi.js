@@ -34,14 +34,24 @@ class BatalUktTinggi extends React.Component {
         }
         return (
             <div>
-                <Card className="margin-top-20 card-warning" body>
-                    <CardTitle><i className="fa fa-info-circle"></i> Perhatian!</CardTitle>
-                    <div className="card-body">
-                        <div className="text-justify">Anda dapat membatalkan pilihan UKT Kelompok Atas dengan klik tombol di bawah ini</div>
-                        <Button onClick={this.toggle} color="danger" className="margin-top-20" block>
-                            <i className="fa fa-warning"></i> Batal <i className="fa fa-warning"></i>
-                            <br />UKT Kelompok Atas
+                <Card className="premium-card-warning shadow-sm border-0 mb-4 overflow-hidden">
+                    <CardTitle className="p-2 px-3 mb-0 border-bottom d-flex align-items-center bg-white" style={{borderRadius: '16px 16px 0 0', fontSize: '0.9rem'}}>
+                        <div className="info-icon mr-2 bg-warning text-white rounded-circle d-flex align-items-center justify-content-center" style={{width: '24px', height: '24px'}}>
+                            <i className="fa fa-exclamation-triangle" style={{fontSize: '12px'}}></i>
+                        </div>
+                        <span className="font-weight-bold" style={{color: '#92400e'}}>Perhatian!</span>
+                    </CardTitle>
+                    <div className="card-body p-3">
+                        <Button
+                            onClick={this.toggle}
+                            className="modern-btn-danger w-100 py-2 shadow-sm small mb-3"
+                            style={{background: '#ef4444 !important', fontSize: '0.8rem', fontWeight: 'bold'}}
+                        >
+                            <i className="fa fa-warning mr-2"></i> Batal UKT Kelompok Atas
                         </Button>
+                        <div className="text-justify" style={{fontSize: '0.75rem', color: '#92400e'}}>
+                            Batalkan pilihan <strong>UKT Kelompok Atas</strong> untuk kembali ke data ekonomi.
+                        </div>
                     </div>
                 </Card>
                 <Modal size="lg" isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
@@ -54,9 +64,13 @@ class BatalUktTinggi extends React.Component {
                             <i className="fa fa-info-circle"></i> Anda tetap mempunyai kemungkinan untuk mendapatkan UKT kelompok VI, VII, atau VIII. Anda dapat memilih UKT Kelompok Atas dengan tombol <b>"Pilih UKT Kelompok Atas"</b> yang ada di bagian samping kiri laman selama anda belum menyelesaikan proses.
                         </Alert>
                     </ModalBody>
-                    <ModalFooter className="text-right">
-                        <Button color="success" onClick={this.handleBatalUktTinggi.bind(this)}>Ya, Saya yakin</Button>{' '}
-                        <Button color="danger" onClick={this.toggle}>Batal</Button>
+                    <ModalFooter className="p-4 bg-light border-top d-flex justify-content-end">
+                        <Button className="modern-btn-primary px-4" onClick={this.handleBatalUktTinggi.bind(this)}>
+                            <i className="fa fa-check mr-2"></i> Ya, Saya Yakin
+                        </Button>{' '}
+                        <Button color="link" className="text-secondary font-weight-bold" onClick={this.toggle}>
+                            Batal
+                        </Button>
                     </ModalFooter>
                 </Modal>
             </div>

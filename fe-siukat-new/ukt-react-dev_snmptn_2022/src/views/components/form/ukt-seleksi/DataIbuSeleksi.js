@@ -52,7 +52,7 @@ let FormIbuSeleksi = (props) => {
     };
     return (
         <Form onSubmit={handleSubmit}>
-            <FormGroup row>
+            <FormGroup row className="mb-4">
                 <Label for="nama_ibu" md={3}>
                     Nama Lengkap
                 </Label>
@@ -65,7 +65,7 @@ let FormIbuSeleksi = (props) => {
                     />
                 </Col>
             </FormGroup>
-            <FormGroup row>
+            <FormGroup row className="mb-4">
                 <Label for="status_ibu" md={3}></Label>
                 <Col md={9}>
                     <Row>
@@ -97,7 +97,7 @@ let FormIbuSeleksi = (props) => {
 
             {status_ibu === 'hidup' && (
                 <div>
-                    <FormGroup row>
+                    <FormGroup row className="mb-4">
                         <Label for="nik_ibu" md={3}>
                             NIK
                         </Label>
@@ -110,7 +110,7 @@ let FormIbuSeleksi = (props) => {
                             />
                         </Col>
                     </FormGroup>
-                    <FormGroup row>
+                    <FormGroup row className="mb-4">
                         <Label for="file_scan_ktp_ibu" md={3}>
                             KTP Ibu
                         </Label>
@@ -141,7 +141,7 @@ let FormIbuSeleksi = (props) => {
                             </Col>
                         )}
                     </FormGroup>
-                    <FormGroup row>
+                    <FormGroup row className="mb-4">
                         <Label md={3} xs={12}>
                             Tempat & <br />
               Tanggal Lahir
@@ -163,7 +163,7 @@ let FormIbuSeleksi = (props) => {
                             />
                         </Col>
                     </FormGroup>
-                    <FormGroup row>
+                    <FormGroup row className="mb-4">
                         <Label for="alamat_ibu" md={3}>
                             Alamat Lengkap
                         </Label>
@@ -177,7 +177,7 @@ let FormIbuSeleksi = (props) => {
                             />{' '}
                         </Col>
                     </FormGroup>
-                    <FormGroup row>
+                    <FormGroup row className="mb-4">
                         <Label for="provinsi_ibu" md={3}>
                             Provinsi
                         </Label>
@@ -200,7 +200,7 @@ let FormIbuSeleksi = (props) => {
                             </Field>
                         </Col>
                     </FormGroup>
-                    <FormGroup row>
+                    <FormGroup row className="mb-4">
                         <Label for="kabkot_ibu" md={3}>
                             Kab/Kota
                         </Label>
@@ -223,7 +223,7 @@ let FormIbuSeleksi = (props) => {
                             </Field>
                         </Col>
                     </FormGroup>
-                    <FormGroup row>
+                    <FormGroup row className="mb-4">
                         <Label for="kecamatan_ibu" sm={3}>
                             Kecamatan
                         </Label>
@@ -241,7 +241,7 @@ let FormIbuSeleksi = (props) => {
                             </Field>
                         </Col>
                     </FormGroup>
-                    <FormGroup row>
+                    <FormGroup row className="mb-4">
                         <Label for="pekerjaan_ibu" md={3}>
                             Pekerjaan
                         </Label>
@@ -265,7 +265,7 @@ let FormIbuSeleksi = (props) => {
                     </FormGroup>
                     {/* {pekerjaan_ibu !== "11" && ( */}
                     <div>
-                        <FormGroup row>
+                        <FormGroup row className="mb-4">
                             <Label for="penghasilan_ibu" md={3}>
                                 Penghasilan
                             </Label>
@@ -292,7 +292,7 @@ let FormIbuSeleksi = (props) => {
                                 <Alert color="success">{rupiah(penghasilan_ibu)}</Alert>
                             </Col>
                         </FormGroup>
-                        <FormGroup row>
+                        <FormGroup row className="mb-4">
                             <Label for="sampingan_ibu" md={3}>
                                 Sampingan
                             </Label>
@@ -318,7 +318,7 @@ let FormIbuSeleksi = (props) => {
                                 <Alert color="success">{rupiah(sampingan_ibu)}</Alert>
                             </Col>
                         </FormGroup>
-                        <FormGroup row>
+                        <FormGroup row className="mb-4">
                             <Label for="file_scan_slip_ibu" md={3}>
                                 {/* Slip Gaji / Bukti Penghasilan */}
                                 {pekerjaan_ibu !== '11' && 'Slip Gaji / Bukti Penghasilan'}
@@ -365,7 +365,7 @@ let FormIbuSeleksi = (props) => {
                         </FormGroup>
                     </div>
                     {/* )} */}
-                    <FormGroup row>
+                    <FormGroup row className="mb-4">
                         <Label for="telepon_ibu" md={3}>
                             Nomor Telepon
                         </Label>
@@ -395,18 +395,17 @@ let FormIbuSeleksi = (props) => {
                 </div>
             )}
 
-            <FormGroup row>
-                <Col md={{ size: 9 }} xs="12">
+            <FormGroup row className="mt-5 border-top pt-4 mb-0">
+                <Col md={{ size: 8 }} xs="12">
                     {!props.allow ? <AlertFormBelumLengkap /> : <AlertFormLengkap />}
                 </Col>
-                <Col md={{ size: 3 }} xs="12">
+                <Col md={{ size: 4 }} xs="12">
                     <Button
                         type="submit"
-                        color="success"
-                        block
+                        className="modern-btn-primary w-100 py-3 shadow-sm font-weight-bold"
                         disabled={pristine || submitting}
                     >
-                        <i className="fa fa-save"></i> Simpan
+                        <i className="fa fa-save mr-2"></i> Simpan Data Ibu
                     </Button>
                 </Col>
             </FormGroup>
@@ -437,11 +436,11 @@ class DataIbuSeleksi extends React.Component {
     }
     render() {
         return (
-            <Card body>
-                <CardTitle>Data Ibu</CardTitle>
-                <Alert color="warning">
-                    <i className="fa fa-info-circle"></i> Seluruh kolom pada Data Ibu{' '}
-                    <b>Wajib Diisi</b>
+            <Card className="premium-card p-4 p-md-5">
+                <CardTitle tag="h4" className="mb-4">Data Orang Tua: Ibu</CardTitle>
+                <Alert color="warning" className="rounded-lg border-0 shadow-sm mb-4">
+                    <i className="fa fa-info-circle mr-2"></i>
+                    <strong>Seluruh kolom pada Data Ibu Wajib Diisi</strong>
                 </Alert>
                 <FormIbuSeleksi
                     onSubmit={this.submitForm}

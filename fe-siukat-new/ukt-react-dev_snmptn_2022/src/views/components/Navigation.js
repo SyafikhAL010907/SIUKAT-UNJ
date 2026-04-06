@@ -56,19 +56,29 @@ class Navigation extends React.Component {
                 />
 
                 <aside className={`sidebar-container ${collapsed ? 'collapsed' : ''} ${openMobile ? 'open-mobile' : ''}`}>
-                    {/* Header: Logo + Title */}
+                    {/* Header: Logo + Title + Toggle */}
                     <div className="sidebar-header">
-                        <img
-                            src={baseUrl + '/public/img/unj.png'}
-                            alt="Logo UNJ"
-                            className="sidebar-logo-img"
-                        />
-                        {!collapsed && (
-                            <div className="sidebar-brand-text">
-                                <h1 className="sidebar-brand-title">SIUKAT</h1>
-                                <p className="sidebar-brand-subtitle">Sistem Informasi UKT</p>
-                            </div>
-                        )}
+                        <div className="sidebar-header-main">
+                            <img
+                                src={baseUrl + '/public/img/unj.png'}
+                                alt="Logo UNJ"
+                                className="sidebar-logo-img"
+                            />
+                            {!collapsed && (
+                                <div className="sidebar-brand-text">
+                                    <h1 className="sidebar-brand-title">SIUKAT</h1>
+                                    <p className="sidebar-brand-subtitle">Sistem Informasi UKT</p>
+                                </div>
+                            )}
+                        </div>
+                        
+                        <button 
+                            className="sidebar-toggle-btn" 
+                            onClick={() => window.innerWidth > 768 ? this.props.toggleCollapse() : this.props.toggleMobile()}
+                            title={collapsed ? "Buka Sidebar" : "Tutup Sidebar"}
+                        >
+                            <i className={`fa ${collapsed ? 'fa-angle-right' : 'fa-angle-left'}`}></i>
+                        </button>
                     </div>
 
                     {/* Menu Body */}

@@ -39,34 +39,30 @@ let FormSuratKebenaran = (props) => {
         unduhSuratKebenaran,
         textSuratKebenaran,
     } = props;
+    const [checked, setChecked] = React.useState(false);
+
     return (
-        <Form onSubmit={handleSubmit}>
-            <div>
-                <i className="fa fa-info-circle"></i> Berikut ini tahapan untuk
-        menyelesaikan surat pernyataan kebenaran data:
+        <Form onSubmit={handleSubmit} className="premium-card-inner p-4 mb-4 bg-light rounded-lg shadow-sm">
+            <div className="mb-3">
+                <i className="fa fa-info-circle text-primary mr-2"></i> 
+                <strong>Tahapan Penyelesaian Surat Pernyataan:</strong>
             </div>
-            <ol>
+            <ol className="pl-3 mb-4">
                 <li>
-                    <Button size="sm" color="danger" onClick={unduhSuratKebenaran}>
+                    <Button size="sm" color="danger" onClick={unduhSuratKebenaran} className="mb-2">
                         <i className="fa fa-download"></i> {textSuratKebenaran}
                     </Button>
                 </li>
-                <li>Cetak surat pernyataan kebenaran data;</li>
-                <li>
-                    Tanda tangani surat pernyataan kebenaran data apabila seluruh data
-                    sudah benar;
-                </li>
-                <li>Scan surat pernyataan kebenaran data;</li>
-                <li>Unggah surat pernyataan kebenaran data pada form di bawah ini.</li>
-                <li>Klik tombol .</li>
+                <li>Cetak, tanda tangani, dan <strong>scan</strong> kembali surat tersebut (PDF).</li>
+                <li>Unggah surat pada form di bawah ini lalu klik <strong>Simpan</strong>.</li>
             </ol>
             <hr />
 
-            <FormGroup row>
-                <Label for="file_scan_pernyataan_kebenaran" md={3}>
-                    Surat Pernyataan Kebenaran Data
+            <FormGroup row className="align-items-center">
+                <Label for="file_scan_pernyataan_kebenaran" md={4} className="font-weight-bold">
+                    Upload Surat Pernyataan
                 </Label>
-                <Col md={5}>
+                <Col md={4}>
                     <Field
                         component={InputFileBs}
                         type="file"
@@ -74,47 +70,45 @@ let FormSuratKebenaran = (props) => {
                         id="file_scan_pernyataan_kebenaran"
                         accept="application/pdf"
                     />
-                    <FormText color="muted">
-                        <ul className="list-reset">
-                            <li>Ekstensi berkas berupa PDF;</li>
-                            <li>Ukuran berkas tidak lebih dari 500KB.</li>
-                        </ul>
-                    </FormText>
                 </Col>
                 {scan_pernyataan_kebenaran && (
                     <Col md={4}>
                         <a
-                            href={
-                                storage +
-                                '/' +
-                                scan_pernyataan_kebenaran
-                            }
+                            href={storage + '/' + scan_pernyataan_kebenaran}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="btn btn-success btn-sm btn-block"
+                            className="modern-btn-primary py-2 w-100 btn text-white"
+                            style={{fontSize: '0.85rem'}}
                         >
-                            <i className="fa fa-file"></i> Lihat Surat Pernyataan Kebenaran
-              Data yang Anda Unggah
+                            <i className="fa fa-file-pdf-o mr-2"></i> Lihat Surat
                         </a>
                     </Col>
                 )}
             </FormGroup>
-            <FormGroup row>
-                <Col md={3}></Col>
-                <Col md={5}>
-                    <Button
-                        type="submit"
-                        color="success"
-                        block
-                        disabled={pristine || submitting}
-                    >
-                        <i className="fa fa-save"></i> Simpan
-                    </Button>
-                </Col>
-            </FormGroup>
+            
+            <div className="custom-control custom-checkbox my-3">
+                <input 
+                    type="checkbox" 
+                    className="custom-control-input" 
+                    id="checkSetuju" 
+                    onChange={(e) => setChecked(e.target.checked)}
+                />
+                <label className="custom-control-label font-weight-normal" htmlFor="checkSetuju">
+                    Saya menyatakan data yang diisi adalah benar dan jujur.
+                </label>
+            </div>
+
+            <Button
+                type="submit"
+                className="modern-btn-primary w-100 py-2"
+                disabled={!checked || submitting}
+            >
+                <i className="fa fa-save mr-2"></i> Simpan Surat Pernyataan
+            </Button>
         </Form>
     );
 };
+
 class VerifikasiSeleksi extends React.Component {
     constructor(props) {
         super(props);
@@ -127,16 +121,15 @@ class VerifikasiSeleksi extends React.Component {
             collapseListrik: false,
             collapseKendaraan: false,
             collapsePendukung: false,
-
-            textSuratKebenaran:
-                'Unduh Surat Pernyataan Kebenaran Data yang Perlu Ditandatangani',
+            textSuratKebenaran: 'Unduh Surat Pernyataan Kebenaran Data',
         };
-
     }
+
     UNSAFE_componentWillMount() {
         this.props.dispatch(cmahasiswa.getByLoggedIn(cookies.get(cookieName)));
         this.props.dispatch(pendukung.getByLoggedIn(cookies.get(cookieName)));
     }
+
     submitForm = (values) => {
         var formData = new FormData();
         for (var key in values) {
@@ -148,69 +141,76 @@ class VerifikasiSeleksi extends React.Component {
                 formData.append(key, values[key]);
             }
         }
-        this.props.dispatch(
-            pendukung.updateData(cookies.get(cookieName), formData)
-        );
+        this.props.dispatch(pendukung.updateData(cookies.get(cookieName), formData));
         this.props.dispatch(reset('DataSuratKebenaran'));
-
         this.props.updateVerifikasi();
     }
+
     toggle = (stateName, val) => {
         var obj = { [stateName]: val };
         for (var key in this.state) {
             if (key === 'textSuratKebenaran') {
-                obj[key] =
-                    'Unduh Surat Pernyataan Kebenaran Data yang Perlu Ditandatangani';
+                obj[key] = 'Unduh Surat Pernyataan Kebenaran Data';
             } else if (key !== stateName) {
                 obj[key] = false;
             }
         }
         this.setState(obj);
     }
+
     verify = () => {
         this.props.dispatch(cmahasiswa.rendahSelesai(cookies.get(cookieName)));
     }
+
     unduhSuratKebenaran = () => {
-        this.setState({
-            textSuratKebenaran: 'Sedang Mengunduh...',
-        });
-        files
-            .unduhSuratKebenaran(cookies.get(cookieName))
+        this.setState({ textSuratKebenaran: 'Sedang Mengunduh...' });
+        files.unduhSuratKebenaran(cookies.get(cookieName))
             .then(() => {
-                this.setState({
-                    textSuratKebenaran:
-                        'Unduh Surat Pernyataan Kebenaran Data yang Perlu Ditandatangani',
-                });
+                this.setState({ textSuratKebenaran: 'Unduh Surat Pernyataan Kebenaran Data' });
             })
             .catch(() => {
-                this.setState({
-                    textSuratKebenaran:
-                        'Unduh Surat Pernyataan Kebenaran Data yang Perlu Ditandatangani',
-                });
+                this.setState({ textSuratKebenaran: 'Unduh Surat Pernyataan Kebenaran Data' });
             });
     }
+
+    renderSection = (title, icon, stateName, Component) => (
+        <div className="mb-3 border rounded-lg overflow-hidden shadow-sm bg-white">
+            <div 
+                className="d-flex align-items-center justify-content-between p-3 cursor-pointer hover-bg-light"
+                onClick={() => this.toggle(stateName, !this.state[stateName])}
+                style={{ cursor: 'pointer', background: this.state[stateName] ? '#f1f5f9' : '#fff' }}
+            >
+                <div className="font-weight-bold text-dark">
+                    <i className={`fa ${icon} mr-3 text-emerald`}></i> {title}
+                </div>
+                <i className={`fa ${this.state[stateName] ? 'fa-chevron-up' : 'fa-chevron-down'} text-muted`}></i>
+            </div>
+            <Collapse isOpen={this.state[stateName]}>
+                <div className="p-4 p-md-5 border-top bg-white">
+                    <Component />
+                </div>
+            </Collapse>
+        </div>
+    );
+
     render() {
         if (this.props.cmahasiswa.flag === 'selesai_isi') {
             return <Redirect to="/main/ukt/selesai-isi" />;
         }
-        console.log(
-            'kebenaran :' + this.props.pendukung.scan_pernyataan_kebenaran === ''
-        );
-        console.log(
-            'ukt tinggi :' + this.props.pendukung.scan_pernyataan_ukt_tinggi === ''
-        );
-        return (
-            <Card body>
-                <CardTitle>Verifikasi Data</CardTitle>
 
-                {(this.props.allow === undefined || this.props.allow === 0) && (
-                    <Alert color="warning">
-                        <i className="fa fa-info-circle"></i> Verifikasi dilakukan ketika
-            seluruh data telah terisi.
+        const isAllowed = this.props.allow !== undefined && this.props.allow !== 0;
+
+        return (
+            <Card className="premium-card p-4 p-md-5">
+                <CardTitle tag="h4" className="mb-4">Verifikasi & Finalisasi Data</CardTitle>
+                
+                {!isAllowed && (
+                    <Alert color="warning" className="rounded-lg shadow-sm border-0 mb-4">
+                        <i className="fa fa-info-circle mr-2"></i> Verifikasi dapat dilakukan setelah <strong>seluruh tahapan data</strong> terisi lengkap.
                     </Alert>
                 )}
 
-                {this.props.allow !== undefined && this.props.allow !== 0 && (
+                {isAllowed && (
                     <div>
                         <FormSuratKebenaran
                             onSubmit={this.submitForm}
@@ -219,215 +219,35 @@ class VerifikasiSeleksi extends React.Component {
                             textSuratKebenaran={this.state.textSuratKebenaran}
                         />
 
-                        <div>
-                            {/* Data Pribadi */}
-                            <div>
-                                <legend className="clearfix">
-                                    <i className="fa fa-user"></i> Data Pribadi
-                                    <div className="pull-right">
-                                        <Button
-                                            size="sm"
-                                            color="success"
-                                            onClick={() =>
-                                                this.toggle(
-                                                    'collapsePribadi',
-                                                    !this.state.collapsePribadi
-                                                )
-                                            }
-                                        >
-                                            <i className="fa fa-bars"></i>
-                                        </Button>
-                                    </div>
-                                </legend>
-                                <Collapse isOpen={this.state.collapsePribadi}>
-                                    <Pribadi />
-                                </Collapse>
-                            </div>
-
-                            {/* Data Ayah */}
-                            <div>
-                                <legend className="clearfix">
-                                    <i className="fa fa-user"></i> Data Ayah
-                                    <div className="pull-right">
-                                        <Button
-                                            size="sm"
-                                            color="success"
-                                            onClick={() =>
-                                                this.toggle('collapseAyah', !this.state.collapseAyah)
-                                            }
-                                        >
-                                            <i className="fa fa-bars"></i>
-                                        </Button>
-                                    </div>
-                                </legend>
-                                <Collapse isOpen={this.state.collapseAyah}>
-                                    <Ayah />
-                                </Collapse>
-                            </div>
-
-                            {/* Data Ibu */}
-                            <div>
-                                <legend className="clearfix">
-                                    <i className="fa fa-user"></i> Data Ibu
-                                    <div className="pull-right">
-                                        <Button
-                                            size="sm"
-                                            color="success"
-                                            onClick={() =>
-                                                this.toggle('collapseIbu', !this.state.collapseIbu)
-                                            }
-                                        >
-                                            <i className="fa fa-bars"></i>
-                                        </Button>
-                                    </div>
-                                </legend>
-                                <Collapse isOpen={this.state.collapseIbu}>
-                                    <Ibu />
-                                </Collapse>
-                            </div>
-
-                            {/* Data Wali */}
-                            <div>
-                                <legend className="clearfix">
-                                    <i className="fa fa-user"></i> Data Wali
-                                    <div className="pull-right">
-                                        <Button
-                                            size="sm"
-                                            color="success"
-                                            onClick={() =>
-                                                this.toggle('collapseWali', !this.state.collapseWali)
-                                            }
-                                        >
-                                            <i className="fa fa-bars"></i>
-                                        </Button>
-                                    </div>
-                                </legend>
-                                <Collapse isOpen={this.state.collapseWali}>
-                                    <Wali />
-                                </Collapse>
-                            </div>
-
-                            {/* Data Rumah */}
-                            <div>
-                                <legend className="clearfix">
-                                    <i className="fa fa-home"></i> Data Rumah
-                                    <div className="pull-right">
-                                        <Button
-                                            size="sm"
-                                            color="success"
-                                            onClick={() =>
-                                                this.toggle('collapseRumah', !this.state.collapseRumah)
-                                            }
-                                        >
-                                            <i className="fa fa-bars"></i>
-                                        </Button>
-                                    </div>
-                                </legend>
-                                <Collapse isOpen={this.state.collapseRumah}>
-                                    <Rumah />
-                                </Collapse>
-                            </div>
-
-                            {/* Data Listrik */}
-                            <div>
-                                <legend className="clearfix">
-                                    <i className="fa fa-flash"></i> Data Listrik
-                                    <div className="pull-right">
-                                        <Button
-                                            size="sm"
-                                            color="success"
-                                            onClick={() =>
-                                                this.toggle(
-                                                    'collapseListrik',
-                                                    !this.state.collapseListrik
-                                                )
-                                            }
-                                        >
-                                            <i className="fa fa-bars"></i>
-                                        </Button>
-                                    </div>
-                                </legend>
-                                <Collapse isOpen={this.state.collapseListrik}>
-                                    <Listrik />
-                                </Collapse>
-                            </div>
-
-                            {/* Data Kendaraan */}
-                            <div>
-                                <legend className="clearfix">
-                                    <i className="fa fa-bus"></i> Data Kendaraan
-                                    <div className="pull-right">
-                                        <Button
-                                            size="sm"
-                                            color="success"
-                                            onClick={() =>
-                                                this.toggle(
-                                                    'collapseKendaraan',
-                                                    !this.state.collapseKendaraan
-                                                )
-                                            }
-                                        >
-                                            <i className="fa fa-bars"></i>
-                                        </Button>
-                                    </div>
-                                </legend>
-                                <Collapse isOpen={this.state.collapseKendaraan}>
-                                    <Kendaraan />
-                                </Collapse>
-                            </div>
-
-                            {/* Data Pendukung */}
-                            <div>
-                                <legend className="clearfix">
-                                    <i className="fa fa-file-text"></i> Data Pendukung
-                                    <div className="pull-right">
-                                        <Button
-                                            size="sm"
-                                            color="success"
-                                            onClick={() =>
-                                                this.toggle(
-                                                    'collapsePendukung',
-                                                    !this.state.collapsePendukung
-                                                )
-                                            }
-                                        >
-                                            <i className="fa fa-bars"></i>
-                                        </Button>
-                                    </div>
-                                </legend>
-                                <Collapse isOpen={this.state.collapsePendukung}>
-                                    <Pendukung />
-                                </Collapse>
-                            </div>
+                        <div className="my-4">
+                            <h5 className="mb-4 font-weight-bold text-secondary border-bottom pb-2">
+                                <i className="fa fa-search mr-2"></i> Pratinjau Seluruh Data:
+                            </h5>
+                            {this.renderSection('Data Pribadi', 'fa-user', 'collapsePribadi', Pribadi)}
+                            {this.renderSection('Data Ayah', 'fa-user', 'collapseAyah', Ayah)}
+                            {this.renderSection('Data Ibu', 'fa-user', 'collapseIbu', Ibu)}
+                            {this.renderSection('Data Wali', 'fa-user', 'collapseWali', Wali)}
+                            {this.renderSection('Data Rumah', 'fa-home', 'collapseRumah', Rumah)}
+                            {this.renderSection('Data Listrik', 'fa-flash', 'collapseListrik', Listrik)}
+                            {this.renderSection('Data Kendaraan', 'fa-bus', 'collapseKendaraan', Kendaraan)}
+                            {this.renderSection('Data Pendukung', 'fa-file-text', 'collapsePendukung', Pendukung)}
                         </div>
-                    </div>
-                )}
 
-                {this.props.verified !== 0 && (
-                    <div>
-                        <hr />
-                        <Row>
-                            <Col md={{ size: 7 }} xs="12">
-                                <Alert color="danger">
-                                    <i className="fa fa-info-circle"></i> Dengan ini saya
-                  menyatakan bahwa data yang saya masukkan adalah data yang
-                  sebenar-benarnya dan sejujur-jujurnya.
+                        {this.props.verified !== 0 && (
+                            <div className="mt-5 pt-4 border-top">
+                                <Alert color="danger" className="rounded-lg border-0 shadow-sm mb-4">
+                                    <i className="fa fa-exclamation-triangle mr-2"></i>
+                                    Pastikan seluruh data di atas sudah benar. Setelah finalisasi, data <strong>tidak dapat diubah kembali</strong>.
                                 </Alert>
-                            </Col>
-                            <Col md={{ size: 5 }} xs="12">
                                 <Button
-                                    color="success"
-                                    block
-                                    onClick={this.verify.bind(this)}
-                                    disabled={
-                                        this.props.pendukung.scan_pernyataan_kebenaran === '' ||
-                                        this.props.scan_pernyataan_ukt_tinggi === ''
-                                    }
+                                    className="modern-btn-primary w-100 py-3 shadow font-weight-bold"
+                                    onClick={this.verify}
+                                    disabled={this.props.pendukung.scan_pernyataan_kebenaran === ''}
                                 >
-                                    <i className="fa fa-save"></i> Ya, Semua data sudah benar.
+                                    <i className="fa fa-check-circle mr-2"></i> Ya, Saya Yakin & Finalisasi Data
                                 </Button>
-                            </Col>
-                        </Row>
+                            </div>
+                        )}
                     </div>
                 )}
             </Card>

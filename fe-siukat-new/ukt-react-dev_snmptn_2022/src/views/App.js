@@ -5,6 +5,7 @@ import 'react-day-picker/lib/style.css';
 import './dist/css/loader.css';
 import './dist/css/styles.css';
 import './dist/css/sidebar.css';
+import './dist/css/modern-ui.css';
 import Login from './pages/Login';
 import Layout from './pages/Layout';
 import {

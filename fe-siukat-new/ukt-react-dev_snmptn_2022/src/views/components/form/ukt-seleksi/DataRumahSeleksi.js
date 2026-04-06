@@ -37,7 +37,7 @@ let FormRumahSeleksi = (props) => {
     } = props;
     return (
         <Form onSubmit={handleSubmit}>
-            <Row>
+            <Row className="mb-4">
                 <Label for="status_kepemilikan" md={3} xs={12}>Status Rumah</Label>
                 <FormGroup tag="fieldset" className="col">
                     <FormGroup check>
@@ -79,7 +79,7 @@ let FormRumahSeleksi = (props) => {
                 </FormGroup>
             </Row>
             {status_kepemilikan === 'milik_sendiri' && (
-                <Row>
+                <Row className="mb-4">
                     <Label for="status_sertifikat" md={3}>Status Sertifikat</Label>
                     <FormGroup tag="fieldset" className="col">
                         <FormGroup check>
@@ -134,7 +134,7 @@ let FormRumahSeleksi = (props) => {
             {
                 status_kepemilikan === 'bersama_saudara' && (
                     <div>
-                        <FormGroup row>
+                        <FormGroup row className="mb-4">
                             <Label for="jumlah_kepala_keluarga" md={3}>Jumlah Kepala Keluarga</Label>
                             <Col md={9}>
                                 <Field
@@ -153,7 +153,7 @@ let FormRumahSeleksi = (props) => {
             {
                 (status_kepemilikan === 'milik_sendiri' || status_kepemilikan === 'bersama_saudara') && (
                     <div>
-                        <FormGroup row>
+                        <FormGroup row className="mb-4">
                             <Label for="luas_tanah" md={3}>Luas Tanah</Label>
                             <Col md={9}>
                                 <Field
@@ -171,7 +171,7 @@ let FormRumahSeleksi = (props) => {
                                 </FormText>
                             </Col>
                         </FormGroup>
-                        <FormGroup row>
+                        <FormGroup row className="mb-4">
                             <Label for="luas_bangunan" md={3}>Luas Bangunan</Label>
                             <Col md={9}>
                                 <Field
@@ -189,7 +189,7 @@ let FormRumahSeleksi = (props) => {
                                 </FormText>
                             </Col>
                         </FormGroup>
-                        <FormGroup row>
+                        <FormGroup row className="mb-4">
                             <Label for="biaya_pbb" md={3}>Biaya PBB</Label>
                             <Col md={5} xs={12}>
                                 <Field
@@ -215,7 +215,7 @@ Rp. 0.</li>
                                 <Alert color="success">{rupiah(biaya_pbb)} </Alert>
                             </Col>
                         </FormGroup>
-                        <FormGroup row>
+                        <FormGroup row className="mb-4">
                             <Label for="file_scan_pbb" md={3}>Tagihan PBB</Label>
                             <Col md={5}>
                                 <Field
@@ -255,7 +255,7 @@ Rp. 0.</li>
             {
                 status_kepemilikan === 'kontrak' && (
                     <div>
-                        <FormGroup row>
+                        <FormGroup row className="mb-4">
                             <Label for="biaya_kontrak" md={3}>Biaya Kontrak</Label>
                             <Col md={5} xs={12}>
                                 <Field
@@ -279,7 +279,7 @@ Rp. 0.</li>
                                 <Alert color="success">{rupiah(biaya_kontrak)} </Alert>
                             </Col>
                         </FormGroup>
-                        <FormGroup row>
+                        <FormGroup row className="mb-4">
                             <Label for="file_scan_kontrak" md={3}>Surat Perjanjian Kontrak</Label>
                             <Col md={5}>
                                 <Field
@@ -320,18 +320,17 @@ Rp. 0.</li>
                 )
             }
 
-            <FormGroup row>
-                <Col md={{ size: 9 }} xs="12">
+            <FormGroup row className="mt-5 border-top pt-4 mb-0">
+                <Col md={{ size: 8 }} xs="12">
                     {!props.allow ? <AlertFormBelumLengkap /> : <AlertFormLengkap />}
                 </Col>
-                <Col md={{ size: 3 }} xs="12">
+                <Col md={{ size: 4 }} xs="12">
                     <Button
                         type="submit"
-                        color="success"
-                        block
+                        className="modern-btn-primary w-100 py-3 shadow-sm font-weight-bold"
                         disabled={pristine || submitting}
                     >
-                        <i className="fa fa-save"></i> Simpan
+                        <i className="fa fa-save mr-2"></i> Simpan Data Rumah
                     </Button>
                 </Col>
             </FormGroup>
@@ -384,11 +383,11 @@ class DataRumahSeleksi extends React.Component {
 
     render() {
         return (
-            <Card body>
-                <CardTitle>Data Rumah</CardTitle>
-                <Alert color="warning">
-                    <i className="fa fa-info-circle"></i> Data tempat tinggal calon
-          mahasiswa
+            <Card className="premium-card p-4 p-md-5">
+                <CardTitle tag="h4" className="mb-4">Kondisi & Data Rumah</CardTitle>
+                <Alert color="warning" className="rounded-lg border-0 shadow-sm mb-4">
+                    <i className="fa fa-info-circle mr-2"></i>
+                    <strong>Seluruh kolom pada Data Rumah Wajib Diisi</strong>
                 </Alert>
                 <FormRumahSeleksi
                     onSubmit={this.submitForm}

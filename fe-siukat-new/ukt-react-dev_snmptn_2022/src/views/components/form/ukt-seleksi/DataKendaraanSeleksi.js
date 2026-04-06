@@ -35,11 +35,11 @@ let FormKendaraanSeleksi = (props) => {
     return (
         <Form onSubmit={handleSubmit}>
             <FormGroup>
-                <legend>
+                <legend className="mb-4">
                     <i className="fa fa-motorcycle"></i> Data Motor
                 </legend>
             </FormGroup>
-            <FormGroup row>
+            <FormGroup row className="mb-4">
                 <Label for="status_motor" md={3} xs={12}>Status Motor</Label>
                 <Col md={4} xs={12}>
                     <FormGroup check>
@@ -67,7 +67,7 @@ let FormKendaraanSeleksi = (props) => {
 
             {status_motor === 'ada' && (
                 <>
-                    <FormGroup row>
+                    <FormGroup row className="mb-4">
                         <Label for="jumlah_motor" md={3} xs={12}>Jumlah Motor</Label>
                         <Col md={9}>
                             <Field
@@ -84,7 +84,7 @@ let FormKendaraanSeleksi = (props) => {
                             </FormText>
                         </Col>
                     </FormGroup>
-                    <FormGroup row>
+                    <FormGroup row className="mb-4">
                         <Label for="pajak_motor" md={3} xs={12}>Total Pajak Motor</Label>
                         <Col md={5} xs={12}>
                             <Field
@@ -109,7 +109,7 @@ let FormKendaraanSeleksi = (props) => {
                             <Alert color="success">{rupiah(pajak_motor)}</Alert>
                         </Col>
                     </FormGroup>
-                    <FormGroup row>
+                    <FormGroup row className="mb-4">
                         <Label for="file_scan_motor" md={3}>STNK Motor</Label>
                         <Col md={5}>
                             <Field
@@ -148,11 +148,11 @@ let FormKendaraanSeleksi = (props) => {
             )}
 
             <FormGroup>
-                <legend>
+                <legend className="mb-4">
                     <i className="fa fa-car"></i> Data Mobil
                 </legend>
             </FormGroup>
-            <FormGroup row>
+            <FormGroup row className="mb-4">
                 <Label for="status_mobil" md={3} xs={12}>
                     Status Mobil</Label>
                 <Col md={4} xs={12}>
@@ -181,7 +181,7 @@ let FormKendaraanSeleksi = (props) => {
 
             {status_mobil === 'ada' && (
                 <div>
-                    <FormGroup row>
+                    <FormGroup row className="mb-4">
                         <Label for="jumlah_mobil" md={3} xs={12}>Jumlah Mobil</Label>
                         <Col md={9}>
                             <Field
@@ -200,7 +200,7 @@ let FormKendaraanSeleksi = (props) => {
                             </FormText>
                         </Col>
                     </FormGroup>
-                    <FormGroup row>
+                    <FormGroup row className="mb-4">
                         <Label for="pajak_mobil" md={3} xs={12}>Total Pajak Mobil</Label>
                         <Col md={5} xs={12}>
                             <Field
@@ -225,7 +225,7 @@ let FormKendaraanSeleksi = (props) => {
                             <Alert color="success">{rupiah(pajak_mobil)}</Alert>
                         </Col>
                     </FormGroup>
-                    <FormGroup row>
+                    <FormGroup row className="mb-4">
                         <Label for="file_scan_mobil" md={3}>STNK Mobil</Label>
                         <Col md={5}>
                             <Field
@@ -263,18 +263,17 @@ let FormKendaraanSeleksi = (props) => {
                 </div>
             )}
 
-            <FormGroup row>
-                <Col md={{ size: 9 }} xs="12">
+            <FormGroup row className="mt-5 border-top pt-4 mb-0">
+                <Col md={{ size: 8 }} xs="12">
                     {!props.allow ? <AlertFormBelumLengkap /> : <AlertFormLengkap />}
                 </Col>
-                <Col md={{ size: 3 }} xs="12">
+                <Col md={{ size: 4 }} xs="12">
                     <Button
                         type="submit"
-                        color="success"
-                        block
+                        className="modern-btn-primary w-100 py-3 shadow-sm font-weight-bold"
                         disabled={pristine || submitting}
                     >
-                        <i className="fa fa-save"></i> Simpan
+                        <i className="fa fa-save mr-2"></i> Simpan Data Kendaraan
                     </Button>
                 </Col>
             </FormGroup>
@@ -306,8 +305,14 @@ class DataKendaraanSeleksi extends React.Component {
 
     render() {
         return (
-            <Card body>
-                <CardTitle>Data Kendaraan</CardTitle>
+            <Card className="premium-card p-4 p-md-5">
+                <CardTitle tag="h4" className="mb-4">Data Kendaraan</CardTitle>
+                <Alert color="warning" className="rounded-lg border-0 shadow-sm mb-4">
+                    <i className="fa fa-info-circle mr-2"></i>
+                    <strong>Seluruh kolom pada Data Kendaraan Wajib Diisi</strong>
+                    <br />
+                    <small className="ml-4">Isi dengan tanda strip (-) jika tidak memiliki kendaraan.</small>
+                </Alert>
                 <FormKendaraanSeleksi
                     onSubmit={this.submitForm}
                     initialValues={this.props.kendaraan}

@@ -52,7 +52,7 @@ let FormAyahSeleksi = (props) => {
     };
     return (
         <Form onSubmit={handleSubmit}>
-            <FormGroup row>
+            <FormGroup row className="mb-4">
                 <Label for="nama_ayah" md={3}>
                     Nama Lengkap
                 </Label>
@@ -65,7 +65,7 @@ let FormAyahSeleksi = (props) => {
                     />
                 </Col>
             </FormGroup>
-            <FormGroup row>
+            <FormGroup row className="mb-4">
                 <Label for="status_ayah" md={3}></Label>
                 <Col md={9}>
                     <Row>
@@ -97,7 +97,7 @@ let FormAyahSeleksi = (props) => {
 
             {status_ayah === 'hidup' && (
                 <div>
-                    <FormGroup row>
+                    <FormGroup row className="mb-4">
                         <Label for="nik_ayah" md={3}>
                             NIK
                         </Label>
@@ -110,7 +110,7 @@ let FormAyahSeleksi = (props) => {
                             />
                         </Col>
                     </FormGroup>
-                    <FormGroup row>
+                    <FormGroup row className="mb-4">
                         <Label for="file_scan_ktp_ayah" md={3}>
                             KTP Ayah
                         </Label>
@@ -126,7 +126,6 @@ let FormAyahSeleksi = (props) => {
                             <SyaratScan />
                         </Col>
                         {props.initialValues.scan_ktp_ayah && (
-                            <Col md={4}>
                                 <a
                                     href={
                                         storage +
@@ -135,14 +134,14 @@ let FormAyahSeleksi = (props) => {
                                     }
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="btn btn-success btn-block"
+                                    className="modern-btn-primary py-2 w-100 btn text-white"
+                                    style={{fontSize: '0.85rem'}}
                                 >
-                                    <i className="fa fa-file"></i> Lihat KTP Ayah
+                                    <i className="fa fa-file-pdf-o mr-2"></i> Lihat KTP Ayah
                                 </a>
-                            </Col>
                         )}
                     </FormGroup>
-                    <FormGroup row>
+                    <FormGroup row className="mb-4">
                         <Label md={3} xs={12}>
                             Tempat {'&'} Tanggal Lahir
                         </Label>
@@ -163,7 +162,7 @@ let FormAyahSeleksi = (props) => {
                             />
                         </Col>
                     </FormGroup>
-                    <FormGroup row>
+                    <FormGroup row className="mb-4">
                         <Label for="alamat_ayah" md={3}>
                             Alamat Lengkap
                         </Label>
@@ -177,7 +176,7 @@ let FormAyahSeleksi = (props) => {
                             />{' '}
                         </Col>
                     </FormGroup>
-                    <FormGroup row>
+                    <FormGroup row className="mb-4">
                         <Label for="provinsi_ayah" md={3}>
                             Provinsi
                         </Label>
@@ -200,7 +199,7 @@ let FormAyahSeleksi = (props) => {
                             </Field>
                         </Col>
                     </FormGroup>
-                    <FormGroup row>
+                    <FormGroup row className="mb-4">
                         <Label for="kabkot_ayah" md={3}>
                             Kab/Kota
                         </Label>
@@ -223,7 +222,7 @@ let FormAyahSeleksi = (props) => {
                             </Field>
                         </Col>
                     </FormGroup>
-                    <FormGroup row>
+                    <FormGroup row className="mb-4">
                         <Label for="kecamatan_ayah" sm={3}>
                             Kecamatan
                         </Label>
@@ -241,7 +240,7 @@ let FormAyahSeleksi = (props) => {
                             </Field>
                         </Col>
                     </FormGroup>
-                    <FormGroup row>
+                    <FormGroup row className="mb-4">
                         <Label for="pekerjaan_ayah" md={3}>
                             Pekerjaan
                         </Label>
@@ -265,7 +264,7 @@ let FormAyahSeleksi = (props) => {
                     </FormGroup>
                     {/* {pekerjaan_ayah !== "11" && ( */}
                     <div>
-                        <FormGroup row>
+                        <FormGroup row className="mb-4">
                             <Label for="penghasilan_ayah" md={3}>
                                 Penghasilan
                             </Label>
@@ -292,7 +291,7 @@ let FormAyahSeleksi = (props) => {
                                 <Alert color="success">{rupiah(penghasilan_ayah)}</Alert>
                             </Col>
                         </FormGroup>
-                        <FormGroup row>
+                        <FormGroup row className="mb-4">
                             <Label for="sampingan_ayah" md={3}>
                                 Sampingan
                             </Label>
@@ -318,7 +317,7 @@ let FormAyahSeleksi = (props) => {
                                 <Alert color="success">{rupiah(sampingan_ayah)}</Alert>
                             </Col>
                         </FormGroup>
-                        <FormGroup row>
+                        <FormGroup row className="mb-4">
                             <Label for="file_scan_slip_ayah" md={3}>
                                 {pekerjaan_ayah !== '11' && 'Slip Gaji / Bukti Penghasilan'}
                                 {pekerjaan_ayah === '11' && 'Surat Keterangan Tidak Bekerja'}
@@ -363,7 +362,7 @@ let FormAyahSeleksi = (props) => {
                         </FormGroup>
                     </div>
                     {/* )} */}
-                    <FormGroup row>
+                    <FormGroup row className="mb-4">
                         <Label for="telepon_ayah" md={3}>
                             Nomor Telepon
                         </Label>
@@ -393,18 +392,17 @@ let FormAyahSeleksi = (props) => {
                 </div>
             )}
 
-            <FormGroup row>
-                <Col md={{ size: 9 }} xs="12">
+            <FormGroup row className="mt-5 border-top pt-4 mb-0">
+                <Col md={{ size: 8 }} xs="12">
                     {!props.allow ? <AlertFormBelumLengkap /> : <AlertFormLengkap />}
                 </Col>
-                <Col md={{ size: 3 }} xs="12">
+                <Col md={{ size: 4 }} xs="12">
                     <Button
                         type="submit"
-                        color="success"
-                        block
+                        className="modern-btn-primary w-100 py-3 shadow-sm font-weight-bold"
                         disabled={pristine || submitting}
                     >
-                        <i className="fa fa-save"></i> Simpan
+                        <i className="fa fa-save mr-2"></i> Simpan Data Ayah
                     </Button>
                 </Col>
             </FormGroup>
@@ -436,11 +434,11 @@ class DataAyahSeleksi extends React.Component {
     }
     render() {
         return (
-            <Card body>
-                <CardTitle>Data Ayah</CardTitle>
-                <Alert color="warning">
-                    <i className="fa fa-info-circle"></i> Seluruh kolom pada Data Ayah{' '}
-                    <b>Wajib Diisi</b>
+            <Card className="premium-card p-4 p-md-5">
+                <CardTitle tag="h4" className="mb-4">Data Orang Tua: Ayah</CardTitle>
+                <Alert color="warning" className="rounded-lg border-0 shadow-sm mb-4">
+                    <i className="fa fa-info-circle mr-2"></i>
+                    <strong>Seluruh kolom pada Data Ayah Wajib Diisi</strong>
                 </Alert>
                 <FormAyahSeleksi
                     onSubmit={this.submitForm}

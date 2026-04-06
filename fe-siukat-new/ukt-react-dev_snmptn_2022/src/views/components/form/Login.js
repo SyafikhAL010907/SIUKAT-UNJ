@@ -19,6 +19,7 @@ class FormLogin extends React.Component {
             jawaban: '',
             authCookie: null,
             tombolMasuk: 'Masuk',
+            showPassword: false,
         }
     }
     UNSAFE_componentWillMount() {
@@ -85,42 +86,59 @@ class FormLogin extends React.Component {
         const open_login = this.props.open_login;
         return (
             <Form onSubmit={this.login}>
-                {!online ?
-                    <h5 className="text-warning">Service Currently Offline</h5> : ''
-                }
-                <FormGroup>
-                    <Label for="no_peserta">
+                {!online && <Alert color="danger" className="rounded-lg border-0 shadow-sm mb-4">Service Currently Offline</Alert>}
+                
+                <FormGroup className="modern-input-group mb-4">
+                    <Label for="no_peserta" style={{color: '#ffffff', fontWeight: '800'}}>
                         Nomor Peserta {" "}
-                        <span style={{ textTransform: "uppercase" }}>
+                        <span className="text-uppercase" style={{opacity: 1, fontSize: '0.8rem', fontWeight: '800', color: '#ffffff'}}>
                             {stage_detail === 'mandiri' ? 'Mandiri Ujian Tulis' : stage_detail}
                         </span>
                     </Label>
                     <Input type="text" name="no_peserta" id="no_peserta" placeholder="01234567890" onChange={this.handleNomorPendaftaran.bind(this)} disabled={!online} required />
                 </FormGroup>
-                <FormGroup>
-                    <Label for="password">Tanggal Lahir
-                        <FormText className="text-white">(Contoh: 31121999)</FormText>
+
+                <FormGroup className="modern-input-group mb-4">
+                    <Label for="password" style={{color: '#ffffff', fontWeight: '800'}}>
+                        Tanggal Lahir
+                        <span className="ml-2 font-weight-bold small" style={{opacity: 1, color: '#ffffff'}}>(Contoh: 31121999)</span>
                     </Label>
-                    <Input type="password" name="password" id="password" placeholder="ddmmyyyy" onChange={this.handleTanggalLahir.bind(this)} disabled={!online} required />
+                    <div className="position-relative password-toggle-wrapper">
+                        <Input 
+                            type={this.state.showPassword ? "text" : "password"} 
+                            name="password" 
+                            id="password" 
+                            placeholder="ddmmyyyy" 
+                            onChange={this.handleTanggalLahir.bind(this)} 
+                            disabled={!online} 
+                            required 
+                            style={{ paddingRight: '45px' }}
+                        />
+                        <div 
+                            className="password-eye-btn" 
+                            onClick={() => this.setState({ showPassword: !this.state.showPassword })}
+                        >
+                            <i className={`fa ${this.state.showPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+                        </div>
+                    </div>
                 </FormGroup>
-                <FormGroup>
-                    <Alert color="warning"><Label for="jawaban" className="mb-0">{online ? `Berapakah ${this.props.captcha.pertanyaan}?` : 'Offline'}</Label></Alert>
+
+                <FormGroup className="modern-input-group mb-4">
+                    <div className="bg-white rounded-lg p-2 mb-2 text-center text-emerald font-weight-bold shadow-sm" style={{fontSize: '0.9rem'}}>
+                        {online ? `Berapakah ${this.props.captcha.pertanyaan}?` : 'Offline'}
+                    </div>
                     <Input type="hidden" name="kode_captcha" id="kode_captcha" defaultValue={this.props.captcha.kode} disabled={!online} />
                     <Input type="text" name="jawaban" id="jawaban" placeholder="Jawaban Anda" onChange={this.handleCaptcha.bind(this)} disabled={!online} required />
                 </FormGroup>
-                {!open_login && (
-                    <FormGroup>
-                        <Card body style={{ borderRadius: '10px' }} color="danger">
-                            <CardTitle style={{ textAlign: "center" }}>Pengisian data ekonomi blm dibuka
-                                {/* <Button color="danger" block disabled>Pengisian data ekonomi blm dibuka</Button> */}
-                            </CardTitle>
-                        </Card>
-                    </FormGroup>
-                )}
-                {open_login && (
-                    <FormGroup>
-                        <Button color="success" block type="submit" disabled={!online}><i className="fa fa-sign-in"></i> {this.state.tombolMasuk}</Button>
-                    </FormGroup>
+
+                {open_login ? (
+                    <Button block className="modern-btn-primary py-3 font-weight-bold shadow mt-4" type="submit" disabled={!online}>
+                        <i className="fa fa-sign-in mr-2"></i> {this.state.tombolMasuk}
+                    </Button>
+                ) : (
+                    <Alert color="danger" className="rounded-lg border-0 shadow-sm mt-4 text-center font-weight-bold">
+                        Pengisian data ekonomi belum dibuka
+                    </Alert>
                 )}
             </Form>
         )

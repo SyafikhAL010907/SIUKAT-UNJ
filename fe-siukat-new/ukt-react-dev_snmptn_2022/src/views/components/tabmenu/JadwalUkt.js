@@ -1,14 +1,13 @@
 import React from 'react';
-import { Table } from 'reactstrap';
 
 class JadwalUkt extends React.Component {
     render() {
         return (
-            <Table responsive striped bordered className="login-schedule">
+            <table className="premium-table-modern">
                 <thead>
-                    <tr className="table-head-green">
-                        <th width="30%">Kegiatan</th>
-                        <th width="70%">Jadwal</th>
+                    <tr>
+                        <th width="40%">Kegiatan</th>
+                        <th width="60%">Jadwal</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -20,14 +19,6 @@ class JadwalUkt extends React.Component {
                         <td>Pengumuman UKT</td>
                         <td>{this.props.info.pengumuman}</td>
                     </tr>
-                    {/* <tr>
-            <td>Proses Klarifikasi UKT</td>
-            <td>
-              {this.props.info.klarifikasi_tanggal}
-              <br />
-              {this.props.info.klarifikasi_lokasi}
-            </td>
-          </tr> */}
                     <tr>
                         <td>Pembayaran UKT</td>
                         <td>{this.props.info.pembayaran}</td>
@@ -37,7 +28,7 @@ class JadwalUkt extends React.Component {
                         <td>{this.props.info.lapor_diri}</td>
                     </tr>
                 </tbody>
-            </Table>
+            </table>
         );
     }
 }

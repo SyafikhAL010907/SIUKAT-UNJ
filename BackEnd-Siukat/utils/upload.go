@@ -22,7 +22,8 @@ func SanitizeString(s string) string {
 
 // HandleDynamicUpload creates dynamic directory and saves file (overwrites if exists)
 // Folder structure: uploads/{SanitizedNama}_{NoPeserta}/{Sanitized_Filename.ext}
-func HandleDynamicUpload(c *gin.Context, file *multipart.FileHeader, namaMahasiswa string, noPeserta string) (string, error) {
+// forcedFilename (optional): if provided, uses this name instead of original while keeping extension
+func HandleDynamicUpload(c *gin.Context, file *multipart.FileHeader, namaMahasiswa string, noPeserta string, forcedFilename ...string) (string, error) {
 	// 1. Sanitize Nama and NoPeserta for Folder Name
 	sanitizedNama := SanitizeString(namaMahasiswa)
 	// Balikin '_' sebagai pemisah antara Nama (yang sudah digabung) dan NoPeserta
@@ -38,9 +39,29 @@ func HandleDynamicUpload(c *gin.Context, file *multipart.FileHeader, namaMahasis
 
 	// 4. Sanitize Filename (keep extension)
 	ext := filepath.Ext(file.Filename)
-	base := strings.TrimSuffix(file.Filename, ext)
-	sanitizedBase := SanitizeString(base)
-	finalFilename := sanitizedBase + ext
+	var finalFilename string
+
+	if len(forcedFilename) > 0 && forcedFilename[0] != "" {
+		// LOGIKA FORCED FILENAME: Gunakan nama yang dipaksakan (misal: "foto_profil")
+		// Sebelum simpan, kita cari & hapus file lama dengan nama dasar yang sama (Apapun ekstensinya)
+		// supaya tidak numpuk .jpg & .png secara bersamaan
+		baseForce := SanitizeString(forcedFilename[0])
+		
+		fmt.Printf("🧹 STORAGE CLEANUP (Wildcard): Searching for [%s.*] in [%s]\n", baseForce, targetDir)
+		pattern := filepath.Join(targetDir, baseForce+".*")
+		matches, _ := filepath.Glob(pattern)
+		for _, match := range matches {
+			fmt.Printf("🧹 Removing old match: [%s]\n", match)
+			os.Remove(match)
+		}
+
+		finalFilename = baseForce + ext
+	} else {
+		// LOGIKA ASLI: Gunakan nama file asli yang di-sanitize
+		base := strings.TrimSuffix(file.Filename, ext)
+		sanitizedBase := SanitizeString(base)
+		finalFilename = sanitizedBase + ext
+	}
 
 	// 5. Construct Final Path for SaveUploadedFile
 	finalSavePath := filepath.Join(targetDir, finalFilename)

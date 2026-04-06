@@ -25,7 +25,7 @@ let FormPendukungSeleksi = (props) => {
     const { handleSubmit, pristine, submitting, scan_kk } = props;
     return (
         <Form onSubmit={handleSubmit}>
-            <FormGroup row>
+            <FormGroup row className="mb-4">
                 <Label for="tanggungan" md={3}>
                     Jumlah Tanggungan
                 </Label>
@@ -40,7 +40,7 @@ let FormPendukungSeleksi = (props) => {
                     <FormText>Termasuk Kepala Keluarga</FormText>
                 </Col>
             </FormGroup>
-            <FormGroup row>
+            <FormGroup row className="mb-4">
                 <Label for="file_scan_kk" md={3}>
                     Kartu Keluarga
                 </Label>
@@ -69,24 +69,23 @@ let FormPendukungSeleksi = (props) => {
                             rel="noopener noreferrer"
                             className="btn btn-success btn-block"
                         >
-                            <i className="fa fa-file"></i> Lihat Kartu Keluarga
+                            <i className="fa fa-file mr-2"></i> Lihat Kartu Keluarga
                         </a>
                     </Col>
                 )}
             </FormGroup>
 
-            <FormGroup row>
-                <Col md={{ size: 9 }} xs="12">
+            <FormGroup row className="mt-5 border-top pt-4 mb-0">
+                <Col md={{ size: 8 }} xs="12">
                     {!props.allow ? <AlertFormBelumLengkap /> : <AlertFormLengkap />}
                 </Col>
-                <Col md={{ size: 3 }} xs="12">
+                <Col md={{ size: 4 }} xs="12">
                     <Button
                         type="submit"
-                        color="success"
-                        block
+                        className="modern-btn-primary w-100 py-3 shadow-sm font-weight-bold"
                         disabled={pristine || submitting}
                     >
-                        <i className="fa fa-save"></i> Simpan
+                        <i className="fa fa-save mr-2"></i> Simpan Data Pendukung
                     </Button>
                 </Col>
             </FormGroup>
@@ -116,17 +115,13 @@ class DataPendukungSeleksi extends React.Component {
     }
     render() {
         return (
-            <Card body>
-                <CardTitle>Data Pendukung</CardTitle>
-                <Alert color="warning">
-                    <i className="fa fa-info-circle"></i>
-                    <span> Jumlah tanggungan termasuk semua orang di kartu keluarga. <b>Misal:</b></span>
-                    <ul>
-                        <li>Ayah;</li>
-                        <li>Ibu;</li>
-                        <li>2 Orang Anak.</li>
-                    </ul>
-                    Maka, <b>jumlah tanggungan = 4.</b>
+            <Card className="premium-card p-4 p-md-5">
+                <CardTitle tag="h4" className="mb-4">Berkas Pendukung</CardTitle>
+                <Alert color="warning" className="rounded-lg border-0 shadow-sm mb-4">
+                    <i className="fa fa-info-circle mr-2"></i>
+                    <strong>Seluruh kolom pada Data Pendukung Wajib Diisi</strong>
+                    <br />
+                    <small className="ml-4">Isi dengan tanda strip (-) jika tidak memiliki berkas terkait.</small>
                 </Alert>
                 <FormPendukungSeleksi
                     onSubmit={this.submitForm}

@@ -13,7 +13,6 @@ import {
 import classnames from 'classnames';
 import { cookies, cookieName } from '../../global';
 import {
-    Bantuan,
     DataDiri,
     JadwalUkt,
     InfoBiodata,
@@ -62,18 +61,16 @@ class TabMenu extends React.Component {
         //     return <Redirect to={"/main/ukt"} />
         // }
         return (
-            <div className="margin-top-20">
+            <div className="mt-4">
                 <Row>
                     <Col md="3" xs="12">
-                        <ListGroup className="tab-pane-menu">
+                        <ListGroup className="modern-sidebar-menu shadow-sm h-100">
                             <ListGroupItem
                                 className={classnames({ active: this.state.activeTab === '1' })}
                                 onClick={(e) => {
                                     e.preventDefault();
                                     this.toggle('1');
                                 }}
-                                tag="a"
-                                href=""
                             >
                                 <i className="fa fa-user"></i> Data Diri
                             </ListGroupItem>
@@ -83,10 +80,8 @@ class TabMenu extends React.Component {
                                     e.preventDefault();
                                     this.toggle('2');
                                 }}
-                                tag="a"
-                                href=""
                             >
-                                <i className="fa fa-clock-o"></i> Informasi Jadwal
+                                <i className="fa fa-calendar-check-o"></i> Informasi Jadwal
                             </ListGroupItem>
                             <ListGroupItem
                                 className={classnames({ active: this.state.activeTab === '3' })}
@@ -94,10 +89,8 @@ class TabMenu extends React.Component {
                                     e.preventDefault();
                                     this.toggle('3');
                                 }}
-                                tag="a"
-                                href=""
                             >
-                                <i className="fa fa-user"></i> Informasi Biodata
+                                <i className="fa fa-id-card-o"></i> Informasi Biodata
                             </ListGroupItem>
                             <ListGroupItem
                                 className={classnames({ active: this.state.activeTab === '4' })}
@@ -105,8 +98,6 @@ class TabMenu extends React.Component {
                                     e.preventDefault();
                                     this.toggle('4');
                                 }}
-                                tag="a"
-                                href=""
                             >
                                 <i className="fa fa-money"></i> Informasi UKT
                             </ListGroupItem>
@@ -116,10 +107,8 @@ class TabMenu extends React.Component {
                                     e.preventDefault();
                                     this.toggle('5');
                                 }}
-                                tag="a"
-                                href=""
                             >
-                                <i className="fa fa-recycle"></i> Alur Pengisian UKT
+                                <i className="fa fa-road"></i> Alur Pengisian UKT
                             </ListGroupItem>
                             <ListGroupItem
                                 className={classnames({ active: this.state.activeTab === '6' })}
@@ -127,134 +116,83 @@ class TabMenu extends React.Component {
                                     e.preventDefault();
                                     this.toggle('6');
                                 }}
-                                tag="a"
-                                href=""
                             >
-                                <i className="fa fa-download"></i> Berkas Yang Diperlukan
+                                <i className="fa fa-folder-open-o"></i> Berkas Penting
                             </ListGroupItem>
-                            {/* <ListGroupItem
-                className={classnames({ active: this.state.activeTab === "7" })}
-                onClick={(e) => {
-                  e.preventDefault();
-                  this.toggle("7");
-                }}
-                tag="a"
-                href=""
-              >
-                <i className="fa fa-exclamation"></i> Klarifikasi UKT
-              </ListGroupItem> */}
                             <ListGroupItem
                                 className={classnames({ active: this.state.activeTab === '8' })}
                                 onClick={(e) => {
                                     e.preventDefault();
                                     this.toggle('8');
                                 }}
-                                tag="a"
-                                href=""
                             >
-                                <i className="fa fa-question-circle"></i> FAQ
+                                <i className="fa fa-question-circle-o"></i> FAQ
                             </ListGroupItem>
                         </ListGroup>
-                        <Bantuan />
                     </Col>
-                    <Col md="9" xs="12">
+                    <Col md="9" xs="12" className="d-flex flex-column">
                         {this.props.cmahasiswa.bidik_misi_cmahasiswa === 'Ya' && (
-                            <Alert color="warning">
-                                Anda termasuk peserta Bidik Misi. Peserta Bidik Misi juga
-                                diwajibkan mengisi data untuk penentuan UKT dengan
-                                sebenar-benarnya dan sejujur-jujurnya. Apabila suatu saat status
-                                Bidik Misi anda dicabut, maka hasil UKT ini yang harus anda
-                                bayarkan pada setiap semester.
+                            <Alert color="warning" className="rounded-lg shadow-sm border-0 mb-4">
+                                <i className="fa fa-graduation-cap mr-2"></i>
+                                <strong>Peserta Bidik Misi:</strong> Anda diwajibkan tetap mengisi data untuk penentuan UKT dengan
+                                sebenar-benarnya. Data ini akan digunakan jika status Bidik Misi dicabut.
                             </Alert>
                         )}
                         <TabContent
                             activeTab={this.state.activeTab}
-                            className="tab-pane-content"
+                            className="h-100"
                         >
-                            <TabPane tabId="1">
-                                <Row>
-                                    <Col sm="12">
-                                        <Card body>
-                                            <CardTitle>Data Diri</CardTitle>
-                                            <DataDiri />
-                                        </Card>
-                                    </Col>
-                                </Row>
+                            <TabPane tabId="1" className="h-100">
+                                <Card className="premium-card">
+                                    <CardTitle tag="h4">Data Diri Mahasiswa</CardTitle>
+                                    <DataDiri />
+                                </Card>
                             </TabPane>
-                            <TabPane tabId="2">
-                                <Row>
-                                    <Col sm="12">
-                                        <Card body>
-                                            <CardTitle>Informasi Jadwal</CardTitle>
-                                            <JadwalUkt info={this.props.info} />
-                                        </Card>
-                                    </Col>
-                                </Row>
+                            <TabPane tabId="2" className="h-100">
+                                <Card className="premium-card">
+                                    <CardTitle tag="h4">Informasi Jadwal Penting</CardTitle>
+                                    <JadwalUkt info={this.props.info} />
+                                </Card>
                             </TabPane>
-                            <TabPane tabId="3">
-                                <Row>
-                                    <Col sm="12">
-                                        <Card body>
-                                            <CardTitle>Informasi Biodata</CardTitle>
-                                            <InfoBiodata />
-                                        </Card>
-                                    </Col>
-                                </Row>
+                            <TabPane tabId="3" className="h-100">
+                                <Card className="premium-card">
+                                    <CardTitle tag="h4">Status Kelengkapan Biodata</CardTitle>
+                                    <InfoBiodata />
+                                </Card>
                             </TabPane>
-                            <TabPane tabId="4">
-                                <Row>
-                                    <Col sm="12">
-                                        <Card body>
-                                            <CardTitle>Informasi UKT</CardTitle>
-                                            <TabelUkt />
-                                        </Card>
-                                    </Col>
-                                </Row>
+                            <TabPane tabId="4" className="h-100">
+                                <Card className="premium-card">
+                                    <CardTitle tag="h4">Informasi Tabel UKT</CardTitle>
+                                    <TabelUkt />
+                                </Card>
                             </TabPane>
-                            <TabPane tabId="5">
-                                <Row>
-                                    <Col sm="12">
-                                        <Card body>
-                                            <CardTitle>Alur Pengisian UKT</CardTitle>
-                                            <AlurUKT />
-                                        </Card>
-                                    </Col>
-                                </Row>
+                            <TabPane tabId="5" className="h-100">
+                                <Card className="premium-card">
+                                    <CardTitle tag="h4">Alur Pengisian UKT</CardTitle>
+                                    <AlurUKT />
+                                </Card>
                             </TabPane>
-                            <TabPane tabId="6">
-                                <Row>
-                                    <Col sm="12">
-                                        <Card body>
-                                            <CardTitle>Berkas Yang Diperlukan</CardTitle>
-                                            <DaftarBerkas />
-                                        </Card>
-                                    </Col>
-                                </Row>
+                            <TabPane tabId="6" className="h-100">
+                                <Card className="premium-card">
+                                    <CardTitle tag="h4">Daftar Berkas Persyaratan</CardTitle>
+                                    <DaftarBerkas />
+                                </Card>
                             </TabPane>
-                            <TabPane tabId="7">
-                                <Row>
-                                    <Col sm="12">
-                                        <Card body>
-                                            <CardTitle>Klarifikasi UKT</CardTitle>
-                                            <Alert color="warning">
-                                                <b>Klarifikasi UKT</b> adalah memperbarui dokumen atau
-                        data yang <b>salah</b> pada saat pengisian UKT daring.
-                                            </Alert>
-                                            <KetentuanKlarifikasi />
-                                            <JadwalKlarifikasi />
-                                        </Card>
-                                    </Col>
-                                </Row>
+                            <TabPane tabId="7" className="h-100">
+                                <Card className="premium-card">
+                                    <CardTitle tag="h4">Klarifikasi Data UKT</CardTitle>
+                                    <Alert color="warning" className="border-0 shadow-sm mb-4">
+                                        <b>Klarifikasi UKT</b> adalah momen untuk memperbarui dokumen yang memiliki kesalahan pengisian.
+                                    </Alert>
+                                    <KetentuanKlarifikasi />
+                                    <JadwalKlarifikasi />
+                                </Card>
                             </TabPane>
-                            <TabPane tabId="8">
-                                <Row>
-                                    <Col sm="12">
-                                        <Card body>
-                                            <CardTitle>Frequently Asked Questions</CardTitle>
-                                            <FAQ />
-                                        </Card>
-                                    </Col>
-                                </Row>
+                            <TabPane tabId="8" className="h-100">
+                                <Card className="premium-card">
+                                    <CardTitle tag="h4">Frequently Asked Questions (FAQ)</CardTitle>
+                                    <FAQ />
+                                </Card>
                             </TabPane>
                         </TabContent>
                     </Col>

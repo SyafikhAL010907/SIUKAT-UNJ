@@ -1,8 +1,7 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
-import { Container } from 'reactstrap';
 import { Loading } from 'redux-global-loader';
-import { Navigation, Footer, UktLoader } from '../components';
+import { UktLoader } from '../components';
 import { PilihanUktTinggi, UktTinggi, Seleksi, SelesaiIsi, TungguPengumuman, TerimaSanggah, Terima, Klarifikasi } from './';
 
 class Ukt extends React.Component {

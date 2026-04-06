@@ -68,8 +68,8 @@ class BatalUktRendah extends React.Component {
             ukt.VII = this.props.ukt.VII;
             ukt.VIII = this.props.ukt.VIII;
             return Object.entries(ukt).map((data, key) => (
-                <Col md={4} xs={12} className="radio-custom text-center" key={key}>
-                    <Input
+                <Col md={4} xs={12} key={key} className="ukt-selection-tile">
+                    <input
                         type="radio"
                         id={'ukt-tinggi-' + data[0]}
                         name="ukt_tinggi"
@@ -78,20 +78,23 @@ class BatalUktRendah extends React.Component {
                         onChange={this.radioUktTinggi}
                         disabled={data[1] === 0}
                     />
-                    <Label
-                        className="label-custom"
+                    <label
+                        className="label-modern"
                         htmlFor={'ukt-tinggi-' + data[0]}
                         style={{
                             pointerEvents: data[1] === 0 ? 'none' : 'default',
                             opacity: data[1] === 0 ? 0.3 : 1,
+                            padding: '20px 10px'
                         }}
                     >
-                        <i className="fa fa-money font-size-30"></i>
-                        <br />
-                        <span className="">UKT Kelompok {data[0]}</span>
-                        <br />
-                        <b>{data[1] === 0 ? 'Tidak Tersedia' : rupiah(data[1])}</b>
-                    </Label>
+                        <div className="icon-box" style={{width: '40px', height: '40px', fontSize: '18px', marginBottom: '10px'}}>
+                            <i className="fa fa-money"></i>
+                        </div>
+                        <span className="group-name" style={{fontSize: '0.9rem'}}>Kelompok {data[0]}</span>
+                        <div className="price-tag" style={{fontSize: '1rem'}}>
+                            {data[1] === 0 ? 'N/A' : rupiah(data[1])}
+                        </div>
+                    </label>
                 </Col>
             ));
         }
@@ -102,22 +105,23 @@ class BatalUktRendah extends React.Component {
         }
         return (
             <div>
-                <Card className="margin-top-20 card-warning" body>
-                    <CardTitle>
-                        <i className="fa fa-info-circle"></i> Perhatian!
+                <Card className="premium-card-warning shadow-sm border-0">
+                    <CardTitle className="p-3 mb-0 border-bottom d-flex align-items-center bg-white" style={{borderRadius: '16px 16px 0 0'}}>
+                        <div className="info-icon mr-2 bg-warning text-white rounded-circle d-flex align-items-center justify-content-center" style={{width: '24px', height: '24px'}}>
+                            <i className="fa fa-exclamation-triangle" style={{fontSize: '12px'}}></i>
+                        </div>
+                        <span className="font-weight-bold" style={{color: '#92400e'}}>Perhatian!</span>
                     </CardTitle>
-                    <div className="card-body">
-                        <div className="text-justify">
-                            Anda dapat memilih pilihan UKT Kelompok Atas dengan klik tombol di
-                            bawah ini
+                    <div className="card-body p-4">
+                        <div className="text-justify mb-4" style={{fontSize: '0.9rem', color: '#92400e'}}>
+                            Anda dapat memilih pilihan <strong>UKT Kelompok Atas</strong> jika Anda tidak ingin melalui proses pengisian data yang panjang.
                         </div>
                         <Button
                             onClick={this.toggle}
-                            color="danger"
-                            className="margin-top-20"
-                            block
+                            className="modern-btn-danger w-100 py-3 shadow-sm"
+                            style={{background: '#ef4444 !important'}}
                         >
-                            Pilih UKT Kelompok Atas
+                            <i className="fa fa-arrow-circle-up mr-2"></i> Pilih UKT Kelompok Atas
                         </Button>
                     </div>
                 </Card>
@@ -146,16 +150,16 @@ class BatalUktRendah extends React.Component {
                         </Alert>
                         <Row>{this.renderUkt()}</Row>
                     </ModalBody>
-                    <ModalFooter className="text-right">
+                    <ModalFooter className="p-4 bg-light border-top d-flex justify-content-end">
                         <Button
                             disabled={this.state.bersediaDisabled}
-                            color="success"
+                            className={`modern-btn-primary px-4 ${this.state.bersediaDisabled ? 'opacity-50' : ''}`}
                             onClick={this.handleBatalUktRendah.bind(this)}
                         >
                             {this.state.bersediaDisabled === false ? <IconCheck /> : ''}{' '}
                             {this.state.tombolBersedia}
-                        </Button>
-                        <Button color="danger" onClick={this.toggle}>
+                        </Button>{' '}
+                        <Button color="link" className="text-secondary font-weight-bold" onClick={this.toggle}>
                             Batal
                         </Button>
                     </ModalFooter>

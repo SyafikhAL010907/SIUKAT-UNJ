@@ -2,24 +2,20 @@ import React from 'react';
 import {
     TabContent, TabPane,
     Row, Col,
-    ListGroup, ListGroupItem,
+    ListGroup, ListGroupItem, Card
 } from 'reactstrap';
 import classnames from 'classnames';
 import {
     DataPribadiSeleksi, DataAyahSeleksi, DataIbuSeleksi, DataWaliSeleksi,
     DataRumahSeleksi, DataListrikSeleksi, DataKendaraanSeleksi, DataPendukungSeleksi, VerifikasiSeleksi,
-    BatalUktRendah
+    BatalUktRendah, Bantuan
 } from '../components';
 import { cmahasiswa } from '../../actions';
 import { cookies, cookieName } from '../../global';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
-const CheckIcon = () => (
-    <span className="pull-right">
-        <i className="fa fa-check"></i>
-    </span>
-);
+// CheckIcon placeholder removed as it was unused
 
 class Seleksi extends React.Component {
     constructor(props) {
@@ -72,165 +68,145 @@ class Seleksi extends React.Component {
             return <Redirect to="/main/ukt" />;
         }
         return (
-            <div className="margin-top-20">
-                <Row>
+            <div className="mt-4">
+                <Row className="h-100">
                     <Col md="3" xs="12">
-                        <ListGroup className="tab-pane-menu">
+                        <ListGroup className="modern-sidebar-menu shadow-sm mb-3">
                             <ListGroupItem
                                 className={classnames({ active: this.state.activeTab === '1' })}
                                 onClick={this.handleClickTab}
                                 data-id="1"
-                                tag="a"
-                                role="button"
                             >
-                                <div className="clearfix">
-                                    <i className="fa fa-user"></i> Data Pribadi
-                                    {this.props.verifikasi.cmahasiswa === 1 ? <CheckIcon /> : ''}
-                                </div>
+                                <i className="fa fa-user"></i> Data Pribadi
+                                {this.props.verifikasi.cmahasiswa === 1 && <span className="sidebar-check-icon"><i className="fa fa-check"></i></span>}
                             </ListGroupItem>
                             <ListGroupItem
                                 className={classnames({ active: this.state.activeTab === '2' })}
                                 onClick={this.handleClickTab}
                                 data-id="2"
-                                tag="a"
-                                role="button"
                             >
-                                <div className="clearfix">
-                                    <i className="fa fa-user"></i> Data Ayah
-                                    {this.props.verifikasi.ayah === 1 ? <CheckIcon /> : ''}
-                                </div>
+                                <i className="fa fa-user"></i> Data Ayah
+                                {this.props.verifikasi.ayah === 1 && <span className="sidebar-check-icon"><i className="fa fa-check"></i></span>}
                             </ListGroupItem>
                             <ListGroupItem
                                 className={classnames({ active: this.state.activeTab === '3' })}
                                 onClick={this.handleClickTab}
                                 data-id="3"
-                                tag="a"
-                                role="button"
                             >
-                                <div className="clearfix">
-                                    <i className="fa fa-user"></i> Data Ibu
-                                    {this.props.verifikasi.ibu === 1 ? <CheckIcon /> : ''}
-                                </div>
+                                <i className="fa fa-user"></i> Data Ibu
+                                {this.props.verifikasi.ibu === 1 && <span className="sidebar-check-icon"><i className="fa fa-check"></i></span>}
                             </ListGroupItem>
                             <ListGroupItem
                                 className={classnames({ active: this.state.activeTab === '4' })}
                                 onClick={this.handleClickTab}
                                 data-id="4"
-                                tag="a"
-                                role="button"
                             >
-                                <div className="clearfix">
-                                    <i className="fa fa-group"></i> Data Wali
-                                    {this.props.verifikasi.wali === 1 ? <CheckIcon /> : ''}
-                                </div>
+                                <i className="fa fa-group"></i> Data Wali
+                                {this.props.verifikasi.wali === 1 && <span className="sidebar-check-icon"><i className="fa fa-check"></i></span>}
                             </ListGroupItem>
                             <ListGroupItem
                                 className={classnames({ active: this.state.activeTab === '5' })}
                                 onClick={this.handleClickTab}
                                 data-id="5"
-                                tag="a"
-                                role="button"
                             >
-                                <div className="clearfix">
-                                    <i className="fa fa-home"></i> Data Rumah
-                                    {this.props.verifikasi.rumah === 1 ? <CheckIcon /> : ''}
-                                </div>
+                                <i className="fa fa-home"></i> Data Rumah
+                                {this.props.verifikasi.rumah === 1 && <span className="sidebar-check-icon"><i className="fa fa-check"></i></span>}
                             </ListGroupItem>
                             <ListGroupItem
                                 className={classnames({ active: this.state.activeTab === '6' })}
                                 onClick={this.handleClickTab}
                                 data-id="6"
-                                tag="a"
-                                role="button"
                             >
-                                <div className="clearfix">
-                                    <i className="fa fa-flash"></i> Data Listrik
-                                    {this.props.verifikasi.listrik === 1 ? <CheckIcon /> : ''}
-                                </div>
+                                <i className="fa fa-flash"></i> Data Listrik
+                                {this.props.verifikasi.listrik === 1 && <span className="sidebar-check-icon"><i className="fa fa-check"></i></span>}
                             </ListGroupItem>
                             <ListGroupItem
                                 className={classnames({ active: this.state.activeTab === '7' })}
                                 onClick={this.handleClickTab}
                                 data-id="7"
-                                tag="a"
-                                role="button"
                             >
-                                <div className="clearfix">
-                                    <i className="fa fa-bus"></i> Data Kendaraan
-                                    {this.props.verifikasi.kendaraan === 1 ? <CheckIcon /> : ''}
-                                </div>
+                                <i className="fa fa-bus"></i> Data Kendaraan
+                                {this.props.verifikasi.kendaraan === 1 && <span className="sidebar-check-icon"><i className="fa fa-check"></i></span>}
                             </ListGroupItem>
                             <ListGroupItem
                                 className={classnames({ active: this.state.activeTab === '8' })}
                                 onClick={this.handleClickTab}
                                 data-id="8"
-                                tag="a"
-                                role="button"
                             >
-                                <div className="clearfix">
-                                    <i className="fa fa-file-text"></i> Data Pendukung
-                                    {this.props.verifikasi.pendukung === 1 ? <CheckIcon /> : ''}
-                                </div>
+                                <i className="fa fa-file-text"></i> Data Pendukung
+                                {this.props.verifikasi.pendukung === 1 && <span className="sidebar-check-icon"><i className="fa fa-check"></i></span>}
                             </ListGroupItem>
                             <ListGroupItem
-                                className={classnames({
-                                    active: this.state.activeTab === '9',
-                                    'bg-warning': this.state.activeTab !== '9'
-                                })}
+                                className={classnames({ active: this.state.activeTab === '9' })}
                                 onClick={this.handleClickTab}
                                 data-id="9"
-                                tag="a"
-                                role="button"
                             >
-                                <div className="clearfix">
-                                    <i className="fa fa-check-square"></i> Verifikasi
-                                </div>
+                                <i className="fa fa-check-square"></i> Verifikasi Hasil
                             </ListGroupItem>
                         </ListGroup>
                         <BatalUktRendah />
+                        <Bantuan />
                     </Col>
-                    <Col md="9" xs="12">
-                        <TabContent activeTab={this.state.activeTab}>
-                            <TabPane tabId="1">
-                                <DataPribadiSeleksi updateVerifikasi={this.updateVerifikasi} allow={this.props.verifikasi.cmahasiswa} />
+                    <Col md="9" xs="12" className="d-flex flex-column">
+                        <TabContent activeTab={this.state.activeTab} className="h-100">
+                            <TabPane tabId="1" className="h-100">
+                                <Card className="premium-card">
+                                    <DataPribadiSeleksi updateVerifikasi={this.updateVerifikasi} allow={this.props.verifikasi.cmahasiswa} />
+                                </Card>
                             </TabPane>
-                            <TabPane tabId="2">
-                                <DataAyahSeleksi updateVerifikasi={this.updateVerifikasi} allow={this.props.verifikasi.ayah} />
+                            <TabPane tabId="2" className="h-100">
+                                <Card className="premium-card">
+                                    <DataAyahSeleksi updateVerifikasi={this.updateVerifikasi} allow={this.props.verifikasi.ayah} />
+                                </Card>
                             </TabPane>
-                            <TabPane tabId="3">
-                                <DataIbuSeleksi updateVerifikasi={this.updateVerifikasi} allow={this.props.verifikasi.ibu} />
+                            <TabPane tabId="3" className="h-100">
+                                <Card className="premium-card">
+                                    <DataIbuSeleksi updateVerifikasi={this.updateVerifikasi} allow={this.props.verifikasi.ibu} />
+                                </Card>
                             </TabPane>
-                            <TabPane tabId="4">
-                                <DataWaliSeleksi updateVerifikasi={this.updateVerifikasi} allow={this.props.verifikasi.wali} />
+                            <TabPane tabId="4" className="h-100">
+                                <Card className="premium-card">
+                                    <DataWaliSeleksi updateVerifikasi={this.updateVerifikasi} allow={this.props.verifikasi.wali} />
+                                </Card>
                             </TabPane>
-                            <TabPane tabId="5">
-                                <DataRumahSeleksi updateVerifikasi={this.updateVerifikasi} allow={this.props.verifikasi.rumah} />
+                            <TabPane tabId="5" className="h-100">
+                                <Card className="premium-card">
+                                    <DataRumahSeleksi updateVerifikasi={this.updateVerifikasi} allow={this.props.verifikasi.rumah} />
+                                </Card>
                             </TabPane>
-                            <TabPane tabId="6">
-                                <DataListrikSeleksi updateVerifikasi={this.updateVerifikasi} allow={this.props.verifikasi.listrik} />
+                            <TabPane tabId="6" className="h-100">
+                                <Card className="premium-card">
+                                    <DataListrikSeleksi updateVerifikasi={this.updateVerifikasi} allow={this.props.verifikasi.listrik} />
+                                </Card>
                             </TabPane>
-                            <TabPane tabId="7">
-                                <DataKendaraanSeleksi updateVerifikasi={this.updateVerifikasi} allow={this.props.verifikasi.kendaraan} />
+                            <TabPane tabId="7" className="h-100">
+                                <Card className="premium-card">
+                                    <DataKendaraanSeleksi updateVerifikasi={this.updateVerifikasi} allow={this.props.verifikasi.kendaraan} />
+                                </Card>
                             </TabPane>
-                            <TabPane tabId="8">
-                                <DataPendukungSeleksi updateVerifikasi={this.updateVerifikasi} allow={this.props.verifikasi.pendukung} />
+                            <TabPane tabId="8" className="h-100">
+                                <Card className="premium-card">
+                                    <DataPendukungSeleksi updateVerifikasi={this.updateVerifikasi} allow={this.props.verifikasi.pendukung} />
+                                </Card>
                             </TabPane>
-                            <TabPane tabId="9">
-                                <VerifikasiSeleksi
-                                    updateVerifikasi={this.updateVerifikasi}
-                                    router={this.props}
-                                    allow={
-                                        (this.props.verifikasi.cmahasiswa &&
-                                            this.props.verifikasi.ayah &&
-                                            this.props.verifikasi.ibu &&
-                                            this.props.verifikasi.wali &&
-                                            this.props.verifikasi.rumah &&
-                                            this.props.verifikasi.listrik &&
-                                            this.props.verifikasi.kendaraan &&
-                                            this.props.verifikasi.pendukung
-                                        )}
-                                    verified={this.props.verifikasi.verifikasi}
-                                />
+                            <TabPane tabId="9" className="h-100">
+                                <Card className="premium-card">
+                                    <VerifikasiSeleksi
+                                        updateVerifikasi={this.updateVerifikasi}
+                                        router={this.props}
+                                        allow={
+                                            (this.props.verifikasi.cmahasiswa &&
+                                                this.props.verifikasi.ayah &&
+                                                this.props.verifikasi.ibu &&
+                                                this.props.verifikasi.wali &&
+                                                this.props.verifikasi.rumah &&
+                                                this.props.verifikasi.listrik &&
+                                                this.props.verifikasi.kendaraan &&
+                                                this.props.verifikasi.pendukung
+                                            )}
+                                        verified={this.props.verifikasi.verifikasi}
+                                    />
+                                </Card>
                             </TabPane>
                         </TabContent>
                     </Col>

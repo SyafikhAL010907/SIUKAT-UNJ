@@ -213,18 +213,20 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 			return
 		}
 
-		// LOGIKA DINAMIS & EFISIENSI (CLEANUP)
+		// LOGIKA DINAMIS & EFISIENSI (Standardisasi "foto_profil")
+		// HAPUS FILE FISIK LAMA (Apapun namanya)
 		utils.DeleteOldFile(student.FotoCmahasiswa)
 
-		savedPath, errUpload := utils.HandleDynamicUpload(c, file, student.NamaCmahasiswa, np)
+		// SEKARANG: Otomatis hapus foto profil lama (apapun ekstensinya .jpg/.png) di dalam HandleDynamicUpload
+		savedPath, errUpload := utils.HandleDynamicUpload(c, file, student.NamaCmahasiswa, np, "foto_profil")
 		if errUpload != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal mengupload foto: " + errUpload.Error()})
 			return
 		}
 
-		// Update DB
+		// Update DB menggunakan atribut asli dari record student (original/sanggah)
 		updateData := map[string]interface{}{"foto_cmahasiswa": savedPath}
-		cmahasiswaService.Edit(updateData, np, "original")
+		cmahasiswaService.Edit(updateData, np, student.Atribut)
 
 		c.JSON(http.StatusOK, gin.H{
 			"message": "Foto profil berhasil diperbarui",
@@ -273,11 +275,12 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 				}
 
 				if fileHeader != nil {
-					// Cleanup foto lama
+					// HAPUS FILE FISIK LAMA (Apapun namanya)
 					utils.DeleteOldFile(student.FotoCmahasiswa)
 
-					// Upload baru
-					savedPath, errUpload := utils.HandleDynamicUpload(c, fileHeader, student.NamaCmahasiswa, np)
+					// Upload baru dengan nama tetap "foto_profil" (Sesuai Request USER)
+					// HandleDynamicUpload otomatis cari & hapus file "foto_profil.*" lain untuk safety
+					savedPath, errUpload := utils.HandleDynamicUpload(c, fileHeader, student.NamaCmahasiswa, np, "foto_profil")
 					if errUpload == nil {
 						updateData["foto_cmahasiswa"] = savedPath
 					} else {
@@ -350,8 +353,8 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 			np = newNP
 		}
 
-		// Jalankan Update untuk sisa field lainnya
-		res, err := cmahasiswaService.Edit(filteredData, np, "original")
+		// Jalankan Update untuk sisa field lainnya (Gunakan student.Atribut)
+		res, err := cmahasiswaService.Edit(filteredData, np, student.Atribut)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal merubah data mahasiswa: " + err.Error()})
 			return

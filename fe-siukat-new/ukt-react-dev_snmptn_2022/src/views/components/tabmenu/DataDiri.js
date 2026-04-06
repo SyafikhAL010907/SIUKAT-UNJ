@@ -29,45 +29,48 @@ class DataDiri extends React.Component {
         const safeInfo = info || {};
 
         return (
-            <Row>
-                <Col md={3} xs={12}>
-                    {cmahasiswa.foto_cmahasiswa ? (
-                        <img
-                            src={
-                                cmahasiswa.foto_cmahasiswa?.startsWith('http') 
-                                ? cmahasiswa.foto_cmahasiswa 
-                                : storage + '/' + cmahasiswa.foto_cmahasiswa
-                            }
-                            className="img-thumbnail img-responsive"
-                            alt="foto-cmahasiswa"
-                            onError={(e) => {
-                                if (!e.target.dataset.triedFallback) {
-                                    e.target.dataset.triedFallback = 'true';
-                                    e.target.src = service + '/img/profile.png';
-                                } else {
-                                    e.target.onerror = null;
-                                    e.target.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+            <Row className="align-items-center py-2">
+                <Col md={4} xs={12} className="text-center mb-4 mb-md-0">
+                    <div className="position-relative d-inline-block shadow-sm rounded-lg overflow-hidden" 
+                         style={{ border: '4px solid #f8fafc', background: '#f8fafc' }}>
+                        {cmahasiswa.foto_cmahasiswa ? (
+                            <img
+                                src={
+                                    cmahasiswa.foto_cmahasiswa?.startsWith('http') 
+                                    ? cmahasiswa.foto_cmahasiswa 
+                                    : storage + '/' + cmahasiswa.foto_cmahasiswa
                                 }
-                            }}
-                        />
-                    ) : (
-                        <img
-                            src={service + '/img/profile.png'}
-                            className="img-thumbnail img-responsive"
-                            alt="belum-ada-foto"
-                        />
-                    )}
+                                style={{ width: '100%', maxWidth: '200px', height: 'auto', aspectRatio: '3/4', objectFit: 'cover', borderRadius: '8px' }}
+                                alt="foto-cmahasiswa"
+                                onError={(e) => {
+                                    if (!e.target.dataset.triedFallback) {
+                                        e.target.dataset.triedFallback = 'true';
+                                        e.target.src = service + '/img/profile.png';
+                                    } else {
+                                        e.target.onerror = null;
+                                        e.target.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+                                    }
+                                }}
+                            />
+                        ) : (
+                            <img
+                                src={service + '/img/profile.png'}
+                                style={{ width: '100%', maxWidth: '200px', height: 'auto', aspectRatio: '3/4', objectFit: 'cover', borderRadius: '8px' }}
+                                alt="belum-ada-foto"
+                            />
+                        )}
+                    </div>
                 </Col>
-                <Col md={9} xs={12}>
-                    <Table responsive striped bordered>
+                <Col md={8} xs={12}>
+                    <Table responsive className="modern-table-premium mb-0">
                         <tbody>
                             <tr>
                                 <td>Nomor Peserta</td>
                                 <td>{cmahasiswa.no_peserta || '-'}</td>
                             </tr>
                             <tr>
-                                <td>Nama</td>
-                                <td>{cmahasiswa.nama_cmahasiswa || '-'}</td>
+                                <td>Nama Lengkap</td>
+                                <td style={{color: '#000'}}>{cmahasiswa.nama_cmahasiswa || '-'}</td>
                             </tr>
                             <tr>
                                 <td>Program Studi</td>

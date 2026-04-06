@@ -25,9 +25,10 @@ import {
     AlertFormBelumLengkap,
 } from '../';
 import { cmahasiswa, provinsi, kabkot, kecamatan } from '../../../../actions';
-import { cookies, cookieName, rupiah, storage } from '../../../../global';
+import { cookies, cookieName, rupiah, storage, service } from '../../../../global';
 
 let FormDataPribadiSeleksi = (props) => {
+    const [isDragging, setIsDragging] = React.useState(false);
     const {
         handleSubmit,
         pristine,
@@ -37,7 +38,27 @@ let FormDataPribadiSeleksi = (props) => {
         ref_kabkot,
         ref_kecamatan,
         penghasilan_cmahasiswa,
+        change, // Diambil dari redux-form props
     } = props;
+
+    const handleDragOver = (e) => {
+        e.preventDefault();
+        setIsDragging(true);
+    };
+
+    const handleDragLeave = () => {
+        setIsDragging(false);
+    };
+
+    const handleDrop = (e) => {
+        e.preventDefault();
+        setIsDragging(false);
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            // Update field value di redux-form
+            dispatch(change('DataPribadiSeleksi', 'file_foto_cmahasiswa', files));
+        }
+    };
     const handleProvinsi = (e) => {
         dispatch(kabkot.fetchForCmahasiswa(e.target.value));
         dispatch(
@@ -52,7 +73,7 @@ let FormDataPribadiSeleksi = (props) => {
     };
     return (
         <Form onSubmit={handleSubmit}>
-            <FormGroup row>
+            <FormGroup row className="mb-4">
                 <Label for="nama_cmahasiswa" md={3}>
                     Nama Lengkap
                 </Label>
@@ -66,7 +87,7 @@ let FormDataPribadiSeleksi = (props) => {
                     />
                 </Col>
             </FormGroup>
-            <FormGroup row>
+            <FormGroup row className="mb-4">
                 <Label for="gender_cmahasiswa" md={3}>
                     Jenis Kelamin
                 </Label>
@@ -98,7 +119,7 @@ let FormDataPribadiSeleksi = (props) => {
                 </Col>
 
             </FormGroup>
-            <FormGroup row>
+            <FormGroup row className="mb-4">
                 <Label md={3} xs={12}>
                     Tempat &amp;
                     Tanggal Lahir
@@ -124,7 +145,7 @@ let FormDataPribadiSeleksi = (props) => {
                     </Row>
                 </Col>
             </FormGroup>
-            <FormGroup row>
+            <FormGroup row className="mb-4">
                 <Label for="alamat_cmahasiswa" md={3}>
                     Alamat Lengkap
                 </Label>
@@ -138,7 +159,7 @@ let FormDataPribadiSeleksi = (props) => {
                     />{' '}
                 </Col>
             </FormGroup>
-            <FormGroup row>
+            <FormGroup row className="mb-4">
                 <Label for="provinsi_cmahasiswa" md={3}>
                     Provinsi
                 </Label>
@@ -161,7 +182,7 @@ let FormDataPribadiSeleksi = (props) => {
                     </Field>
                 </Col>
             </FormGroup>
-            <FormGroup row>
+            <FormGroup row className="mb-4">
                 <Label for="kabkot_cmahasiswa" md={3}>
                     Kab/Kota
                 </Label>
@@ -184,7 +205,7 @@ let FormDataPribadiSeleksi = (props) => {
                     </Field>
                 </Col>
             </FormGroup>
-            <FormGroup row>
+            <FormGroup row className="mb-4">
                 <Label for="kecamatan_cmahasiswa" sm={3}>
                     Kecamatan
                 </Label>
@@ -202,7 +223,7 @@ let FormDataPribadiSeleksi = (props) => {
                     </Field>
                 </Col>
             </FormGroup>
-            <FormGroup row>
+            <FormGroup row className="mb-4">
                 <Label for="telepon_cmahasiswa" md={3}>
                     Nomor Telepon
                 </Label>
@@ -220,7 +241,7 @@ let FormDataPribadiSeleksi = (props) => {
                     </FormText>
                 </Col>
             </FormGroup>
-            <FormGroup row>
+            <FormGroup row className="mb-4">
                 <Label for="goldar_cmahasiswa" md={3}>
                     Golongan Darah
                 </Label>
@@ -235,7 +256,7 @@ let FormDataPribadiSeleksi = (props) => {
                     </Field>
                 </Col>
             </FormGroup>
-            <FormGroup row>
+            <FormGroup row className="mb-4">
                 <Label for="sosmed_cmahasiswa" md={3}>
                     Sosial Media
                 </Label>
@@ -249,7 +270,7 @@ let FormDataPribadiSeleksi = (props) => {
                     <FormText color="muted">Facebook/Twitter/Instagram</FormText>
                 </Col>
             </FormGroup>
-            <FormGroup row>
+            <FormGroup row className="mb-4">
                 <Label for="penghasilan_cmahasiswa" md={3}>
                     Penghasilan Pribadi
                 </Label>
@@ -278,55 +299,90 @@ let FormDataPribadiSeleksi = (props) => {
                     <Alert color="success">{rupiah(penghasilan_cmahasiswa)}</Alert>
                 </Col>
             </FormGroup>
-            <FormGroup row>
-                <Label for="file_foto_cmahasiswa" md={3}>
-                    Foto
-                    {props.initialValues.foto_cmahasiswa && (
-                        <div>
-                            <FormText color="muted">Foto Anda saat ini:</FormText>
+            {/* AREA UPLOAD FOTO - REDESIGN PREMIUM (Request USER: Anti-Nabrak & Drag-Drop) */}
+            <div 
+                className="p-3 mb-4" 
+                style={{ 
+                    border: isDragging ? '2px dashed #00c853' : '2px dashed #ccc',
+                    borderRadius: '8px',
+                    backgroundColor: isDragging ? 'rgba(0, 200, 83, 0.05)' : '#f9f9f9',
+                    transition: 'all 0.3s ease'
+                }}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+            >
+                <Row className="align-items-center">
+                    <Col md={3} xs={12} className="text-center mb-3 mb-md-0">
+                        <FormText color="muted" className="d-block mb-2">Foto Saat Ini:</FormText>
+                        <div style={{ maxWidth: '150px', margin: '0 auto' }}>
+                            {props.initialValues.foto_cmahasiswa ? (
+                                <img
+                                    src={
+                                        props.initialValues.foto_cmahasiswa.startsWith('http')
+                                            ? props.initialValues.foto_cmahasiswa
+                                            : storage + '/' + props.initialValues.foto_cmahasiswa
+                                    }
+                                    className="img-thumbnail img-responsive"
+                                    style={{ width: '100%', height: 'auto', aspectRatio: '3/4', objectFit: 'cover' }}
+                                    alt="foto-anda"
+                                />
+                            ) : (
+                                <img
+                                    src={service + '/img/profile.png'}
+                                    className="img-thumbnail img-responsive"
+                                    style={{ width: '100%', height: 'auto', aspectRatio: '3/4', objectFit: 'cover', opacity: 0.5 }}
+                                    alt=""
+                                />
+                            )}
+                        </div>
+                    </Col>
+                    
+                    <Col md={6} xs={12}>
+                        <Label for="file_foto_cmahasiswa" className="font-weight-bold">
+                            <i className="fa fa-cloud-upload mr-2"></i> Pilih atau Seret Foto Baru
+                        </Label>
+                        <Field
+                            component={InputFileBs}
+                            type="file"
+                            className="form-control"
+                            name="file_foto_cmahasiswa"
+                            id="file_foto_cmahasiswa"
+                        />
+                        <div className="mt-2 small text-muted">
+                            <SyaratFoto />
+                        </div>
+                        {isDragging && (
+                            <div className="mt-2 text-success font-weight-bold animate-pulse">
+                                <i className="fa fa-check-circle"></i> Lepas sekarang untuk upload!
+                            </div>
+                        )}
+                    </Col>
+
+                    <Col md={3} xs={12} className="text-center mb-3 mb-md-0">
+                        <FormText color="muted" className="d-block mb-2">Contoh Pas Foto:</FormText>
+                        <div style={{ maxWidth: '150px', margin: '0 auto' }}>
                             <img
-                                src={
-                                    props.initialValues.foto_cmahasiswa?.startsWith('http') 
-                                    ? props.initialValues.foto_cmahasiswa 
-                                    : storage + '/' + props.initialValues.foto_cmahasiswa
-                                }
+                                src={SampleFoto}
                                 className="img-thumbnail img-responsive"
-                                alt="foto-cmahasiswa"
+                                style={{ width: '100%', height: 'auto', aspectRatio: '3/4', objectFit: 'cover' }}
+                                alt="sample-foto"
                             />
                         </div>
-                    )}
-                </Label>
-                <Col md={6} xs={12}>
-                    <Field
-                        component={InputFileBs}
-                        type="file"
-                        className="form-control"
-                        name="file_foto_cmahasiswa"
-                        id="file_foto_cmahasiswa"
-                    />
-                    <SyaratFoto />
-                </Col>
-                <Col md={3} xs={12}>
-                    <FormText color="muted">Contoh Pas Foto:</FormText>
-                    <img
-                        src={SampleFoto}
-                        className="img-thumbnail img-responsive"
-                        alt="sample-foto"
-                    />
-                </Col>
-            </FormGroup>
-            <FormGroup row>
-                <Col md={{ size: 9 }} xs="12">
+                    </Col>
+                </Row>
+            </div>
+            <FormGroup row className="mt-5 border-top pt-4 mb-0">
+                <Col md={{ size: 8 }} xs="12">
                     {!props.allow ? <AlertFormBelumLengkap /> : <AlertFormLengkap />}
                 </Col>
-                <Col md={{ size: 3 }} xs="12">
+                <Col md={{ size: 4 }} xs="12">
                     <Button
                         type="submit"
-                        color="success"
-                        block
+                        className="modern-btn-primary w-100 py-3 shadow-sm font-weight-bold"
                         disabled={pristine || submitting}
                     >
-                        <i className="fa fa-save"></i> Simpan
+                        <i className="fa fa-save mr-2"></i> Simpan Perubahan Data
                     </Button>
                 </Col>
             </FormGroup>
@@ -357,11 +413,11 @@ class DataPribadiSeleksi extends React.Component {
     }
     render() {
         return (
-            <Card body>
-                <CardTitle>Data Diri</CardTitle>
-                <Alert color="warning">
-                    <i className="fa fa-info-circle"></i> Seluruh kolom pada Data Pribadi{' '}
-                    <b>Wajib Diisi</b>
+            <Card className="premium-card p-4 p-md-5">
+                <CardTitle tag="h4" className="mb-4">Data Diri Calon Mahasiswa</CardTitle>
+                <Alert color="warning" className="rounded-lg border-0 shadow-sm mb-4">
+                    <i className="fa fa-info-circle mr-2"></i>
+                    <strong>Seluruh kolom pada Data Pribadi Wajib Diisi</strong>
                 </Alert>
                 <FormDataPribadiSeleksi
                     onSubmit={this.submitForm}

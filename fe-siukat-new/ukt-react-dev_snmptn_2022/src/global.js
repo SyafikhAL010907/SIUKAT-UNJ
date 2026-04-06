@@ -31,7 +31,7 @@ const cookies = new Proxy(_cookies, {
 });
 
 
-const service = (typeof process !== 'undefined' && process.env.REACT_APP_API_URL) 
+const service = (typeof process !== 'undefined' && process.env && process.env.REACT_APP_API_URL) 
     ? process.env.REACT_APP_API_URL 
     : 'http://localhost:8080/api/v1';
 

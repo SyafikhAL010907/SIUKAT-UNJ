@@ -53,7 +53,7 @@ let FormWaliSeleksi = (props) => {
     };
     return (
         <Form onSubmit={handleSubmit}>
-            <FormGroup row>
+            <FormGroup row className="mb-4">
                 <Label for="status_wali" md={3}>
                     Status Wali
                 </Label>
@@ -86,7 +86,7 @@ let FormWaliSeleksi = (props) => {
 
             {status_wali === 'ada' && (
                 <div>
-                    <FormGroup row>
+                    <FormGroup row className="mb-4">
                         <Label for="nama_wali" md={3}>
                             Nama Lengkap
                         </Label>
@@ -99,7 +99,7 @@ let FormWaliSeleksi = (props) => {
                             />
                         </Col>
                     </FormGroup>
-                    <FormGroup row>
+                    <FormGroup row className="mb-4">
                         <Label for="alamat_wali" md={3}>
                             Alamat Lengkap
                         </Label>
@@ -113,7 +113,7 @@ let FormWaliSeleksi = (props) => {
                             />{' '}
                         </Col>
                     </FormGroup>
-                    <FormGroup row>
+                    <FormGroup row className="mb-4">
                         <Label for="provinsi_wali" md={3}>
                             Provinsi
                         </Label>
@@ -136,7 +136,7 @@ let FormWaliSeleksi = (props) => {
                             </Field>
                         </Col>
                     </FormGroup>
-                    <FormGroup row>
+                    <FormGroup row className="mb-4">
                         <Label for="kabkot_wali" md={3}>
                             Kab/Kota
                         </Label>
@@ -159,7 +159,7 @@ let FormWaliSeleksi = (props) => {
                             </Field>
                         </Col>
                     </FormGroup>
-                    <FormGroup row>
+                    <FormGroup row className="mb-4">
                         <Label for="kecamatan_wali" sm={3}>
                             Kecamatan
                         </Label>
@@ -177,7 +177,7 @@ let FormWaliSeleksi = (props) => {
                             </Field>
                         </Col>
                     </FormGroup>
-                    <FormGroup row>
+                    <FormGroup row className="mb-4">
                         <Label for="kesanggupan_wali" md={3}>
                             Komitmen Pembiayaan
                         </Label>
@@ -204,7 +204,7 @@ let FormWaliSeleksi = (props) => {
                             <Alert color="success">{rupiah(kesanggupan_wali)}</Alert>
                         </Col>
                     </FormGroup>
-                    <FormGroup row>
+                    <FormGroup row className="mb-4">
                         <Label for="file_scan_wali" md={3}>
                             Surat Komitmen Pembiayaan Wali
                         </Label>
@@ -245,18 +245,17 @@ let FormWaliSeleksi = (props) => {
                     </FormGroup>
                 </div>
             )}
-            <FormGroup row>
-                <Col md={{ size: 9 }} xs="12">
+            <FormGroup row className="mt-5 border-top pt-4 mb-0">
+                <Col md={{ size: 8 }} xs="12">
                     {!props.allow ? <AlertFormBelumLengkap /> : <AlertFormLengkap />}
                 </Col>
-                <Col md={{ size: 3 }}>
+                <Col md={{ size: 4 }} xs="12">
                     <Button
                         type="submit"
-                        color="success"
-                        block
+                        className="modern-btn-primary w-100 py-3 shadow-sm font-weight-bold"
                         disabled={pristine || submitting}
                     >
-                        <i className="fa fa-save"></i> Simpan
+                        <i className="fa fa-save mr-2"></i> Simpan Data Wali
                     </Button>
                 </Col>
             </FormGroup>
@@ -306,12 +305,13 @@ class DataWaliSeleksi extends React.Component {
     }
     render() {
         return (
-            <Card body>
-                <CardTitle>Data Wali</CardTitle>
-                <Alert color="warning">
-                    <i className="fa fa-info-circle"></i> Wali dapat meliputi{' '}
-                    <b>Saudara, Perusahaan, Yayasan, dan Beasiswa</b> selain{' '}
-                    <b>Orang Tua</b> yang berkomitmen membiayai calon mahasiswa.
+            <Card className="premium-card p-4 p-md-5">
+                <CardTitle tag="h4" className="mb-4">Data Wali</CardTitle>
+                <Alert color="warning" className="rounded-lg border-0 shadow-sm mb-4">
+                    <i className="fa fa-info-circle mr-2"></i>
+                    <strong>Seluruh kolom pada Data Wali Wajib Diisi</strong>
+                    <br />
+                    <small className="ml-4">Isi dengan tanda strip (-) jika tidak memiliki wali.</small>
                 </Alert>
                 <FormWaliSeleksi
                     onSubmit={this.submitForm}

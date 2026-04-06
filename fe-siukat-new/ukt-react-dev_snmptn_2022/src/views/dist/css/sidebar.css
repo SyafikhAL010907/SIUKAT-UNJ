@@ -25,6 +25,7 @@
     flex-direction: column;
     box-shadow: 4px 0 10px rgba(0, 0, 0, 0.08);
     width: 260px;
+    overflow: visible !important; /* Allow floating toggle to be visible */
 }
 
 .sidebar-container.collapsed {
@@ -58,13 +59,53 @@
 
 /* SIDEBAR HEADER */
 .sidebar-header {
-    padding: 24px 20px;
+    padding: 20px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     display: flex;
     align-items: center;
-    gap: 12px;
-    overflow: hidden;
+    overflow: visible; /* Ensure toggle button is visible */
     min-height: 90px;
+    position: relative;
+    transition: all 0.3s;
+}
+
+.sidebar-header-main {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.sidebar-toggle-btn {
+    position: absolute;
+    right: -16px; /* Float halfway on the edge */
+    top: calc(50% - 16px);
+    background: #0f6d3f;
+    border: 2px solid #ffffff;
+    color: #ffffff;
+    width: 32px;
+    height: 32px;
+    border-radius: 10px; /* Rounded Square Toggle */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    font-size: 1rem;
+    flex-shrink: 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    z-index: 100;
+}
+
+.sidebar-toggle-btn:hover {
+    background: #158a50;
+    transform: scale(1.08);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+.sidebar-container.collapsed .sidebar-header {
+    flex-direction: column;
+    padding: 20px 0;
+    justify-content: center;
 }
 
 .sidebar-logo-img {

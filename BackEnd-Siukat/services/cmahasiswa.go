@@ -69,11 +69,22 @@ func (s *CMahasiswaService) Add(req models.CMahasiswa, atribut string) (models.C
 
 func (s *CMahasiswaService) Edit(data map[string]interface{}, noPeserta string, atribut string) (models.CMahasiswa, error) {
 	db := config.DB
+	
+	fmt.Printf("📝 DB UPDATE: Updating Student [%s] Atribut [%s] with data: %v\n", noPeserta, atribut, data)
+	
 	if err := db.Model(&models.CMahasiswa{}).Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).Updates(data).Error; err != nil {
+		fmt.Printf("❌ DB UPDATE ERROR: %v\n", err)
 		return models.CMahasiswa{}, err
 	}
+	
 	var mhs models.CMahasiswa
-	db.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&mhs)
+	if err := db.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&mhs).Error; err != nil {
+		// Fallback jika First gagal (mungkin no_peserta sedang berganti)
+		fmt.Printf("⚠️ DB UPDATE: Record not found with exact atribut [%s] after update, trying pure NP lookup...\n", atribut)
+		db.Where("no_peserta = ?", noPeserta).First(&mhs)
+	}
+	
+	fmt.Printf("✅ DB UPDATE SUCCESS: Photo in record is now [%s]\n", mhs.FotoCmahasiswa)
 	return mhs, nil
 }
 
@@ -243,14 +254,21 @@ func (s *CMahasiswaService) GetCmahasiswa(noPeserta string) (models.CMahasiswa, 
 
 	// 2. Cek original dengan Preload (Relasi Lengkap)
 	err = db.Preload("Fakultas").Preload("Prodi").Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
-		Where("no_peserta = ?", noPeserta).First(&mhs).Error
+		Where("no_peserta = ? AND atribut = ?", noPeserta, "original").First(&mhs).Error
 	if err == nil {
 		return mhs, nil
 	}
 
-	// 3. FALLBACK: Kalau Preload gagal (mungkin data di tabel referensi belum ada),
-	// kita tarik MURNI data dari tb_cmahasiswa tanpa Preload (Supaya Nama tetap dapet).
+	// 3. FALLBACK: Jika Preload gagal atau relasi tidak ditemukan
+	// Kita tarik MURNI data dari tb_cmahasiswa dengan PRIORITAS tetap (Sanggah > Original)
 	fmt.Printf("⚠️ WARNING: Preload gagal untuk %s, mencoba ambil data murni...\n", noPeserta)
+	
+	// Cek Sanggah murni
+	if err := db.Where("no_peserta = ? AND atribut = ?", noPeserta, "sanggah").First(&mhs).Error; err == nil {
+		return mhs, nil
+	}
+	
+	// Cek Original murni (First or anyway find something)
 	err = db.Where("no_peserta = ?", noPeserta).First(&mhs).Error
 	
 	return mhs, err

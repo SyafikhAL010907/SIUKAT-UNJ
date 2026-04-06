@@ -1,8 +1,8 @@
 import React from "react";
-import { Container, Row, Col, Alert, Button, Card, CardText } from "reactstrap";
+import { Row, Col, Alert, Button, Card, CardText } from "reactstrap";
 import WelcomeBanner from "../dist/img/welcome.jpg";
 import { Loading } from "redux-global-loader";
-import { Navigation, TabMenu, Footer, UktLoader } from "../components";
+import { TabMenu, UktLoader, Bantuan } from "../components";
 
 class Info extends React.Component {
   goToUkt = () => {
@@ -17,16 +17,12 @@ class Info extends React.Component {
         <Loading>
           <UktLoader />
         </Loading>
-        <div>
-          <div className="text-center">
+        <div className="container-fluid py-4">
+          <div className="welcome-banner-container text-center">
             <img src={WelcomeBanner} width="100%" alt="welcome banner" />
           </div>
-          <Card
-            body
-            color="success"
-            inverse
-            className="margin-top-20 text-center"
-          >
+          
+          <Card className="welcome-info-card text-center mb-4">
             <CardText>
               Sistem informasi berbasis daring (online) yang digunakan untuk
               menentukan kelompok UKT setiap Calon Mahasiswa yang diterima di
@@ -36,14 +32,20 @@ class Info extends React.Component {
               dengan seksama terlebih dahulu.
             </CardText>
           </Card>
+
           <TabMenu />
-          <Row>
-            <Col md="12">
-              <Alert color="danger" className="margin-top-20">
+
+          <Row className="mt-4">
+            <Col md="3">
+              <Bantuan />
+            </Col>
+            <Col md="9">
+              <Alert className="modern-alert-danger shadow-sm mb-4">
+                <h5 className="mb-3 font-weight-bold"><i className="fa fa-exclamation-triangle mr-2"></i> Perhatian Penting</h5>
                 <ul>
                   <li>
                     Calon mahasiswa atau orang tua harus mengisi data dengan
-                    jujur dan sebenar-benarnya.
+                    jujur and sebenar-benarnya.
                   </li>
                   <li>
                     Pihak UNJ dapat melakukan verifikasi data dengan mengecek
@@ -72,19 +74,20 @@ class Info extends React.Component {
                   </li>
                 </ul>
               </Alert>
-              <div className="text-center">
-                <Button color="primary" type="button" onClick={this.goToUkt}>
-                  Mulai Pengisian UKT
-                </Button>
-                &nbsp;&nbsp;&nbsp;&nbsp;
-                <Button
-                  color="primary"
-                  type="button"
+            </Col>
+          </Row>
+
+          <Row className="mt-4 mb-5">
+            <Col md="12" className="text-center">
+              <Button className="modern-btn-primary px-5 py-3 mr-4" onClick={this.goToUkt}>
+                <i className="fa fa-pencil-square-o mr-2"></i> Mulai Pengisian UKT
+              </Button>
+              <Button
+                  className="modern-btn-primary px-5 py-3"
                   onClick={this.goToBiodata}
-                >
-                  Mulai Pengisian Biodata
-                </Button>
-              </div>
+              >
+                  <i className="fa fa-user-circle mr-2"></i> Mulai Pengisian Biodata
+              </Button>
             </Col>
           </Row>
         </div>

@@ -104,8 +104,8 @@ class PilihanUktTinggi extends React.Component {
             ukt.VII = this.props.ukt.VII;
             ukt.VIII = this.props.ukt.VIII;
             return Object.entries(ukt).map((data, key) => (
-                <Col md={2} xs={12} className="radio-custom" key={key}>
-                    <Input
+                <Col md={4} xs={12} key={key} className="ukt-selection-tile">
+                    <input
                         type="radio"
                         id={'ukt-tinggi-' + data[0]}
                         name="ukt_tinggi"
@@ -114,20 +114,22 @@ class PilihanUktTinggi extends React.Component {
                         onChange={this.radioUktTinggi}
                         disabled={data[1] === 0}
                     />
-                    <Label
-                        className="label-custom"
+                    <label
+                        className="label-modern"
                         htmlFor={'ukt-tinggi-' + data[0]}
                         style={{
                             pointerEvents: data[1] === 0 ? 'none' : 'default',
                             opacity: data[1] === 0 ? 0.3 : 1,
                         }}
                     >
-                        <i className="fa fa-money font-size-30"></i>
-                        <br />
-                        <span className="">UKT - {data[0]}</span>
-                        <br />
-                        <b>{data[1] === 0 ? 'Tidak Tersedia' : rupiah(data[1])}</b>
-                    </Label>
+                        <div className="icon-box">
+                            <i className="fa fa-money"></i>
+                        </div>
+                        <span className="group-name">Kelompok {data[0]}</span>
+                        <div className="price-tag">
+                            {data[1] === 0 ? 'Tidak Tersedia' : rupiah(data[1])}
+                        </div>
+                    </label>
                 </Col>
             ));
         }
@@ -159,92 +161,88 @@ class PilihanUktTinggi extends React.Component {
             return <Redirect to="/main/ukt/sanggah" />;
         }
         return (
-            <div>
-                <Row className="margin-top-20">
-                    <Col md="12">
-                        <Card body className="bg-grey text-center">
-                            <Row>
-                                <Col md="12">
-                                    <h4>
-                                        Apakah anda bersedia ditetapkan pada UKT Kelompok VI / VII /
-                                        VIII?
-                                    </h4>
-                  Program Studi
-                                    <br />
-                                    <b>
-                                        {this.props.cmahasiswa.prodi != null &&
-                                            this.props.cmahasiswa.prodi.nama}
-                                    </b>
-                                </Col>
-                            </Row>
-                        </Card>
-                    </Col>
-                </Row>
-                <Row className="margin-top-20 text-center">
-                    <Col md="12">
-                        <Alert color="danger">
-                            Silakan pilih salah satu dari daftar di bawah ini:
-                        </Alert>
-                    </Col>
-                </Row>
-                <Row className="text-center">
-                    {this.renderUkt()}
-                    <Col md={6} xs={12} className="radio-custom">
-                        <Input
-                            type="radio"
-                            id={'ukt-tinggi-0'}
-                            name="ukt_tinggi"
-                            value={'0'}
-                            checked={this.state.kategori.toString() === '0'}
-                            onChange={this.batalUktTinggi}
-                        />
-                        <Label className="label-custom" htmlFor={'ukt-tinggi-0'}>
-                            <i className="fa fa-file-text-o font-size-30"></i>
-                            <br />
-                            <span className="">Tidak Bersedia di UKT Kelompok Atas</span>
-                            <br />
-                            <b>(Perhitungan Data Ekonomi)</b>
-                        </Label>
-                    </Col>
-                </Row>
-                <Row className="margin-top-20">
-                    <Col md="6">
-                        <Alert color="orange" className="min-height-260 text-justify">
-                            Jika anda <b>bersedia masuk kelompok UKT VI / VII / VIII</b>, anda
-              hanya perlu:
-                            <ul>
-                                <li>Mengisi data pribadi calon mahasiswa dan orang tua;</li>
-                                <li>
-                                    Mengunggah surat pernyataan yang menyatakan bahwa Anda
-                                    bersedia masuk kelompok UKT Kelompok Atas.
-                                </li>
-                            </ul>
-                        </Alert>
-                    </Col>
-                    <Col md="6">
-                        <Alert color="orange" className="min-height-260 text-justify">
-                            Jika anda <b>tidak bersedia masuk kelompok UKT VI / VII / VIII</b>
-              , maka:
-                            <ul>
-                                <li>
-                                    Proses penetapan UKT dilakukan melalui perhitungan berdasarkan
-                                    data kondisi ekonomi yang diunggah;
-                                </li>
-                                <li>
-                                    Anda tetap mempunyai kemungkinan untuk mendapatkan salah satu
-                  kelompok dari seluruh kelompok UKT yang ada{' '}
-                                    <b>(Kelompok I s.d. VIII)</b> bergantung kepada kondisi
-                  ekonomi orang tua/wali calon mahasiswa baru.
-                                </li>
-                            </ul>
-                        </Alert>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col md="12" className="text-center">
+            <div className="p-0">
+                <Card className="premium-card p-4 p-md-5">
+                    <div className="text-center mb-5">
+                        <h2 className="font-weight-bold color-emerald mb-2">
+                           Pemilihan Kelompok UKT
+                        </h2>
+                        <p className="text-muted lead">
+                            Apakah anda bersedia ditetapkan pada UKT Kelompok VI / VII / VIII?
+                        </p>
+                        {this.props.cmahasiswa.prodi != null && (
+                            <div className="badge badge-emerald-soft p-2 px-3 rounded-pill mt-2">
+                                <i className="fa fa-university mr-2"></i>
+                                {this.props.cmahasiswa.prodi.nama}
+                            </div>
+                        )}
+                    </div>
+
+                    <Alert color="info" className="rounded-lg border-0 shadow-sm mb-4 text-center">
+                        <i className="fa fa-info-circle mr-2"></i>
+                        Silakan pilih salah satu opsi di bawah ini untuk melanjutkan proses:
+                    </Alert>
+
+                    <Row className="mb-5 justify-content-center">
+                        {this.renderUkt()}
+                        <Col md={4} xs={12} className="ukt-selection-tile">
+                            <input
+                                type="radio"
+                                id={'ukt-tinggi-0'}
+                                name="ukt_tinggi"
+                                value={'0'}
+                                checked={this.state.kategori.toString() === '0'}
+                                onChange={this.batalUktTinggi}
+                            />
+                            <label className="label-modern" htmlFor={'ukt-tinggi-0'}>
+                                <div className="icon-box">
+                                    <i className="fa fa-file-text-o"></i>
+                                </div>
+                                <span className="group-name">Gunakan Data Ekonomi</span>
+                                <div className="price-tag" style={{fontSize: '1rem', color: '#64748b'}}>
+                                    (UKT Kelompok I s.d. VIII)
+                                </div>
+                            </label>
+                        </Col>
+                    </Row>
+
+                    <Row className="mb-5">
+                        <Col md="6" className="mb-3 mb-md-0">
+                            <div className="info-card-premium status-green shadow-sm">
+                                <div className="info-header">
+                                    <div className="info-icon">
+                                        <i className="fa fa-check-circle"></i>
+                                    </div>
+                                    <h5 className="mb-0 font-weight-bold">Jika Bersedia (Kelompok Atas)</h5>
+                                </div>
+                                <ul>
+                                    <li>Anda <strong>tidak perlu</strong> mengunggah data ekonomi yang rumit.</li>
+                                    <li>Hanya perlu mengisi data pribadi dasar mahasiswa dan orang tua.</li>
+                                    <li>Mengunggah Surat Pernyataan bersedia masuk Kelompok Atas.</li>
+                                </ul>
+                            </div>
+                        </Col>
+                        <Col md="6">
+                            <div className="info-card-premium status-blue shadow-sm">
+                                <div className="info-header">
+                                    <div className="info-icon">
+                                        <i className="fa fa-calculator"></i>
+                                    </div>
+                                    <h5 className="mb-0 font-weight-bold">Jika Tidak Bersedia</h5>
+                                </div>
+                                <ul>
+                                    <li>Penetapan UKT dilakukan melalui perhitungan data kondisi ekonomi.</li>
+                                    <li>Anda wajib mengunggah seluruh dokumen pendukung ekonomi.</li>
+                                    <li>Tetap berpeluang mendapatkan UKT Kelompok I s.d. VIII.</li>
+                                </ul>
+                            </div>
+                        </Col>
+                    </Row>
+
+                    <div className="text-center">
                         <Button
                             disabled={this.state.nextDisabled}
-                            color="success"
+                            className={`modern-btn-primary px-5 py-3 ${this.state.nextDisabled ? 'opacity-50' : ''}`}
                             size="lg"
                             onClick={
                                 this.state.kategori !== '0'
@@ -255,8 +253,8 @@ class PilihanUktTinggi extends React.Component {
                             {this.state.nextDisabled === false ? <IconCheck /> : ''}{' '}
                             {this.state.nextButton}
                         </Button>
-                    </Col>
-                </Row>
+                    </div>
+                </Card>
 
                 <Modal
                     isOpen={this.state.modalBersedia}
