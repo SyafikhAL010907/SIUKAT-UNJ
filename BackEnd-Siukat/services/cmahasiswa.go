@@ -261,7 +261,7 @@ func (s *CMahasiswaService) GetCmahasiswa(noPeserta string) (models.CMahasiswa, 
 
 	// 3. FALLBACK: Jika Preload gagal atau relasi tidak ditemukan
 	// Kita tarik MURNI data dari tb_cmahasiswa dengan PRIORITAS tetap (Sanggah > Original)
-	fmt.Printf("⚠️ WARNING: Preload gagal untuk %s, mencoba ambil data murni...\n", noPeserta)
+	fmt.Printf("\u26a0\ufe0f WARNING: Preload gagal untuk %s, mencoba ambil data murni...\n", noPeserta)
 	
 	// Cek Sanggah murni
 	if err := db.Where("no_peserta = ? AND atribut = ?", noPeserta, "sanggah").First(&mhs).Error; err == nil {
@@ -357,4 +357,157 @@ func (s *CMahasiswaService) UpdateIdentity(oldName, oldNP, newName, newNP string
 
 		return nil
 	})
+}
+// CountFlag — Parity dengan Node.js untuk statistik dashboard admin
+func (s *CMahasiswaService) CountFlag() (map[string]interface{}, error) {
+	db := config.DB
+	
+	type CountResult struct {
+		Name  string
+		Count int64
+	}
+
+	result := make(map[string]interface{})
+	
+	// List of categories to count
+	categories := []struct {
+		Key   string
+		Field string
+		Value string
+	}{
+		{"belum_isi", "flag", "belum_isi"},
+		{"pengisian", "flag", "pengisian"},
+		{"selesai_isi", "flag", "selesai_isi"},
+		{"pengumuman", "flag", "pengumuman"},
+		{"terima_ukt", "flag", "terima_ukt"},
+		{"sanggah_ukt", "flag", "sanggah_ukt"},
+		{"selesai_sanggah", "flag", "selesai_sanggah"},
+		{"ukt_tinggi", "ukt_tinggi", "ya"},
+		{"ukt_tinggi_tidak", "ukt_tinggi", "tidak"},
+	}
+
+	for _, cat := range categories {
+		var count int64
+		if err := db.Model(&models.CMahasiswa{}).Where(fmt.Sprintf("%s = ?", cat.Field), cat.Value).Count(&count).Error; err != nil {
+			return nil, err
+		}
+		// Format: kategori: [{kategori: count}]
+		result[cat.Key] = []map[string]int64{{cat.Key: count}}
+	}
+
+	return result, nil
+}
+
+// Datatable — Pagination & Search untuk daftar mahasiswa
+func (s *CMahasiswaService) Datatable(page, perPage int, keyword string) (map[string]interface{}, error) {
+	db := config.DB
+	var mhs []models.CMahasiswa
+	var count int64
+
+	query := db.Model(&models.CMahasiswa{}).Preload("Fakultas").Preload("Prodi")
+	
+	if keyword != "" {
+		query = query.Where("no_peserta LIKE ? OR nama_cmahasiswa LIKE ?", "%"+keyword+"%", "%"+keyword+"%")
+	}
+
+	if err := query.Count(&count).Error; err != nil {
+		return nil, err
+	}
+
+	offset := (page - 1) * perPage
+	if err := query.Limit(perPage).Offset(offset).Find(&mhs).Error; err != nil {
+		return nil, err
+	}
+
+	// Hitung Nominal UKT berdasarkan GolonganID untuk tiap baris
+	for i := range mhs {
+		var ukt models.Ukt
+		// Find correct UKT record for this specific student's prodi and entrance path
+		if err := db.Where("major_id = ? AND entrance = ?", mhs[i].ProdiCmahasiswa, mhs[i].JalurCmahasiswa).First(&ukt).Error; err == nil {
+			mhs[i].Ukt = &ukt
+			switch mhs[i].GolonganID {
+			case "I":
+				mhs[i].Ukt.Nominal = mhs[i].Ukt.I
+			case "II":
+				mhs[i].Ukt.Nominal = mhs[i].Ukt.II
+			case "III":
+				mhs[i].Ukt.Nominal = mhs[i].Ukt.III
+			case "IV":
+				mhs[i].Ukt.Nominal = mhs[i].Ukt.IV
+			case "V":
+				mhs[i].Ukt.Nominal = mhs[i].Ukt.V
+			case "VI":
+				mhs[i].Ukt.Nominal = mhs[i].Ukt.VI
+			case "VII":
+				mhs[i].Ukt.Nominal = mhs[i].Ukt.VII
+			case "VIII":
+				mhs[i].Ukt.Nominal = mhs[i].Ukt.VIII
+			}
+		}
+	}
+
+	return map[string]interface{}{
+		"count":       count,
+		"rows":        mhs,
+		"currentPage": page,
+		"perPage":     perPage,
+		"keyword":     keyword,
+	}, nil
+}
+
+// DatatableSanggah — Pagination & Search untuk daftar mahasiswa sanggah
+func (s *CMahasiswaService) DatatableSanggah(page, perPage int, keyword string) (map[string]interface{}, error) {
+	db := config.DB
+	var mhs []models.CMahasiswa
+	var count int64
+
+	query := db.Model(&models.CMahasiswa{}).Preload("Fakultas").Preload("Prodi").Where("flag = ?", "sanggah_ukt")
+	
+	if keyword != "" {
+		query = query.Where("no_peserta LIKE ? OR nama_cmahasiswa LIKE ?", "%"+keyword+"%", "%"+keyword+"%")
+	}
+
+	if err := query.Count(&count).Error; err != nil {
+		return nil, err
+	}
+
+	offset := (page - 1) * perPage
+	if err := query.Limit(perPage).Offset(offset).Find(&mhs).Error; err != nil {
+		return nil, err
+	}
+
+	// Hitung Nominal UKT berdasarkan GolonganID untuk tiap baris
+	for i := range mhs {
+		var ukt models.Ukt
+		// Find correct UKT record for this specific student's prodi and entrance path
+		if err := db.Where("major_id = ? AND entrance = ?", mhs[i].ProdiCmahasiswa, mhs[i].JalurCmahasiswa).First(&ukt).Error; err == nil {
+			mhs[i].Ukt = &ukt
+			switch mhs[i].GolonganID {
+			case "I":
+				mhs[i].Ukt.Nominal = mhs[i].Ukt.I
+			case "II":
+				mhs[i].Ukt.Nominal = mhs[i].Ukt.II
+			case "III":
+				mhs[i].Ukt.Nominal = mhs[i].Ukt.III
+			case "IV":
+				mhs[i].Ukt.Nominal = mhs[i].Ukt.IV
+			case "V":
+				mhs[i].Ukt.Nominal = mhs[i].Ukt.V
+			case "VI":
+				mhs[i].Ukt.Nominal = mhs[i].Ukt.VI
+			case "VII":
+				mhs[i].Ukt.Nominal = mhs[i].Ukt.VII
+			case "VIII":
+				mhs[i].Ukt.Nominal = mhs[i].Ukt.VIII
+			}
+		}
+	}
+
+	return map[string]interface{}{
+		"count":       count,
+		"rows":        mhs,
+		"currentPage": page,
+		"perPage":     perPage,
+		"keyword":     keyword,
+	}, nil
 }

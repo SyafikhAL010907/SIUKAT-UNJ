@@ -121,7 +121,7 @@ func AuthRoutes(r *gin.RouterGroup) {
 		}
 
 		flagStr := ""
-		if user.CMahasiswa.NoPeserta != "" {
+		if user.CMahasiswa != nil {
 			flagStr = user.CMahasiswa.Flag
 		}
 

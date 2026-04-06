@@ -16,6 +16,7 @@ type Ukt struct {
 	VI       int    `gorm:"column:VI" json:"VI"`
 	VII      int    `gorm:"column:VII" json:"VII"`
 	VIII     int    `gorm:"column:VIII" json:"VIII"`
+	Nominal  int    `gorm:"-" json:"nominal"` // Virtual field for frontend
 }
 
 func (Ukt) TableName() string {

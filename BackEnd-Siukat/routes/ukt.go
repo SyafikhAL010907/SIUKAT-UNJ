@@ -82,4 +82,23 @@ func UktRoutes(r *gin.RouterGroup) {
 		}
 		c.JSON(http.StatusOK, data)
 	})
+
+	// GET /ukt/cmahasiswa/:no_peserta (Admin usage)
+	uktGroup.GET("/cmahasiswa/:no_peserta", func(c *gin.Context) {
+		noPeserta := c.Param("no_peserta")
+
+		var mhs models.CMahasiswa
+		if err := config.DB.Where("no_peserta = ?", noPeserta).First(&mhs).Error; err != nil {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Student not found"})
+			return
+		}
+
+		var ukt models.Ukt
+		if err := config.DB.Where("major_id = ? AND entrance = ?", mhs.ProdiCmahasiswa, mhs.JalurCmahasiswa).First(&ukt).Error; err != nil {
+			c.JSON(http.StatusNotFound, gin.H{"error": "UKT reference not found"})
+			return
+		}
+
+		c.JSON(http.StatusOK, ukt)
+	})
 }

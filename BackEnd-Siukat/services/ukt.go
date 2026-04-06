@@ -65,31 +65,45 @@ func (s *UKTService) ComputeUkt(noPeserta string, atribut string) (map[string]in
 	data["cmahasiswa"] = cmahasiswa
 
 	var ayah models.Ayah
-	db.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&ayah)
+	if err := db.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&ayah).Error; err != nil && atribut == "sanggah" {
+		db.Where("no_peserta = ? AND atribut = ?", noPeserta, "original").First(&ayah)
+	}
 	data["ayah"] = ayah
 
 	var ibu models.Ibu
-	db.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&ibu)
+	if err := db.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&ibu).Error; err != nil && atribut == "sanggah" {
+		db.Where("no_peserta = ? AND atribut = ?", noPeserta, "original").First(&ibu)
+	}
 	data["ibu"] = ibu
 
 	var wali models.Wali
-	db.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&wali)
+	if err := db.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&wali).Error; err != nil && atribut == "sanggah" {
+		db.Where("no_peserta = ? AND atribut = ?", noPeserta, "original").First(&wali)
+	}
 	data["wali"] = wali
 
 	var rumah models.Rumah
-	db.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&rumah)
+	if err := db.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&rumah).Error; err != nil && atribut == "sanggah" {
+		db.Where("no_peserta = ? AND atribut = ?", noPeserta, "original").First(&rumah)
+	}
 	data["rumah"] = rumah
 
 	var listrik models.Listrik
-	db.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&listrik)
+	if err := db.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&listrik).Error; err != nil && atribut == "sanggah" {
+		db.Where("no_peserta = ? AND atribut = ?", noPeserta, "original").First(&listrik)
+	}
 	data["listrik"] = listrik
 
 	var kendaraan models.Kendaraan
-	db.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&kendaraan)
+	if err := db.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&kendaraan).Error; err != nil && atribut == "sanggah" {
+		db.Where("no_peserta = ? AND atribut = ?", noPeserta, "original").First(&kendaraan)
+	}
 	data["kendaraan"] = kendaraan
 
 	var pendukung models.Pendukung
-	db.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&pendukung)
+	if err := db.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&pendukung).Error; err != nil && atribut == "sanggah" {
+		db.Where("no_peserta = ? AND atribut = ?", noPeserta, "original").First(&pendukung)
+	}
 	data["pendukung"] = pendukung
 
 	var bobot models.Bobot
@@ -163,22 +177,39 @@ func (s *UKTService) JustCompute(noPeserta string, atribut string) (map[string]i
 
 	var cmahasiswa models.CMahasiswa
 	if err := db.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&cmahasiswa).Error; err != nil {
-		return nil, err
+		// Fallback to original if sanggah not found
+		if err := db.Where("no_peserta = ? AND atribut = ?", noPeserta, "original").First(&cmahasiswa).Error; err != nil {
+			return nil, err
+		}
 	}
 	var ayah models.Ayah
-	db.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&ayah)
+	if err := db.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&ayah).Error; err != nil && atribut == "sanggah" {
+		db.Where("no_peserta = ? AND atribut = ?", noPeserta, "original").First(&ayah)
+	}
 	var ibu models.Ibu
-	db.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&ibu)
+	if err := db.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&ibu).Error; err != nil && atribut == "sanggah" {
+		db.Where("no_peserta = ? AND atribut = ?", noPeserta, "original").First(&ibu)
+	}
 	var wali models.Wali
-	db.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&wali)
+	if err := db.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&wali).Error; err != nil && atribut == "sanggah" {
+		db.Where("no_peserta = ? AND atribut = ?", noPeserta, "original").First(&wali)
+	}
 	var rumah models.Rumah
-	db.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&rumah)
+	if err := db.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&rumah).Error; err != nil && atribut == "sanggah" {
+		db.Where("no_peserta = ? AND atribut = ?", noPeserta, "original").First(&rumah)
+	}
 	var listrik models.Listrik
-	db.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&listrik)
+	if err := db.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&listrik).Error; err != nil && atribut == "sanggah" {
+		db.Where("no_peserta = ? AND atribut = ?", noPeserta, "original").First(&listrik)
+	}
 	var kendaraan models.Kendaraan
-	db.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&kendaraan)
+	if err := db.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&kendaraan).Error; err != nil && atribut == "sanggah" {
+		db.Where("no_peserta = ? AND atribut = ?", noPeserta, "original").First(&kendaraan)
+	}
 	var pendukung models.Pendukung
-	db.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&pendukung)
+	if err := db.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&pendukung).Error; err != nil && atribut == "sanggah" {
+		db.Where("no_peserta = ? AND atribut = ?", noPeserta, "original").First(&pendukung)
+	}
 	var bobot models.Bobot
 	db.Where("id = ?", 1).First(&bobot)
 	

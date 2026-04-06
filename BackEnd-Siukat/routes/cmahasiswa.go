@@ -8,6 +8,7 @@ import (
 	"mime/multipart"
 	"net/http"
 	"time"
+	"BackEnd-Siukat/config"
 
 	"github.com/gin-gonic/gin"
 )
@@ -152,6 +153,54 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 		res, err := cmahasiswaService.GetCmahasiswa(noPeserta)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal Mengambil Data"})
+			return
+		}
+		c.JSON(http.StatusOK, res)
+	})
+
+	// GET /cmahasiswa/count-flag
+	cmahasiswaGroup.GET("/count-flag", func(c *gin.Context) {
+		res, err := cmahasiswaService.CountFlag()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, res)
+	})
+
+	// POST /cmahasiswa/datatable
+	cmahasiswaGroup.POST("/datatable", func(c *gin.Context) {
+		var req struct {
+			Page    int    `json:"page"`
+			PerPage int    `json:"perPage"`
+			Keyword string `json:"keyword"`
+		}
+		if err := c.ShouldBindJSON(&req); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		res, err := cmahasiswaService.Datatable(req.Page, req.PerPage, req.Keyword)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, res)
+	})
+
+	// POST /cmahasiswa/datatable-sanggah
+	cmahasiswaGroup.POST("/datatable-sanggah", func(c *gin.Context) {
+		var req struct {
+			Page    int    `json:"page"`
+			PerPage int    `json:"perPage"`
+			Keyword string `json:"keyword"`
+		}
+		if err := c.ShouldBindJSON(&req); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		res, err := cmahasiswaService.DatatableSanggah(req.Page, req.PerPage, req.Keyword)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
 		c.JSON(http.StatusOK, res)
@@ -363,4 +412,29 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 		c.JSON(http.StatusOK, res)
 	})
 
+	// PUT /cmahasiswa/edit/:no_peserta (Admin usage)
+	cmahasiswaGroup.PUT("/edit/:no_peserta", func(c *gin.Context) {
+		noPeserta := c.Param("no_peserta")
+		
+		var student models.CMahasiswa
+		if err := config.DB.Where("no_peserta = ?", noPeserta).First(&student).Error; err != nil {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Student not found"})
+			return
+		}
+
+		var updateData map[string]interface{}
+		if err := c.ShouldBindJSON(&updateData); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON mapping"})
+			return
+		}
+
+		// Edit student data using the same service logic
+		res, err := cmahasiswaService.Edit(updateData, noPeserta, student.Atribut)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, res)
+	})
 }

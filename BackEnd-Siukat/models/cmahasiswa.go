@@ -35,6 +35,11 @@ type CMahasiswa struct {
 	Fakultas *Fakultas `gorm:"foreignKey:FakultasCmahasiswa;references:Kode" json:"fakultas,omitempty"`
 	Prodi    *Prodi    `gorm:"foreignKey:ProdiCmahasiswa;references:Kode" json:"prodi,omitempty"`
 	Ukt      *Ukt      `gorm:"foreignKey:ProdiCmahasiswa;references:MajorID" json:"ukt,omitempty"`
+
+	// Address Associations
+	Provinsi  *Provinsi  `gorm:"foreignKey:ProvinsiCmahasiswa;references:ProvinsiID" json:"provinsi,omitempty"`
+	Kabkot    *Kabkot    `gorm:"foreignKey:KabkotCmahasiswa;references:KabID" json:"kabkot,omitempty"`
+	Kecamatan *Kecamatan `gorm:"foreignKey:KecamatanCmahasiswa;references:KecamID" json:"kecamatan,omitempty"`
 }
 
 func (CMahasiswa) TableName() string {
