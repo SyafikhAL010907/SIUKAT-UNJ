@@ -2,6 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './views/App';
 import registerServiceWorker from './registerServiceWorker';
+import './input.css';
+import './output.css';
+
 
 import { CookiesProvider } from 'react-cookie';
 import { Provider } from 'react-redux';

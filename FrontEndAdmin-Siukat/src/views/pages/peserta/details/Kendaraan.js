@@ -1,330 +1,287 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { Row, Col, Table, Button, Form, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, Alert, FormText } from 'reactstrap'
-import { Field, reduxForm, reset, formValueSelector } from 'redux-form'
-import { kendaraan, } from '../../../../actions'
-import { InputBs, InputFileBs, money } from '../../../components'
-import { cookies, cookieName, rupiah, storage, service } from '../../../../global'
-import { connect } from 'react-redux'
+import React from 'react';
+import { connect } from 'react-redux';
+import { Field, reduxForm, reset, formValueSelector } from 'redux-form';
+import { kendaraan as kendaraanAction } from '../../../../actions';
+import { InputBs, InputFileBs, money } from '../../../components';
+import { cookies, cookieName, rupiah, storage } from '../../../../global';
 
+// --- KOMPONEN MODAL FORM (FormKendaraan) ---
 let FormKendaraan = (props) => {
-    const { handleSubmit, toggleKendaraan, handleToggleKendaraan,
-            pristine, submitting,
-            status_mobil, status_motor, pajak_motor, pajak_mobil } = props
+    const { 
+        handleSubmit, toggleKendaraan, handleToggleKendaraan,
+        pristine, submitting, initialValues,
+        status_motor, status_mobil, pajak_motor, pajak_mobil 
+    } = props;
+
+    if (!toggleKendaraan) return null;
+
     return (
-        <Form onSubmit={handleSubmit} id="form-kendaraan" className="form-horizontal">        
-            <Modal isOpen={toggleKendaraan} toggle={handleToggleKendaraan} size="lg"
-            className={'modal-success'}>
-                <ModalHeader toggle={handleToggleKendaraan}>Form Kendaraan</ModalHeader>
-                <ModalBody>
-                    <FormGroup>
-                        <legend><i className="fa fa-motorcycle"></i> Data Motor</legend>
-                    </FormGroup>
-                    <FormGroup row>
-                        <Label for="status_motor" md={3} xs={12}>Status Motor</Label>
-                        <Col md={4} xs={12}>
-                            <Label check>
-                                <Field type="radio" component={InputBs} name="status_motor" value="ada" />{' '}
-                                Ada
-                            </Label>
-                        </Col>
-                        <Col md={5} xs={12}>
-                            <Label check>
-                                <Field type="radio" component={InputBs} name="status_motor" value="tidak"/>{' '}
-                                Tidak Ada
-                            </Label>
-                        </Col>
-                    </FormGroup>
-
-                    { status_motor === "ada" && (
-                        <div>
-                            <FormGroup row>
-                                <Label for="jumlah_motor" md={3} xs={12}>Jumlah Motor</Label>
-                                <Col md={9}>
-                                    <Field type="number" component={InputBs} name="jumlah_motor" id="jumlah_motor" placeholder="Jumlah Motor" />
-                                    <FormText>
-                                        <ul className="list-reset">
-                                            <li>Jumlah motor yang dimiliki anggota keluarga dalam Kartu Keluarga</li>
-                                            <li>Hanya isi dengan angka (0-9).</li>
-                                        </ul>
-                                    </FormText>
-                                </Col>
-                            </FormGroup>
-                            <FormGroup row>
-                                <Label for="pajak_motor" md={3} xs={12}>Total Pajak Motor</Label>
-                                <Col md={5} xs={12}>
-                                    <Field type="number" component={InputBs} pattern="[0-9]*" title="Hanya isi dengan angka (0-9)" name="pajak_motor" id="pajak_motor" placeholder="Total Pajak Motor" validate={[ money ]}/>
-                                    <FormText color="muted">
-                                        <ul className="list-reset">
-                                            <li>Total Pajak Motor <b>per tahun</b>;</li>
-                                            <li>Jika memiliki lebih dari 1 motor, maka masukkan jumlah total pajak masing-masing motor yang dimiliki;</li>
-                                            <li>Hanya isi dengan angka (0-9).</li>
-                                        </ul>
-                                    </FormText>
-                                </Col>
-                                <Col md={4} xs={12}>
-                                    <Alert color="success">{ rupiah(pajak_motor) }</Alert>
-                                </Col>
-                            </FormGroup>
-                            <FormGroup row>
-                                <Label for="file_scan_motor" md={3}>STNK Motor</Label>
-                                <Col md={5}>
-                                    <Field component={InputFileBs} type="file" name="file_scan_motor" id="file_scan_motor" />
-                                    <FormText color="muted">
-                                        <ul className="list-reset">
-                                            <li>Scan STNK seluruh motor yang dimiliki;</li>
-                                            <li>Ekstensi berkas berupa PDF;</li>
-                                            <li>Ukuran berkas tidak lebih dari 500KB.</li>
-                                        </ul>
-                                    </FormText>
-                                </Col>
-                                    { (props.initialValues.scan_motor !== "" && props.initialValues.scan_motor !== null) && (
-                                        <Col md={4}>
-                                            <a href={storage+"/"+props.initialValues.scan_motor} target="_blank" rel="noopener noreferrer" className="btn btn-success btn-block"><i className="fa fa-file"></i> Lihat STNK Motor</a>
-                                        </Col>
-                                    )}
-                            </FormGroup>
-                        </div>
-                    )}
-
-                    <FormGroup>
-                        <legend><i className="fa fa-car"></i> Data Mobil</legend>
-                    </FormGroup>
-                    <FormGroup row>
-                        <Label for="status_mobil" md={3} xs={12}>Status Mobil</Label>  
-                        <Col md={4} xs={12}>
-                            <Label check>
-                                <Field type="radio" component={InputBs} name="status_mobil" value="ada" />{' '}
-                                Ada
-                            </Label>
-                        </Col>
-                        <Col md={5} xs={12}>
-                            <Label check>
-                                <Field type="radio" component={InputBs} name="status_mobil" value="tidak"/>{' '}
-                                Tidak Ada
-                            </Label>
-                        </Col>
-                    </FormGroup>
+        <div className="fixed inset-0 z-[999] flex items-center justify-center p-4 overflow-y-auto outline-none focus:outline-none">
+            {/* Backdrop */}
+            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity" onClick={handleToggleKendaraan}></div>
+            
+            <div className="relative w-full max-w-3xl mx-auto z-50">
+                <div className="bg-white rounded-xl shadow-2xl overflow-hidden border-0">
                     
+                    {/* Header */}
+                    <div className="bg-green-700 px-6 py-4 flex justify-between items-center text-white">
+                        <h3 className="text-lg font-bold flex items-center gap-2">
+                            <i className="fas fa-motorcycle"></i> Form Data Kendaraan
+                        </h3>
+                        <button onClick={handleToggleKendaraan} className="hover:rotate-90 transition-transform duration-300">
+                            <i className="fas fa-times text-xl"></i>
+                        </button>
+                    </div>
 
-                    { status_mobil === "ada" && (
-                        <div>
-                            <FormGroup row>
-                                <Label for="jumlah_mobil" md={3} xs={12}>Jumlah Mobil</Label>
-                                <Col md={9}>
-                                    <Field type="number" component={InputBs} name="jumlah_mobil" id="jumlah_mobil" placeholder="Jumlah Mobil" />
-                                    <FormText>
-                                        <ul className="list-reset">
-                                            <li>Jumlah mobil yang dimiliki anggota keluarga dalam Kartu Keluarga</li>
-                                            <li>Hanya isi dengan angka (0-9).</li>
-                                        </ul>
-                                    </FormText>
-                                </Col>
-                            </FormGroup>
-                            <FormGroup row>
-                                <Label for="pajak_mobil" md={3} xs={12}>Total Pajak Mobil</Label>
-                                <Col md={5} xs={12}>
-                                    <Field type="number" component={InputBs} pattern="[0-9]*" title="Hanya isi dengan angka (0-9)" name="pajak_mobil" id="pajak_mobil" placeholder="Total Pajak Mobil" validate={[ money ]}/>
-                                    <FormText color="muted">
-                                        <ul className="list-reset">
-                                            <li>Total Pajak Mobil <b>per tahun</b>;</li>
-                                            <li>Jika memiliki lebih dari 1 mobil, maka masukkan jumlah total pajak masing-masing mobil yang dimiliki;</li>
-                                            <li>Hanya isi dengan angka (0-9).</li>
-                                        </ul>
-                                    </FormText>
-                                </Col>
-                                <Col md={4} xs={12}>
-                                    <Alert color="success">{ rupiah(pajak_mobil) }</Alert>
-                                </Col>
-                            </FormGroup>
-                            <FormGroup row>
-                                <Label for="file_scan_mobil" md={3}>STNK Mobil</Label>
-                                <Col md={5}>
-                                    <Field component={InputFileBs} type="file" name="file_scan_mobil" id="file_scan_mobil" />
-                                    <FormText color="muted">
-                                        <ul className="list-reset">
-                                            <li>Scan STNK seluruh mobil yang dimiliki;</li>
-                                            <li>Ekstensi berkas berupa PDF;</li>
-                                            <li>Ukuran berkas tidak lebih dari 500KB.</li>
-                                        </ul>
-                                    </FormText>
-                                </Col>
-                                    { (props.initialValues.scan_mobil !== "" && props.initialValues.scan_mobil !== null) && (
-                                        <Col md={4}>
-                                            <a href={storage+"/"+props.initialValues.scan_mobil} target="_blank" rel="noopener noreferrer" className="btn btn-success btn-block"><i className="fa fa-file"></i> Lihat STNK Mobil</a>
-                                        </Col>
-                                    )}
-                            </FormGroup>
+                    {/* Body */}
+                    <form onSubmit={handleSubmit} id="form-kendaraan" className="p-6 max-h-[70vh] overflow-y-auto space-y-8">
+                        
+                        {/* SECTION MOTOR */}
+                        <div className="bg-gray-50 p-5 rounded-lg border border-gray-100">
+                            <legend className="text-md font-bold text-green-700 mb-4 flex items-center gap-2">
+                                <i className="fa fa-motorcycle"></i> Data Motor
+                            </legend>
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+                                <label className="md:col-span-3 font-semibold text-gray-700 text-sm">Status Motor</label>
+                                <div className="md:col-span-9 flex gap-6">
+                                    {['ada', 'tidak'].map((opt) => (
+                                        <label key={opt} className="flex items-center cursor-pointer group">
+                                            <Field name="status_motor" component="input" type="radio" value={opt} className="w-4 h-4 text-green-600 focus:ring-green-500 border-gray-300" />
+                                            <span className="ml-2 capitalize group-hover:text-green-700 transition">{opt === 'ada' ? 'Ada' : 'Tidak Ada'}</span>
+                                        </label>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {status_motor === "ada" && (
+                                <div className="mt-4 pt-4 border-t border-gray-200 space-y-4 animate-fadeIn">
+                                    <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+                                        <label className="md:col-span-3 text-sm font-medium">Jumlah Motor</label>
+                                        <div className="md:col-span-9">
+                                            <Field name="jumlah_motor" component={InputBs} type="number" className="w-full rounded-md border-gray-300" />
+                                            <p className="text-[10px] text-gray-400 mt-1 italic">*Jumlah motor dalam satu KK</p>
+                                        </div>
+                                    </div>
+                                    <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+                                        <label className="md:col-span-3 text-sm font-medium">Pajak Motor</label>
+                                        <div className="md:col-span-5">
+                                            <Field name="pajak_motor" component={InputBs} type="number" validate={[money]} />
+                                        </div>
+                                        <div className="md:col-span-4 bg-green-100 text-green-700 py-2 px-3 rounded font-bold text-center text-sm">
+                                            {rupiah(pajak_motor)}
+                                        </div>
+                                    </div>
+                                    <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+                                        <label className="md:col-span-3 text-sm font-medium">STNK Motor (PDF)</label>
+                                        <div className="md:col-span-9 flex flex-col sm:flex-row gap-2">
+                                            <div className="flex-grow">
+                                                <Field name="file_scan_motor" component={InputFileBs} />
+                                            </div>
+                                            {initialValues.scan_motor && (
+                                                <a href={`${storage}/${initialValues.scan_motor}`} target="_blank" rel="noopener noreferrer" 
+                                                   className="bg-blue-500 text-white px-3 py-2 rounded text-xs flex items-center justify-center gap-1 hover:bg-blue-600">
+                                                    <i className="fa fa-eye"></i> Lihat
+                                                </a>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
                         </div>
-                    )}
-                </ModalBody>
-                <ModalFooter className="text-right">
-                    <Button color="success" type="submit" form="form-kendaraan" disabled={pristine || submitting}><i className="fa fa-save"></i> Simpan</Button>{' '}
-                    <Button color="warning" onClick={handleToggleKendaraan}>Batal</Button>
-                </ModalFooter>
-            </Modal>
-        </Form>
-    )
-}
 
-class Kendaraan extends React.Component{
-    constructor(props){
-        super(props)
+                        {/* SECTION MOBIL */}
+                        <div className="bg-gray-50 p-5 rounded-lg border border-gray-100">
+                            <legend className="text-md font-bold text-blue-700 mb-4 flex items-center gap-2">
+                                <i className="fa fa-car"></i> Data Mobil
+                            </legend>
+                            {/* ... (Struktur yang sama dengan Motor, gunakan status_mobil & pajak_mobil) ... */}
+                            <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+                                <label className="md:col-span-3 font-semibold text-gray-700 text-sm">Status Mobil</label>
+                                <div className="md:col-span-9 flex gap-6">
+                                    {['ada', 'tidak'].map((opt) => (
+                                        <label key={opt} className="flex items-center cursor-pointer group">
+                                            <Field name="status_mobil" component="input" type="radio" value={opt} className="w-4 h-4 text-blue-600 focus:ring-blue-500 border-gray-300" />
+                                            <span className="ml-2 capitalize group-hover:text-blue-700 transition">{opt === 'ada' ? 'Ada' : 'Tidak Ada'}</span>
+                                        </label>
+                                    ))}
+                                </div>
+                            </div>
+                            {status_mobil === "ada" && (
+                                <div className="mt-4 pt-4 border-t border-gray-200 space-y-4 animate-fadeIn">
+                                    <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+                                        <label className="md:col-span-3 text-sm font-medium">Pajak Mobil</label>
+                                        <div className="md:col-span-5">
+                                            <Field name="pajak_mobil" component={InputBs} type="number" validate={[money]} />
+                                        </div>
+                                        <div className="md:col-span-4 bg-blue-100 text-blue-700 py-2 px-3 rounded font-bold text-center text-sm">
+                                            {rupiah(pajak_mobil)}
+                                        </div>
+                                    </div>
+                                    <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+                                        <label className="md:col-span-3 text-sm font-medium">STNK Mobil (PDF)</label>
+                                        <div className="md:col-span-9 flex flex-col sm:flex-row gap-2">
+                                            <div className="flex-grow">
+                                                <Field name="file_scan_mobil" component={InputFileBs} />
+                                            </div>
+                                            {initialValues.scan_mobil && (
+                                                <a href={`${storage}/${initialValues.scan_mobil}`} target="_blank" rel="noopener noreferrer" 
+                                                   className="bg-blue-500 text-white px-3 py-2 rounded text-xs flex items-center justify-center gap-1 hover:bg-blue-600">
+                                                    <i className="fa fa-eye"></i> Lihat
+                                                </a>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </form>
 
-        this.state = {
-            modalToggle: false
-        }
-        this.modalToggle = this.modalToggle.bind(this)
-        this.submitKendaraan = this.submitKendaraan.bind(this)
+                    {/* Footer */}
+                    <div className="p-4 bg-gray-100 flex justify-end gap-3">
+                        <button onClick={handleToggleKendaraan} className="px-6 py-2 rounded-lg bg-gray-400 text-white hover:bg-gray-500 font-bold transition">Batal</button>
+                        <button type="submit" form="form-kendaraan" disabled={pristine || submitting} 
+                                className="px-6 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 font-bold shadow-lg disabled:opacity-50 transition">
+                            <i className="fa fa-save mr-2"></i> Simpan Data
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+// --- KOMPONEN TAMPILAN UTAMA (Kendaraan) ---
+class Kendaraan extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { modalToggle: false };
     }
-    componentWillMount(){
-        this.props.dispatch(kendaraan.getById(cookies.get(cookieName), this.props.noPeserta))
+
+    componentWillMount() {
+        this.props.dispatch(kendaraanAction.getById(cookies.get(cookieName), this.props.noPeserta));
     }
+
     modalToggle = () => {
-        this.setState({
-            modalToggle: !this.state.modalToggle
-        })
+        this.setState({ modalToggle: !this.state.modalToggle });
     }
+
     submitKendaraan = (values) => {
-        this.setState({
-            modalToggle: !this.state.modalToggle
-        })
-        var formData = new FormData()
-        for(var key in values){
-            var file = key.startsWith("file_scan") ? key : null
-            if(file){
-                formData.append(key, values[key][0])   
-                document.getElementById(file).value = null;     
-            }else{
-                formData.append(key, values[key])
+        this.modalToggle();
+        const formData = new FormData();
+        for (let key in values) {
+            if (key.startsWith("file_scan") && values[key]) {
+                formData.append(key, values[key][0]);
+                const el = document.getElementById(key);
+                if (el) el.value = null;
+            } else {
+                formData.append(key, values[key]);
             }
         }
-        this.props.dispatch(kendaraan.updateData(cookies.get(cookieName), formData, this.props.noPeserta))
+        this.props.dispatch(kendaraanAction.updateData(cookies.get(cookieName), formData, this.props.noPeserta));
         this.props.dispatch(reset('DataKendaraanSeleksi'));
     }
-    render(){
+
+    renderTable(type, data) {
+        const isMotor = type === 'motor';
+        const status = isMotor ? data.status_motor : data.status_mobil;
+        const jumlah = isMotor ? data.jumlah_motor : data.jumlah_mobil;
+        const pajak = isMotor ? data.pajak_motor : data.pajak_mobil;
+        const scan = isMotor ? data.scan_motor : data.scan_mobil;
+
         return (
-            <Row>
-                <Col md={12}>
-                    <Row>
-                        <Col md="6">
-                            <h4>Kendaraan</h4>
-                        </Col>
-                        <Col md="6" className="text-right">
-                            { this.props.editable && (
-                                <Button color="warning" size="sm" onClick={this.modalToggle}><i className="fa fa-pencil"></i> Perbarui</Button>
+            <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden h-full">
+                <div className={`p-4 border-b ${isMotor ? 'bg-green-50' : 'bg-blue-50'} flex items-center gap-2 font-bold`}>
+                    <i className={`fa ${isMotor ? 'fa-motorcycle text-green-700' : 'fa-car text-blue-700'}`}></i>
+                    <span className="uppercase text-gray-700 tracking-wider text-sm">{isMotor ? 'Data Motor' : 'Data Mobil'}</span>
+                </div>
+                <div className="p-0">
+                    <table className="w-full text-sm">
+                        <tbody className="divide-y divide-gray-100">
+                            <tr>
+                                <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 w-1/3 text-xs uppercase">Status</td>
+                                <td className="p-4">
+                                    <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase ${status === 'ada' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                                        {status || 'Belum diisi'}
+                                    </span>
+                                </td>
+                            </tr>
+                            {status === "ada" && (
+                                <>
+                                    <tr>
+                                        <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Jumlah</td>
+                                        <td className="p-4 font-medium">{jumlah} <span className="text-gray-400 font-normal">(dalam 1 KK)</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Pajak / Thn</td>
+                                        <td className="p-4 font-bold text-green-700">{rupiah(pajak)}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">STNK</td>
+                                        <td className="p-4">
+                                            {scan ? (
+                                                <a href={`${storage}/${scan}`} target="_blank" rel="noopener noreferrer" 
+                                                   className="text-blue-600 hover:text-blue-800 flex items-center gap-1 font-bold">
+                                                    <i className="fa fa-download"></i> Download STNK
+                                                </a>
+                                            ) : <span className="text-gray-400 italic">Belum diunggah</span>}
+                                        </td>
+                                    </tr>
+                                </>
                             )}
-                        </Col>
-                    </Row>
-                    <hr/>
-                    <Row>
-                        <Col md="6">
-                            <Table responsive striped bordered>
-                                <tbody>
-                                    <tr>
-                                        <td width="30%">Status Motor</td>
-                                        <td width="5%">:</td>
-                                        <td>{ this.props.kendaraan.status_motor }</td>
-                                    </tr>
-                                </tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        );
+    }
 
-                                { this.props.kendaraan.status_motor === "ada" && (
-                                    <tbody>
-                                        <tr>
-                                            <td>Jumlah Motor</td>
-                                            <td>:</td>
-                                            <td>{ this.props.kendaraan.jumlah_motor } <b>dalam 1 Kartu Keluarga</b></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Pajak Motor</td>
-                                            <td>:</td>
-                                            <td>{ rupiah(this.props.kendaraan.pajak_motor) } <b>/ tahun</b></td>
-                                        </tr>
-                                        <tr>
-                                            <td>STNK Motor</td>
-                                            <td>:</td>
-                                            <td>
-                                            { (this.props.kendaraan.scan_motor !== "" && this.props.kendaraan.scan_motor !== null) && (
-                                                <a href={ storage+"/"+this.props.kendaraan.scan_motor } target="_blank" rel="noopener noreferrer">
-                                                    <Button color="primary" size="sm"><i className="fa fa-download"></i> Lihat STNK Motor</Button>
-                                                </a>
-                                            )}
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                )}
-                            </Table>
-                        </Col>
-                        <Col md="6">
-                            <Table responsive striped bordered>
-                                <tbody>
-                                    <tr>
-                                        <td width="30%">Status Mobil</td>
-                                        <td width="5%">:</td>
-                                        <td>{ this.props.kendaraan.status_mobil }</td>
-                                    </tr>
-                                </tbody>
+    render() {
+        const { kendaraan: data, editable } = this.props;
 
-                                { this.props.kendaraan.status_mobil === "ada" && (                        
-                                    <tbody>                        
-                                        <tr>
-                                            <td>Jumlah Mobil</td>
-                                            <td>:</td>
-                                            <td>{ this.props.kendaraan.jumlah_mobil } <b>dalam 1 Kartu Keluarga</b></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Pajak Mobil</td>
-                                            <td>:</td>
-                                            <td>{ rupiah(this.props.kendaraan.pajak_mobil) } <b>/ tahun</b></td>
-                                        </tr>
-                                        <tr>
-                                            <td>STNK Mobil</td>
-                                            <td>:</td>
-                                            <td>
-                                            { (this.props.kendaraan.scan_mobil !== "" && this.props.kendaraan.scan_mobil !== null) && (                                        
-                                                <a href={ storage+"/"+this.props.kendaraan.scan_mobil } target="_blank" rel="noopener noreferrer">
-                                                    <Button color="primary" size="sm"><i className="fa fa-download"></i> Lihat STNK Mobil</Button>
-                                                </a>
-                                            )}
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                )}
-                            </Table>
-                        </Col>
-                    </Row>
-                        
-                    <FormKendaraan
-                        onSubmit={this.submitKendaraan}
-                        initialValues={this.props.kendaraan}
-                        toggleKendaraan={this.state.modalToggle}
-                        handleToggleKendaraan={this.modalToggle}
-                        /> 
-                </Col>
-            </Row>
-        )
+        return (
+            <div className="space-y-6">
+                <div className="flex justify-between items-end border-b border-gray-200 pb-4">
+                    <div>
+                        <h4 className="text-2xl font-black text-gray-800 tracking-tight">Inventaris Kendaraan</h4>
+                        <p className="text-gray-500 text-sm">Data motor dan mobil keluarga yang tercatat di KK.</p>
+                    </div>
+                    {editable && (
+                        <button onClick={this.modalToggle} className="bg-yellow-500 hover:bg-yellow-600 text-white px-5 py-2 rounded-lg font-bold shadow-md transition transform hover:scale-105 flex items-center gap-2">
+                            <i className="fa fa-pencil"></i> Perbarui Data
+                        </button>
+                    )}
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    {this.renderTable('motor', data)}
+                    {this.renderTable('mobil', data)}
+                </div>
+
+                <FormKendaraan
+                    onSubmit={this.submitKendaraan}
+                    initialValues={data}
+                    toggleKendaraan={this.state.modalToggle}
+                    handleToggleKendaraan={this.modalToggle}
+                />
+            </div>
+        );
     }
 }
 
+// --- REDUX FORM WRAPPER ---
 FormKendaraan = reduxForm({
     form: 'DataKendaraanSeleksi',
     enableReinitialize: true,
-})(FormKendaraan)
+})(FormKendaraan);
 
-const selector = formValueSelector('DataKendaraanSeleksi')
+const selector = formValueSelector('DataKendaraanSeleksi');
 
 FormKendaraan = connect((store) => {
-    let {status_motor, status_mobil, pajak_motor, pajak_mobil} = selector(store, 'status_motor', 'status_mobil', 'pajak_motor', 'pajak_mobil')
-    return {
-        status_motor,
-        status_mobil,
-        pajak_motor, 
-        pajak_mobil
-    }
-})(FormKendaraan)
+    const { status_motor, status_mobil, pajak_motor, pajak_mobil } = selector(store, 'status_motor', 'status_mobil', 'pajak_motor', 'pajak_mobil');
+    return { status_motor, status_mobil, pajak_motor, pajak_mobil };
+})(FormKendaraan);
 
 export default connect(
-    (store) => ({
-        kendaraan: store.kendaraan.kendaraan,
-    })
-)(Kendaraan)
+    (store) => ({ kendaraan: store.kendaraan.kendaraan })
+)(Kendaraan);

@@ -1,156 +1,220 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { Row, Col, Table, Button, Form, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, FormText } from 'reactstrap'
-import { Field, reduxForm, reset, formValueSelector } from 'redux-form'
-import { pendukung, } from '../../../../actions'
-import { InputBs, InputFileBs } from '../../../components'
-import { cookies, cookieName, storage, service } from '../../../../global'
-import { connect } from 'react-redux'
+import React from 'react';
+import { connect } from 'react-redux';
+import { Field, reduxForm, reset, formValueSelector } from 'redux-form';
+import { pendukung } from '../../../../actions';
+import { InputBs, InputFileBs } from '../../../components';
+import { cookies, cookieName, storage } from '../../../../global';
 
+// Deklarasi selector di luar untuk mencegah error undefined
+const selector = formValueSelector('DataPendukungSeleksi');
+
+/**
+ * KOMPONEN: FormPendukung (Modal Form)
+ */
 let FormPendukung = (props) => {
-    const { handleSubmit, handleTogglePendukung, togglePendukung,
-        pristine, submitting,
-        scan_kk } = props
+    const { 
+        handleSubmit, handleTogglePendukung, togglePendukung, 
+        pristine, submitting, initialValues 
+    } = props;
+
+    if (!togglePendukung) return null;
+
     return (
-        <Form onSubmit={handleSubmit} id="form-pendukung" className="form-horizontal">        
-            <Modal isOpen={togglePendukung} toggle={handleTogglePendukung} size="lg"
-            className={'modal-success'}>
-                <ModalHeader toggle={handleTogglePendukung}>Form Pendukung</ModalHeader>
-                <ModalBody>
-                    <FormGroup row>
-                        <Label for="tanggungan" md={3}>Jumlah Tanggungan</Label>
-                        <Col md={9}>
-                            <Field component={InputBs} type="text" name="tanggungan" id="tanggungan" placeholder="Jumlah Tanggungan" />
-                            <FormText>
-                                Termasuk Kepala Keluarga
-                            </FormText>
-                        </Col>
-                    </FormGroup>
-                    <FormGroup row>
-                        <Label for="file_scan_kk" md={3}>Kartu Keluarga</Label>
-                        <Col md={5}>
-                            <Field component={InputFileBs} type="file" name="file_scan_kk" id="file_scan_kk" />
-                            <FormText color="muted">
-                                <ul className="list-reset">
-                                    <li>Ekstensi berkas berupa PDF;</li>
-                                    <li>Ukuran berkas tidak lebih dari 500KB.</li>
-                                </ul>
-                            </FormText>
-                        </Col>
-                        { (scan_kk !== "" && scan_kk !== null) && (
-                            <Col md={4}>
-                                <a href={storage+"/"+scan_kk} target="_blank" rel="noopener noreferrer" className="btn btn-success btn-block"><i className="fa fa-file"></i> Lihat Kartu Keluarga</a>
-                            </Col>
-                        )}
-                    </FormGroup>
-                </ModalBody>
-                <ModalFooter className="text-right">
-                    <Button color="success" type="submit" form="form-pendukung" disabled={pristine || submitting}><i className="fa fa-save"></i> Simpan</Button>{' '}
-                    <Button color="warning" onClick={handleTogglePendukung}>Batal</Button>
-                </ModalFooter>
-            </Modal>
-        </Form>
-    )
-}
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
+            {/* Backdrop */}
+            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" onClick={handleTogglePendukung}></div>
+            
+            {/* Modal Content */}
+            <div className="relative w-full max-w-2xl mx-auto z-50">
+                <div className="relative flex flex-col w-full bg-white border-0 rounded-xl shadow-2xl outline-none focus:outline-none">
+                    
+                    {/* Header */}
+                    <div className="flex items-center justify-between p-4 border-b bg-green-600 rounded-t-xl text-white">
+                        <h3 className="text-lg font-bold italic flex items-center">
+                            <i className="fa fa-users mr-3 text-yellow-300"></i> Form Data Pendukung
+                        </h3>
+                        <button className="text-white hover:text-gray-200 text-2xl font-bold transition" onClick={handleTogglePendukung}>
+                            ×
+                        </button>
+                    </div>
 
-class Pendukung extends React.Component{
-    constructor(props){
-        super(props)
+                    {/* Body */}
+                    <div className="relative p-6 flex-auto">
+                        <form onSubmit={handleSubmit} id="form-pendukung" className="space-y-6">
+                            
+                            {/* Jumlah Tanggungan */}
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4 items-start">
+                                <label className="text-sm font-semibold text-gray-700 pt-2">Jumlah Tanggungan</label>
+                                <div className="md:col-span-2">
+                                    <Field 
+                                        name="tanggungan" 
+                                        component="input" 
+                                        type="number" 
+                                        placeholder="Contoh: 4"
+                                        className="w-full p-2.5 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition text-sm font-medium"
+                                    />
+                                    <p className="mt-2 text-[11px] text-gray-500 italic">
+                                        * Jumlah seluruh anggota keluarga yang menjadi tanggung jawab (termasuk Kepala Keluarga).
+                                    </p>
+                                </div>
+                            </div>
 
-        this.state = {
-            modalToggle: false
-        }
-        this.modalToggle = this.modalToggle.bind(this)
-        this.submitPendukung = this.submitPendukung.bind(this)
-    }
-    componentWillMount(){
-        this.props.dispatch(pendukung.getById(cookies.get(cookieName), this.props.noPeserta))
-    }
-    modalToggle = () => {
-        this.setState({
-            modalToggle: !this.state.modalToggle
-        })
-    }
-    submitPendukung = (values) => {
-        this.setState({
-            modalToggle: !this.state.modalToggle
-        })
-        var formData = new FormData()
-        for(var key in values){
-            var file = key.startsWith("file_scan") ? key : null
-            if(file){
-                formData.append(key, values[key][0])   
-                document.getElementById(file).value = null;     
-            }else{
-                formData.append(key, values[key])
-            }
-        }
-        this.props.dispatch(pendukung.updateData(cookies.get(cookieName), formData, this.props.noPeserta))
-        this.props.dispatch(reset('DataPendukungSeleksi'));
-    }
-    render(){
-        return (
-            <Row>
-                <Col md={12}>
-                    <Row>
-                        <Col md="6">
-                            <h4>Pendukung</h4>
-                        </Col>
-                        <Col md="6" className="text-right">
-                            { this.props.editable && (
-                                <Button color="warning" size="sm" onClick={this.modalToggle}><i className="fa fa-pencil"></i> Perbarui</Button>
-                            )}
-                        </Col>
-                    </Row>
-                    <hr/>
-                    <Table responsive striped bordered>
-                        <tbody>
-                            <tr>
-                                <td width="30%">Jumlah Tanggungan</td>
-                                <td width="5%">:</td>
-                                <td>{ this.props.pendukung.tanggungan }</td>
-                            </tr>
-                            <tr>
-                                <td>Kartu Keluarga</td>
-                                <td>:</td>
-                                <td>
-                                { (this.props.pendukung.scan_kk !== "" && this.props.pendukung.scan_kk !== null) && (
-                                    <a href={ storage+"/"+this.props.pendukung.scan_kk} target="_blank" rel="noopener noreferrer">
-                                        <Button color="primary" size="sm"><i className="fa fa-download"></i> Lihat Kartu Keluarga</Button>
-                                    </a>
-                                )}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </Table>
-                    <FormPendukung
-                        onSubmit={this.submitPendukung}
-                        initialValues={this.props.pendukung}
-                        togglePendukung={this.state.modalToggle}
-                        handleTogglePendukung={this.modalToggle}
-                        />
-                </Col>
-            </Row>
-        )
-    }
-}
+                            {/* Upload Kartu Keluarga */}
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4 items-start border-t pt-6">
+                                <label className="text-sm font-semibold text-gray-700">Kartu Keluarga (KK)</label>
+                                <div className="md:col-span-2 space-y-4">
+                                    <Field name="file_scan_kk" component={InputFileBs} type="file" id="file_scan_kk" />
+                                    
+                                    <div className="bg-yellow-50 p-3 rounded-lg border border-yellow-100">
+                                        <ul className="text-[11px] text-yellow-700 space-y-1 list-disc ml-4 font-medium uppercase tracking-tight">
+                                            <li>Ekstensi berkas wajib <b>PDF</b></li>
+                                            <li>Ukuran berkas maksimal <b>500 KB</b></li>
+                                        </ul>
+                                    </div>
+
+                                    {initialValues?.scan_kk && (
+                                        <a href={`${storage}/${initialValues.scan_kk}`} target="_blank" rel="noreferrer" 
+                                           className="inline-flex items-center text-xs font-bold text-blue-600 hover:text-blue-800 underline">
+                                            <i className="fa fa-file-pdf-o mr-2"></i> Lihat Kartu Keluarga Saat Ini
+                                        </a>
+                                    )}
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    {/* Footer */}
+                    <div className="flex items-center justify-end p-4 border-t bg-gray-50 rounded-b-xl">
+                        <button onClick={handleTogglePendukung} className="px-6 py-2 text-sm font-bold text-gray-500 hover:text-gray-700 mr-4 transition uppercase">
+                            Batal
+                        </button>
+                        <button
+                            type="submit"
+                            form="form-pendukung"
+                            disabled={pristine || submitting}
+                            className="px-8 py-2.5 bg-green-600 hover:bg-green-700 text-white text-sm font-bold rounded-lg shadow-md transition transform hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50"
+                        >
+                            <i className="fa fa-save mr-2"></i> SIMPAN DATA
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
 
 FormPendukung = reduxForm({
     form: 'DataPendukungSeleksi',
     enableReinitialize: true,
-})(FormPendukung)
+})(FormPendukung);
 
-const selector = formValueSelector('DataPendukungSeleksi')
-
+// Menghubungkan selector untuk mendapatkan nilai scan_kk jika diperlukan di form
 FormPendukung = connect((store) => {
-    let scan_kk = selector(store, 'scan_kk')
     return {
-        scan_kk,
-    }
-})(FormPendukung)
+        scan_kk: selector(store, 'scan_kk'),
+    };
+})(FormPendukung);
 
-export default connect(
-    (store) => ({
-        pendukung: store.pendukung.pendukung,
-    })
-)(Pendukung)
+/**
+ * KOMPONEN UTAMA: Pendukung
+ */
+class Pendukung extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { modalToggle: false };
+    }
+
+    componentDidMount() {
+        this.props.dispatch(pendukung.getById(cookies.get(cookieName), this.props.noPeserta));
+    }
+
+    modalToggle = () => {
+        this.setState({ modalToggle: !this.state.modalToggle });
+    }
+
+    submitPendukung = (values) => {
+        this.modalToggle();
+        const formData = new FormData();
+        for (let key in values) {
+            if (key.startsWith("file_scan") && values[key] && values[key][0]) {
+                formData.append(key, values[key][0]);
+                const el = document.getElementById(key);
+                if (el) el.value = null;
+            } else {
+                formData.append(key, values[key]);
+            }
+        }
+        this.props.dispatch(pendukung.updateData(cookies.get(cookieName), formData, this.props.noPeserta));
+        this.props.dispatch(reset('DataPendukungSeleksi'));
+    }
+
+    render() {
+        const { pendukung, editable } = this.props;
+
+        return (
+            <div className="w-full bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-6">
+                {/* Header Card */}
+                <div className="flex items-center justify-between p-5 border-b border-gray-100 bg-gray-50/50">
+                    <div className="flex items-center space-x-3">
+                        <div className="p-2 bg-green-600 rounded-lg shadow-inner">
+                            <i className="fa fa-file-text-o text-white"></i>
+                        </div>
+                        <h4 className="text-lg font-bold text-gray-800 tracking-tight italic uppercase">Berkas Pendukung</h4>
+                    </div>
+                    {editable && (
+                        <button
+                            onClick={this.modalToggle}
+                            className="flex items-center px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white text-xs font-bold rounded-lg shadow-sm transition-all transform hover:scale-105"
+                        >
+                            <i className="fa fa-pencil mr-2"></i> PERBARUI
+                        </button>
+                    )}
+                </div>
+
+                {/* Content Table */}
+                <div className="overflow-x-auto">
+                    <table className="w-full text-sm text-left border-collapse">
+                        <tbody className="divide-y divide-gray-100">
+                            <tr className="hover:bg-gray-50 transition">
+                                <td className="px-6 py-4 font-bold text-gray-500 bg-gray-50/30 w-1/3 uppercase text-[10px] tracking-widest">Jumlah Tanggungan</td>
+                                <td className="px-6 py-4 text-gray-800 border-l border-gray-50">
+                                    <span className="text-lg font-bold text-green-700">{pendukung.tanggungan || 0}</span> 
+                                    <span className="ml-2 text-gray-400 font-medium italic">Orang</span>
+                                </td>
+                            </tr>
+                            <tr className="hover:bg-gray-50 transition">
+                                <td className="px-6 py-4 font-bold text-gray-500 bg-gray-50/30 uppercase text-[10px] tracking-widest">Kartu Keluarga</td>
+                                <td className="px-6 py-4 border-l border-gray-50">
+                                    {pendukung.scan_kk ? (
+                                        <a href={`${storage}/${pendukung.scan_kk}`} target="_blank" rel="noreferrer" 
+                                           className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-bold rounded-lg shadow transition">
+                                            <i className="fa fa-download mr-2"></i> UNDUH / LIHAT KK
+                                        </a>
+                                    ) : (
+                                        <div className="flex items-center text-red-500 text-xs font-bold italic bg-red-50 px-3 py-1 rounded-full w-fit">
+                                            <i className="fa fa-warning mr-2"></i> Belum ada dokumen
+                                        </div>
+                                    )}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                {/* Modal Form Component */}
+                <FormPendukung
+                    onSubmit={this.submitPendukung}
+                    initialValues={this.props.pendukung}
+                    togglePendukung={this.state.modalToggle}
+                    handleTogglePendukung={this.modalToggle}
+                />
+            </div>
+        );
+    }
+}
+
+const mapStateToProps = (store) => ({
+    pendukung: store.pendukung.pendukung || {},
+});
+
+export default connect(mapStateToProps)(Pendukung);

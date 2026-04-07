@@ -1,0 +1,6 @@
+/* Di dalam src/index.css atau src/input.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom CSS kamu setelahnya */

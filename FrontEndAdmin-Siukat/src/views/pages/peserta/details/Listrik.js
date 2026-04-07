@@ -1,196 +1,229 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { Row, Col, Table, Button, Form, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, Alert, FormText } from 'reactstrap'
-import { Field, reduxForm, reset, formValueSelector } from 'redux-form'
-import { listrik, } from '../../../../actions'
-import { InputBs, InputFileBs, money } from '../../../components'
-import { cookies, cookieName, rupiah, storage, service } from '../../../../global'
-import { connect } from 'react-redux'
+import React from 'react';
+import { connect } from 'react-redux';
+import { Field, reduxForm, reset, formValueSelector } from 'redux-form';
+import { listrik } from '../../../../actions';
+import { InputBs, InputFileBs, money } from '../../../components';
+import { cookies, cookieName, rupiah, storage } from '../../../../global';
 
+// 1. Deklarasikan selector DI LUAR komponen agar tersedia saat connect dipanggil
+const selector = formValueSelector('DataListrikSeleksi');
+
+/**
+ * KOMPONEN: FormListrik (Modal Form)
+ */
 let FormListrik = (props) => {
-    const { handleSubmit, handleToggleListrik, toggleListrik,
-        pristine, submitting,
-        pengeluaran, scan_listrik } = props
+    const { 
+        handleSubmit, handleToggleListrik, toggleListrik, 
+        pristine, submitting, initialValues, pengeluaran 
+    } = props;
+
+    if (!toggleListrik) return null;
+
     return (
-        <Form onSubmit={handleSubmit} id="form-listrik" className="form-horizontal">        
-            <Modal isOpen={toggleListrik} toggle={handleToggleListrik} size="lg"
-            className={'modal-success'}>
-                <ModalHeader toggle={handleToggleListrik}>Form Listrik</ModalHeader>
-                <ModalBody>
-                    <FormGroup row>
-                        <Label for="no_pelanggan" md={3}>Nomor Pelanggan</Label>
-                        <Col md={9}>
-                            <Field type="text" component={InputBs} name="no_pelanggan" id="no_pelanggan" placeholder="Nomor Pelanggan PLN" />
-                        </Col>
-                    </FormGroup>
-                    <FormGroup row>
-                        <Label for="jenis_pemakaian" md={3}>Status Listrik</Label>                                            
-                        <Col md={4}>
-                            <Label check>
-                                <Field type="radio" component={InputBs} name="jenis_pemakaian" value="prabayar" />{' '}
-                                Prabayar (Token)
-                            </Label>
-                        </Col>
-                        <Col md={5}>
-                            <Label check>
-                                <Field type="radio" component={InputBs} name="jenis_pemakaian" value="pascabayar" />{' '}
-                                Pascabayar
-                            </Label>
-                        </Col>
-                    </FormGroup>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
+            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" onClick={handleToggleListrik}></div>
+            
+            <div className="relative w-full max-w-2xl mx-auto z-50">
+                <div className="relative flex flex-col w-full bg-white border-0 rounded-xl shadow-2xl outline-none focus:outline-none">
+                    
+                    <div className="flex items-center justify-between p-4 border-b bg-green-600 rounded-t-xl text-white">
+                        <h3 className="text-lg font-bold italic flex items-center">
+                            <i className="fa fa-bolt mr-2 text-yellow-300"></i> Form Data Listrik
+                        </h3>
+                        <button className="text-white hover:text-gray-200 text-2xl font-bold transition" onClick={handleToggleListrik}>×</button>
+                    </div>
 
-                    <FormGroup row>
-                        <Label md={3} xs={12}>Biaya Listrik</Label>
-                        <Col md={5} xs={12}>
-                            <Field type="number" component={InputBs} pattern="[0-9]*" title="Hanya isi dengan angka (0-9)" name="pengeluaran" placeholder="Biaya Listrik" id="pengeluaran" validate={[ money ]}/>
-                            <FormText color="muted">
-                                <ul className="list-reset">
-                                    <li>Biaya listrik <b>3 bulan terakhir</b>;</li>
-                                    <li>Hanya isi dengan angka (0-9).</li>
-                                </ul>
-                            </FormText>
-                        </Col>
-                        <Col md={4} xs={12}>
-                            <Alert color="success">{ rupiah(pengeluaran) }</Alert>
-                        </Col>
-                    </FormGroup>
-                    <FormGroup row>
-                        <Label for="file_scan_listrik" md={3}>Bukti Tagihan Listrik</Label>
-                        <Col md={5}>
-                            <Field component={InputFileBs} type="file" name="file_scan_listrik" id="file_scan_listrik" />
-                            <FormText color="muted">
-                                <ul className="list-reset">
-                                    <li>Bukti tagihan listrik <b>3 bulan terakhir</b>;</li>
-                                    <li>Ekstensi berkas berupa PDF;</li>
-                                    <li>Ukuran berkas tidak lebih dari 500KB.</li>
-                                </ul>
-                            </FormText>
-                        </Col>
-                        { (props.initialValues.scan_listrik !== "" && props.initialValues.scan_listrik !== null) && (
-                            <Col md={4}>
-                                <a href={storage+"/"+props.initialValues.scan_listrik} target="_blank" rel="noopener noreferrer" className="btn btn-success btn-block"><i className="fa fa-file"></i> Lihat Scan Rekening Listrik</a>
-                            </Col>
-                        )}
-                    </FormGroup>
-                </ModalBody>
-                <ModalFooter className="text-right">
-                    <Button color="success" type="submit" form="form-listrik" disabled={pristine || submitting}><i className="fa fa-save"></i> Simpan</Button>{' '}
-                    <Button color="warning" onClick={handleToggleListrik}>Batal</Button>
-                </ModalFooter>
-            </Modal>
-        </Form>
-    )
-}
+                    <div className="relative p-6 flex-auto max-h-[75vh] overflow-y-auto">
+                        <form onSubmit={handleSubmit} id="form-listrik" className="space-y-6">
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4 items-center">
+                                <label className="text-sm font-semibold text-gray-700">Nomor Pelanggan</label>
+                                <div className="md:col-span-2">
+                                    <Field 
+                                        name="no_pelanggan" 
+                                        component="input" 
+                                        type="text" 
+                                        placeholder="Nomor Pelanggan PLN"
+                                        className="w-full p-2.5 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 outline-none text-sm"
+                                    />
+                                </div>
+                            </div>
 
-class Listrik extends React.Component{
-    constructor(props){
-        super(props)
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4 items-start">
+                                <label className="text-sm font-semibold text-gray-700 pt-2">Status Listrik</label>
+                                <div className="md:col-span-2 grid grid-cols-2 gap-3">
+                                    <label className="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition">
+                                        <Field name="jenis_pemakaian" component="input" type="radio" value="prabayar" className="w-4 h-4 text-green-600" />
+                                        <span className="ml-3 text-sm font-medium text-gray-600">Prabayar</span>
+                                    </label>
+                                    <label className="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition">
+                                        <Field name="jenis_pemakaian" component="input" type="radio" value="pascabayar" className="w-4 h-4 text-green-600" />
+                                        <span className="ml-3 text-sm font-medium text-gray-600">Pascabayar</span>
+                                    </label>
+                                </div>
+                            </div>
 
-        this.state = {
-            modalToggle: false
-        }
-        this.modalToggle = this.modalToggle.bind(this)
-        this.submitListrik = this.submitListrik.bind(this)
-    }
-    componentWillMount(){
-        this.props.dispatch(listrik.getById(cookies.get(cookieName), this.props.noPeserta))
-    }
-    modalToggle = () => {
-        this.setState({
-            modalToggle: !this.state.modalToggle
-        })
-    }
-    submitListrik = (values) => {
-        this.setState({
-            modalToggle: !this.state.modalToggle
-        })
-        var formData = new FormData()
-        for(var key in values){
-            var file = key.startsWith("file_scan") ? key : null
-            if(file){
-                formData.append(key, values[key][0])   
-                document.getElementById(file).value = null;     
-            }else{
-                formData.append(key, values[key])
-            }
-        }
-        this.props.dispatch(listrik.updateData(cookies.get(cookieName), formData, this.props.noPeserta))
-        this.props.dispatch(reset('DataListrikSeleksi'));
-    }
-    render(){
-        return (
-            <Row>
-                <Col md={12}>
-                    <Row>
-                        <Col md="6">
-                            <h4>Listrik</h4>
-                        </Col>
-                        <Col md="6" className="text-right">
-                            { this.props.editable && (
-                                <Button color="warning" size="sm" onClick={this.modalToggle}><i className="fa fa-pencil"></i> Perbarui</Button>
-                            )}
-                        </Col>
-                    </Row>
-                    <hr/>
-                    <Table responsive striped bordered>
-                        <tbody>
-                            <tr>
-                                <td width="30%">Nomor Pelanggan</td>
-                                <td width="5%">:</td>
-                                <td>{ this.props.listrik.no_pelanggan }</td>
-                            </tr>
-                            <tr>
-                                <td>Jenis Pemakaian</td>
-                                <td>:</td>
-                                <td>{ this.props.listrik.jenis_pemakaian }</td>
-                            </tr>
-                            <tr>
-                                <td>Biaya Listrik</td>
-                                <td>:</td>
-                                <td>{ rupiah(this.props.listrik.pengeluaran) } <b>/ 3 bulan terakhir</b></td>
-                            </tr>
-                            <tr>
-                                <td>Bukti Tagihan Listrik</td>
-                                <td>:</td>
-                                <td>
-                                { (this.props.listrik.scan_listrik !== "" && this.props.listrik.scan_listrik !== null) && (
-                                    <a href={ storage+"/"+this.props.listrik.scan_listrik } target="_blank" rel="noopener noreferrer">
-                                        <Button color="primary" size="sm"><i className="fa fa-download"></i> Lihat Scan Rekening Listrik</Button>
-                                    </a>
-                                )}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </Table>
-                    <FormListrik
-                        onSubmit={this.submitListrik}
-                        initialValues={this.props.listrik}
-                        toggleListrik={this.state.modalToggle}
-                        handleToggleListrik={this.modalToggle}
-                        /> 
-                </Col>
-            </Row>
-        )
-    }
-}
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4 items-start">
+                                <label className="text-sm font-semibold text-gray-700 pt-2">Biaya Listrik</label>
+                                <div className="md:col-span-2 space-y-3">
+                                    <div className="flex flex-col sm:flex-row gap-2">
+                                        <div className="flex-1">
+                                            <Field 
+                                                name="pengeluaran" 
+                                                component="input" 
+                                                type="number" 
+                                                validate={[money]}
+                                                className="w-full p-2.5 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 outline-none text-sm"
+                                            />
+                                        </div>
+                                        <div className="sm:w-1/2 bg-green-50 text-green-700 px-4 py-2.5 rounded-lg border border-green-200 font-bold text-center text-sm">
+                                            {rupiah(pengeluaran || 0)}
+                                        </div>
+                                    </div>
+                                    <div className="bg-blue-50 p-3 rounded-lg border border-blue-100 text-[11px] text-blue-700 italic">
+                                        * Masukkan rata-rata biaya 3 bulan terakhir.
+                                    </div>
+                                </div>
+                            </div>
 
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4 items-start border-t pt-6">
+                                <label className="text-sm font-semibold text-gray-700">Bukti Tagihan</label>
+                                <div className="md:col-span-2 space-y-4">
+                                    <Field name="file_scan_listrik" component={InputFileBs} type="file" id="file_scan_listrik" />
+                                    {initialValues?.scan_listrik && (
+                                        <a href={`${storage}/${initialValues.scan_listrik}`} target="_blank" rel="noreferrer" className="text-xs font-bold text-blue-600 hover:underline">
+                                            <i className="fa fa-file-pdf-o mr-2"></i> Lihat Dokumen Lama
+                                        </a>
+                                    )}
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div className="flex items-center justify-end p-4 border-t bg-gray-50 rounded-b-xl">
+                        <button onClick={handleToggleListrik} className="px-6 py-2 text-sm font-bold text-gray-500 hover:text-gray-700 mr-4 uppercase">Batal</button>
+                        <button type="submit" form="form-listrik" disabled={pristine || submitting} className="px-8 py-2.5 bg-green-600 hover:bg-green-700 text-white text-sm font-bold rounded-lg shadow-md transition disabled:opacity-50">
+                            <i className="fa fa-save mr-2"></i> SIMPAN
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+// 2. Bungkus dengan reduxForm TERLEBIH DAHULU
 FormListrik = reduxForm({
     form: 'DataListrikSeleksi',
     enableReinitialize: true,
-})(FormListrik)
+})(FormListrik);
 
-const selector = formValueSelector('DataListrikSeleksi')
-
+// 3. Kemudian hubungkan ke connect menggunakan selector
 FormListrik = connect((store) => {
-    let {pengeluaran, scan_listrik} = selector(store, 'pengeluaran', 'scan_listrik')
+    // Pastikan selector dipanggil dengan state store
+    const pengeluaran = selector(store, 'pengeluaran');
     return {
-        pengeluaran,
-        scan_listrik,
-    }
-})(FormListrik)
+        pengeluaran: pengeluaran
+    };
+})(FormListrik);
 
-export default connect(
-    (store) => ({
-        listrik: store.listrik.listrik,
-    })
-)(Listrik)
+/**
+ * KOMPONEN UTAMA
+ */
+class Listrik extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { modalToggle: false };
+    }
+
+    componentDidMount() {
+        this.props.dispatch(listrik.getById(cookies.get(cookieName), this.props.noPeserta));
+    }
+
+    modalToggle = () => {
+        this.setState({ modalToggle: !this.state.modalToggle });
+    }
+
+    submitListrik = (values) => {
+        this.modalToggle();
+        const formData = new FormData();
+        for (let key in values) {
+            if (key.startsWith("file_scan") && values[key] && values[key][0]) {
+                formData.append(key, values[key][0]);
+            } else {
+                formData.append(key, values[key]);
+            }
+        }
+        this.props.dispatch(listrik.updateData(cookies.get(cookieName), formData, this.props.noPeserta));
+        this.props.dispatch(reset('DataListrikSeleksi'));
+    }
+
+    render() {
+        const { listrik, editable } = this.props;
+
+        return (
+            <div className="w-full bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-6">
+                <div className="flex items-center justify-between p-5 border-b border-gray-100 bg-gray-50/50">
+                    <div className="flex items-center space-x-3">
+                        <div className="p-2 bg-yellow-400 rounded-lg"><i className="fa fa-bolt text-white"></i></div>
+                        <h4 className="text-lg font-bold text-gray-800 tracking-tight italic uppercase">Data Listrik</h4>
+                    </div>
+                    {editable && (
+                        <button onClick={this.modalToggle} className="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white text-xs font-bold rounded-lg shadow-sm transition">
+                            <i className="fa fa-pencil mr-2"></i> PERBARUI
+                        </button>
+                    )}
+                </div>
+
+                <div className="overflow-x-auto">
+                    <table className="w-full text-sm text-left">
+                        <tbody className="divide-y divide-gray-100">
+                            <tr>
+                                <td className="px-6 py-4 font-bold text-gray-500 bg-gray-50/30 w-1/3 uppercase text-[10px]">Nomor Pelanggan</td>
+                                <td className="px-6 py-4 text-gray-800 border-l border-gray-50 font-mono italic">{listrik.no_pelanggan || '-'}</td>
+                            </tr>
+                            <tr>
+                                <td className="px-6 py-4 font-bold text-gray-500 bg-gray-50/30 uppercase text-[10px]">Jenis Pemakaian</td>
+                                <td className="px-6 py-4 text-gray-800 border-l border-gray-50">
+                                    <span className="px-2 py-1 bg-blue-50 text-blue-700 rounded text-[11px] font-bold uppercase">
+                                        {listrik.jenis_pemakaian || '-'}
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className="px-6 py-4 font-bold text-gray-500 bg-gray-50/30 uppercase text-[10px]">Biaya Listrik</td>
+                                <td className="px-6 py-4 text-green-700 font-bold border-l border-gray-50">
+                                    {rupiah(listrik.pengeluaran)} <span className="text-gray-400 font-normal text-xs">/ 3 bln</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className="px-6 py-4 font-bold text-gray-500 bg-gray-50/30 uppercase text-[10px]">Dokumen</td>
+                                <td className="px-6 py-4 border-l border-gray-50">
+                                    {listrik.scan_listrik ? (
+                                        <a href={`${storage}/${listrik.scan_listrik}`} target="_blank" rel="noreferrer" className="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white text-[11px] font-bold rounded">
+                                            <i className="fa fa-file-pdf-o mr-2"></i> LIHAT STRUK
+                                        </a>
+                                    ) : <span className="text-red-400 italic text-xs">Belum ada berkas</span>}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <FormListrik
+                    onSubmit={this.submitListrik}
+                    initialValues={this.props.listrik}
+                    toggleListrik={this.state.modalToggle}
+                    handleToggleListrik={this.modalToggle}
+                />
+            </div>
+        );
+    }
+}
+
+// Map store state to Listrik props
+const mapStateToProps = (store) => ({
+    listrik: store.listrik.listrik || {},
+});
+
+export default connect(mapStateToProps)(Listrik);

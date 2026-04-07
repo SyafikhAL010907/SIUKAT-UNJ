@@ -1,222 +1,191 @@
 import React from 'react'
-import {Row, Col, Button,
-        TabContent, TabPane, Nav, NavItem, NavLink, Table } from 'reactstrap'
 import classnames from 'classnames';
 import { connect } from 'react-redux'
 import { cmahasiswa, ukt, user, hitung } from '../../../actions'
 import { Ayah, Ibu, Kendaraan, Listrik, Pendukung, Pribadi, Rumah, Wali } from './details'
 import { cookies, cookieName, rupiah } from '../../../global'
-        
-class DetailCmahasiswa extends React.Component{
-    constructor(props) {
-      super(props);
-  
-      this.toggle = this.toggle.bind(this);
-      this.state = {
-        activeTab: '1'
-      };
-    }
 
-    componentWillMount(){
-      this.props.dispatch(user.getByLoggedIn(cookies.get(cookieName)))
-      this.props.dispatch(cmahasiswa.getById(cookies.get(cookieName), this.props.match.params.no_peserta))
-      this.props.dispatch(ukt.getById(cookies.get(cookieName), this.props.match.params.no_peserta))
-      this.props.dispatch(hitung.flagHitung(cookies.get(cookieName), this.props.match.params.no_peserta))
-    }
-  
-    toggle(tab) {
-      if (this.state.activeTab !== tab) {
-        this.setState({
-          activeTab: tab
-        });
-      }
-    }
+class DetailCmahasiswa extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { activeTab: '1' };
+  }
 
-    batalKlarifikasi = () => {
-      this.props.dispatch(cmahasiswa.flagBatalKlarifikasi(cookies.get(cookieName), this.props.match.params.no_peserta))
-    }
+  componentWillMount() {
+    this.props.dispatch(user.getByLoggedIn(cookies.get(cookieName)))
+    this.props.dispatch(cmahasiswa.getById(cookies.get(cookieName), this.props.match.params.no_peserta))
+    this.props.dispatch(ukt.getById(cookies.get(cookieName), this.props.match.params.no_peserta))
+    this.props.dispatch(hitung.flagHitung(cookies.get(cookieName), this.props.match.params.no_peserta))
+  }
 
-    selesaiKlarifikasi = () => {
-      this.props.dispatch(cmahasiswa.flagSelesaiKlarifikasi(cookies.get(cookieName), this.props.match.params.no_peserta))      
+  toggle(tab) {
+    if (this.state.activeTab !== tab) {
+      this.setState({ activeTab: tab });
     }
-    selesaiHitung = () => {
-      this.props.dispatch(hitung.flagHitung(cookies.get(cookieName), this.props.match.params.no_peserta))      
-    }
-    render(){
-        return(
-            <div>
-              { this.props.cmahasiswa.golongan_id && (
-                <div>
-                  <Row>
-                    <Col md="6">
-                      <h4><small>UKT Saat Ini:</small> { rupiah(this.props.ukt[this.props.cmahasiswa.golongan_id])} ({this.props.cmahasiswa.golongan_id}) {(this.props.cmahasiswa.penalty === '1') ? "- Penalty": ""} </h4>
-                    </Col>
-                    <Col md="6" className="text-right">
-                      { this.props.cmahasiswa.atribut === "sanggah" && 
-                        this.props.cmahasiswa.flag === "sanggah_ukt" && (
-                        <div>
-                          <Button size="md" color="primary" onClick={this.selesaiKlarifikasi.bind(this)}>Selesai Klarifikasi</Button>{" "}
-                          <Button size="md" color="danger" onClick={this.batalKlarifikasi.bind(this)}>Batal Klarifikasi</Button>
-                        </div>
-                      )}
-                    </Col>     
-                  </Row>
-                  <hr/>
-                </div>                
-              )}
-              <Nav tabs>
-                <NavItem>
-                  <NavLink
-                    className={classnames({ active: this.state.activeTab === '1' })}
-                    onClick={() => { this.toggle('1'); }}
-                  >
-                    Data Pribadi
-                  </NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink
-                    className={classnames({ active: this.state.activeTab === '2' })}
-                    onClick={() => { this.toggle('2'); }}
-                  >
-                    Data Ayah/Ibu/Wali
-                  </NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink
-                    className={classnames({ active: this.state.activeTab === '3' })}
-                    onClick={() => { this.toggle('3'); }}
-                  >
-                    Data Rumah & Listrik
-                  </NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink
-                    className={classnames({ active: this.state.activeTab === '4' })}
-                    onClick={() => { this.toggle('4'); }}
-                  >
-                    Data Kendaraan
-                  </NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink
-                    className={classnames({ active: this.state.activeTab === '5' })}
-                    onClick={() => { this.toggle('5'); }}
-                  >
-                    Data Pendukung
-                  </NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink
-                    className={classnames({ active: this.state.activeTab === '6' })}
-                    onClick={() => { this.toggle('6'); }}
-                  >
-                    Coba Menghitung
-                  </NavLink>
-                </NavItem>
-              </Nav>
-              <TabContent activeTab={this.state.activeTab}>
-                <TabPane tabId="1">
-                  <Pribadi 
-                    noPeserta={this.props.match.params.no_peserta}
-                    editable={(this.props.cmahasiswa.atribut === "sanggah" && 
-                        this.props.cmahasiswa.flag === "sanggah_ukt") || (this.props.user && this.props.user.role === "admin")}
-                    />
-                </TabPane>
-                <TabPane tabId="2">
-                  <Row>
-                    <Col sm="6">
-                      <Ayah 
-                        noPeserta={this.props.match.params.no_peserta}
-                        editable={this.props.cmahasiswa.atribut === "sanggah" && 
-                        this.props.cmahasiswa.flag === "sanggah_ukt"}/>
-                    </Col>
-                    <Col sm="6">
-                      <Ibu 
-                        noPeserta={this.props.match.params.no_peserta}
-                        editable={(this.props.cmahasiswa.atribut === "sanggah" && 
-                        this.props.cmahasiswa.flag === "sanggah_ukt") || (this.props.user && this.props.user.role === "admin")}
-                        />
-                    </Col>
-                  </Row>
-                  <hr/>
-                  <Row>
-                    <Col sm="12">
-                      <Wali 
-                        noPeserta={this.props.match.params.no_peserta}
-                        editable={(this.props.cmahasiswa.atribut === "sanggah" && 
-                        this.props.cmahasiswa.flag === "sanggah_ukt") || (this.props.user && this.props.user.role === "admin")}
-                        />
-                    </Col>
-                  </Row>
-                </TabPane>
-                <TabPane tabId="3">
-                    <Row>
-                        <Col sm="12">
-                            <Row>
-                                <Col sm="6"><Rumah 
-                                              noPeserta={this.props.match.params.no_peserta}
-                                              editable={this.props.cmahasiswa.atribut === "sanggah" && 
-                                              this.props.cmahasiswa.flag === "sanggah_ukt"}
-                                              /></Col>
-                                <Col sm="6"><Listrik 
-                                              noPeserta={this.props.match.params.no_peserta}
-                                              editable={this.props.cmahasiswa.atribut === "sanggah" && 
-                                              this.props.cmahasiswa.flag === "sanggah_ukt"}
-                                              /></Col>
-                            </Row>
-                        </Col>
-                    </Row>
-                </TabPane>
-                <TabPane tabId="4">
-                    <Row>
-                        <Col sm="12">
-                            <Kendaraan 
-                              noPeserta={this.props.match.params.no_peserta}
-                              editable={this.props.cmahasiswa.atribut === "sanggah" && 
-                              this.props.cmahasiswa.flag === "sanggah_ukt"}
-                              />
-                        </Col>
-                    </Row>
-                </TabPane>
-                <TabPane tabId="5">
-                    <Row>
-                        <Col sm="12">
-                            <Pendukung 
-                              noPeserta={this.props.match.params.no_peserta}
-                              editable={this.props.cmahasiswa.atribut === "sanggah" && 
-                              this.props.cmahasiswa.flag === "sanggah_ukt"}
-                              />
-                        </Col>
-                    </Row>
-                </TabPane>
-                <TabPane tabId="6">
-                    <Row>
-                        <Col sm="12">
-                          <h4>Coba Menghitung</h4>
-                          <hr/>
-                          <Button size="md" color="primary" onClick={this.selesaiHitung.bind(this)}>Coba Menghitung Ulang</Button>{" "}
-                          <br/><br/>
-                          <Table>
-                            <tbody>
-                              <tr>
-                                <th>UKT yang harusnya didapat</th>
-                                <td>:</td>
-                                <td>{this.props.hitung.choosenUkt} - { rupiah(this.props.ukt[this.props.hitung.choosenUkt])}</td>
-                              </tr>
-                              <tr>
-                                <th>Indeks Kemampuan Bayar</th>
-                                <td>:</td>
-                                <td>{(this.props.hitung.ikb !== undefined) ? rupiah(parseInt(this.props.hitung.ikb, 10)) : "Rp. 0"}</td>
-                              </tr>
-                            </tbody>
-                          </Table>
-                        </Col>
-                    </Row>
-                </TabPane>
-              </TabContent>
+  }
+
+  batalKlarifikasi = () => {
+    this.props.dispatch(cmahasiswa.flagBatalKlarifikasi(cookies.get(cookieName), this.props.match.params.no_peserta))
+  }
+
+  selesaiKlarifikasi = () => {
+    this.props.dispatch(cmahasiswa.flagSelesaiKlarifikasi(cookies.get(cookieName), this.props.match.params.no_peserta))
+  }
+
+  selesaiHitung = () => {
+    this.props.dispatch(hitung.flagHitung(cookies.get(cookieName), this.props.match.params.no_peserta))
+  }
+
+  render() {
+    const { activeTab } = this.state;
+    const isSanggah = this.props.cmahasiswa.atribut === "sanggah" && this.props.cmahasiswa.flag === "sanggah_ukt";
+
+    return (
+      <div className="space-y-6">
+        {/* Header Section: UKT Info & Actions */}
+        {this.props.cmahasiswa.golongan_id && (
+          <div className="bg-white p-6 rounded-2xl border border-emerald-100 shadow-sm flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="flex items-center space-x-4">
+              <div className="bg-emerald-700 p-3 rounded-xl shadow-lg shadow-emerald-200">
+                <i className="fa fa-money text-yellow-400 text-xl"></i>
+              </div>
+              <div>
+                <p className="text-xs font-bold text-emerald-800 uppercase tracking-wider">UKT Saat Ini</p>
+                <h4 className="text-xl font-extrabold text-gray-800">
+                  {rupiah(this.props.ukt[this.props.cmahasiswa.golongan_id])} 
+                  <span className="ml-2 text-emerald-600">({this.props.cmahasiswa.golongan_id})</span>
+                  {this.props.cmahasiswa.penalty === '1' && <span className="ml-2 text-red-500 text-sm font-medium border-l pl-2 border-gray-200 italic">- Penalty</span>}
+                </h4>
+              </div>
             </div>
-        )
-    }
+
+            {isSanggah && (
+              <div className="flex space-x-3">
+                <button 
+                  onClick={this.selesaiKlarifikasi}
+                  className="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-bold transition-all shadow-md active:scale-95"
+                >
+                  <i className="fa fa-check mr-2"></i>Selesai Klarifikasi
+                </button>
+                <button 
+                  onClick={this.batalKlarifikasi}
+                  className="px-5 py-2 bg-white border-2 border-red-100 text-red-600 hover:bg-red-50 rounded-xl text-sm font-bold transition-all active:scale-95"
+                >
+                  <i className="fa fa-times mr-2"></i>Batal
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Tab Navigation */}
+        <div className="bg-gray-100/50 p-1 rounded-2xl flex flex-wrap gap-1">
+          {[
+            { id: '1', label: 'Pribadi', icon: 'fa-user' },
+            { id: '2', label: 'Orang Tua/Wali', icon: 'fa-users' },
+            { id: '3', label: 'Rumah & Listrik', icon: 'fa-home' },
+            { id: '4', label: 'Kendaraan', icon: 'fa-motorcycle' },
+            { id: '5', label: 'Pendukung', icon: 'fa-file-text' },
+            { id: '6', label: 'Simulasi Hitung', icon: 'fa-calculator' },
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => this.toggle(tab.id)}
+              className={classnames(
+                "flex-1 min-w-[140px] px-4 py-3 rounded-xl text-sm font-bold transition-all flex items-center justify-center space-x-2",
+                activeTab === tab.id 
+                  ? "bg-white text-emerald-800 shadow-sm border-b-2 border-yellow-400" 
+                  : "text-gray-500 hover:bg-gray-200/50 hover:text-emerald-700"
+              )}
+            >
+              <i className={`fa ${tab.icon} ${activeTab === tab.id ? 'text-emerald-600' : 'text-gray-400'}`}></i>
+              <span>{tab.label}</span>
+            </button>
+          ))}
+        </div>
+
+        {/* Tab Content Area */}
+        <div className="bg-white rounded-2xl border border-gray-100 p-6 min-h-[400px]">
+          {activeTab === '1' && (
+            <div className="animate-fadeIn">
+              <Pribadi 
+                noPeserta={this.props.match.params.no_peserta}
+                editable={isSanggah || (this.props.user && this.props.user.role === "admin")}
+              />
+            </div>
+          )}
+
+          {activeTab === '2' && (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-fadeIn">
+              <Ayah noPeserta={this.props.match.params.no_peserta} editable={isSanggah} />
+              <Ibu noPeserta={this.props.match.params.no_peserta} editable={isSanggah || (this.props.user && this.props.user.role === "admin")} />
+              <div className="lg:col-span-2 pt-6 border-t border-dashed">
+                <Wali noPeserta={this.props.match.params.no_peserta} editable={isSanggah || (this.props.user && this.props.user.role === "admin")} />
+              </div>
+            </div>
+          )}
+
+          {activeTab === '3' && (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-fadeIn">
+              <Rumah noPeserta={this.props.match.params.no_peserta} editable={isSanggah} />
+              <Listrik noPeserta={this.props.match.params.no_peserta} editable={isSanggah} />
+            </div>
+          )}
+
+          {activeTab === '4' && (
+            <div className="animate-fadeIn">
+              <Kendaraan noPeserta={this.props.match.params.no_peserta} editable={isSanggah} />
+            </div>
+          )}
+
+          {activeTab === '5' && (
+            <div className="animate-fadeIn">
+              <Pendukung noPeserta={this.props.match.params.no_peserta} editable={isSanggah} />
+            </div>
+          )}
+
+          {activeTab === '6' && (
+            <div className="animate-fadeIn max-w-2xl mx-auto">
+              <div className="text-center mb-8">
+                <div className="inline-block p-4 bg-yellow-50 rounded-full mb-4">
+                  <i className="fa fa-calculator text-3xl text-yellow-600"></i>
+                </div>
+                <h3 className="text-xl font-bold text-emerald-900">Simulasi Perhitungan UKT</h3>
+                <p className="text-sm text-gray-500 mt-2">Hitung ulang potensi UKT berdasarkan data terbaru mahasiswa.</p>
+              </div>
+              
+              <button 
+                onClick={this.selesaiHitung}
+                className="w-full py-3 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl font-bold shadow-lg shadow-emerald-100 transition-all mb-8 flex items-center justify-center space-x-2"
+              >
+                <i className="fa fa-refresh"></i>
+                <span>Coba Menghitung Ulang</span>
+              </button>
+
+              <div className="bg-gray-50 rounded-2xl overflow-hidden border border-gray-100">
+                <table className="w-full text-left text-sm">
+                  <tbody>
+                    <tr className="border-b border-gray-100">
+                      <th className="px-6 py-4 font-bold text-gray-600 bg-white w-1/2">UKT yang harusnya didapat</th>
+                      <td className="px-6 py-4 font-extrabold text-emerald-700 italic">
+                        {this.props.hitung.choosenUkt} — {rupiah(this.props.ukt[this.props.hitung.choosenUkt])}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th className="px-6 py-4 font-bold text-gray-600 bg-white">Indeks Kemampuan Bayar (IKB)</th>
+                      <td className="px-6 py-4 font-mono font-bold text-gray-800">
+                        {(this.props.hitung.ikb !== undefined) ? rupiah(parseInt(this.props.hitung.ikb, 10)) : "Rp. 0"}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    )
+  }
 }
 
 export default connect(

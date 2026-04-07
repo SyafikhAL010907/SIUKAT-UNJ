@@ -1,122 +1,182 @@
 import React from 'react'
-import {Link} from 'react-router-dom'
-import {Button, Table, Pagination, PaginationItem, PaginationLink, InputGroup, InputGroupAddon, Input} from 'reactstrap'
+import { Link } from 'react-router-dom'
 
-class DataTable extends React.Component{
-    renderColumns(){
+class DataTable extends React.Component {
+    renderColumns() {
         return Object.entries(this.props.columns).map((data, key) => (
-            <th key={key}>{data[1]}</th>
+            <th key={key} className="px-6 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">
+                {data[1]}
+            </th>
         ))
     }
-    renderValues(values){
+
+    renderValues(values) {
         return Object.entries(this.props.columns).map((data, key) => {
-            if(key !== Object.entries(this.props.columns).length - 1){
-                let key = data[0].split(".")
-                let val = (key.length > 1) ? (values[key[0]] ? values[key[0]][key[1]] : "") : values[data[0]]   // Safety Check: Avoid crash if related object is undefined
+            const isLast = key === Object.entries(this.props.columns).length - 1;
+            
+            if (!isLast) {
+                let keys = data[0].split(".")
+                let val = (keys.length > 1) ? (values[keys[0]] ? values[keys[0]][keys[1]] : "") : values[data[0]]
                 return (
-                    <td key={key}>{val}</td>
+                    <td key={key} className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                        {val}
+                    </td>
                 )
-            }else{
-                if(this.props.update !== undefined && this.props.delete !== undefined){
-                    return (
-                        <td key={key}>
-                            <Button color="warning" className="btn-sm" onClick={(e) => this.props.update(e, values[this.props.primaryKey])}><i className="fa fa-pencil"></i> Perbarui</Button>{" "}
-                            <Button color="danger" className="btn-sm" onClick={(e) => this.props.delete(e, values[this.props.primaryKey])}><i className="fa fa-close"></i> Hapus</Button>
-                        </td>
-                    )
-                }else{
-                    return (
-                        <td key={key}>
-                            <Link to={"/admin/peserta/" + values[this.props.primaryKey]} className="btn btn-sm btn-warning"><i className="fa fa-eye"></i> Lihat</Link>
-                        </td>
-                    )
-                }
+            } else {
+                return (
+                    <td key={key} className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                        {this.props.update !== undefined && this.props.delete !== undefined ? (
+                            <>
+                                <button 
+                                    onClick={(e) => this.props.update(e, values[this.props.primaryKey])}
+                                    className="inline-flex items-center px-3 py-1 bg-yellow-400 hover:bg-yellow-500 text-emerald-900 text-xs font-bold rounded transition-colors shadow-sm"
+                                >
+                                    <i className="fa fa-pencil mr-1"></i> Edit
+                                </button>
+                                <button 
+                                    onClick={(e) => this.props.update(e, values[this.props.primaryKey])}
+                                    className="inline-flex items-center px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded transition-colors shadow-sm"
+                                >
+                                    <i className="fa fa-close mr-1"></i> Hapus
+                                </button>
+                            </>
+                        ) : (
+                            <Link 
+                                to={"/admin/peserta/" + values[this.props.primaryKey]} 
+                                className="inline-flex items-center px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded transition-colors shadow-sm"
+                            >
+                                <i className="fa fa-eye mr-1"></i> Lihat
+                            </Link>
+                        )}
+                    </td>
+                )
             }
         })
     }
-    renderList(){
-        return Array.isArray(this.props.data) ? this.props.data.map((data, key) => {
-            return (
-                <tr key={key}>
-                    <td>{key+1}</td>
-                    {this.renderValues(data)}
-                </tr>
-            )
-        }) : ""
-    }
-    renderPagination(){
-        let pagination = [],
-            currentPage = parseInt(this.props.currentPage, 10),
-            totalPages = parseInt(this.props.totalPages, 10),
-            prevBool = false, 
-            nextBool = false,
-            active = false
 
-        // PREV BUTTON
-        if(currentPage === 1) prevBool=true
-        pagination.push(<PaginationItem key="0" disabled={prevBool}><PaginationLink previous href="" 
-                        onClick={(e) => this.props.renderData(e, this.props.perPage, currentPage-1, this.props.keyword)}>Sebelumnya</PaginationLink></PaginationItem>)
-        
-        // NAV BUTTON
-        let start   = (this.props.currentPage===1)?this.props.currentPage:(this.props.currentPage>=4)?this.props.currentPage-3:this.props.currentPage-(this.props.currentPage-1),
-            end     = (this.props.totalPages>4)?this.props.currentPage+3:this.props.totalPages
-        for(let i = start; i<=end; i++){
-            active = (i===currentPage) ? true : false
-            pagination.push(<PaginationItem key={i} active={active}><PaginationLink href="" 
-                            onClick={(e) => this.props.renderData(e, this.props.perPage, i, this.props.keyword)}>{i}</PaginationLink></PaginationItem>)
+    renderList() {
+        return Array.isArray(this.props.data) ? this.props.data.map((data, key) => (
+            <tr key={key} className="hover:bg-emerald-50 transition-colors border-b border-gray-100">
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-emerald-800 bg-gray-50/50">
+                    {key + 1}
+                </td>
+                {this.renderValues(data)}
+            </tr>
+        )) : null
+    }
+
+    renderPagination() {
+        let items = [];
+        let currentPage = parseInt(this.props.currentPage, 10);
+        let totalPages = parseInt(this.props.totalPages, 10);
+
+        const btnClass = "relative inline-flex items-center px-4 py-2 border text-sm font-medium transition-colors ";
+        const activeClass = "z-10 bg-emerald-700 border-emerald-700 text-white";
+        const inactiveClass = "bg-white border-gray-300 text-gray-500 hover:bg-emerald-50 hover:text-emerald-700";
+
+        // Previous
+        items.push(
+            <button
+                key="prev"
+                disabled={currentPage === 1}
+                onClick={(e) => this.props.renderData(e, this.props.perPage, currentPage - 1, this.props.keyword)}
+                className={`${btnClass} rounded-l-md ${currentPage === 1 ? 'bg-gray-100 text-gray-400' : inactiveClass}`}
+            >
+                Prev
+            </button>
+        );
+
+        // Numbers
+        let start = (currentPage === 1) ? 1 : (currentPage >= 4) ? currentPage - 2 : 1;
+        let end = Math.min(start + 4, totalPages);
+
+        for (let i = start; i <= end; i++) {
+            items.push(
+                <button
+                    key={i}
+                    onClick={(e) => this.props.renderData(e, this.props.perPage, i, this.props.keyword)}
+                    className={`${btnClass} ${i === currentPage ? activeClass : inactiveClass}`}
+                >
+                    {i}
+                </button>
+            );
         }
 
-        // NEXT BUTTON
-        if(totalPages === currentPage) nextBool = true
-        pagination.push(<PaginationItem key="999" disabled={nextBool}><PaginationLink next href="" 
-                        onClick={(e) => this.props.renderData(e, this.props.perPage, currentPage+1, this.props.keyword)}>Berikutnya</PaginationLink></PaginationItem>)
+        // Next
+        items.push(
+            <button
+                key="next"
+                disabled={currentPage === totalPages}
+                onClick={(e) => this.props.renderData(e, this.props.perPage, currentPage + 1, this.props.keyword)}
+                className={`${btnClass} rounded-r-md ${currentPage === totalPages ? 'bg-gray-100 text-gray-400' : inactiveClass}`}
+            >
+                Next
+            </button>
+        );
 
-        return pagination
+        return items;
     }
-    render(){
-        // console.log(this.props.data)
-        return(
-            <div>
-                <div className="clearfix">
-                    <div className="float-left">
-                        <InputGroup>
-                            <span style={{paddingTop: '7px'}}>Tampilkan</span>
-                            <Input type="select" id="perPage" name="perPage" className="margin-side-5" value={this.props.perPage} onChange={this.props.handlePerPage}>
-                                <option value="10">10</option>
-                                <option value="25">25</option>
-                                <option value="50">50</option>
-                                <option value="100">100</option>
-                            </Input>
-                            <span style={{paddingTop: '7px'}}>Per Halaman</span>
-                        </InputGroup>
+
+    render() {
+        return (
+            <div className="bg-white rounded-xl shadow-md overflow-hidden border border-emerald-100">
+                {/* Header Controls */}
+                <div className="p-5 flex flex-col md:flex-row justify-between items-center gap-4 bg-white border-b border-gray-100">
+                    <div className="flex items-center space-x-3">
+                        <span className="text-sm font-medium text-gray-600">Tampilkan</span>
+                        <select 
+                            value={this.props.perPage} 
+                            onChange={this.props.handlePerPage}
+                            className="block w-20 pl-3 pr-10 py-1.5 text-sm border-emerald-200 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 rounded-md shadow-sm"
+                        >
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                        </select>
+                        <span className="text-sm font-medium text-gray-600">Entri</span>
                     </div>
-                    <div className="float-right">
-                        <InputGroup>
-                            <InputGroupAddon addonType="prepend"><i className="fa fa-search"></i></InputGroupAddon>
-                            <Input type="text" id="keyword" name="keyword" placeholder="Pencarian" value={this.props.keyword} onChange={this.props.handleSearch}/>
-                        </InputGroup>
+
+                    <div className="relative w-full md:w-64">
+                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i className="fa fa-search text-emerald-500"></i>
+                        </div>
+                        <input
+                            type="text"
+                            placeholder="Cari data..."
+                            value={this.props.keyword}
+                            onChange={this.props.handleSearch}
+                            className="block w-full pl-10 pr-3 py-2 border border-emerald-200 rounded-lg leading-5 bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm transition-all"
+                        />
                     </div>
                 </div>
-                <Table responsive striped className="margin-top-20">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            {this.renderColumns()}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {this.renderList()}
-                    </tbody>
-                </Table>
-                <div className="clearfix">
-                    <div className="float-left">
-                        Menampilkan {(this.props.data.length > this.props.perPage) ? this.props.perPage : this.props.data.length} dari total <b>{this.props.total}</b> data
+
+                {/* Table Area */}
+                <div className="overflow-x-auto">
+                    <table className="min-w-full divide-y divide-emerald-200">
+                        <thead className="bg-emerald-700">
+                            <tr>
+                                <th className="px-6 py-3 text-left text-xs font-bold text-yellow-400 uppercase tracking-wider">
+                                    No
+                                </th>
+                                {this.renderColumns()}
+                            </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-200">
+                            {this.renderList()}
+                        </tbody>
+                    </table>
+                </div>
+
+                {/* Footer / Pagination */}
+                <div className="px-5 py-4 flex flex-col md:flex-row justify-between items-center bg-gray-50 border-t border-emerald-100">
+                    <div className="mb-4 md:mb-0">
+                        <p className="text-sm text-gray-600">
+                            Menampilkan <span className="font-bold text-emerald-700">{(this.props.data.length > this.props.perPage) ? this.props.perPage : this.props.data.length}</span> dari <span className="font-bold text-emerald-700">{this.props.total}</span> data
+                        </p>
                     </div>
-                    <div className="float-right">
-                        <Pagination>
-                            {this.renderPagination()}
-                        </Pagination>
-                    </div>
+                    <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                        {this.renderPagination()}
+                    </nav>
                 </div>
             </div>
         )

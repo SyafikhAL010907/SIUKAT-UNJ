@@ -1,104 +1,120 @@
 import React from 'react'
-import {Row, Col, Card, CardHeader, CardBody, Button} from 'reactstrap'
 import { cmahasiswa, user } from '../../../actions'
 import { connect } from 'react-redux'
 import { cookies, cookieName } from '../../../global'
 import { DataTable, SummaryCmahasiswa, Exports } from '../../components'
-    
 
-class CalonMahasiswa extends React.Component{
-    constructor(props){
+class CalonMahasiswa extends React.Component {
+    constructor(props) {
         super(props)
         this.state = {
             toggleCalonMahasiswa: false,
             perPage: 10,
             keyword: ""
         }
-        this.toggleCalonMahasiswa = this.toggleCalonMahasiswa.bind(this)
-        this.renderData = this.renderData.bind(this)
-        this.handleSearch = this.handleSearch.bind(this)
-        this.handlePerPage = this.handlePerPage.bind(this)
     }
-    toggleCalonMahasiswa(){
-        this.setState({
-            toggleCalonMahasiswa: !this.state.toggleCalonMahasiswa
-        })
-    }
-    componentWillMount(){
+
+    componentWillMount() {
         this.props.dispatch(user.getByLoggedIn(cookies.get(cookieName)))
-        this.props.dispatch(cmahasiswa.fetchCmahasiswa(cookies.get(cookieName), {perPage: 10, page: 1, keyword: ""}))    
+        this.props.dispatch(cmahasiswa.fetchCmahasiswa(cookies.get(cookieName), { perPage: 10, page: 1, keyword: "" }))
     }
-    
+
     // DATATABLE HANDLERS
-    renderData(e, perPage=10, to=1, key=null){
-        e.preventDefault()
-        this.props.dispatch(cmahasiswa.fetchCmahasiswa(cookies.get(cookieName), {perPage: perPage, page: to, keyword: key}))
+    renderData = (e, perPage = 10, to = 1, key = null) => {
+        if (e) e.preventDefault()
+        this.props.dispatch(cmahasiswa.fetchCmahasiswa(cookies.get(cookieName), { perPage: perPage, page: to, keyword: key }))
     }
-    handlePerPage(e){
-        this.setState({
-            perPage: e.target.value
-        })
-        this.renderData(e, e.target.value, 1, this.state.keyword)        
+
+    handlePerPage = (e) => {
+        this.setState({ perPage: e.target.value })
+        this.renderData(e, e.target.value, 1, this.state.keyword)
     }
-    handleSearch(e){
-        this.setState({
-            keyword: e.target.value
-        })
+
+    handleSearch = (e) => {
+        this.setState({ keyword: e.target.value })
         this.renderData(e, this.state.perPage, 1, e.target.value)
     }
 
-    render(){
-        return(
-            <Row>
-                <Col xs="12">
-                    <SummaryCmahasiswa/>
-                    <Card className="card-accent-success">
-                        <CardHeader>
-                            <Row>
-                                <Col md="6"><span>Data Master</span></Col>
-                                <Col md="6" className="text-right">
-                                    {/* <Button className="btn btn-sm btn-success margin-left-10"><i className="fa fa-file-pdf-o"></i> PDF Bidik Misi</Button>
-                                    <Button className="btn btn-sm btn-danger margin-left-10 margin-top-10"><i className="fa fa-file-excel-o"></i> Excel Bidik Misi</Button> */}
-                                
-                                    <Button className="btn btn-sm btn-success margin-left-10">
-                                        <i className="fa fa-file-pdf-o"></i> PDF Data Master
-                                    </Button>
-                                    <Exports count={this.props.count} title="Data Master"/>
-                                    {/* <Button className="btn btn-sm btn-info text-white margin-left-10 margin-top-10" onClick={(e)=>{this.handleExport(e,"csv")}}><i className="fa fa-file-excel-o"></i> Excel Calon Mahasiswa</Button> */}
-                                </Col>
-                            </Row>
-                        </CardHeader>
-                        <CardBody className="card-body">
-                            <DataTable 
+    render() {
+        return (
+            <div className="p-4 md:p-8 space-y-8 bg-gray-50 min-h-screen">
+                
+                {/* Section Summary / Statistik Teratas */}
+                <div className="animate-fadeIn">
+                    <SummaryCmahasiswa />
+                </div>
+
+                {/* Main Card Container */}
+                <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+                    
+                    {/* Header: Judul & Actions */}
+                    <div className="p-6 border-b border-gray-50 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div className="flex items-center space-x-3">
+                            <div className="w-1.5 h-8 bg-emerald-600 rounded-full"></div>
+                            <div>
+                                <h2 className="text-xl font-bold text-gray-800">Data Master</h2>
+                                <p className="text-xs text-gray-400 font-medium tracking-wide">CALON MAHASISWA BARU</p>
+                            </div>
+                        </div>
+
+                       <div className="flex flex-wrap items-center gap-2">
+                        {/* Tombol PDF */}
+                        <button className="flex items-center space-x-2 px-4 py-2 bg-white text-red-600 hover:bg-red-50 border border-red-200 rounded-xl text-sm font-bold transition-all shadow-sm active:scale-95">
+                            <i className="fa fa-file-pdf-o"></i>
+                            <span>PDF Master</span>
+                        </button>
+
+                        {/* Komponen Exports - Kita hilangkan background emerald dari pembungkusnya 
+                            agar tidak "double button", biarkan class di dalam komponen Exports yang bekerja */}
+                        <div className="inline-block outline-none shadow-sm rounded-xl overflow-hidden active:scale-95 transition-transform">
+                            <Exports 
+                                count={this.props.count} 
+                                title="Data Master" 
+                                className="btn-excel-modern" // Jika komponen Exports menerima custom class
+                            />
+                        </div>
+                    </div>
+                    </div>
+
+                    {/* Table Section */}
+                    <div className="p-4 sm:p-6">
+                        <div className="bg-white rounded-2xl overflow-hidden border border-gray-50">
+                            <DataTable
                                 data={this.props.cmahasiswa}
                                 columns={{
                                     no_peserta: "Nomor Peserta",
-                                    nama_cmahasiswa: "Nama Lengkap", 
-                                    bidik_misi_cmahasiswa: "BM", 
-                                    "fakultas.nama": "Fakultas", 
-                                    "prodi.nama": "Program Studi", 
+                                    nama_cmahasiswa: "Nama Lengkap",
+                                    bidik_misi_cmahasiswa: "BM",
+                                    "fakultas.nama": "Fakultas",
+                                    "prodi.nama": "Program Studi",
                                     golongan_id: "Kelompok UKT",
                                     "ukt.nominal": "Nominal UKT",
                                     flag: "Status",
                                     ukt_tinggi: "UKT Tinggi",
-                                    aksi:'Aksi'
+                                    aksi: 'Aksi'
                                 }}
                                 primaryKey="no_peserta"
                                 total={this.props.count}
-
                                 currentPage={this.props.currentPage}
                                 totalPages={this.props.totalPages}
                                 perPage={this.state.perPage}
                                 keyword={this.state.keyword}
-                                
                                 handlePerPage={this.handlePerPage}
                                 handleSearch={this.handleSearch}
                                 renderData={this.renderData}
-                                />
-                        </CardBody>
-                    </Card>
-                </Col>
-            </Row>
+                            />
+                        </div>
+                    </div>
+
+                    {/* Footer Info */}
+                    <div className="px-6 py-4 bg-gray-50/50 border-t border-gray-50">
+                        <div className="flex items-center text-xs text-gray-400 space-x-4">
+                            <span className="flex items-center"><span className="w-2 h-2 bg-emerald-500 rounded-full mr-2"></span> Terverifikasi</span>
+                            <span className="flex items-center"><span className="w-2 h-2 bg-red-500 rounded-full mr-2"></span> Belum Lapor Diri</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         )
     }
 }
@@ -110,6 +126,5 @@ export default connect((store) => ({
     currentPage: store.cmahasiswa.datatable.currentPage,
     perPage: store.cmahasiswa.datatable.perPage,
     keyword: store.cmahasiswa.datatable.keyword,
-
     user: store.user.user
 }))(CalonMahasiswa)
