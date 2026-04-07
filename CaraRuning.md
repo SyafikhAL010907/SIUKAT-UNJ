@@ -6,6 +6,9 @@
 cd BackEnd-Siukat > go run cmd/api/main.go
 go build ./cmd/api/main.go
 
+cd FrontEndAdmin-Siukat > npm install
+cd FrontEndAdmin-Siukat > npm start
+
 cd FrontEndCMahasiswa-Siukat > npm install
 cd FrontEndCMahasiswa-Siukat > npm start
 
