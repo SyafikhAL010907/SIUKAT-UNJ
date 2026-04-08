@@ -3,6 +3,7 @@ import { Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { user } from '../../../../actions';
 import { notif, cookies, cookieName } from '../../../../global';
+import logoUnj from "../../../../views/dist/images/unj.png";
 
 class Header extends Component {
   constructor(props) {
@@ -61,11 +62,8 @@ class Header extends Component {
             </button>
 
             <div className="flex items-center gap-3">
-              <div className="relative group">
-                <div className="absolute -inset-1 rounded-lg bg-gradient-to-r from-green-600 to-yellow-400 opacity-25 blur transition duration-1000 group-hover:opacity-50"></div>
-                <div className="relative flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-green-600 to-green-700 font-bold text-white shadow-lg shadow-green-200">
-                  <span className="text-xl">U</span>
-                </div>
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white p-1">
+                <img src={logoUnj} alt="Logo UNJ" className="h-full w-auto object-contain" />
               </div>
               
               <div className="flex flex-col leading-tight">
@@ -114,7 +112,7 @@ class Header extends Component {
             {/* LOGOUT */}
             <button 
               onClick={this.logout}
-              className="group flex h-10 w-10 items-center justify-center rounded-xl bg-white border border-red-100 text-red-500 transition-all hover:bg-red-500 hover:text-white hover:shadow-lg hover:shadow-red-200 active:scale-95"
+              className="group flex h-10 w-10 items-center justify-center rounded-xl bg-white border border-red-100 text-red-500 transition-all hover:bg-red-500 hover:text-red-500 hover:shadow-lg hover:shadow-red-200 active:scale-95"
               title="Keluar Aplikasi"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 transition-transform group-hover:rotate-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">

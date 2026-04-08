@@ -1,191 +1,86 @@
 import React from 'react'
-import {Row, Col, Card, CardBody, CardTitle, CardFooter } from 'reactstrap'
 import { SummaryCmahasiswa, DashboardChartMetadata } from '../components';
 import { dashboard } from "../../actions"
-
 import { connect } from 'react-redux'
 import { cookies, cookieName } from "../../global"
 
-// const brandPrimary = '#20a8d8';
-// const brandSuccess = '#4dbd74';
-const brandInfo = '#63c2de';
-// const brandWarning = '#f8cb00';
-// const brandDanger = '#f86c6b';
-
-// convert Hex to RGBA
-function convertHex(hex, opacity) {
-    hex = hex.replace('#', '');
-    var r = parseInt(hex.substring(0, 2), 16);
-    var g = parseInt(hex.substring(2, 4), 16);
-    var b = parseInt(hex.substring(4, 6), 16);
-  
-    var result = 'rgba(' + r + ',' + g + ',' + b + ',' + opacity / 100 + ')';
-    return result;
-}
-
-class Dashboards extends React.Component{
-    constructor(props){
-        super(props);        
+class Dashboards extends React.Component {
+    constructor(props) {
+        super(props);
         this.state = {
-            fields:[],
-            startDates:[],
-            endDates:[],
-            mainChart : {
-                labels: props.fields,
-                datasets: [
-                    {
-                        data: props.endDates
-                    },
-                    {
-                        label: 'Mulai Pengisisan',
-                        backgroundColor: convertHex(brandInfo, 10),
-                        borderColor: brandInfo,
-                        pointHoverBackgroundColor: '#fff',
-                        borderWidth: 2,
-                        data: props.startDates
-                    }
-                ]
-            },
-            mainChartOpts : {
-                maintainAspectRatio: false,
-                legend: {
-                    display: false
-                },
-                scales: {
-                    xAxes: [{
-                    gridLines: {
-                        drawOnChartArea: false,
-                    }
-                    }],
-                    yAxes: [{
-                    ticks: {
-                        beginAtZero: true,
-                        maxTicksLimit: 5,
-                        stepSize: Math.ceil(250 / 5),
-                        max: 250
-                    }
-                    }]
-                },
-                elements: {
-                    point: {
-                    radius: 0,
-                    hitRadius: 10,
-                    hoverRadius: 4,
-                    hoverBorderWidth: 3,
-                    }
-                }
-            }
-
+            fields: [],
+            startDates: [],
+            endDates: []
         }
     }
-    componentWillMount(){                        
-        
-        this.props.dispatch(dashboard.fetchData(cookies.get(cookieName)));  
+
+    componentWillMount() {
+        this.props.dispatch(dashboard.fetchData(cookies.get(cookieName)));
     }
-    render(){
-        return(
-            <div>
-                <SummaryCmahasiswa/>
-                <Row>
-                    <Col>
-                        <Card>
-                            <CardBody className="card-body">
-                                <Row>
-                                <Col sm="12">
-                                    <CardTitle className="mb-0">Traffic Pengisian UKT</CardTitle>
-                                    {/* <div className="small text-muted">November 2015 <span>{this.state.hellow}</span></div> */}
-                                </Col>
-                                {/* <Col sm="7" className="d-none d-sm-inline-block">
-                                    <Button color="primary" className="float-right"><i className="icon-cloud-download"></i></Button>
-                                    <ButtonToolbar className="float-right" aria-label="Toolbar with button groups">
-                                    <ButtonGroup className="mr-3" data-toggle="buttons" aria-label="First group">
-                                        <Label htmlFor="option1" className="btn btn-outline-secondary">
-                                        <Input type="radio" name="options" id="option1"/> Day
-                                        </Label>
-                                        <Label htmlFor="option2" className="btn btn-outline-secondary active">
-                                        <Input type="radio" name="options" id="option2" defaultChecked/> Month
-                                        </Label>
-                                        <Label htmlFor="option3" className="btn btn-outline-secondary">
-                                        <Input type="radio" name="options" id="option3"/> Year
-                                        </Label>
-                                    </ButtonGroup>
-                                    </ButtonToolbar>
-                                </Col> */}
-                                </Row>
-                                {/* <div className="chart-wrapper" style={{height: 300 + 'px', marginTop: 40 + 'px'}}>
-                                    <Line data={this.state.mainChart} redraw options={this.state.mainChartOpts} height={300}/>
-                                </div> */}
-                            </CardBody>
-                            <CardFooter style={{backgroundColor: 'white'}}>
-                                <DashboardChartMetadata />
-                            </CardFooter>
-                        </Card>
-                    </Col>
-                </Row>
+
+    render() {
+        return (
+            /* Background utama dipastikan Putih */
+            <div className="min-h-screen bg-white p-4 md:p-8">
+                <div className="max-w-7xl mx-auto space-y-10">
+                    
+                    {/* Section 1: Top Statistics (Summary) */}
+                    {/* Pastikan di dalam komponen SummaryCmahasiswa tidak ada shadow yang berat */}
+                    <section>
+                        <SummaryCmahasiswa />
+                    </section>
+
+                    {/* Section 2: Konten Utama (Traffic) */}
+                    <section className="border-t border-gray-100 pt-8">
+                        {/* Header Tanpa Card pembungkus */}
+                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                            <div>
+                                <h2 className="text-2xl font-black text-gray-800 tracking-tight">
+                                    Traffic Pengisian UKT
+                                </h2>
+                                <p className="text-sm text-gray-400 mt-1 font-medium">
+                                    Monitoring aktivitas mahasiswa per fakultas secara real-time
+                                </p>
+                            </div>
+                            
+                            <div className="flex items-center space-x-3">
+                                <div className="flex items-center px-3 py-1 bg-emerald-50 rounded-full border border-emerald-100">
+                                    <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse mr-2"></div>
+                                    <span className="text-[10px] font-bold text-emerald-700 uppercase tracking-wider">Sistem Aktif</span>
+                                </div>
+                                <button 
+                                    onClick={() => window.location.reload()} 
+                                    className="p-2 text-gray-400 hover:text-[#006d32] transition-colors focus:outline-none"
+                                    title="Refresh Halaman"
+                                >
+                                    <i className="fa fa-refresh text-lg"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Body Content: Langsung memanggil Metadata tanpa pembungkus Card lagi */}
+                        <div className="w-full">
+                            <DashboardChartMetadata />
+                        </div>
+                    </section>
+
+                    {/* Section 3: Footer/Info Alert - Dibuat flat agar tidak seperti card bertumpuk */}
+                    <footer className="pt-8 border-t border-gray-100">
+                        <div className="bg-gray-50 p-4 rounded-xl flex items-center space-x-3">
+                            <i className="fa fa-info-circle text-[#006d32] text-lg"></i>
+                            <p className="text-xs text-gray-500 leading-relaxed">
+                                <strong>Catatan Admin:</strong> Data statistik ini diperbarui secara otomatis setiap kali ada perubahan status pengisian dari sisi mahasiswa. Gunakan filter fakultas jika ingin melihat data lebih spesifik.
+                            </p>
+                        </div>
+                    </footer>
+                </div>
             </div>
         )
-    }
-    componentDidMount(){   
-    }
-    componentWillReceiveProps(){
-        var obj = this;
-        this.setState({
-            mainChart : {
-                labels: obj.props.fields,
-                datasets: [
-                    {
-                        label: 'Penyelesaian Pengisisan',
-                        backgroundColor: convertHex(brandInfo, 10),
-                        borderColor: brandInfo,
-                        pointHoverBackgroundColor: '#fff',
-                        borderWidth: 2,
-                        data: obj.props.endDates
-                    },
-                    {
-                        label: 'Mulai Pengisisan',
-                        backgroundColor: convertHex("#d64a57", 10),
-                        borderColor: "#d64a57",
-                        pointHoverBackgroundColor: '#fff',
-                        borderWidth: 2,
-                        data: obj.props.startDates
-                    }
-                ]
-            },
-            mainChartOpts : {
-                maintainAspectRatio: false,
-                legend: {
-                    display: false
-                },
-                scales: {
-                    xAxes: [{
-                    gridLines: {
-                        drawOnChartArea: false,
-                    }
-                    }],
-                    yAxes: [{
-                    ticks: {
-                        beginAtZero: true,
-                        maxTicksLimit: 5,
-                        stepSize: Math.ceil(250 / 5),
-                        max: 100
-                    }
-                    }]
-                },
-                elements: {
-                    point: {
-                    radius: 0,
-                    hitRadius: 10,
-                    hoverRadius: 4,
-                    hoverBorderWidth: 3,
-                    }
-                }
-            }
-        })
     }
 }
 
 export default connect((store) => ({
-    fields : store.dashboarddata.fields,
-    startDates : store.dashboarddata.startDates,
-    endDates : store.dashboarddata.endDates
+    fields: store.dashboarddata.fields,
+    startDates: store.dashboarddata.startDates,
+    endDates: store.dashboarddata.endDates
 }))(Dashboards)

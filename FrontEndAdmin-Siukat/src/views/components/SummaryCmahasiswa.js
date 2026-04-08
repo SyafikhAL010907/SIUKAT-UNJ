@@ -1,57 +1,74 @@
-import React from 'react'
-import { cmahasiswa } from '../../actions'
-import { connect } from 'react-redux'
-import { cookies, cookieName } from '../../global'
+import React from 'react';
+import { cmahasiswa } from '../../actions';
+import { connect } from 'react-redux';
+import { cookies, cookieName } from '../../global';
 
 class SummaryCmahasiswa extends React.Component {
     componentWillMount() {
-        this.props.dispatch(cmahasiswa.flagCount(cookies.get(cookieName)))
+        // Memastikan pengambilan data saat komponen akan dimuat
+        this.props.dispatch(cmahasiswa.flagCount(cookies.get(cookieName)));
     }
 
+    /**
+     * Fungsi Helper untuk merender Card
+     * Menambahkan pengecekan isNaN agar tidak muncul NaN% di UI
+     */
     renderCard(title, count, percentage, smallText, icon, colorClass, barColor) {
+        // LOGIKA PERBAIKAN: Jika percentage bukan angka (NaN), null, atau undefined, set ke 0
+        const safePercentage = isNaN(percentage) || percentage === null || percentage === undefined 
+            ? 0 
+            : Math.round(percentage); // Gunakan Math.round agar angka lebih cantik tanpa desimal panjang
+
         return (
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 transition-all hover:shadow-md hover:-translate-y-1">
                 <div className="flex justify-between items-start mb-4">
                     <div>
-                        <p className="text-sm font-medium text-gray-500 mb-1">{title}</p>
-                        <h3 className="text-2xl font-bold text-gray-800">{count}</h3>
+                        <p className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-1">{title}</p>
+                        <h3 className="text-2xl font-black text-gray-800 tracking-tight">
+                            {count || 0}
+                        </h3>
                     </div>
-                    <div className={`p-3 rounded-xl ${colorClass} text-white shadow-sm`}>
+                    <div className={`p-3 rounded-xl ${colorClass} text-white shadow-lg`}>
                         <i className={`fa ${icon} text-xl`}></i>
                     </div>
                 </div>
                 
                 <div className="space-y-2">
                     <div className="flex justify-between items-center text-xs">
-                        <span className="font-semibold text-emerald-700">{percentage}%</span>
-                        <span className="text-gray-400">{smallText}</span>
+                        <div className="flex items-center space-x-1">
+                            <span className="font-bold text-gray-700">{safePercentage}%</span>
+                            <span className="text-gray-400 font-medium">Progres</span>
+                        </div>
+                        <span className="text-gray-400 italic">{smallText}</span>
                     </div>
+                    
                     {/* Progress Bar Area */}
-                    <div className="w-full bg-gray-100 rounded-full h-1.5">
+                    <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
                         <div 
-                            className={`${barColor} h-1.5 rounded-full transition-all duration-1000`} 
-                            style={{ width: `${percentage}%` }}
+                            className={`${barColor} h-full rounded-full transition-all duration-1000 ease-out`} 
+                            style={{ width: `${safePercentage}%` }}
                         ></div>
                     </div>
                 </div>
             </div>
-        )
+        );
     }
 
     render() {
-        const { flagCount } = this.props;
+        // Memastikan flagCount memiliki objek default agar tidak error saat akses property
+        const flagCount = this.props.flagCount || {};
 
         return (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 p-1">
                 {/* Card 1: Status Pengisian */}
                 {this.renderCard(
                     "Selesai Mengisi",
                     flagCount.total_selesai,
                     flagCount.percentSelesai,
-                    `Belum: ${flagCount.total_belum}`,
+                    `Sisa: ${flagCount.total_belum || 0}`,
                     "fa-check-circle", 
-                    "bg-emerald-600", // Hijau UNJ
-                    "bg-emerald-500"
+                    "bg-[#006d32]", // Hijau UNJ
+                    "bg-[#006d32]"
                 )}
 
                 {/* Card 2: UKT Tinggi */}
@@ -59,10 +76,10 @@ class SummaryCmahasiswa extends React.Component {
                     "UKT Tinggi",
                     flagCount.ukt_tinggi,
                     flagCount.percentUktTinggi,
-                    `Seleksi: ${flagCount.ukt_seleksi}`,
+                    `Seleksi: ${flagCount.ukt_seleksi || 0}`,
                     "fa-line-chart", 
-                    "bg-amber-500", // Kuning/Gold UNJ
-                    "bg-amber-400"
+                    "bg-[#ffcc00]", // Kuning UNJ
+                    "bg-[#ffcc00]"
                 )}
 
                 {/* Card 3: Terima UKT */}
@@ -70,7 +87,7 @@ class SummaryCmahasiswa extends React.Component {
                     "Terima UKT",
                     flagCount.terima_ukt,
                     flagCount.percentTerima,
-                    `Belum Pilih: ${flagCount.pengumuman}`,
+                    `Antre: ${flagCount.pengumuman || 0}`,
                     "fa-handshake-o", 
                     "bg-blue-600",
                     "bg-blue-500"
@@ -81,16 +98,19 @@ class SummaryCmahasiswa extends React.Component {
                     "Selesai Sanggah",
                     flagCount.selesai_sanggah,
                     flagCount.percentSanggah,
-                    `Total Sanggah: ${flagCount.sanggah_ukt}`,
+                    `Total: ${flagCount.sanggah_ukt || 0}`,
                     "fa-gavel", 
                     "bg-rose-600",
                     "bg-rose-500"
                 )}
             </div>
-        )
+        );
     }
 }
 
-export default connect((store) => ({
+// Map State dari Redux
+const mapStateToProps = (store) => ({
     flagCount: store.cmahasiswa.flagCount
-}))(SummaryCmahasiswa)
+});
+
+export default connect(mapStateToProps)(SummaryCmahasiswa);
