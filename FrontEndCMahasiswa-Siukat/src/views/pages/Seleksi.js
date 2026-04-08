@@ -15,7 +15,20 @@ import { cookies, cookieName } from '../../global';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
-// CheckIcon placeholder removed as it was unused
+// Menambahkan internal style untuk memastikan icon check muncul dengan benar
+const styles = {
+    sidebarItem: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        cursor: 'pointer'
+    },
+    checkIcon: {
+        color: '#28a745', // Warna hijau sukses
+        marginLeft: '10px',
+        fontSize: '1.1rem'
+    }
+};
 
 class Seleksi extends React.Component {
     constructor(props) {
@@ -67,6 +80,19 @@ class Seleksi extends React.Component {
         if (this.props.cmahasiswa.flag !== 'pengisian' && this.props.cmahasiswa.ukt_tinggi === 'tidak') {
             return <Redirect to="/main/ukt" />;
         }
+
+        // Helper untuk merender Icon Checklist agar kode lebih bersih
+        const renderCheck = (isComplete) => {
+            if (isComplete === 1 || isComplete === true) {
+                return (
+                    <span className="sidebar-check-icon" style={styles.checkIcon}>
+                        <i className="fa fa-check-circle"></i>
+                    </span>
+                );
+            }
+            return null;
+        };
+
         return (
             <div className="mt-4">
                 <Row className="h-100">
@@ -76,77 +102,95 @@ class Seleksi extends React.Component {
                                 className={classnames({ active: this.state.activeTab === '1' })}
                                 onClick={this.handleClickTab}
                                 data-id="1"
+                                style={styles.sidebarItem}
                             >
-                                <i className="fa fa-user"></i> Data Pribadi
-                                {this.props.verifikasi.cmahasiswa === 1 && <span className="sidebar-check-icon"><i className="fa fa-check"></i></span>}
+                                <span><i className="fa fa-user mr-2"></i> Data Pribadi</span>
+                                {renderCheck(this.props.verifikasi.cmahasiswa)}
                             </ListGroupItem>
+
                             <ListGroupItem
                                 className={classnames({ active: this.state.activeTab === '2' })}
                                 onClick={this.handleClickTab}
                                 data-id="2"
+                                style={styles.sidebarItem}
                             >
-                                <i className="fa fa-user"></i> Data Ayah
-                                {this.props.verifikasi.ayah === 1 && <span className="sidebar-check-icon"><i className="fa fa-check"></i></span>}
+                                <span><i className="fa fa-user mr-2"></i> Data Ayah</span>
+                                {renderCheck(this.props.verifikasi.ayah)}
                             </ListGroupItem>
+
                             <ListGroupItem
                                 className={classnames({ active: this.state.activeTab === '3' })}
                                 onClick={this.handleClickTab}
                                 data-id="3"
+                                style={styles.sidebarItem}
                             >
-                                <i className="fa fa-user"></i> Data Ibu
-                                {this.props.verifikasi.ibu === 1 && <span className="sidebar-check-icon"><i className="fa fa-check"></i></span>}
+                                <span><i className="fa fa-user mr-2"></i> Data Ibu</span>
+                                {renderCheck(this.props.verifikasi.ibu)}
                             </ListGroupItem>
+
                             <ListGroupItem
                                 className={classnames({ active: this.state.activeTab === '4' })}
                                 onClick={this.handleClickTab}
                                 data-id="4"
+                                style={styles.sidebarItem}
                             >
-                                <i className="fa fa-group"></i> Data Wali
-                                {this.props.verifikasi.wali === 1 && <span className="sidebar-check-icon"><i className="fa fa-check"></i></span>}
+                                <span><i className="fa fa-group mr-2"></i> Data Wali</span>
+                                {renderCheck(this.props.verifikasi.wali)}
                             </ListGroupItem>
+
                             <ListGroupItem
                                 className={classnames({ active: this.state.activeTab === '5' })}
                                 onClick={this.handleClickTab}
                                 data-id="5"
+                                style={styles.sidebarItem}
                             >
-                                <i className="fa fa-home"></i> Data Rumah
-                                {this.props.verifikasi.rumah === 1 && <span className="sidebar-check-icon"><i className="fa fa-check"></i></span>}
+                                <span><i className="fa fa-home mr-2"></i> Data Rumah</span>
+                                {renderCheck(this.props.verifikasi.rumah)}
                             </ListGroupItem>
+
                             <ListGroupItem
                                 className={classnames({ active: this.state.activeTab === '6' })}
                                 onClick={this.handleClickTab}
                                 data-id="6"
+                                style={styles.sidebarItem}
                             >
-                                <i className="fa fa-flash"></i> Data Listrik
-                                {this.props.verifikasi.listrik === 1 && <span className="sidebar-check-icon"><i className="fa fa-check"></i></span>}
+                                <span><i className="fa fa-flash mr-2"></i> Data Listrik</span>
+                                {renderCheck(this.props.verifikasi.listrik)}
                             </ListGroupItem>
+
                             <ListGroupItem
                                 className={classnames({ active: this.state.activeTab === '7' })}
                                 onClick={this.handleClickTab}
                                 data-id="7"
+                                style={styles.sidebarItem}
                             >
-                                <i className="fa fa-bus"></i> Data Kendaraan
-                                {this.props.verifikasi.kendaraan === 1 && <span className="sidebar-check-icon"><i className="fa fa-check"></i></span>}
+                                <span><i className="fa fa-bus mr-2"></i> Data Kendaraan</span>
+                                {renderCheck(this.props.verifikasi.kendaraan)}
                             </ListGroupItem>
+
                             <ListGroupItem
                                 className={classnames({ active: this.state.activeTab === '8' })}
                                 onClick={this.handleClickTab}
                                 data-id="8"
+                                style={styles.sidebarItem}
                             >
-                                <i className="fa fa-file-text"></i> Data Pendukung
-                                {this.props.verifikasi.pendukung === 1 && <span className="sidebar-check-icon"><i className="fa fa-check"></i></span>}
+                                <span><i className="fa fa-file-text mr-2"></i> Data Pendukung</span>
+                                {renderCheck(this.props.verifikasi.pendukung)}
                             </ListGroupItem>
+
                             <ListGroupItem
                                 className={classnames({ active: this.state.activeTab === '9' })}
                                 onClick={this.handleClickTab}
                                 data-id="9"
+                                style={styles.sidebarItem}
                             >
-                                <i className="fa fa-check-square"></i> Verifikasi Hasil
+                                <span><i className="fa fa-check-square mr-2"></i> Verifikasi Hasil</span>
                             </ListGroupItem>
                         </ListGroup>
                         <BatalUktRendah />
                         <Bantuan />
                     </Col>
+                    
                     <Col md="9" xs="12" className="d-flex flex-column">
                         <TabContent activeTab={this.state.activeTab} className="h-100">
                             <TabPane tabId="1" className="h-100">

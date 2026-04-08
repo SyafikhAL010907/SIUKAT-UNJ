@@ -198,19 +198,28 @@ class VerifikasiSeleksi extends React.Component {
             return <Redirect to="/main/ukt/selesai-isi" />;
         }
 
-        const isAllowed = this.props.allow !== undefined && this.props.allow !== 0;
+        // Cek apakah semua tahap sudah bernilai 1/true
+        const isAllowed = this.props.allow !== undefined && this.props.allow !== 0 && this.props.allow !== false;
 
         return (
             <Card className="premium-card p-4 p-md-5">
                 <CardTitle tag="h4" className="mb-4">Verifikasi & Finalisasi Data</CardTitle>
                 
-                {!isAllowed && (
-                    <Alert color="warning" className="rounded-lg shadow-sm border-0 mb-4">
-                        <i className="fa fa-info-circle mr-2"></i> Verifikasi dapat dilakukan setelah <strong>seluruh tahapan data</strong> terisi lengkap.
-                    </Alert>
-                )}
-
-                {isAllowed && (
+                {!isAllowed ? (
+                    <div className="text-center py-5">
+                        <div className="mb-4">
+                            <i className="fa fa-lock text-warning" style={{ fontSize: '4rem' }}></i>
+                        </div>
+                        <h5 className="text-dark font-weight-bold">Mohon Maaf</h5>
+                        <p className="text-muted mx-auto" style={{ maxWidth: '400px' }}>
+                            Anda belum bisa melakukan verifikasi. Silakan lengkapi seluruh tahapan data pada menu di samping kiri terlebih dahulu hingga semua bertanda ceklis hijau.
+                        </p>
+                        <Alert color="warning" className="rounded-lg border-0 shadow-sm d-inline-block mt-3">
+                            <i className="fa fa-info-circle mr-2"></i> 
+                            Pastikan status di Sidebar sudah terverifikasi semua.
+                        </Alert>
+                    </div>
+                ) : (
                     <div>
                         <FormSuratKebenaran
                             onSubmit={this.submitForm}
@@ -242,7 +251,7 @@ class VerifikasiSeleksi extends React.Component {
                                 <Button
                                     className="modern-btn-primary w-100 py-3 shadow font-weight-bold"
                                     onClick={this.verify}
-                                    disabled={this.props.pendukung.scan_pernyataan_kebenaran === ''}
+                                    disabled={!this.props.pendukung.scan_pernyataan_kebenaran}
                                 >
                                     <i className="fa fa-check-circle mr-2"></i> Ya, Saya Yakin & Finalisasi Data
                                 </Button>
