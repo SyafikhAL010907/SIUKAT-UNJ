@@ -90,15 +90,7 @@ class TabMenu extends React.Component {
                                     this.toggle('3');
                                 }}
                             >
-                                <i className="fa fa-id-card-o"></i> Informasi Biodata
-                            </ListGroupItem>
-                            <ListGroupItem
-                                className={classnames({ active: this.state.activeTab === '4' })}
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    this.toggle('4');
-                                }}
-                            >
+                               
                                 <i className="fa fa-money"></i> Informasi UKT
                             </ListGroupItem>
                             <ListGroupItem

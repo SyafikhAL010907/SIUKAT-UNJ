@@ -82,12 +82,6 @@ class Info extends React.Component {
               <Button className="modern-btn-primary px-5 py-3 mr-4" onClick={this.goToUkt}>
                 <i className="fa fa-pencil-square-o mr-2"></i> Mulai Pengisian UKT
               </Button>
-              <Button
-                  className="modern-btn-primary px-5 py-3"
-                  onClick={this.goToBiodata}
-              >
-                  <i className="fa fa-user-circle mr-2"></i> Mulai Pengisian Biodata
-              </Button>
             </Col>
           </Row>
         </div>
