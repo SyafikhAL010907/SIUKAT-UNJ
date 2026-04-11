@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { withCookies } from 'react-cookie';
-import { notif, cookies, cookieName, removeToken, baseUrl, storage } from '../../global';
+import { notif, removeToken, baseUrl, storage } from '../../global';
 
 class Navigation extends React.Component {
     constructor(props) {
@@ -43,9 +43,9 @@ class Navigation extends React.Component {
         const { collapsed, openMobile, toggleMobile, studentData } = this.props;
         const student = studentData || {};
         
-        const photoUrl = student.foto_cmahasiswa 
+        /* const photoUrl = student.foto_cmahasiswa 
             ? (student.foto_cmahasiswa.startsWith('http') ? student.foto_cmahasiswa : storage + '/' + student.foto_cmahasiswa)
-            : `https://ui-avatars.com/api/?name=${encodeURIComponent(student.nama_cmahasiswa || 'User')}&background=0f6d3f&color=fff`;
+            : `https://ui-avatars.com/api/?name=${encodeURIComponent(student.nama_cmahasiswa || 'User')}&background=0f6d3f&color=fff`; */
 
         return (
             <React.Fragment>

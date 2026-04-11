@@ -18,7 +18,7 @@ class ObjectMetaData extends React.Component {
         return (
             <div className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-all hover:shadow-md">
                 {/* Header Fakultas - Menggunakan Hijau UNJ pada Border Kiri */}
-                <div className="bg-white px-6 py-4 border-b border-gray-100 flex justify-between items-center border-l-4 border-[#006d32]">
+                <div className="bg-white px-6 py-4 border-b border-b-gray-100 flex justify-between items-center border-l-4 border-l-[#006d32]">
                     <h3 className="text-lg font-bold text-[#006d32] tracking-tight">{title}</h3>
                     <span className="text-sm font-bold text-gray-600 bg-gray-50 px-4 py-1 rounded-full border border-gray-200">
                         Total: {valuetotal} <span className="text-[10px] uppercase ml-1 opacity-60">Mhs</span>

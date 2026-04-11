@@ -4,6 +4,7 @@ import (
 	"BackEnd-Siukat/config"
 	"BackEnd-Siukat/middlewares"
 	"BackEnd-Siukat/models"
+	"BackEnd-Siukat/utils"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -134,4 +135,7 @@ func AdminRoutes(r *gin.RouterGroup) {
 		tx.Commit()
 		c.JSON(http.StatusOK, "Data telah dihapus!")
 	})
+
+	// Route for injecting data from Excel
+	auth.POST("/inject-data", utils.InjectDataExcel)
 }

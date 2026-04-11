@@ -126,16 +126,16 @@ func AuthRoutes(r *gin.RouterGroup) {
 		}
 
 		// LOG "CCTV" SEBELUM FILTER
-		log.Printf("DEBUG CCTV - Login Attempt: NoPeserta=%s, Role=%s, JalurMasuk=%d", user.NoPeserta, user.Role, user.JalurMasuk)
+		log.Printf("DEBUG CCTV - Login Attempt: NoPeserta=%s, Role=%s, JalurMasuk=%s", user.NoPeserta, user.Role, user.JalurMasuk)
 
 		// Ambil data info berdasarkan jalur_masuk (kode)
 		var information models.Info
-		if user.JalurMasuk != 0 {
+		if user.JalurMasuk != "" && user.JalurMasuk != "0" {
 			config.DB.Where("kode = ?", user.JalurMasuk).First(&information)
 		}
 
 		// LOGIK AKSES JADWAL (Hanya untuk cmahasiswa)
-		if user.Role == "cmahasiswa" && user.JalurMasuk != 0 {
+		if user.Role == "cmahasiswa" && user.JalurMasuk != "" && user.JalurMasuk != "0" {
 			wib := time.FixedZone("WIB", 7*3600) // GMT+7
 			now := time.Now().In(wib)
 			
@@ -179,7 +179,7 @@ func AuthRoutes(r *gin.RouterGroup) {
 				log.Printf("DEBUG SATPAM - SKIP: Tanggal Mulai/Selesai NULL di database")
 			}
 		} else {
-			log.Printf("DEBUG SATPAM - SKIP: User bukan cmahasiswa atau JalurMasuk 0 (Role: %s, Jalur: %d)", user.Role, user.JalurMasuk)
+			log.Printf("DEBUG SATPAM - SKIP: User bukan cmahasiswa atau JalurMasuk kosong (Role: %s, Jalur: %s)", user.Role, user.JalurMasuk)
 		}
 
 		c.JSON(http.StatusOK, gin.H{

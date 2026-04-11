@@ -32,7 +32,7 @@ func UktRoutes(r *gin.RouterGroup) {
 		// ukt findOne logic
 		var ukt models.Ukt
 		if err := config.DB.Where("major_id = ? AND entrance = ?", user.CMahasiswa.ProdiCmahasiswa, user.CMahasiswa.JalurCmahasiswa).First(&ukt).Error; err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			c.JSON(http.StatusNotFound, gin.H{"error": "UKT reference not found for your program/entrance: " + err.Error()})
 			return
 		}
 

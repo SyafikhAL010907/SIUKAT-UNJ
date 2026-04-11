@@ -3,6 +3,8 @@ import { SummaryCmahasiswa, DashboardChartMetadata } from '../components';
 import { dashboard } from "../../actions"
 import { connect } from 'react-redux'
 import { cookies, cookieName } from "../../global"
+// Import sudah benar
+import ButtonInject from '../../views/components/ButtonInject';
 
 class Dashboards extends React.Component {
     constructor(props) {
@@ -25,14 +27,12 @@ class Dashboards extends React.Component {
                 <div className="max-w-7xl mx-auto space-y-10">
                     
                     {/* Section 1: Top Statistics (Summary) */}
-                    {/* Pastikan di dalam komponen SummaryCmahasiswa tidak ada shadow yang berat */}
                     <section>
                         <SummaryCmahasiswa />
                     </section>
 
                     {/* Section 2: Konten Utama (Traffic) */}
                     <section className="border-t border-gray-100 pt-8">
-                        {/* Header Tanpa Card pembungkus */}
                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
                             <div>
                                 <h2 className="text-2xl font-black text-gray-800 tracking-tight">
@@ -43,33 +43,41 @@ class Dashboards extends React.Component {
                                 </p>
                             </div>
                             
-                            <div className="flex items-center space-x-3">
-                                <div className="flex items-center px-3 py-1 bg-emerald-50 rounded-full border border-emerald-100">
-                                    <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse mr-2"></div>
-                                    <span className="text-[10px] font-bold text-emerald-700 uppercase tracking-wider">Sistem Aktif</span>
+                            {/* Area Aksi: Ditambahkan ButtonInject di sini */}
+                            <div className="flex items-center space-x-4">
+                                {/* Tombol Inject Data */}
+                                <ButtonInject />
+
+                                <div className="h-8 w-[1px] bg-gray-200 hidden md:block"></div>
+
+                                <div className="flex items-center space-x-3">
+                                    <div className="flex items-center px-3 py-1 bg-emerald-50 rounded-full border border-emerald-100">
+                                        <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse mr-2"></div>
+                                        <span className="text-[10px] font-bold text-emerald-700 uppercase tracking-wider">Sistem Aktif</span>
+                                    </div>
+                                    <button 
+                                        onClick={() => window.location.reload()} 
+                                        className="p-2 text-gray-400 hover:text-[#006d32] transition-colors focus:outline-none"
+                                        title="Refresh Halaman"
+                                    >
+                                        <i className="fa fa-refresh text-lg"></i>
+                                    </button>
                                 </div>
-                                <button 
-                                    onClick={() => window.location.reload()} 
-                                    className="p-2 text-gray-400 hover:text-[#006d32] transition-colors focus:outline-none"
-                                    title="Refresh Halaman"
-                                >
-                                    <i className="fa fa-refresh text-lg"></i>
-                                </button>
                             </div>
                         </div>
 
-                        {/* Body Content: Langsung memanggil Metadata tanpa pembungkus Card lagi */}
+                        {/* Body Content */}
                         <div className="w-full">
                             <DashboardChartMetadata />
                         </div>
                     </section>
 
-                    {/* Section 3: Footer/Info Alert - Dibuat flat agar tidak seperti card bertumpuk */}
+                    {/* Section 3: Footer/Info Alert */}
                     <footer className="pt-8 border-t border-gray-100">
                         <div className="bg-gray-50 p-4 rounded-xl flex items-center space-x-3">
                             <i className="fa fa-info-circle text-[#006d32] text-lg"></i>
                             <p className="text-xs text-gray-500 leading-relaxed">
-                                <strong>Catatan Admin:</strong> Data statistik ini diperbarui secara otomatis setiap kali ada perubahan status pengisian dari sisi mahasiswa. Gunakan filter fakultas jika ingin melihat data lebih spesifik.
+                                <strong>Catatan Admin:</strong> Data statistik ini diperbarui secara otomatis. Anda dapat menggunakan tombol <strong>Inject</strong> untuk mengunggah data mahasiswa baru dari file Excel ke sistem.
                             </p>
                         </div>
                     </footer>

@@ -12,6 +12,12 @@ cd FrontEndAdmin-Siukat > npm start
 cd FrontEndCMahasiswa-Siukat > npm install
 cd FrontEndCMahasiswa-Siukat > npm start
 
+
+go run scripts/utils/rollback_full/main.go < running rollback
+go run scripts/utils/dynamic_injector/main.go < running inject
+go run scripts/utils/generate_master_excel/main.go < running clean excel
+
+
 Nomor Peserta: 925111008305
 Password (ddmmyyyy): 16092006 (berdasarkan tanggal lahir 16 September 2006)
 
