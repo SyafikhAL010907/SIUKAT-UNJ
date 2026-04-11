@@ -11,6 +11,20 @@ import { cookies, cookieName } from '../../global';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
+// Style tambahan untuk menyelaraskan sidebar agar rapi
+const styles = {
+    sidebarItem: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        cursor: 'pointer'
+    },
+    checkIcon: {
+        color: '#28a745',
+        fontSize: '1rem'
+    }
+};
+
 class UktTinggi extends React.Component {
     constructor(props) {
         super(props);
@@ -28,8 +42,8 @@ class UktTinggi extends React.Component {
         this.props.dispatch(cmahasiswa.checkDataComplete(cookies.get(cookieName)));
     }
 
+    // Fungsi ini dipanggil setelah tombol "Simpan" di komponen anak diklik
     updateVerifikasi() {
-        // delay mencegah flag verifikasi gagal terupdate akibat promise.
         setTimeout(() => {
             this.props.dispatch(cmahasiswa.checkDataComplete(cookies.get(cookieName)));
         }, 3000);
@@ -37,6 +51,19 @@ class UktTinggi extends React.Component {
 
     toggle(tab) {
         if (this.state.activeTab !== tab) {
+            // Logic Pencegahan: Cek kelengkapan data sebelum masuk ke tab Verifikasi (ID 6)
+            if (tab === '6') {
+                const v = this.props.verifikasi;
+                const isComplete = (
+                    v.cmahasiswa && v.ayah && v.ibu && v.wali && v.pendukung
+                );
+
+                if (!isComplete) {
+                    alert("Mohon lengkapi semua data terlebih dahulu sebelum melakukan verifikasi.");
+                    return;
+                }
+            }
+
             this.setState({
                 activeTab: tab,
             });
@@ -47,84 +74,95 @@ class UktTinggi extends React.Component {
         if (this.props.cmahasiswa.flag !== 'pengisian' && this.props.cmahasiswa.ukt_tinggi === 'ya') {
             return <Redirect to="/main/ukt" />;
         }
+
+        // Helper untuk merender Icon Checklist secara konsisten
+        const renderCheck = (isComplete) => {
+            if (isComplete === 1 || isComplete === true) {
+                return (
+                    <div className="sidebar-check-icon ml-auto" style={styles.checkIcon}>
+                        <i className="fa fa-check-circle"></i>
+                    </div>
+                );
+            }
+            return null;
+        };
+
         return (
             <div className="margin-top-20">
                 <Row>
                     <Col md="3" xs="12">
                         <InfoUktTinggi />
                         
-                        <ListGroup className="modern-sidebar-menu mb-4">
+                        <ListGroup className="modern-sidebar-menu mb-4 shadow-sm">
                             <ListGroupItem
                                 className={classnames({ active: this.state.activeTab === '1' })}
                                 onClick={(e) => { e.preventDefault(); this.toggle('1'); }}
                                 tag="a"
-                                href="">
-                                <i className="fa fa-user"></i> Data Pribadi
-                                {this.props.verifikasi.cmahasiswa === 1 && (
-                                    <div className="sidebar-check-icon ml-auto">
-                                        <i className="fa fa-check"></i>
-                                    </div>
-                                )}
+                                href=""
+                                style={styles.sidebarItem}
+                            >
+                                <span><i className="fa fa-user mr-2"></i> Data Pribadi</span>
+                                {renderCheck(this.props.verifikasi.cmahasiswa)}
                             </ListGroupItem>
+
                             <ListGroupItem
                                 className={classnames({ active: this.state.activeTab === '2' })}
                                 onClick={(e) => { e.preventDefault(); this.toggle('2'); }}
                                 tag="a"
-                                href="">
-                                <i className="fa fa-male"></i> Data Ayah
-                                {this.props.verifikasi.ayah === 1 && (
-                                    <div className="sidebar-check-icon ml-auto">
-                                        <i className="fa fa-check"></i>
-                                    </div>
-                                )}
+                                href=""
+                                style={styles.sidebarItem}
+                            >
+                                <span><i className="fa fa-male mr-2"></i> Data Ayah</span>
+                                {renderCheck(this.props.verifikasi.ayah)}
                             </ListGroupItem>
+
                             <ListGroupItem
                                 className={classnames({ active: this.state.activeTab === '3' })}
                                 onClick={(e) => { e.preventDefault(); this.toggle('3'); }}
                                 tag="a"
-                                href="">
-                                <i className="fa fa-female"></i> Data Ibu
-                                {this.props.verifikasi.ibu === 1 && (
-                                    <div className="sidebar-check-icon ml-auto">
-                                        <i className="fa fa-check"></i>
-                                    </div>
-                                )}
+                                href=""
+                                style={styles.sidebarItem}
+                            >
+                                <span><i className="fa fa-female mr-2"></i> Data Ibu</span>
+                                {renderCheck(this.props.verifikasi.ibu)}
                             </ListGroupItem>
+
                             <ListGroupItem
                                 className={classnames({ active: this.state.activeTab === '4' })}
                                 onClick={(e) => { e.preventDefault(); this.toggle('4'); }}
                                 tag="a"
-                                href="">
-                                <i className="fa fa-users"></i> Data Wali
-                                {this.props.verifikasi.wali === 1 && (
-                                    <div className="sidebar-check-icon ml-auto">
-                                        <i className="fa fa-check"></i>
-                                    </div>
-                                )}
+                                href=""
+                                style={styles.sidebarItem}
+                            >
+                                <span><i className="fa fa-users mr-2"></i> Data Wali</span>
+                                {renderCheck(this.props.verifikasi.wali)}
                             </ListGroupItem>
+
                             <ListGroupItem
                                 className={classnames({ active: this.state.activeTab === '5' })}
                                 onClick={(e) => { e.preventDefault(); this.toggle('5'); }}
                                 tag="a"
-                                href="">
-                                <i className="fa fa-file-text"></i> Surat Pernyataan
-                                {this.props.verifikasi.pendukung === 1 && (
-                                    <div className="sidebar-check-icon ml-auto">
-                                        <i className="fa fa-check"></i>
-                                    </div>
-                                )}
+                                href=""
+                                style={styles.sidebarItem}
+                            >
+                                <span><i className="fa fa-file-text mr-2"></i> Surat Pernyataan</span>
+                                {renderCheck(this.props.verifikasi.pendukung)}
                             </ListGroupItem>
+
                             <ListGroupItem
                                 className={classnames({ active: this.state.activeTab === '6' })}
                                 onClick={(e) => { e.preventDefault(); this.toggle('6'); }}
                                 tag="a"
-                                href="">
-                                <i className="fa fa-check-square"></i> Verifikasi
+                                href=""
+                                style={styles.sidebarItem}
+                            >
+                                <span><i className="fa fa-check-square mr-2"></i> Verifikasi</span>
                             </ListGroupItem>
                         </ListGroup>
 
                         <BatalUktTinggi />
                     </Col>
+                    
                     <Col md="9" xs="12">
                         <TabContent activeTab={this.state.activeTab}>
                             <TabPane tabId="1">

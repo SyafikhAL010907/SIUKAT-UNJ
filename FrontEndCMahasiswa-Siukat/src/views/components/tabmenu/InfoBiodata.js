@@ -1,19 +1,25 @@
 import React from "react";
 import { Row, Col, Button, Alert } from "reactstrap";
 import { Link } from "react-router-dom";
+// Mengimpor komponen TabelUkt yang sejajar
+import TabelUkt from "./TabelUkt"; 
 
 class InfoBiodata extends React.Component {
   goToBiodata = () => {
     this.props.history.push("/main/biodata");
   };
+
   render() {
     return (
       <div>
-        <Alert color="info">
+        {/* Menampilkan Tabel UKT di bagian atas */}
+        <TabelUkt />
+
+        {/* <Alert color="info" className="mt-3">
           Biodata Calon Mahasiswa Baru Universitas Negeri Jakarta akan digunakan
           sebagai data dasar pembuatan akun Sistem Informasi Akademik
           Universitas Negeri Jakarta, pengisian biodata terdiri atas 3 kategori:
-          <ul>
+          <ul className="mt-2">
             <li>
               <b>Biodata Diri</b>
             </li>
@@ -50,30 +56,6 @@ class InfoBiodata extends React.Component {
               </Link>
             </Col>
           </Row>
-        </Alert>
-
-        {/* <Table responsive striped bordered className="login-schedule text-center">
-                    <thead>
-                        <tr className="table-head-green">
-                            <th width="30%" className="text-center">Kelompok UKT</th>
-                            <th width="70%" className="text-center">Besar UKT</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {this.renderUkt()}
-                    </tbody>
-                </Table> */}
-        {/* <Alert color="warning">
-          <ul>
-            <li>
-              Kelompok 1 hanya diperuntukkan bagi <b>keluarga sangat miskin</b>,
-              dan mendapatkan subsidi dana dari kelompok lainnya.
-            </li>
-            <li>
-              Kelompok 2 hanya diperuntukkan bagi <b>keluarga miskin</b>, dan
-              mendapatkan subsidi dana dari kelompok lainnya.
-            </li>
-          </ul>
         </Alert> */}
       </div>
     );

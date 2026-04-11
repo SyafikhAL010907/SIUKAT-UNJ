@@ -224,7 +224,7 @@ class Login extends Component {
 
                     <Col md={{ size: 3 }} xs={{ size: 12 }} className="px-0">
                         <div className="login-side">
-                            <div className="lux-jalur-card">
+                            {/* <div className="lux-jalur-card">
                                 <div className="text-center">
                                     <div className="mb-4 d-inline-flex align-items-center justify-content-center" style={{ background: '#0066331a', height: '64px', width: '64px', borderRadius: '16px' }}>
                                         <div className="bg-white rounded-lg shadow-sm d-flex align-items-center justify-content-center" style={{ height: '40px', width: '40px' }}>
@@ -277,7 +277,7 @@ class Login extends Component {
                                         )}
                                     </div>
                                 </div>
-                            </div>
+                            </div> */}
                             
                             <h3 className="text-center mb-4 font-weight-bold text-white">Silakan Masuk</h3>
                             <div className="login-form-wrapper">

@@ -171,4 +171,4 @@ class FormLogin extends React.Component {
 export default connect((store) => ({
     captcha: store.captcha.captcha,
     cmahasiswa: store.cmahasiswa.cmahasiswa,
-}))(FormLogin)
+}))(FormLogin)

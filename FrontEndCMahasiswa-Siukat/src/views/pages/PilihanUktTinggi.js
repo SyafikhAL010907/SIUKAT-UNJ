@@ -183,9 +183,61 @@ class PilihanUktTinggi extends React.Component {
                         Silakan pilih salah satu opsi di bawah ini untuk melanjutkan proses:
                     </Alert>
 
+                    {/* Pembungkus Khusus Kelompok Tinggi dengan Identitas UNJ */}
+                    <div 
+                        className="ukt-high-group-container mb-5 p-4 rounded-lg shadow-sm" 
+                        style={{ 
+                            background: '#ffffff', 
+                            border: '3px solid #008d4c', // Hijau UNJ
+                            position: 'relative',
+                            marginTop: '20px'
+                        }}
+                    >
+                        <div 
+                            className="text-center" 
+                            style={{ 
+                                position: 'absolute', 
+                                top: '-18px', 
+                                left: '0', 
+                                right: '0' 
+                            }}
+                        >
+                            <span 
+                                className="px-4 py-2 font-weight-bold text-uppercase" 
+                                style={{ 
+                                    backgroundColor: '#ffcc00', // Kuning UNJ
+                                    color: '#008d4c', // Hijau UNJ
+                                    borderRadius: '50px', 
+                                    fontSize: '0.9rem', 
+                                    letterSpacing: '1.5px',
+                                    border: '2px solid #008d4c',
+                                    boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+                                }}
+                            >
+                                <i className="fa fa-circle mr-2"></i>
+                                UKT Kelompok Tinggi
+                                <i className="fa fa-circle ml-2"></i>
+                            </span>
+                        </div>
+
+                        <div className="mt-3">
+                            <Row className="justify-content-center">
+                                {this.renderUkt()}
+                            </Row>
+                        </div>
+                    </div>
+
                     <Row className="mb-5 justify-content-center">
-                        {this.renderUkt()}
-                        <Col md={4} xs={12} className="ukt-selection-tile">
+                        <Col md={12} className="text-center mb-4">
+                            <div className="d-flex align-items-center justify-content-center">
+                                <hr style={{ flex: 1, borderTop: '1px solid #e2e8f0' }} />
+                                <span className="mx-3 text-muted font-italic" style={{ fontSize: '0.9rem' }}>
+                                    Atau jika keberatan, gunakan pilihan di bawah ini:
+                                </span>
+                                <hr style={{ flex: 1, borderTop: '1px solid #e2e8f0' }} />
+                            </div>
+                        </Col>
+                        <Col md={6} xs={12} className="ukt-selection-tile">
                             <input
                                 type="radio"
                                 id={'ukt-tinggi-0'}
@@ -194,13 +246,21 @@ class PilihanUktTinggi extends React.Component {
                                 checked={this.state.kategori.toString() === '0'}
                                 onChange={this.batalUktTinggi}
                             />
-                            <label className="label-modern" htmlFor={'ukt-tinggi-0'}>
-                                <div className="icon-box">
-                                    <i className="fa fa-file-text-o"></i>
+                            <label 
+                                className="label-modern" 
+                                htmlFor={'ukt-tinggi-0'}
+                                style={{ border: '2px solid #cbd5e1' }}
+                            >
+                                <div className="icon-box" style={{ background: '#f1f5f9', color: '#475569' }}>
+                                    <i className="fa fa-calculator"></i>
                                 </div>
                                 <span className="group-name">Gunakan Data Ekonomi</span>
-                                <div className="price-tag" style={{fontSize: '1rem', color: '#64748b'}}>
-                                    (UKT Kelompok I s.d. VIII)
+                                <div className="price-tag" style={{ fontSize: '0.95rem', color: '#64748b' }}>
+                                    (Seleksi Kelompok I s.d. VIII)
+                                </div>
+                                <div className="mt-2 text-primary" style={{ fontSize: '0.8rem' }}>
+                                    <i className="fa fa-info-circle mr-1"></i> 
+                                    Memerlukan verifikasi berkas pendukung
                                 </div>
                             </label>
                         </Col>

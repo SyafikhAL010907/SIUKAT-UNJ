@@ -6,27 +6,19 @@ import {
     Modal,
     ModalHeader,
     ModalBody,
-    ModalFooter,
     Button,
-    Form,
-    FormGroup,
-    Label,
-    FormText,
 } from "reactstrap";
-import { InputFileBs, SyaratScan } from '../components/form'
-import { rupiah, cookies, cookieName, storage } from "../../global";
+import { rupiah, cookies, cookieName } from "../../global";
 import { cmahasiswa, ukt, verifikasi, keringanan } from "../../actions";
 import { connect } from "react-redux";
-import { Field } from 'redux-form';
-import unggahSanggah from './form/sanggah/unggahSanggah';
 import UnggahSanggah from './form/sanggah/unggahSanggah';
+
 class NominalUKT extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             modalSanggah: false,
         };
-
         this.toggleSanggah = this.toggleSanggah.bind(this);
     }
 
@@ -42,104 +34,109 @@ class NominalUKT extends React.Component {
         this.props.dispatch(verifikasi.fetchVerifikasi(cookies.get(cookieName)));
         this.props.dispatch(keringanan.getData(cookies.get(cookieName)));
     }
+
     renderUktTinggi = () => {
         var ukt_now = {
             kategori: [this.props.cmahasiswa.golongan_id],
             besar_ukt: this.props.ukt[this.props.cmahasiswa.golongan_id],
         };
         return (
-            <span>
-                <b>Kelompok {ukt_now.kategori}</b>
-                <br /> Dengan besaran {rupiah(ukt_now.besar_ukt)}
-            </span>
+            <div className="py-2">
+                <div className="text-uppercase small font-weight-bold text-muted mb-1">Besaran UKT Anda:</div>
+                <div className="h1 font-weight-bold mb-2" style={{ color: '#008d4c', letterSpacing: '-1px' }}>
+                    {rupiah(ukt_now.besar_ukt)}
+                </div>
+                <div className="d-inline-block px-3 py-1 rounded-pill" style={{ backgroundColor: '#ffcc00', color: '#000', fontWeight: '600', fontSize: '0.9rem' }}>
+                    Kelompok {ukt_now.kategori}
+                </div>
+            </div>
         );
     };
+
     render() {
+        const { cmahasiswa, verifikasi, ukt, keringanan } = this.props;
+
         return (
             <div className="margin-top-20">
-                <Card body className="text-center" color="warning">
-                    <Row>
-                        <Col md={2} xs={12}>
-                            <h2 className="margin-top-10">
-                                <i className="fa fa-money"></i>
-                            </h2>
-                        </Col>
-                        <Col md={8} xs={12}>
-                            {this.props.cmahasiswa.bidik_misi_cmahasiswa === "Ya" &&
-                                this.props.verifikasi.result_bidikmisi === "lolos" ? (
-                                <React.Fragment>
-                                    <b>
-                                        Anda peserta bidikmisi, jika bidikmisi anda <br />
-                                        dicabut maka besar UKT anda:
-                                    </b>
-                                </React.Fragment>
-                            ) : this.props.verifikasi.result_kipk === "lolos" ? (
-                                <React.Fragment>
-                                    <b>
-                                        Anda peserta KIPK, jika usulan KIPK anda <br />
-                                        tidak diterima oleh Kementrian Pendidikan dan Kebudayaan,
-                                        maka besar UKT berdasarkan data yang anda unggah adalah:
-                                    </b>
-                                </React.Fragment>
-                            ) : (
-                                // : this.props.verifikasi.result_kjmu === "lolos" ? (
-                                //   <React.Fragment>
-                                //     <b>
-                                //       Anda peserta KJMU, jika KJMU anda <br />
-                                //       dicabut maka besar UKT anda:
-                                //     </b>
-                                //   </React.Fragment>
-                                // )
-                                <React.Fragment>
-                                    <h5>
-                                        Berdasarkan data yang anda unggah, <br />
-                                        anda Mendapatkan UKT:{" "}
-                                    </h5>
-                                </React.Fragment>
-                            )}
-                            <hr />
-                            <h4>
-                                {this.props.ukt !== undefined
-                                    ? this.renderUktTinggi()
-                                    : // : "Memuat data..."}
-                                    "UKT anda saat ini belum ditetapkan, silakan cek kembali pada tanggal 8 September 2020"}
-                            </h4>
-                            <br />
-                            <p>
-                                Biaya di atas adalah biaya pendidikan <b>per-semester</b>
-                            </p>
-                        </Col>
-                        <Col md={2} xs={12}>
-                            <h2 className="margin-top-10">
-                                <i className="fa fa-money"></i>
-                            </h2>
-                        </Col>
-                    </Row>
+                <Card className="border-0 shadow-sm" style={{ borderRadius: '12px', overflow: 'hidden', backgroundColor: '#fff' }}>
+                    {/* Top Bar Aksentuasi Hijau UNJ */}
+                    <div style={{ background: '#008d4c', height: '6px' }}></div>
+                    
+                    <div className="p-4 p-md-5">
+                        <Row className="justify-content-center text-center">
+                            <Col md={10}>
+                                <div className="mb-4">
+                                    {cmahasiswa.bidik_misi_cmahasiswa === "Ya" &&
+                                    verifikasi.result_bidikmisi === "lolos" ? (
+                                        <div className="mb-3">
+                                            <span className="badge badge-success p-2 mb-2">Peserta Bidikmisi</span>
+                                            <p className="text-muted small">Jika status Bidikmisi dicabut, maka nominal UKT Anda:</p>
+                                        </div>
+                                    ) : verifikasi.result_kipk === "lolos" ? (
+                                        <div className="mb-3">
+                                            <span className="badge badge-success p-2 mb-2">Peserta KIP-Kuliah</span>
+                                            <p className="text-muted small">Jika usulan KIPK tidak diterima, maka nominal UKT Anda berdasarkan data unggahan:</p>
+                                        </div>
+                                    ) : (
+                                        <h5 className="font-weight-normal text-secondary mb-4">
+                                            Berdasarkan hasil verifikasi data, penetapan UKT Anda adalah:
+                                        </h5>
+                                    )}
+                                </div>
+
+                                {/* Box Nominal Utama */}
+                                <div className="py-4 mb-4" style={{ borderTop: '1px solid #eee', borderBottom: '1px solid #eee' }}>
+                                    {ukt !== undefined
+                                        ? this.renderUktTinggi()
+                                        : <div className="p-3 text-warning border rounded" style={{ backgroundColor: '#fffdf0' }}>
+                                            <i className="fa fa-clock-o mr-2"></i>
+                                            UKT Anda belum ditetapkan. Silakan cek kembali secara berkala.
+                                          </div>
+                                    }
+                                </div>
+
+                                <div className="d-flex align-items-center justify-content-center text-muted small mt-2">
+                                    <div className="px-3 py-1 border rounded-pill bg-light">
+                                        <i className="fa fa-calendar mr-2"></i> Per Semester
+                                    </div>
+                                </div>
+                            </Col>
+                        </Row>
+                    </div>
                 </Card>
-                {this.props.keringanan?.flag == '' ? (
-                    this.props.verifikasi.result_kipk === "lolos" ? (
-                        <React.Fragment>
-                            <Card body className="margin-top-20">
-                                <b>
-                                    Besaran tersebut adalah besaran yang wajib anda bayarkan
-                                    apabila usulan KIPK anda tidak diterima.
-                                    <br />
-                                    Apabila ada perubahan data yang disebabkan adanya kondisi luar biasa setelah pengunggahan data maka
-                                    bagi calon mahasiswa baru yng memiliki perbedaan data yang menimbulkan hasil berbeda maka di berikan
-                                    kesempatan untuk malakukan penyesuaian data baru. jika tidak ada perubahan data apapun.
-                                    maka golongan dan besaran ukt tersebut bersifat final
-                                    silakan unggah perubahan data dengan menekan tombol dibawah
-                                    <br /><br />
-                                </b>
-                            </Card>
-                        </React.Fragment>
-                    ) : null
-                ) : null}
-                <Modal isOpen={this.state.modalSanggah} >
-                    <ModalHeader toggle={this.toggleSanggah}>
-                        Unggah Perubahan Data
+
+                {/* Notifikasi Perubahan Data (KIPK) */}
+                {keringanan?.flag === '' && verifikasi.result_kipk === "lolos" && (
+                    <Card className="mt-4 border-0 shadow-sm" style={{ backgroundColor: '#f0f9f4', borderLeft: '5px solid #008d4c', borderRadius: '8px' }}>
+                        <div className="p-4">
+                            <div className="d-flex align-items-start">
+                                <div className="mr-3" style={{ color: '#008d4c' }}>
+                                    <i className="fa fa-info-circle fa-2x"></i>
+                                </div>
+                                <div>
+                                    <h6 className="font-weight-bold text-dark mb-1">Informasi Penyesuaian Data</h6>
+                                    <p className="small text-secondary mb-3" style={{ lineHeight: '1.6' }}>
+                                        Besaran di atas bersifat final jika tidak ada perubahan data. Namun, jika terdapat <strong>kondisi luar biasa</strong> setelah pengunggahan, Anda diberikan kesempatan untuk menyesuaikan data.
+                                    </p>
+                                    <Button 
+                                        size="sm" 
+                                        onClick={this.toggleSanggah}
+                                        style={{ backgroundColor: '#008d4c', border: 'none', borderRadius: '20px', padding: '5px 20px' }}
+                                    >
+                                        Unggah Perubahan
+                                    </Button>
+                                </div>
+                            </div>
+                        </div>
+                    </Card>
+                )}
+
+                <Modal isOpen={this.state.modalSanggah} centered size="lg" contentClassName="border-0 shadow-lg" style={{ borderRadius: '15px' }}>
+                    <ModalHeader toggle={this.toggleSanggah} className="border-0 pb-0">
+                        <span className="font-weight-bold">Form Perubahan Data</span>
                     </ModalHeader>
-                    <ModalBody>
+                    <ModalBody className="pt-0">
+                        <hr />
                         <UnggahSanggah />
                     </ModalBody>
                 </Modal>
