@@ -1,9 +1,11 @@
 import axios from 'axios'
 import { service, notif, errLog } from '../global'
 
-export function getById(token, id){
+export function getById(token, id, atribut = ""){
+    let url = service+'/pendukung/get-pendukung/'+id;
+    if (atribut) url += '?atribut=' + atribut;
     return new Promise((resolve, reject) => {
-        axios.get(service+'/pendukung/get-pendukung/'+id, {
+        axios.get(url, {
                 headers: {
                     "Authorization": "Bearer "+token
                 }

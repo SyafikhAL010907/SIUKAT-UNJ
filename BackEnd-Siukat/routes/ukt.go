@@ -74,8 +74,30 @@ func UktRoutes(r *gin.RouterGroup) {
 	// GET /ukt/just-compute/:no_peserta
 	uktGroup.GET("/just-compute/:no_peserta", func(c *gin.Context) {
 		noPesertaParam := c.Param("no_peserta")
+		atribut := c.Query("atribut")
 
-		data, err := uktService.JustCompute(noPesertaParam, "sanggah")
+		if atribut == "" {
+			atribut = "sanggah" // Default fallback
+		}
+
+		data, err := uktService.JustCompute(noPesertaParam, atribut)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, data)
+	})
+
+	// GET /ukt/compute/:no_peserta (Admin — hitung ulang & simpan golongan_id ke DB)
+	uktGroup.GET("/compute/:no_peserta", func(c *gin.Context) {
+		noPesertaParam := c.Param("no_peserta")
+		atribut := c.Query("atribut")
+
+		if atribut == "" {
+			atribut = "original"
+		}
+
+		data, err := uktService.ComputeUkt(noPesertaParam, atribut)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return

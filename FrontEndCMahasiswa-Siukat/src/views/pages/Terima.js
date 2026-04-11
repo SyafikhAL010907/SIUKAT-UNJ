@@ -84,9 +84,9 @@ class ComponentToPrint extends React.Component {
                             <td>|</td>
                             <td>
                                 <h5>
-                                    {this.props.cmahasiswa.no_peserta.charAt(0) === '8'
+                                    {this.props.cmahasiswa?.no_peserta?.charAt(0) === '8'
                                         ? 'JAPRES'
-                                        : this.props.info.stage.toUpperCase()}
+                                        : this.props.info?.stage?.toUpperCase() || '-'}
                                 </h5>
                             </td>
                         </tr>
@@ -96,7 +96,7 @@ class ComponentToPrint extends React.Component {
                             </td>
                             <td>|</td>
                             <td>
-                                <h5>{this.props.cmahasiswa.prodi?.jenjang}</h5>
+                                <h5>{this.props.cmahasiswa?.prodi?.jenjang || '-'}</h5>
                             </td>
                         </tr>
                         <tr style={{ textAlign: 'left', paddingLeft: '20px' }}>
@@ -204,26 +204,26 @@ class Terima extends React.Component {
     cekPembayanUKT() {
         console.log(this.props.verifikasi.result_kipk);
         let requestBody = {
-            nomor_pendaftaran: this.props.cmahasiswa.no_peserta,
-            nomor_tagihan: this.props.cmahasiswa.no_peserta,
+            nomor_pendaftaran: this.props.cmahasiswa?.no_peserta,
+            nomor_tagihan: this.props.cmahasiswa?.no_peserta,
             // nomor_tagihan:
             //     this.props.info.stage_detail == 'sbmptn'
             //         ? this.props.cmahasiswa.no_peserta
             //         : this.props.cmahasiswa.tagihan,
-            kode_prodi: this.props.cmahasiswa.prodi_cmahasiswa,
+            kode_prodi: this.props.cmahasiswa?.prodi_cmahasiswa,
             jenjang:
-                this.props.cmahasiswa.prodi?.jenjang.slice(0, 1) +
+                (this.props.cmahasiswa?.prodi?.jenjang?.slice(0, 1) || '') +
                 '-' +
-                this.props.cmahasiswa.prodi?.jenjang.slice(-1),
+                (this.props.cmahasiswa?.prodi?.jenjang?.slice(-1) || ''),
             stage:
-                this.props.cmahasiswa.no_peserta.charAt(0) === '8'
+                this.props.cmahasiswa?.no_peserta?.charAt(0) === '8'
                     ? 'JAPRES'
-                    : this.props.info.stage_detail.toUpperCase(),
-            beasiswa: this.props.verifikasi.result_kipk === 'lolos' ? 'YA' : 'TIDAK',
+                    : (this.props.info?.stage_detail?.toUpperCase() || 'MANDIRI'),
+            beasiswa: this.props.verifikasi?.result_kipk === 'lolos' ? 'YA' : 'TIDAK',
             keterangan: '-',
             keterangan_beasiswa:
-                this.props.verifikasi.result_kipk === 'lolos' ? 'KIPK' : '-',
-            nama_lengkap: this.props.cmahasiswa.nama_cmahasiswa
+                this.props.verifikasi?.result_kipk === 'lolos' ? 'KIPK' : '-',
+            nama_lengkap: this.props.cmahasiswa?.nama_cmahasiswa
         };
         console.log(requestBody, this.props.verifikasi);
         const url = 'http://103.8.12.212:38080/penmaba/registrasi';
@@ -380,7 +380,7 @@ class Terima extends React.Component {
                                         <br />
                                         <span>
                                             (Silakan login kembali pada tanggal{" "}
-                                            {this.props.info.lapor_diri})
+                                            {this.props.info?.lapor_diri || "-"})
                                         </span>
                                     </Button>
                                 </div>

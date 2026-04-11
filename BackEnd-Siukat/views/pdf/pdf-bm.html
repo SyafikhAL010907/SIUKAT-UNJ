@@ -1,4 +1,4 @@
-﻿<!DOCTYPE HTML>
+<!DOCTYPE HTML>
 <html>
     <head>
         <title>Rekapitulasi Sistem Informasi Uang Kuliah Tunggal </title>
@@ -37,17 +37,23 @@
                 </tr>
             </thead>
             <tbody>
-                <% for(var i=0; i < rows.length; i++) { %>
+                {{ range $index, $row := .rows }}
                 <tr>
-                    <td class="text-center"><%= i+1 %></td>
-                    <td class="text-center"><%= rows[i].no_peserta %></td>
-                    <td><%= rows[i].nama_cmahasiswa %></td>
-                    <td><%= rows[i].fakultas.nama %></td>
-                    <td><%= rows[i].prodi.nama %></td>
-                    <td class="text-center">Rp. <%= (rows[i].ukt[rows[i].golongan_id]) ? rows[i].ukt[rows[i].golongan_id] : "-"  %></td>
-                    <td class="text-center"><%= rows[i].no_registrasi %></td>
+                    <td class="text-center">{{ add $index 1 }}</td>
+                    <td class="text-center">{{ $row.NoPeserta }}</td>
+                    <td>{{ $row.NamaCmahasiswa }}</td>
+                    <td>{{ if $row.Fakultas }}{{ $row.Fakultas.Nama }}{{ else }}-{{ end }}</td>
+                    <td>{{ if $row.Prodi }}{{ $row.Prodi.Nama }}{{ else }}-{{ end }}</td>
+                    <td class="text-center">
+                        {{ if $row.GolonganID }}
+                            {{ $row.GolonganID }}
+                        {{ else }}
+                            -
+                        {{ end }}
+                    </td>
+                    <td class="text-center">{{ $row.NoRegistrasi }}</td>
                 </tr>
-                <% } %>
+                {{ end }}
             </tbody>
         </table>
     </body>

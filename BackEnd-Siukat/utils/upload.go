@@ -13,9 +13,9 @@ import (
 
 // SanitizeString — Membersihkan string (Gabungkan semua karakter alphanumeric)
 func SanitizeString(s string) string {
-	// 1. Hapus semua karakter yang bukan huruf atau angka (termasuk spasi)
-	reg, _ := regexp.Compile("[^a-zA-Z0-9]+")
-	s = reg.ReplaceAllString(s, "") // Digabung jaya!
+	// 1. Hapus semua karakter yang bukan huruf, angka, atau underscore
+	reg, _ := regexp.Compile("[^a-zA-Z0-9_]+")
+	s = reg.ReplaceAllString(s, "")
 
 	return s
 }

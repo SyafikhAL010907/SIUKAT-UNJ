@@ -8,6 +8,7 @@ import (
 	"BackEnd-Siukat/utils"
 	"net/http"
 	"strconv"
+	"fmt"
 
 	"github.com/gin-gonic/gin"
 )
@@ -61,7 +62,8 @@ func WaliRoutes(r *gin.RouterGroup) {
 		fileScan, errScan := c.FormFile("file_scan_wali")
 		if errScan == nil {
 			utils.DeleteOldFile(existing.ScanWali)
-			newPath, err := utils.HandleDynamicUpload(c, fileScan, student.NamaCmahasiswa, np)
+			filename := fmt.Sprintf("Surat_Wali_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
+			newPath, err := utils.HandleDynamicUpload(c, fileScan, student.NamaCmahasiswa, np, filename)
 			if err == nil {
 				data["scan_wali"] = newPath
 			}
@@ -102,7 +104,8 @@ func WaliRoutes(r *gin.RouterGroup) {
 		fileScan, errScan := c.FormFile("file_scan_wali")
 		if errScan == nil {
 			utils.DeleteOldFile(existing.ScanWali)
-			newPath, err := utils.HandleDynamicUpload(c, fileScan, student.NamaCmahasiswa, np)
+			filename := fmt.Sprintf("Surat_Wali_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
+			newPath, err := utils.HandleDynamicUpload(c, fileScan, student.NamaCmahasiswa, np, filename)
 			if err == nil {
 				data["scan_wali"] = newPath
 			}
@@ -128,11 +131,22 @@ func WaliRoutes(r *gin.RouterGroup) {
 
 	group.GET("/get-wali/:no_peserta", func(c *gin.Context) {
 		noPeserta := c.Param("no_peserta")
+		atribut := c.Query("atribut")
 		var model models.Wali
-		err := config.DB.Where("no_peserta = ? AND atribut = ?", noPeserta, "sanggah").First(&model).Error
-		if err != nil {
-			err = config.DB.Where("no_peserta = ? AND atribut = ?", noPeserta, "original").First(&model).Error
+		var err error
+
+		if atribut != "" {
+			err = config.DB.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
+				Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&model).Error
+		} else {
+			err = config.DB.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
+				Where("no_peserta = ? AND atribut = ?", noPeserta, "sanggah").First(&model).Error
+			if err != nil {
+				err = config.DB.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
+					Where("no_peserta = ? AND atribut = ?", noPeserta, "original").First(&model).Error
+			}
 		}
+
 		if err != nil {
 			c.JSON(http.StatusOK, gin.H{"msg": "data tidak ditemukan"})
 			return

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE HTML>
+<!DOCTYPE HTML>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -47,93 +47,72 @@
             <br/>
             <div class="content">
                 <p>Kami yang bertanda tangan di bawah ini:</p>
+                <!-- PIHAK PERTAMA (Isian Manual) -->
                 <table class="table">
                     <tr>
                         <td>1.</td>
                         <td>Nama</td>
                         <td>:</td>
-                        <td></td>
+                        <td>..........................................................</td>
                     </tr>
                     <tr>
                         <td></td>
                         <td>No. KTP (NIK)</td>
                         <td>:</td>
-                        <td></td>
+                        <td>..........................................................</td>
                     </tr>
                     <tr>
                         <td></td>
                         <td>Alamat</td>
                         <td>:</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td>..........................................................</td>
                     </tr>
                     <tr>
                         <td></td>
                         <td>Pekerjaan</td>
                         <td>:</td>
-                        <td></td>
+                        <td>..........................................................</td>
                     </tr>
                     <tr>
                         <td></td>
                         <td>No. Telepon / HP</td>
                         <td>:</td>
-                        <td></td>
+                        <td>..........................................................</td>
                     </tr>
                 </table>
                 <p>Dalam hal ini, bertindak untuk dan atas namanya sendiri. Selanjutnya dalam perjanjian ini disebut sebagai PIHAK PERTAMA.</p>
+                
+                <!-- PIHAK KEDUA (Otomatis Data Mahasiswa) -->
                 <table class="table">
                     <tr>
                         <td>2.</td>
                         <td>Nama</td>
                         <td>:</td>
-                        <td></td>
+                        <td>{{ .cmahasiswa.NamaCmahasiswa }}</td>
                     </tr>
                     <tr>
                         <td></td>
-                        <td>No. KTP (NIK)</td>
+                        <td>No. Peserta</td>
                         <td>:</td>
-                        <td></td>
+                        <td>{{ .cmahasiswa.NoPeserta }}</td>
                     </tr>
                     <tr>
                         <td></td>
                         <td>Alamat</td>
                         <td>:</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td>{{ .cmahasiswa.AlamatCmahasiswa }}</td>
                     </tr>
                     <tr>
                         <td></td>
                         <td>Pekerjaan</td>
                         <td>:</td>
-                        <td></td>
+                        <td>Mahasiswa</td>
                     </tr>
                     <tr>
                         <td></td>
                         <td>No. Telepon / HP</td>
                         <td>:</td>
-                        <td></td>
+                        <td>{{ .cmahasiswa.TeleponCmahasiswa }}</td>
                     </tr>
                 </table>
                 <p>Dalam hal ini, bertindak untuk dan atas namanya sendiri. Selanjutnya dalam perjanjian ini disebut sebagai PIHAK KEDUA.</p>
@@ -158,6 +137,7 @@
                             ............... , ...............................<br/>
                             <p class="text-center">Yang membuat pernyataan,</p>
                         </td>
+                    </tr>
                 </table>
 
                 <table class="table" width="100%">
@@ -180,6 +160,7 @@
                             <p class="text-center">(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</p>
                             <p style="padding-left: 40px">NIK.</p>
                         </td>
+                    </tr>
                 </table>
                 <br/>
                 <br/>
@@ -191,5 +172,8 @@
                 <span style="font-size: 13px"><i>*)coret yang tidak perlu</i></span>
             </div>
         </div>
+        <script>
+            window.print();
+        </script>
     </body>
 </html>

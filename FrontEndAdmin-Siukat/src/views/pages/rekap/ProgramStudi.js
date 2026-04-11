@@ -19,10 +19,37 @@ class ProgramStudi extends React.Component {
     toggleModal = () => this.setState({ isModalOpen: !this.state.isModalOpen });
     handleSearch = (e) => this.setState({ search: e.target.value });
 
+    handleExport = () => {
+        const data = this.props.data.rekapProdi || [];
+        if (!data.length) return;
+
+        const headers = ['Program Studi', 'Total Mhs', ...GOLONGAN_LIST, 'Bidikmisi', 'Selesai', 'Total Nominal UKT'];
+        const rows = data.map(item => [
+            item.prodi || '-',
+            item.total_mahasiswa || 0,
+            ...GOLONGAN_LIST.map(g => item[g] || 0),
+            item.bidikmisi || 0,
+            item.subtotal || 0,
+            item.total_ukt || 0
+        ]);
+
+        const csvContent = [headers, ...rows]
+            .map(row => row.map(v => `"${v}"`).join(','))
+            .join('\n');
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'Rekap_Program_Studi_SIUKAT.csv';
+        link.click();
+        URL.revokeObjectURL(url);
+    };
+
     getFilteredData = () => {
         const { rekapProdi = [] } = this.props.data;
         return rekapProdi.filter(item =>
-            item.prodi.toLowerCase().includes(this.state.search.toLowerCase())
+            (item.prodi || "").toLowerCase().includes(this.state.search.toLowerCase())
         );
     };
 
@@ -48,6 +75,7 @@ class ProgramStudi extends React.Component {
                         
                         <div className="flex items-center gap-3">
                             <SearchInput value={this.state.search} onChange={this.handleSearch} />
+                            <ExportButton onClick={this.handleExport} />
                             <AddButton onClick={this.toggleModal} />
                         </div>
                     </header>
@@ -170,6 +198,19 @@ const AddButton = ({ onClick }) => (
         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
             <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
         </svg>
+    </button>
+);
+
+const ExportButton = ({ onClick }) => (
+    <button
+        onClick={onClick}
+        title="Export CSV"
+        className="flex items-center gap-2 px-4 py-2.5 bg-white text-green-700 border-2 border-green-200 hover:border-green-500 hover:bg-green-50 active:scale-95 rounded-xl font-bold text-sm transition-all shadow-sm"
+    >
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+        Export
     </button>
 );
 

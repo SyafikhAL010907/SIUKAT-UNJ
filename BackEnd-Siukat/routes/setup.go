@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -19,15 +20,17 @@ func SetupRoutes(r *gin.Engine) {
 	api.GET("/uploads/*filepath", func(c *gin.Context) {
 		path := c.Param("filepath")
 
-		// Remove leading slash if any
-		path = strings.TrimPrefix(path, "/")
-
-		// Handle duplicate "uploads/" prefix if database already has it
-		// (since Admin prepends service + "/uploads")
-		if strings.HasPrefix(path, "uploads/") {
-			path = strings.TrimPrefix(path, "uploads/")
+		// Smart Trim: handle any number of leading slashes and duplicate "uploads/" prefixes
+		// (Common when frontend manually prepends these to already-fixed paths)
+		for {
+			newPath := strings.TrimPrefix(path, "/")
+			newPath = strings.TrimPrefix(newPath, "uploads/")
+			if newPath == path {
+				break
+			}
+			path = newPath
 		}
-
+		
 		// 1. Try direct path (standard static serving)
 		fullPath := filepath.Join("uploads", path)
 		if _, err := os.Stat(fullPath); err == nil {
@@ -35,26 +38,65 @@ func SetupRoutes(r *gin.Engine) {
 			return
 		}
 
-		// 2. If not found, check if it's just a filename (no subfolders in requested path)
+		// 2. Smart Fallback for Legacy/Admin Links
+		// If exact match fails, try to find a file in any student folder that matches keywords
 		filename := filepath.Base(path)
-		if !strings.Contains(path, "/") {
-			// Search recursively in uploads/
-			foundPath := ""
-			filepath.Walk("uploads", func(p string, info os.FileInfo, err error) error {
-				if err == nil && !info.IsDir() && info.Name() == filename {
-					foundPath = p
-					return fmt.Errorf("found") // stop walking
-				}
+		
+		// Extract potential ID or Name keywords (roughly)
+		// We prioritize searching by NoPeserta found in the requested filename
+		re := regexp.MustCompile(`\d{10,}`)
+		studentID := re.FindString(filename)
+		
+		foundPath := ""
+		filepath.Walk("uploads", func(p string, info os.FileInfo, err error) error {
+			if err != nil || info.IsDir() {
 				return nil
-			})
-
-			if foundPath != "" {
-				c.File(foundPath)
-				return
 			}
+			
+			// If we have a student ID, look for it in the path
+			if studentID != "" && strings.Contains(p, studentID) {
+				// And check if the category matches
+				categories := []string{
+					"KTP", "Slip", "Profile", "Foto", "Listrik", 
+					"STNK", "Motor", "Mobil", "KartuKeluarga", "KK",
+					"PBB", "Kontrak", "Rumah", "Pernyataan", "Wali", "Kebenaran",
+				}
+				for _, cat := range categories {
+					lowerCat := strings.ToLower(cat)
+					lowerFile := strings.ToLower(filename)
+					lowerDisk := strings.ToLower(info.Name())
+
+					// Standard Match
+					matchReq := strings.Contains(lowerFile, lowerCat)
+					matchDisk := strings.Contains(lowerDisk, lowerCat)
+
+					// Synonym Match: KK <-> KartuKeluarga
+					if !matchReq && lowerCat == "kk" && strings.Contains(lowerFile, "kartukeluarga") { matchReq = true }
+					if !matchReq && lowerCat == "kartukeluarga" && strings.Contains(lowerFile, "kk") { matchReq = true }
+					if !matchDisk && lowerCat == "kk" && strings.Contains(lowerDisk, "kartukeluarga") { matchDisk = true }
+					if !matchDisk && lowerCat == "kartukeluarga" && strings.Contains(lowerDisk, "kk") { matchDisk = true }
+
+					if matchReq && matchDisk {
+						foundPath = p
+						return fmt.Errorf("found")
+					}
+				}
+			}
+			
+			// Last resort: Exact filename match anywhere
+			if info.Name() == filename {
+				foundPath = p
+				return fmt.Errorf("found")
+			}
+			return nil
+		})
+
+		if foundPath != "" {
+			c.File(foundPath)
+			return
 		}
 
-		c.JSON(404, gin.H{"error": "File not found", "requested": path})
+		c.JSON(404, gin.H{"error": "File not found", "requested": path, "hint": "Please re-upload if problem persists"})
 	})
 
 	// === Index ===

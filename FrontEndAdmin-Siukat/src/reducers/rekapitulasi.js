@@ -17,6 +17,12 @@ export default function reducer(state={
                 rekapFakultas:action.payload
             }
         }
+        case "FETCH_REKAP_FAKULTAS_REJECTED":{            
+            return{
+                ...state,
+                loading:false
+            }
+        }
         case "FETCH_REKAP_PRODI":{
             return{
                 ...state,
@@ -28,6 +34,12 @@ export default function reducer(state={
                 ...state,
                 loading:false,
                 rekapProdi:action.payload
+            }
+        }
+        case "FETCH_REKAP_PRODI_REJECTED":{            
+            return{
+                ...state,
+                loading:false
             }
         }
         default:{

@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"strconv"
 	"time"
+	"fmt"
 
 	"github.com/gin-gonic/gin"
 )
@@ -66,9 +67,11 @@ func KendaraanRoutes(r *gin.RouterGroup) {
 			fileMtr, errMtr := c.FormFile("file_scan_motor")
 			if errMtr == nil {
 				utils.DeleteOldFile(existing.ScanMotor)
-				newPath, err := utils.HandleDynamicUpload(c, fileMtr, student.NamaCmahasiswa, np)
+				filename := fmt.Sprintf("STNK_Motor_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
+				newPath, err := utils.HandleDynamicUpload(c, fileMtr, student.NamaCmahasiswa, np, filename)
 				if err == nil {
 					req.ScanMotor = newPath
+					req.StatusMotor = "ada"
 				}
 			}
 		}
@@ -83,9 +86,11 @@ func KendaraanRoutes(r *gin.RouterGroup) {
 			fileMbl, errMbl := c.FormFile("file_scan_mobil")
 			if errMbl == nil {
 				utils.DeleteOldFile(existing.ScanMobil)
-				newPath, err := utils.HandleDynamicUpload(c, fileMbl, student.NamaCmahasiswa, np)
+				filename := fmt.Sprintf("STNK_Mobil_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
+				newPath, err := utils.HandleDynamicUpload(c, fileMbl, student.NamaCmahasiswa, np, filename)
 				if err == nil {
 					req.ScanMobil = newPath
+					req.StatusMobil = "ada"
 				}
 			}
 		}
@@ -127,9 +132,11 @@ func KendaraanRoutes(r *gin.RouterGroup) {
 			fileMtr, errMtr := c.FormFile("file_scan_motor")
 			if errMtr == nil {
 				utils.DeleteOldFile(existing.ScanMotor)
-				newPath, err := utils.HandleDynamicUpload(c, fileMtr, student.NamaCmahasiswa, np)
+				filename := fmt.Sprintf("STNK_Motor_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
+				newPath, err := utils.HandleDynamicUpload(c, fileMtr, student.NamaCmahasiswa, np, filename)
 				if err == nil {
 					req.ScanMotor = newPath
+					req.StatusMotor = "ada"
 				}
 			}
 		}
@@ -144,9 +151,11 @@ func KendaraanRoutes(r *gin.RouterGroup) {
 			fileMbl, errMbl := c.FormFile("file_scan_mobil")
 			if errMbl == nil {
 				utils.DeleteOldFile(existing.ScanMobil)
-				newPath, err := utils.HandleDynamicUpload(c, fileMbl, student.NamaCmahasiswa, np)
+				filename := fmt.Sprintf("STNK_Mobil_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
+				newPath, err := utils.HandleDynamicUpload(c, fileMbl, student.NamaCmahasiswa, np, filename)
 				if err == nil {
 					req.ScanMobil = newPath
+					req.StatusMobil = "ada"
 				}
 			}
 		}
@@ -174,11 +183,21 @@ func KendaraanRoutes(r *gin.RouterGroup) {
 
 	group.GET("/get-kendaraan/:no_peserta", func(c *gin.Context) {
 		noPeserta := c.Param("no_peserta")
+		atribut := c.Query("atribut") // Ambil dari URL ?atribut=original
 		var model models.Kendaraan
-		err := config.DB.Where("no_peserta = ? AND atribut = ?", noPeserta, "sanggah").First(&model).Error
-		if err != nil {
-			err = config.DB.Where("no_peserta = ? AND atribut = ?", noPeserta, "original").First(&model).Error
+		var err error
+
+		if atribut != "" {
+			// Jika Admin minta atribut spesifik
+			err = config.DB.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&model).Error
+		} else {
+			// Logic lama: Prioritas Sanggah -> Original
+			err = config.DB.Where("no_peserta = ? AND atribut = ?", noPeserta, "sanggah").First(&model).Error
+			if err != nil {
+				err = config.DB.Where("no_peserta = ? AND atribut = ?", noPeserta, "original").First(&model).Error
+			}
 		}
+
 		if err != nil {
 			c.JSON(http.StatusOK, gin.H{"msg": "data tidak ditemukan"})
 			return

@@ -203,7 +203,7 @@ class Ibu extends React.Component{
     componentWillMount(){
         this.props.dispatch(pekerjaan.fetchPekerjaan(cookies.get(cookieName)))
         this.props.dispatch(provinsi.fetchProvinsi())
-        this.props.dispatch(ibu.fetchAllData(cookies.get(cookieName), this.props.noPeserta))
+        this.props.dispatch(ibu.fetchAllData(cookies.get(cookieName), this.props.noPeserta, this.props.atribut))
     }
     modalToggle = () => {
         this.setState({
@@ -228,113 +228,113 @@ class Ibu extends React.Component{
         this.props.dispatch(reset('DataIbu'))        
     }
     render(){
+        const ibu = this.props.ibu || {}
         return (
-            <Row>
-                <Col md={12}>
-                    <Row>
-                        <Col md="6">
-                            <h4>Ibu</h4>
-                        </Col>
-                        <Col md="6" className="text-right">
-                            { this.props.editable && (
-                                <Button color="warning" size="sm" onClick={this.modalToggle}><i className="fa fa-pencil"></i> Perbarui</Button>
-                            )}
-                        </Col>
-                    </Row>
-                    <hr/>
-                    <Table responsive striped bordered>
-                        <tbody>
+            <div className="space-y-4">
+                <div className="flex justify-between items-end border-b border-gray-200 pb-4">
+                    <div>
+                        <h4 className="text-xl font-black text-gray-800 tracking-tight flex items-center gap-2">
+                            <i className="fa fa-female text-pink-500"></i> Data Ibu
+                        </h4>
+                        <p className="text-gray-500 text-sm">Informasi orang tua kandung / ibu.</p>
+                    </div>
+                    { this.props.editable && (
+                        <button onClick={this.modalToggle} className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg font-bold shadow-md transition transform hover:scale-105 flex items-center gap-2 text-sm">
+                            <i className="fa fa-pencil"></i> Perbarui Data
+                        </button>
+                    )}
+                </div>
+
+                <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                    <div className="p-4 border-b bg-pink-50 flex items-center gap-2 font-bold">
+                        <i className="fa fa-female text-pink-500"></i>
+                        <span className="uppercase text-gray-700 tracking-wider text-sm">Informasi Ibu</span>
+                    </div>
+                    <table className="w-full text-sm">
+                        <tbody className="divide-y divide-gray-100">
                             <tr>
-                                <td width="30%">Nama</td>
-                                <td width="5%">:</td>
-                                <td>{ this.props.ibu.nama_ibu }</td>
+                                <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 w-1/3 text-xs uppercase">Nama Lengkap</td>
+                                <td className="p-4 font-medium text-gray-800">{ibu.nama_ibu || '-'}</td>
                             </tr>
                             <tr>
-                                <td>Status Ibu</td>
-                                <td>:</td>
-                                <td>{ this.props.ibu.status_ibu }</td>
+                                <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Status</td>
+                                <td className="p-4">
+                                    <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase ${ibu.status_ibu === 'hidup' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                                        {ibu.status_ibu || 'Belum diisi'}
+                                    </span>
+                                </td>
                             </tr>
+                            { ibu.status_ibu === "hidup" && (<>
+                                <tr>
+                                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">NIK</td>
+                                    <td className="p-4 font-mono text-gray-700">{ibu.nik_ibu || '-'}</td>
+                                </tr>
+                                <tr>
+                                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">KTP</td>
+                                    <td className="p-4">
+                                        { (ibu.scan_ktp_ibu && ibu.scan_ktp_ibu !== "") ? (
+                                            <a href={storage+"/"+ibu.scan_ktp_ibu} target="_blank" rel="noopener noreferrer"
+                                               className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 font-bold text-sm">
+                                                <i className="fa fa-download"></i> Lihat KTP
+                                            </a>
+                                        ) : <span className="text-gray-400 italic text-xs">Belum diunggah</span>}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Tempat, Tgl Lahir</td>
+                                    <td className="p-4 text-gray-700">{ibu.tempat_lahir_ibu ? `${ibu.tempat_lahir_ibu}, ${ibu.tanggal_lahir_ibu}` : '-'}</td>
+                                </tr>
+                                <tr>
+                                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Alamat</td>
+                                    <td className="p-4 text-gray-700">
+                                        { ibu.provinsi != null
+                                            ? `${ibu.alamat_ibu}, ${ibu.kecamatan.kecam_nama}, ${ibu.kabkot.kab_nama}, ${ibu.provinsi.provinsi_nama}`
+                                            : (ibu.alamat_ibu || '-')
+                                        }
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Pekerjaan</td>
+                                    <td className="p-4 text-gray-700">{ibu.pekerjaan?.nama || '-'}</td>
+                                </tr>
+                                <tr>
+                                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Penghasilan</td>
+                                    <td className="p-4 font-bold text-emerald-700">{rupiah(ibu.penghasilan_ibu)} <span className="text-gray-400 font-normal text-xs">/ bulan</span></td>
+                                </tr>
+                                <tr>
+                                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Penghasilan Sampingan</td>
+                                    <td className="p-4 font-bold text-emerald-700">{rupiah(ibu.sampingan_ibu)} <span className="text-gray-400 font-normal text-xs">/ bulan</span></td>
+                                </tr>
+                                <tr>
+                                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Bukti Penghasilan</td>
+                                    <td className="p-4">
+                                        { (ibu.scan_slip_ibu && ibu.scan_slip_ibu !== "") ? (
+                                            <a href={storage+"/"+ibu.scan_slip_ibu} target="_blank" rel="noopener noreferrer"
+                                               className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 font-bold text-sm">
+                                                <i className="fa fa-download"></i> Lihat Slip Gaji
+                                            </a>
+                                        ) : <span className="text-gray-400 italic text-xs">Belum diunggah</span>}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Nomor Telepon</td>
+                                    <td className="p-4 font-mono text-gray-700">{ibu.telepon_ibu || '-'}</td>
+                                </tr>
+                            </>)}
                         </tbody>
+                    </table>
+                </div>
 
-                        { this.props.ibu.status_ibu === "hidup" && (
-                            <tbody>
-                                <tr>
-                                    <td>NIK</td>
-                                    <td>:</td>
-                                    <td>{ this.props.ibu.nik_ibu }</td>
-                                </tr>
-                                <tr>
-                                    <td>KTP</td>
-                                    <td>:</td>
-                                    <td>
-                                    { (this.props.ibu.scan_ktp_ibu !== "" && this.props.ibu.scan_ktp_ibu !== null) && (
-                                        <a href={ storage+"/"+this.props.ibu.scan_ktp_ibu } target="_blank" rel="noopener noreferrer"><Button color="primary" size="sm"><i className="fa fa-download"></i> Lihat KTP</Button></a>
-                                    )}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Tempat, Tanggal Lahir</td>
-                                    <td>:</td>
-                                    <td>{ this.props.ibu.tempat_lahir_ibu+", "+this.props.ibu.tanggal_lahir_ibu }</td>
-                                </tr>
-                                <tr>
-                                    <td>Alamat</td>
-                                    <td>:</td>
-                                    <td>
-                                    { this.props.ibu.provinsi != null && 
-                                        ( this.props.ibu.alamat_ibu+", "+this.props.ibu.kecamatan.kecam_nama+", "+this.props.ibu.kabkot.kab_nama+", "+this.props.ibu.provinsi.provinsi_nama )
-                                    }
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Pekerjaan</td>
-                                    <td>:</td>
-                                    <td>
-                                    { this.props.ibu.pekerjaan != null && 
-                                        ( this.props.ibu.pekerjaan.nama )
-                                    }
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Penghasilan</td>
-                                    <td>:</td>
-                                    <td>{ rupiah(this.props.ibu.penghasilan_ibu) } <b>/ bulan</b></td>
-                                </tr>
-                                <tr>
-                                    <td>Sampingan</td>
-                                    <td>:</td>
-                                    <td>{ rupiah(this.props.ibu.sampingan_ibu) } <b>/ bulan</b></td>
-                                </tr>
-                                <tr>
-                                    <td>Bukti Penghasilan</td>
-                                    <td>:</td>
-                                    <td>
-                                    { (this.props.ibu.scan_slip_ibu !== "" && this.props.ibu.scan_slip_ibu !== null) && (
-                                        <a href={ storage+"/"+this.props.ibu.scan_slip_ibu } target="_blank" rel="noopener noreferrer">
-                                            <Button color="primary" size="sm"><i className="fa fa-download"></i> Lihat Bukti Penghasilan</Button>
-                                        </a>
-                                    )}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Nomor Telepon</td>
-                                    <td>:</td>
-                                    <td>{ this.props.ibu.telepon_ibu } </td>
-                                </tr>
-                            </tbody>
-                        )}
-                    </Table>
-
-                    <FormIbu
-                        onSubmit={this.submitIbu}
-                        initialValues={this.props.ibu}
-                        toggleIbu={this.state.modalToggle}
-                        handleToggleIbu={this.modalToggle}
-                        /> 
-                </Col>
-            </Row>
+                <FormIbu
+                    onSubmit={this.submitIbu}
+                    initialValues={this.props.ibu}
+                    toggleIbu={this.state.modalToggle}
+                    handleToggleIbu={this.modalToggle}
+                />
+            </div>
         )
     }
+
 }
 
 FormIbu = reduxForm({

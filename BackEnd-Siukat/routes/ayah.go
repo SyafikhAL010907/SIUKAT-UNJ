@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"strconv"
 	"time"
+	"fmt"
 
 	"github.com/gin-gonic/gin"
 )
@@ -94,7 +95,8 @@ func AyahRoutes(r *gin.RouterGroup) {
 				utils.DeleteOldFile(oldAyah.ScanKtpAyah)
 				
 				// Simpan file baru secara dinamis
-				newPath, err := utils.HandleDynamicUpload(c, fileKtp, student.NamaCmahasiswa, np)
+				filename := fmt.Sprintf("KTP_Ayah_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
+				newPath, err := utils.HandleDynamicUpload(c, fileKtp, student.NamaCmahasiswa, np, filename)
 				if err == nil {
 					data["scan_ktp_ayah"] = newPath
 				}
@@ -107,7 +109,8 @@ func AyahRoutes(r *gin.RouterGroup) {
 				utils.DeleteOldFile(oldAyah.ScanSlipAyah)
 				
 				// Simpan file baru secara dinamis
-				newPath, err := utils.HandleDynamicUpload(c, fileSlip, student.NamaCmahasiswa, np)
+				filename := fmt.Sprintf("Slip_Ayah_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
+				newPath, err := utils.HandleDynamicUpload(c, fileSlip, student.NamaCmahasiswa, np, filename)
 				if err == nil {
 					data["scan_slip_ayah"] = newPath
 				}
@@ -161,7 +164,8 @@ func AyahRoutes(r *gin.RouterGroup) {
 			fileKtp, errKtp := c.FormFile("file_scan_ktp_ayah")
 			if errKtp == nil {
 				utils.DeleteOldFile(oldAyah.ScanKtpAyah)
-				newPath, err := utils.HandleDynamicUpload(c, fileKtp, student.NamaCmahasiswa, np)
+				filename := fmt.Sprintf("KTP_Ayah_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
+				newPath, err := utils.HandleDynamicUpload(c, fileKtp, student.NamaCmahasiswa, np, filename)
 				if err == nil {
 					data["scan_ktp_ayah"] = newPath
 				}
@@ -170,7 +174,8 @@ func AyahRoutes(r *gin.RouterGroup) {
 			fileSlip, errSlip := c.FormFile("file_scan_slip_ayah")
 			if errSlip == nil {
 				utils.DeleteOldFile(oldAyah.ScanSlipAyah)
-				newPath, err := utils.HandleDynamicUpload(c, fileSlip, student.NamaCmahasiswa, np)
+				filename := fmt.Sprintf("Slip_Ayah_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
+				newPath, err := utils.HandleDynamicUpload(c, fileSlip, student.NamaCmahasiswa, np, filename)
 				if err == nil {
 					data["scan_slip_ayah"] = newPath
 				}
@@ -204,14 +209,20 @@ func AyahRoutes(r *gin.RouterGroup) {
 	// GET /ayah/get-ayah/:no_peserta
 	ayahGroup.GET("/get-ayah/:no_peserta", func(c *gin.Context) {
 		noPeserta := c.Param("no_peserta")
+		atribut := c.Query("atribut")
 		var ayah models.Ayah
-		
-		err := config.DB.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
-			Where("no_peserta = ? AND atribut = ?", noPeserta, "sanggah").First(&ayah).Error
+		var err error
 
-		if err != nil {
+		if atribut != "" {
 			err = config.DB.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
-				Where("no_peserta = ? AND atribut = ?", noPeserta, "original").First(&ayah).Error
+				Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&ayah).Error
+		} else {
+			err = config.DB.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
+				Where("no_peserta = ? AND atribut = ?", noPeserta, "sanggah").First(&ayah).Error
+			if err != nil {
+				err = config.DB.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
+					Where("no_peserta = ? AND atribut = ?", noPeserta, "original").First(&ayah).Error
+			}
 		}
 
 		if err != nil {

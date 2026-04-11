@@ -25,10 +25,41 @@ class Fakultas extends React.Component {
         this.setState({ search: e.target.value });
     };
 
+    handleExport = () => {
+        const data = this.props.data.rekapFakultas || [];
+        if (data.length === 0) return;
+
+        const headers = ["Fakultas", "Total Mhs", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "Bidikmisi", "Selesai Isi", "Total UKT"];
+        const csvRows = [headers.join(",")];
+
+        data.forEach(item => {
+            const row = [
+                `"${item.fakultas}"`,
+                item.total_mahasiswa,
+                item.I, item.II, item.III, item.IV, item.V, item.VI, item.VII, item.VIII,
+                item.bidikmisi,
+                item.subtotal,
+                item.total_ukt
+            ];
+            csvRows.push(row.join(","));
+        });
+
+        const csvString = csvRows.join("\n");
+        const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", `Rekap_Fakultas_${new Date().toLocaleDateString()}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
     render() {
         const { rekapFakultas } = this.props.data;
         const filteredData = (rekapFakultas || []).filter(item => 
-            item.fakultas.toLowerCase().includes(this.state.search.toLowerCase())
+            (item.fakultas || "").toLowerCase().includes(this.state.search.toLowerCase())
         );
 
         return (
@@ -55,7 +86,10 @@ class Fakultas extends React.Component {
                                     onChange={this.handleSearch}
                                 />
                             </div>
-                            <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center transition shadow-sm">
+                            <button 
+                                onClick={this.handleExport}
+                                className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center transition shadow-sm"
+                            >
                                 <i className="fa fa-file-excel-o mr-2"></i> EXPORT CSV
                             </button>
                         </div>

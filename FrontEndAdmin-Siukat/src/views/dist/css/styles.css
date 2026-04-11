@@ -347,3 +347,42 @@ legend{
   border-top: 3px solid #048a55;
   border-radius: 3px;
 }
+
+/* EXCEL EXPORT PREMIUM STYLING */
+.btn-excel-modern {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    padding: 10px 16px !important;
+    background-color: #ffffff !important;
+    color: #059669 !important; /* emerald-600 */
+    border: 1px solid #d1fae5 !important; /* emerald-200 */
+    border-radius: 12px !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+    cursor: pointer !important;
+    height: auto !important;
+    outline: none !important;
+}
+
+.btn-excel-modern:hover {
+    background-color: #f0fdf4 !important; /* emerald-50 */
+    border-color: #10b981 !important; /* emerald-500 */
+    color: #047857 !important; /* emerald-700 */
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+    text-decoration: none !important;
+}
+
+.btn-excel-modern:active {
+    transform: translateY(0);
+    scale: 0.95;
+}
+
+.btn-excel-modern i {
+    font-size: 16px !important;
+    color: #059669 !important;
+}

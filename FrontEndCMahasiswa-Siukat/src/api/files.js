@@ -3,60 +3,21 @@ import { service, notif, errLog } from '../global';
 import FileDownload from 'react-file-download';
 
 export function unduhBuktiSelesai(token) {
-    return new Promise((resolve, reject) => {
-        axios.get(service + '/pdf/bukti-selesai', {
-            headers: {
-                'Authorization': 'Bearer ' + token
-            },
-            responseType: 'arraybuffer'
-        })
-            .then((response) => {
-                FileDownload(response.data, 'Bukti-Selesai.pdf');
-                resolve(response.data);
-            })
-            .catch((err) => {
-                notif('Terjadi kesalahan!', errLog(err.response), 'error');
-                reject(err.response);
-            });
-    });
+    const url = service + '/pdf/bukti-selesai?token=' + token;
+    window.open(url, '_blank');
+    return Promise.resolve();
 }
 
 export function unduhSuratKebenaran(token) {
-    return new Promise((resolve, reject) => {
-        axios.get(service + '/pdf/surat-validasi', {
-            headers: {
-                'Authorization': 'Bearer ' + token
-            },
-            responseType: 'arraybuffer'
-        })
-            .then((response) => {
-                FileDownload(response.data, 'Surat-Pernyataan-Kebenaran-Data.pdf');
-                resolve(response.data);
-            })
-            .catch((err) => {
-                notif('Terjadi kesalahan!', errLog(err.response), 'error');
-                reject(err.response);
-            });
-    });
+    const url = service + '/pdf/surat-validasi?token=' + token;
+    window.open(url, '_blank');
+    return Promise.resolve();
 }
 
 export function unduhSlipPembayaran(token) {
-    return new Promise((resolve, reject) => {
-        axios.get(service + '/pdf/slip-pembayaran', {
-            headers: {
-                'Authorization': 'Bearer ' + token
-            },
-            responseType: 'arraybuffer'
-        })
-            .then((response) => {
-                FileDownload(response.data, 'Slip-Pembayaran.pdf');
-                resolve(response.data);
-            })
-            .catch((err) => {
-                notif('Terjadi kesalahan!', errLog(err.response), 'error');
-                reject(err.response);
-            });
-    });
+    const url = service + '/pdf/slip-pembayaran?token=' + token;
+    window.open(url, '_blank');
+    return Promise.resolve();
 }
 
 export function unduhSuratPernyataanUKTAtas(token) {
@@ -78,36 +39,16 @@ export function unduhSuratPernyataanUKTAtas(token) {
     });
 }
 
-export function unduhWali() {
-    return new Promise((resolve, reject) => {
-        axios.get(service + '/pdf/wali', {
-            responseType: 'arraybuffer'
-        })
-            .then((response) => {
-                FileDownload(response.data, 'Surat-Pernyataan-Komitmen-Wali.pdf');
-                resolve(response.data);
-            })
-            .catch((err) => {
-                notif('Terjadi kesalahan!', errLog(err.response), 'error');
-                reject(err.response);
-            });
-    });
+export function unduhWali(token) {
+    const url = service + '/pdf/wali?token=' + token;
+    window.open(url, '_blank');
+    return Promise.resolve();
 }
 
-export function unduhKontrak() {
-    return new Promise((resolve, reject) => {
-        axios.get(service + '/pdf/kontrak', {
-            responseType: 'arraybuffer'
-        })
-            .then((response) => {
-                FileDownload(response.data, 'Surat-Perjanjian-Kontrak.pdf');
-                resolve(response.data);
-            })
-            .catch((err) => {
-                notif('Terjadi kesalahan!', errLog(err.response), 'error');
-                reject(err.response);
-            });
-    });
+export function unduhKontrak(token) {
+    const url = service + '/pdf/kontrak?token=' + token;
+    window.open(url, '_blank');
+    return Promise.resolve();
 }
 
 export function unduhRegistrasi(param) {

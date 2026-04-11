@@ -1,9 +1,9 @@
 import { notif, errLog } from '../global'
 import { ayah, kabkot, kecamatan } from '../api'
 
-export function fetchAllData(token, id){
+export function fetchAllData(token, id, atribut = ""){
     return function(dispatch){
-        ayah.getById(token, id).then((response) => {
+        ayah.getById(token, id, atribut).then((response) => {
             dispatch({
                 type: "FETCH_AYAH_FULFILLED",
                 payload: response

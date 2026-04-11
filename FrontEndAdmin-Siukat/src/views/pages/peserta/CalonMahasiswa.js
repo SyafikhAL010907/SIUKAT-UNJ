@@ -1,7 +1,7 @@
 import React from 'react'
 import { cmahasiswa, user } from '../../../actions'
 import { connect } from 'react-redux'
-import { cookies, cookieName } from '../../../global'
+import { cookies, cookieName, service } from '../../../global'
 import { DataTable, SummaryCmahasiswa, Exports } from '../../components'
 
 class CalonMahasiswa extends React.Component {
@@ -21,18 +21,33 @@ class CalonMahasiswa extends React.Component {
 
     // DATATABLE HANDLERS
     renderData = (e, perPage = 10, to = 1, key = null) => {
-        if (e) e.preventDefault()
-        this.props.dispatch(cmahasiswa.fetchCmahasiswa(cookies.get(cookieName), { perPage: perPage, page: to, keyword: key }))
+        if (e && e.preventDefault) e.preventDefault()
+        // Pastikan perPage dan page selalu integer agar tidak ditolak backend Go
+        this.props.dispatch(cmahasiswa.fetchCmahasiswa(cookies.get(cookieName), { 
+            perPage: parseInt(perPage, 10), 
+            page: parseInt(to, 10), 
+            keyword: key || "" 
+        }))
     }
 
     handlePerPage = (e) => {
-        this.setState({ perPage: e.target.value })
-        this.renderData(e, e.target.value, 1, this.state.keyword)
+        const value = parseInt(e.target.value, 10)  // Konversi ke integer
+        this.setState({ perPage: value })
+        this.props.dispatch(cmahasiswa.fetchCmahasiswa(cookies.get(cookieName), { 
+            perPage: value, 
+            page: 1, 
+            keyword: this.state.keyword 
+        }))
     }
 
     handleSearch = (e) => {
-        this.setState({ keyword: e.target.value })
-        this.renderData(e, this.state.perPage, 1, e.target.value)
+        const value = e.target.value
+        this.setState({ keyword: value })
+        this.props.dispatch(cmahasiswa.fetchCmahasiswa(cookies.get(cookieName), { 
+            perPage: parseInt(this.state.perPage, 10), 
+            page: 1, 
+            keyword: value 
+        }))
     }
 
     render() {
@@ -58,22 +73,28 @@ class CalonMahasiswa extends React.Component {
                         </div>
 
                        <div className="flex flex-wrap items-center gap-2">
-                        {/* Tombol PDF */}
-                        <button className="flex items-center space-x-2 px-4 py-2 bg-white text-red-600 hover:bg-red-50 border border-red-200 rounded-xl text-sm font-bold transition-all shadow-sm active:scale-95">
+                        {/* Tombol PDF Master - Restored to original UI state */}
+                        <button 
+                            onClick={() => {
+                                const token = cookies.get(cookieName);
+                                // Gunakan konstanta service langsung dari global.js
+                                const url = (service.startsWith('http') ? service : window.location.origin + service) + '/pdf/master?token=' + token;
+                                window.open(url);
+                            }}
+                            className="flex items-center space-x-2 px-4 py-2 bg-white text-red-600 hover:bg-red-50 border border-red-200 rounded-xl text-sm font-bold transition-all shadow-sm active:scale-95"
+                        >
                             <i className="fa fa-file-pdf-o"></i>
                             <span>PDF Master</span>
                         </button>
 
-                        {/* Komponen Exports - Kita hilangkan background emerald dari pembungkusnya 
-                            agar tidak "double button", biarkan class di dalam komponen Exports yang bekerja */}
-                        <div className="inline-block outline-none shadow-sm rounded-xl overflow-hidden active:scale-95 transition-transform">
-                            <Exports 
-                                count={this.props.count} 
-                                title="Data Master" 
-                                className="btn-excel-modern" // Jika komponen Exports menerima custom class
-                            />
-                        </div>
+                        {/* Komponen Exports */}
+                        <Exports 
+                            count={this.props.count} 
+                            title="Data Master" 
+                            className="btn-excel-modern"
+                        />
                     </div>
+
                     </div>
 
                     {/* Table Section */}

@@ -159,7 +159,7 @@ class Kendaraan extends React.Component {
     }
 
     componentWillMount() {
-        this.props.dispatch(kendaraanAction.getById(cookies.get(cookieName), this.props.noPeserta));
+        this.props.dispatch(kendaraanAction.getById(cookies.get(cookieName), this.props.noPeserta, this.props.atribut));
     }
 
     modalToggle = () => {

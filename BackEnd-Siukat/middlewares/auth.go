@@ -13,23 +13,27 @@ import (
 // JwtAuth Middleware menggantikan passport-jwt strategy pada Node.js
 func JwtAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		tokenString := ""
 		authHeader := c.GetHeader("Authorization")
-		if authHeader == "" {
-			fmt.Println("DEBUG AUTH: Missing Authorization Header")
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization header is required"})
+
+		// 1. Coba ambil dari Header Authorization
+		if authHeader != "" {
+			parts := strings.Split(authHeader, " ")
+			if len(parts) == 2 && parts[0] == "Bearer" {
+				tokenString = parts[1]
+			}
+		}
+
+		// 2. Jika header kosong, coba ambil dari Query Parameter ?token=... (Khusus buat PDF/Download)
+		if tokenString == "" {
+			tokenString = c.Query("token")
+		}
+
+		if tokenString == "" {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization token is required"})
 			c.Abort()
 			return
 		}
-
-		parts := strings.Split(authHeader, " ")
-		if len(parts) != 2 || parts[0] != "Bearer" {
-			fmt.Printf("DEBUG AUTH: Malformed Header: %v\n", authHeader)
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization header format must be Bearer {token}"})
-			c.Abort()
-			return
-		}
-
-		tokenString := parts[1]
 		fmt.Printf("DEBUG AUTH: Token String: '%s'\n", tokenString)
 		secret := os.Getenv("SECRET") // Sesuai dengan constants/secret.js
 

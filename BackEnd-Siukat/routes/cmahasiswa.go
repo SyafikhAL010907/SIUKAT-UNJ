@@ -8,6 +8,7 @@ import (
 	"mime/multipart"
 	"net/http"
 	"time"
+	"fmt"
 	"BackEnd-Siukat/config"
 
 	"github.com/gin-gonic/gin"
@@ -267,7 +268,8 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 		utils.DeleteOldFile(student.FotoCmahasiswa)
 
 		// SEKARANG: Otomatis hapus foto profil lama (apapun ekstensinya .jpg/.png) di dalam HandleDynamicUpload
-		savedPath, errUpload := utils.HandleDynamicUpload(c, file, student.NamaCmahasiswa, np, "foto_profil")
+		filename := fmt.Sprintf("Profile_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
+		savedPath, errUpload := utils.HandleDynamicUpload(c, file, student.NamaCmahasiswa, np, filename)
 		if errUpload != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal mengupload foto: " + errUpload.Error()})
 			return
@@ -329,7 +331,8 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 
 					// Upload baru dengan nama tetap "foto_profil" (Sesuai Request USER)
 					// HandleDynamicUpload otomatis cari & hapus file "foto_profil.*" lain untuk safety
-					savedPath, errUpload := utils.HandleDynamicUpload(c, fileHeader, student.NamaCmahasiswa, np, "foto_profil")
+					filename := fmt.Sprintf("Profile_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
+					savedPath, errUpload := utils.HandleDynamicUpload(c, fileHeader, student.NamaCmahasiswa, np, filename)
 					if errUpload == nil {
 						updateData["foto_cmahasiswa"] = savedPath
 					} else {

@@ -1,9 +1,9 @@
 import { listrik } from '../api'
 
-export function getById(token, id){
+export function getById(token, id, atribut = ""){
     return {
         type: "FETCH_LISTRIK",
-        payload: listrik.getById(token, id)
+        payload: listrik.getById(token, id, atribut)
     }
 }
 

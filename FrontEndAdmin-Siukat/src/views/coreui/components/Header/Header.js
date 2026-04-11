@@ -3,7 +3,7 @@ import { Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { user } from '../../../../actions';
 import { notif, cookies, cookieName } from '../../../../global';
-import logoUnj from "../../../../views/dist/images/unj.png";
+
 
 class Header extends Component {
   constructor(props) {
@@ -62,11 +62,12 @@ class Header extends Component {
             </button>
 
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white p-1">
-                <img src={logoUnj} alt="Logo UNJ" className="h-full w-auto object-contain" />
+              <div className="flex h-11 w-11 items-center justify-center rounded-full bg-white p-1.5 shadow-sm border border-gray-100">
+                <img src="/unj.png" alt="Logo UNJ" className="h-full w-auto object-contain" />
               </div>
               
               <div className="flex flex-col leading-tight">
+
                 <span className="text-xl font-black italic tracking-tighter text-gray-800 uppercase">
                   SIUKAT <span className="bg-gradient-to-r from-green-600 to-green-400 bg-clip-text text-transparent">ADMIN</span>
                 </span>

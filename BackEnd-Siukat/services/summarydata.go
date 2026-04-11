@@ -83,7 +83,7 @@ func (s *SummaryService) FetchByFakultas() ([]SummaryDistribution, error) {
                             when golongan_id = '' then 0
                             else 0
                         end as nilai_ukt,
-                        c.nama as fakultas
+                        COALESCE(c.nama, 'Tanpa Fakultas') as fakultas
                     FROM
                         tb_cmahasiswa a
                     left join ref_ukt b on
@@ -144,7 +144,7 @@ func (s *SummaryService) FetchByProdi() ([]SummaryDistribution, error) {
                             when golongan_id = '' then 0
                             else 0
                         end as nilai_ukt,
-                        c.nama as prodi
+                        COALESCE(c.nama, 'Tanpa Prodi') as prodi
                     FROM
                         tb_cmahasiswa a
                     left join ref_ukt b on

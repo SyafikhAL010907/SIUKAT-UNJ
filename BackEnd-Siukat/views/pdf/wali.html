@@ -1,4 +1,4 @@
-﻿<!DOCTYPE HTML>
+<!DOCTYPE HTML>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -50,47 +50,17 @@
                 <tr>
                     <td>Nama / Institusi</td>
                     <td>:</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>No. KTP (NIK)</td>
-                    <td>:</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Pekerjaan</td>
-                    <td>:</td>
-                    <td></td>
+                    <td>{{ .wali.NamaWali }}</td>
                 </tr>
                 <tr>
                     <td>Alamat</td>
                     <td>:</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>{{ .wali.AlamatWali }}</td>
                 </tr>
                 <tr>
                     <td>No. Telepon / HP</td>
                     <td>:</td>
-                    <td></td>
+                    <td>-</td>
                 </tr>
             </table>
             <br/>
@@ -99,22 +69,22 @@
                 <tr>
                     <td>Nama Calon Mahasiswa</td>
                     <td>:</td>
-                    <td></td>
+                    <td>{{ .cmahasiswa.NamaCmahasiswa }}</td>
                 </tr>
                 <tr>
                     <td>Nomor Pendaftaran</td>
                     <td>:</td>
-                    <td></td>
+                    <td>{{ .cmahasiswa.NoPeserta }}</td>
                 </tr>
                 <tr>
                     <td>Pilihan Program Studi</td>
                     <td>:</td>
-                    <td></td>
+                    <td>{{ if .cmahasiswa.Prodi }}{{ .cmahasiswa.Prodi.Nama }}{{ else }}-{{ end }}</td>
                 </tr>
                 <tr>
                     <td>Hubungan Keluarga dengan Wali</td>
                     <td>:</td>
-                    <td></td>
+                    <td>-</td>
                 </tr>
             </table>
             <br/>
@@ -133,7 +103,7 @@
                 <li>
                     Untuk selanjutnya, Bersedia untuk membiayai pendidikannya hingga tamat di
                     Universitas Negeri Jakarta dan setiap bulannya dapat membiayai calon
-                    mahasiswa tersebut sebesar Rp. ..................... 
+                    mahasiswa tersebut sebesar Rp. {{ if .wali.KesanggupanWali }}{{ formatRupiah .wali.KesanggupanWali }}{{ else }}..........{{ end }} 
                 </li>
             </ol>
             <br/>
@@ -158,18 +128,21 @@
                     <td></td>
                     <td></td>
                     <td>
-                        ................ , ............................. {{ date('Y') }}<br/>
+                        ................ , ............................. {{ date "Y" }}<br/>
                         <p class="text-center">Yang Membuat Pernyataan,</p>
                         <p class="text-center">Wali,</p>
                         <br/>
                         <br/>
                         <p class="text-center">Materai 6000</p>
                         <br/>
-                        <p class="text-center">(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</p>
-                        <p>&nbsp;&nbsp;&nbsp;&nbsp;NIK.</p>
+                        <br/>
+                        <p class="text-center">( {{ .wali.NamaWali }} )</p>
                     </td>
                 </tr>
             </table>
         </div>
+        <script>
+            window.print();
+        </script>
     </body>
 </html>

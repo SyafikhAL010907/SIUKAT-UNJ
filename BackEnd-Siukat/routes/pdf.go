@@ -25,8 +25,7 @@ func PdfRoutes(r *gin.RouterGroup) {
 	// ==========================================
 
 	pdfGroup.GET("/alur", func(c *gin.Context) {
-		// Mengambil template file statis
-		c.File("views/pdf/alur.html")
+		c.HTML(http.StatusOK, "alur.html", nil)
 	})
 
 	pdfGroup.GET("/surat-pernyataan-ukt-atas", func(c *gin.Context) {
@@ -74,7 +73,7 @@ func PdfRoutes(r *gin.RouterGroup) {
 
 		// Tarik data Mahasiswa dengan Preload Relasi
 		var mhs models.CMahasiswa
-		err := config.DB.Preload("Fakultas").Preload("Prodi").Where("no_peserta = ?", np).First(&mhs).Error
+		err := config.DB.Preload("Fakultas").Preload("Prodi").Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").Where("no_peserta = ?", np).First(&mhs).Error
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Data Mahasiswa tidak ditemukan"})
 			return
@@ -105,7 +104,7 @@ func PdfRoutes(r *gin.RouterGroup) {
 		config.DB.First(&info)
 
 		var mhs models.CMahasiswa
-		if err := config.DB.Where("no_peserta = ?", np).First(&mhs).Error; err != nil {
+		if err := config.DB.Preload("Fakultas").Preload("Prodi").Where("no_peserta = ?", np).First(&mhs).Error; err != nil {
 			c.JSON(http.StatusInternalServerError, err.Error())
 			return
 		}
@@ -132,9 +131,9 @@ func PdfRoutes(r *gin.RouterGroup) {
 		var l models.Listrik
 		var p models.Pendukung
 
-		config.DB.Where("no_peserta = ?", np).First(&mhs)
-		config.DB.Where("no_peserta = ?", np).First(&a)
-		config.DB.Where("no_peserta = ?", np).First(&i)
+		config.DB.Preload("Fakultas").Preload("Prodi").Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").Where("no_peserta = ?", np).First(&mhs)
+		config.DB.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").Preload("Pekerjaan").Where("no_peserta = ?", np).First(&a)
+		config.DB.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").Preload("Pekerjaan").Where("no_peserta = ?", np).First(&i)
 		config.DB.Where("no_peserta = ?", np).First(&k)
 		config.DB.Where("no_peserta = ?", np).First(&w)
 		config.DB.Where("no_peserta = ?", np).First(&r)
@@ -156,6 +155,36 @@ func PdfRoutes(r *gin.RouterGroup) {
 		c.HTML(http.StatusOK, "surat-validasi.html", data)
 	})
 
+	authGroup.GET("/kontrak", func(c *gin.Context) {
+		noPeserta, _ := c.Get("no_peserta")
+		np := noPeserta.(string)
+
+		var mhs models.CMahasiswa
+		config.DB.Preload("Fakultas").Preload("Prodi").Where("no_peserta = ?", np).First(&mhs)
+
+		data := gin.H{
+			"cmahasiswa": mhs,
+		}
+		c.HTML(http.StatusOK, "kontrak.html", data)
+	})
+
+	authGroup.GET("/wali", func(c *gin.Context) {
+		noPeserta, _ := c.Get("no_peserta")
+		np := noPeserta.(string)
+
+		var mhs models.CMahasiswa
+		var w models.Wali
+
+		config.DB.Preload("Fakultas").Preload("Prodi").Where("no_peserta = ?", np).First(&mhs)
+		config.DB.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").Where("no_peserta = ?", np).First(&w)
+
+		data := gin.H{
+			"cmahasiswa": mhs,
+			"wali":       w,
+		}
+		c.HTML(http.StatusOK, "wali.html", data)
+	})
+
 	authGroup.GET("/sanggah", func(c *gin.Context) {
 		// Logika ini diperuntukkan narik Array of Sanggah Data
 		var mhsList []models.CMahasiswa
@@ -175,5 +204,16 @@ func PdfRoutes(r *gin.RouterGroup) {
 			"rows": mhsList,
 		}
 		c.HTML(http.StatusOK, "pdf-bm.html", data)
+	})
+
+	authGroup.GET("/master", func(c *gin.Context) {
+		var mhsList []models.CMahasiswa
+		// Ambil semua data mahasiswa dengan relasi Fakultas, Prodi, dan UKT
+		config.DB.Preload("Fakultas").Preload("Prodi").Preload("Ukt").Find(&mhsList)
+
+		data := gin.H{
+			"cmahasiswa": mhsList,
+		}
+		c.HTML(http.StatusOK, "pdf-master.html", data)
 	})
 }

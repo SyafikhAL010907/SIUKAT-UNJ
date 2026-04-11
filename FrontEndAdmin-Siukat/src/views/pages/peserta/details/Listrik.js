@@ -137,7 +137,7 @@ class Listrik extends React.Component {
     }
 
     componentDidMount() {
-        this.props.dispatch(listrik.getById(cookies.get(cookieName), this.props.noPeserta));
+        this.props.dispatch(listrik.getById(cookies.get(cookieName), this.props.noPeserta, this.props.atribut));
     }
 
     modalToggle = () => {

@@ -223,7 +223,7 @@ class Rumah extends React.Component {
     }
 
     componentWillMount() {
-        this.props.dispatch(rumah.getById(cookies.get(cookieName), this.props.noPeserta));
+        this.props.dispatch(rumah.getById(cookies.get(cookieName), this.props.noPeserta, this.props.atribut));
     }
 
     modalToggle = () => {

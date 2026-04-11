@@ -1,9 +1,11 @@
 import axios from 'axios'
 import { service, notif, errLog } from '../global'
 
-export function getById(token, id){
+export function getById(token, id, atribut = ""){
+    let url = service+'/listrik/get-listrik/'+id;
+    if (atribut) url += '?atribut=' + atribut;
     return new Promise((resolve, reject) => {
-        axios.get(service+'/listrik/get-listrik/'+id, {
+        axios.get(url, {
                 headers: {
                     "Authorization": "Bearer "+token
                 }

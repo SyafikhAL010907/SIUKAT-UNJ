@@ -1,9 +1,9 @@
 import { pendukung } from '../api'
 
-export function getById(token, id){
+export function getById(token, id, atribut = ""){
     return {
         type: "FETCH_PENDUKUNG",
-        payload: pendukung.getById(token, id)
+        payload: pendukung.getById(token, id, atribut)
     }
 }
 

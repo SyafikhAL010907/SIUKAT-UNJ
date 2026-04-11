@@ -1,9 +1,9 @@
 import { kendaraan } from '../api'
 
-export function getById(token, id){
+export function getById(token, id, atribut = ""){
     return {
         type: "FETCH_KENDARAAN",
-        payload: kendaraan.getById(token, id)
+        payload: kendaraan.getById(token, id, atribut)
     }
 }
 

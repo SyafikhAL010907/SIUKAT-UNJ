@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"strconv"
 	"time"
+	"fmt"
 
 	"github.com/gin-gonic/gin"
 )
@@ -66,7 +67,8 @@ func RumahRoutes(r *gin.RouterGroup) {
 			filePbb, errPbb := c.FormFile("file_scan_pbb")
 			if errPbb == nil {
 				utils.DeleteOldFile(oldRumah.ScanPbb)
-				newPath, err := utils.HandleDynamicUpload(c, filePbb, student.NamaCmahasiswa, np)
+				filename := fmt.Sprintf("PBB_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
+				newPath, err := utils.HandleDynamicUpload(c, filePbb, student.NamaCmahasiswa, np, filename)
 				if err == nil {
 					req.ScanPbb = newPath
 				}
@@ -83,7 +85,8 @@ func RumahRoutes(r *gin.RouterGroup) {
 			filePbb, errPbb := c.FormFile("file_scan_pbb")
 			if errPbb == nil {
 				utils.DeleteOldFile(oldRumah.ScanPbb)
-				newPath, err := utils.HandleDynamicUpload(c, filePbb, student.NamaCmahasiswa, np)
+				filename := fmt.Sprintf("PBB_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
+				newPath, err := utils.HandleDynamicUpload(c, filePbb, student.NamaCmahasiswa, np, filename)
 				if err == nil {
 					req.ScanPbb = newPath
 				}
@@ -95,7 +98,8 @@ func RumahRoutes(r *gin.RouterGroup) {
 			fileKtr, errKtr := c.FormFile("file_scan_kontrak")
 			if errKtr == nil {
 				utils.DeleteOldFile(oldRumah.ScanKontrak)
-				newPath, err := utils.HandleDynamicUpload(c, fileKtr, student.NamaCmahasiswa, np)
+				filename := fmt.Sprintf("Kontrak_Rumah_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
+				newPath, err := utils.HandleDynamicUpload(c, fileKtr, student.NamaCmahasiswa, np, filename)
 				if err == nil {
 					req.ScanKontrak = newPath
 				}
@@ -141,7 +145,8 @@ func RumahRoutes(r *gin.RouterGroup) {
 			filePbb, errPbb := c.FormFile("file_scan_pbb")
 			if errPbb == nil {
 				utils.DeleteOldFile(oldRumah.ScanPbb)
-				newPath, err := utils.HandleDynamicUpload(c, filePbb, student.NamaCmahasiswa, np)
+				filename := fmt.Sprintf("PBB_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
+				newPath, err := utils.HandleDynamicUpload(c, filePbb, student.NamaCmahasiswa, np, filename)
 				if err == nil {
 					req.ScanPbb = newPath
 				}
@@ -158,7 +163,8 @@ func RumahRoutes(r *gin.RouterGroup) {
 			filePbb, errPbb := c.FormFile("file_scan_pbb")
 			if errPbb == nil {
 				utils.DeleteOldFile(oldRumah.ScanPbb)
-				newPath, err := utils.HandleDynamicUpload(c, filePbb, student.NamaCmahasiswa, np)
+				filename := fmt.Sprintf("PBB_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
+				newPath, err := utils.HandleDynamicUpload(c, filePbb, student.NamaCmahasiswa, np, filename)
 				if err == nil {
 					req.ScanPbb = newPath
 				}
@@ -170,7 +176,8 @@ func RumahRoutes(r *gin.RouterGroup) {
 			fileKtr, errKtr := c.FormFile("file_scan_kontrak")
 			if errKtr == nil {
 				utils.DeleteOldFile(oldRumah.ScanKontrak)
-				newPath, err := utils.HandleDynamicUpload(c, fileKtr, student.NamaCmahasiswa, np)
+				filename := fmt.Sprintf("Kontrak_Rumah_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
+				newPath, err := utils.HandleDynamicUpload(c, fileKtr, student.NamaCmahasiswa, np, filename)
 				if err == nil {
 					req.ScanKontrak = newPath
 				}
@@ -202,11 +209,19 @@ func RumahRoutes(r *gin.RouterGroup) {
 
 	group.GET("/get-rumah/:no_peserta", func(c *gin.Context) {
 		noPeserta := c.Param("no_peserta")
+		atribut := c.Query("atribut")
 		var model models.Rumah
-		err := config.DB.Where("no_peserta = ? AND atribut = ?", noPeserta, "sanggah").First(&model).Error
-		if err != nil {
-			err = config.DB.Where("no_peserta = ? AND atribut = ?", noPeserta, "original").First(&model).Error
+		var err error
+
+		if atribut != "" {
+			err = config.DB.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&model).Error
+		} else {
+			err = config.DB.Where("no_peserta = ? AND atribut = ?", noPeserta, "sanggah").First(&model).Error
+			if err != nil {
+				err = config.DB.Where("no_peserta = ? AND atribut = ?", noPeserta, "original").First(&model).Error
+			}
 		}
+
 		if err != nil {
 			c.JSON(http.StatusOK, gin.H{"msg": "data tidak ditemukan"})
 			return

@@ -118,8 +118,6 @@ let FormListrikSeleksi = (props) => {
                             href={
                                 storage +
                                 '/' +
-                                props.initialValues.no_peserta +
-                                '/' +
                                 scan_listrik
                             }
                             target="_blank"

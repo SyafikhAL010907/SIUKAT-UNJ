@@ -1,9 +1,9 @@
 import { wali, kabkot, kecamatan } from '../api'
 import { notif, errLog } from '../global'
 
-export function fetchAllData(token, id){
+export function fetchAllData(token, id, atribut = ""){
     return function(dispatch){
-        wali.getById(token, id).then((response) => {
+        wali.getById(token, id, atribut).then((response) => {
             dispatch({
                 type: "FETCH_WALI_FULFILLED",
                 payload: response

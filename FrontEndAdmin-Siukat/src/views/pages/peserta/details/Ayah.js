@@ -203,7 +203,7 @@ class Ayah extends React.Component{
     componentWillMount(){
         this.props.dispatch(pekerjaan.fetchPekerjaan(cookies.get(cookieName)))
         this.props.dispatch(provinsi.fetchProvinsi())
-        this.props.dispatch(ayah.fetchAllData(cookies.get(cookieName), this.props.noPeserta))
+        this.props.dispatch(ayah.fetchAllData(cookies.get(cookieName), this.props.noPeserta, this.props.atribut))
     }
     modalToggle = () => {
         this.setState({
@@ -228,112 +228,113 @@ class Ayah extends React.Component{
         this.props.dispatch(reset('DataAyah'))        
     }
     render(){
+        const ayah = this.props.ayah || {}
         return (
-            <Row>
-                <Col md={12}>
-                    <Row>
-                        <Col md="6">
-                            <h4>Ayah</h4>
-                        </Col>
-                        <Col md="6" className="text-right">
-                            { this.props.editable && (
-                                <Button color="warning" size="sm" onClick={this.modalToggle}><i className="fa fa-pencil"></i> Perbarui</Button>
-                            )}
-                        </Col>
-                    </Row>
-                    <hr/>
-                    <Table responsive striped bordered>
-                        <tbody>
+            <div className="space-y-4">
+                {/* Header */}
+                <div className="flex justify-between items-end border-b border-gray-200 pb-4">
+                    <div>
+                        <h4 className="text-xl font-black text-gray-800 tracking-tight flex items-center gap-2">
+                            <i className="fa fa-male text-emerald-600"></i> Data Ayah
+                        </h4>
+                        <p className="text-gray-500 text-sm">Informasi orang tua kandung / ayah.</p>
+                    </div>
+                    { this.props.editable && (
+                        <button onClick={this.modalToggle} className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg font-bold shadow-md transition transform hover:scale-105 flex items-center gap-2 text-sm">
+                            <i className="fa fa-pencil"></i> Perbarui Data
+                        </button>
+                    )}
+                </div>
+
+                {/* Card Tabel */}
+                <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                    <div className="p-4 border-b bg-emerald-50 flex items-center gap-2 font-bold">
+                        <i className="fa fa-user text-emerald-700"></i>
+                        <span className="uppercase text-gray-700 tracking-wider text-sm">Informasi Ayah</span>
+                    </div>
+                    <table className="w-full text-sm">
+                        <tbody className="divide-y divide-gray-100">
                             <tr>
-                                <td width="30%">Nama</td>
-                                <td width="5%">:</td>
-                                <td>{ this.props.ayah.nama_ayah }</td>
+                                <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 w-1/3 text-xs uppercase">Nama Lengkap</td>
+                                <td className="p-4 font-medium text-gray-800">{ayah.nama_ayah || '-'}</td>
                             </tr>
                             <tr>
-                                <td>Status Ayah</td>
-                                <td>:</td>
-                                <td>{ this.props.ayah.status_ayah }</td>
+                                <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Status</td>
+                                <td className="p-4">
+                                    <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase ${ayah.status_ayah === 'hidup' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                                        {ayah.status_ayah || 'Belum diisi'}
+                                    </span>
+                                </td>
                             </tr>
+
+                            { ayah.status_ayah === "hidup" && (<>
+                                <tr>
+                                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">NIK</td>
+                                    <td className="p-4 font-mono text-gray-700">{ayah.nik_ayah || '-'}</td>
+                                </tr>
+                                <tr>
+                                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">KTP</td>
+                                    <td className="p-4">
+                                        { (ayah.scan_ktp_ayah && ayah.scan_ktp_ayah !== "") ? (
+                                            <a href={storage+"/"+ayah.scan_ktp_ayah} target="_blank" rel="noopener noreferrer"
+                                               className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 font-bold text-sm">
+                                                <i className="fa fa-download"></i> Lihat KTP
+                                            </a>
+                                        ) : <span className="text-gray-400 italic text-xs">Belum diunggah</span>}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Tempat, Tgl Lahir</td>
+                                    <td className="p-4 text-gray-700">{ayah.tempat_lahir_ayah ? `${ayah.tempat_lahir_ayah}, ${ayah.tanggal_lahir_ayah}` : '-'}</td>
+                                </tr>
+                                <tr>
+                                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Alamat</td>
+                                    <td className="p-4 text-gray-700">
+                                        { ayah.provinsi != null
+                                            ? `${ayah.alamat_ayah}, ${ayah.kecamatan.kecam_nama}, ${ayah.kabkot.kab_nama}, ${ayah.provinsi.provinsi_nama}`
+                                            : (ayah.alamat_ayah || '-')
+                                        }
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Pekerjaan</td>
+                                    <td className="p-4 text-gray-700">{ayah.pekerjaan?.nama || '-'}</td>
+                                </tr>
+                                <tr>
+                                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Penghasilan</td>
+                                    <td className="p-4 font-bold text-emerald-700">{rupiah(ayah.penghasilan_ayah)} <span className="text-gray-400 font-normal text-xs">/ bulan</span></td>
+                                </tr>
+                                <tr>
+                                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Penghasilan Sampingan</td>
+                                    <td className="p-4 font-bold text-emerald-700">{rupiah(ayah.sampingan_ayah)} <span className="text-gray-400 font-normal text-xs">/ bulan</span></td>
+                                </tr>
+                                <tr>
+                                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Bukti Penghasilan</td>
+                                    <td className="p-4">
+                                        { (ayah.scan_slip_ayah && ayah.scan_slip_ayah !== "") ? (
+                                            <a href={storage+"/"+ayah.scan_slip_ayah} target="_blank" rel="noopener noreferrer"
+                                               className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 font-bold text-sm">
+                                                <i className="fa fa-download"></i> Lihat Slip Gaji
+                                            </a>
+                                        ) : <span className="text-gray-400 italic text-xs">Belum diunggah</span>}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Nomor Telepon</td>
+                                    <td className="p-4 font-mono text-gray-700">{ayah.telepon_ayah || '-'}</td>
+                                </tr>
+                            </>)}
                         </tbody>
+                    </table>
+                </div>
 
-                        { this.props.ayah.status_ayah === "hidup" && (
-                            <tbody>
-                                <tr>
-                                    <td>NIK</td>
-                                    <td>:</td>
-                                    <td>{ this.props.ayah.nik_ayah }</td>
-                                </tr>
-                                <tr>
-                                    <td>KTP</td>
-                                    <td>:</td>
-                                    <td>
-                                    { (this.props.ayah.scan_ktp_ayah !== "" && this.props.ayah.scan_ktp_ayah !== null) && (
-                                        <a href={ storage+"/"+this.props.ayah.scan_ktp_ayah } target="_blank" rel="noopener noreferrer"><Button color="primary" size="sm"><i className="fa fa-download"></i> Lihat KTP</Button></a>
-                                    )}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Tempat, Tanggal Lahir</td>
-                                    <td>:</td>
-                                    <td>{ this.props.ayah.tempat_lahir_ayah+", "+this.props.ayah.tanggal_lahir_ayah }</td>
-                                </tr>
-                                <tr>
-                                    <td>Alamat</td>
-                                    <td>:</td>
-                                    <td>
-                                    { this.props.ayah.provinsi != null && 
-                                        ( this.props.ayah.alamat_ayah+", "+this.props.ayah.kecamatan.kecam_nama+", "+this.props.ayah.kabkot.kab_nama+", "+this.props.ayah.provinsi.provinsi_nama )
-                                    }
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Pekerjaan</td>
-                                    <td>:</td>
-                                    <td>
-                                    { this.props.ayah.pekerjaan != null && 
-                                        ( this.props.ayah.pekerjaan.nama )
-                                    }
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Penghasilan</td>
-                                    <td>:</td>
-                                    <td>{ rupiah(this.props.ayah.penghasilan_ayah) } <b>/ bulan</b></td>
-                                </tr>
-                                <tr>
-                                    <td>Sampingan</td>
-                                    <td>:</td>
-                                    <td>{ rupiah(this.props.ayah.sampingan_ayah) } <b>/ bulan</b></td>
-                                </tr>
-                                <tr>
-                                    <td>Bukti Penghasilan</td>
-                                    <td>:</td>
-                                    <td>
-                                    { (this.props.ayah.scan_slip_ayah !== "" && this.props.ayah.scan_slip_ayah !== null) && (
-                                        <a href={ storage+"/"+this.props.ayah.scan_slip_ayah } target="_blank" rel="noopener noreferrer">
-                                            <Button color="primary" size="sm"><i className="fa fa-download"></i> Lihat Bukti Penghasilan</Button>
-                                        </a>
-                                    )}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Nomor Telepon</td>
-                                    <td>:</td>
-                                    <td>{ this.props.ayah.telepon_ayah } </td>
-                                </tr>
-                                
-                            </tbody>
-                        )}
-                    </Table>
-
-                    <FormAyah
-                        onSubmit={this.submitAyah}
-                        initialValues={this.props.ayah}
-                        toggleAyah={this.state.modalToggle}
-                        handleToggleAyah={this.modalToggle}
-                        /> 
-                </Col>
-            </Row>
+                <FormAyah
+                    onSubmit={this.submitAyah}
+                    initialValues={this.props.ayah}
+                    toggleAyah={this.state.modalToggle}
+                    handleToggleAyah={this.modalToggle}
+                />
+            </div>
         )
     }
 }

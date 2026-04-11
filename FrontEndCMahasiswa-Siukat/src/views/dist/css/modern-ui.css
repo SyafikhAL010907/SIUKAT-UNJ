@@ -215,7 +215,7 @@
     background: linear-gradient(180deg, var(--unj-green) 0%, var(--unj-green-dark) 100%);
     color: #ffffff;
     min-height: 100vh;
-    padding: 60px 45px !important;
+    padding: 60px 25px !important; /* Reduced from 45px to give more space for cards */
     display: flex;
     flex-direction: column;
     box-shadow: -15px 0 50px rgba(0, 0, 0, 0.2);
@@ -722,4 +722,338 @@ select.form-control {
 input::-ms-reveal,
 input::-ms-clear {
     display: none !important;
+}
+/* ============================================================
+   LUXURY UI EXTENSION (REPLICATING TAILWIND DESIGN)
+   ============================================================ */
+
+.lux-login-form {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    flex-grow: 1;
+}
+
+.lux-form-body {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.lux-alert-offline {
+    background: #dc2626;
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: bold;
+    text-align: center;
+    animation: lux-pulse 2s infinite;
+}
+
+@keyframes lux-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+
+.lux-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.lux-label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 0 4px;
+}
+
+.lux-label {
+    font-size: 11px;
+    font-weight: 900;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0 !important;
+}
+
+.lux-badge {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.lux-badge-snbp { background: #2563eb; color: white; }
+.lux-badge-snbt { background: #f97316; color: white; }
+.lux-badge-mandiri { background: #fbbf24; color: #064e3b; }
+.lux-badge-soft { background: rgba(255, 255, 255, 0.2); color: white; }
+
+.lux-input {
+    width: 100%;
+    background: white !important;
+    border: 2px solid transparent !important;
+    border-radius: 12px !important;
+    padding: 12px 16px !important;
+    color: #111827 !important;
+    font-weight: 600 !important;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.06) !important;
+    outline: none !important;
+    transition: all 0.2s !important;
+    height: auto !important;
+}
+
+.lux-input:focus {
+    border-color: #fbbf24 !important;
+}
+
+.lux-password-wrapper {
+    position: relative;
+}
+
+.lux-password-toggle {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.lux-password-toggle:hover {
+    color: #047857;
+}
+
+.lux-captcha-box {
+    background: rgba(5, 46, 22, 0.3);
+    border-radius: 16px;
+    padding: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 24px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.lux-captcha-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    padding: 0 4px;
+}
+
+.lux-captcha-text {
+    font-size: 10px;
+    font-weight: bold;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.lux-captcha-q-row {
+     display: flex;
+     align-items: center;
+     gap: 8px;
+}
+
+.lux-captcha-q-label {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 10px;
+    font-style: italic;
+}
+
+.lux-captcha-q-badge {
+    background: #fbbf24;
+    color: #064e3b;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-weight: 900;
+    font-size: 14px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.lux-btn-submit {
+    width: 100%;
+    background: #fbbf24;
+    color: #064e3b;
+    font-weight: 900;
+    padding: 16px;
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 16px;
+    cursor: pointer;
+    margin-bottom: 15px;
+}
+
+.lux-btn-submit:hover {
+    background: #fcd34d;
+    transform: translateY(-1px);
+}
+
+.lux-btn-submit:active {
+    background: #f59e0b;
+    transform: translateY(0);
+}
+
+/* PAGE WRAPPERS */
+.lux-modal-card {
+    overflow: hidden;
+    border-radius: 24px;
+    border: 1px solid #f3f4f6;
+    background: white;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.lux-modal-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: linear-gradient(to bottom right, #006633, #008a44);
+    padding: 20px 24px;
+    color: white;
+}
+
+.lux-modal-icon-bg {
+    display: flex;
+    height: 40px;
+    width: 40px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(4px);
+}
+
+.lux-modal-body {
+    background: white;
+    padding: 40px 32px;
+    text-align: center;
+}
+
+.lux-modal-footer {
+    background: rgba(249, 250, 251, 0.5);
+    padding: 8px 32px 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.lux-card-schedule {
+    background: #f9faf9;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    margin-bottom: 24px;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+}
+
+.lux-card-header-green {
+    background: #006633;
+    color: white;
+    padding: 12px 16px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.lux-card-header-gold {
+    background: #FFD700;
+    color: #006633;
+    padding: 12px 16px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.lux-jalur-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    padding: 24px 18px;
+    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1), 
+                0 20px 25px -5px rgba(0, 0, 0, 0.05),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+    transition: all 0.5s;
+    margin-bottom: 32px;
+    width: 100%;
+}
+
+.lux-jalur-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #fbbf24, #006633, #fbbf24);
+    opacity: 0.8;
+}
+
+.lux-jalur-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 102, 51, 0.1);
+    background: white;
+    padding: 14px 16px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    font-weight: 800;
+    color: #064e3b;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.lux-jalur-btn-center {
+    justify-content: center !important;
+    gap: 10px;
+    background: linear-gradient(to bottom, #ffffff, #f9fafb);
+}
+
+.lux-jalur-btn:hover {
+    border-color: #fbbf24;
+    background: white;
+    box-shadow: 0 10px 15px -3px rgba(0, 102, 51, 0.1);
+    color: #006633;
+    transform: translateY(-2px);
+    text-decoration: none !important;
+}
+
+.lux-jalur-icon-arrow {
+    flex: 0 0 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #006633;
+    color: #FFD700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+}
+
+.lux-jalur-btn:hover .lux-jalur-icon-arrow {
+    transform: translateX(4px);
 }

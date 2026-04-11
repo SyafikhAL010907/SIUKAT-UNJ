@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"strconv"
 	"time"
+	"fmt"
 )
 
 func IbuRoutes(r *gin.RouterGroup) {
@@ -27,14 +28,23 @@ func IbuRoutes(r *gin.RouterGroup) {
 	})
 	ibuGroup.GET("/get-ibu/:no_peserta", func(c *gin.Context) {
 		noPeserta := c.Param("no_peserta")
+		atribut := c.Query("atribut")
 		var ibu models.Ibu
-		// Prioritaskan sanggah dulu, fallback ke original — Parity dengan Node.js
-		err := config.DB.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
-			Where("no_peserta = ? AND atribut = ?", noPeserta, "sanggah").First(&ibu).Error
-		if err != nil {
+		var err error
+
+		if atribut != "" {
 			err = config.DB.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
-				Where("no_peserta = ? AND atribut = ?", noPeserta, "original").First(&ibu).Error
+				Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&ibu).Error
+		} else {
+			// Prioritaskan sanggah dulu, fallback ke original — Parity dengan Node.js
+			err = config.DB.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
+				Where("no_peserta = ? AND atribut = ?", noPeserta, "sanggah").First(&ibu).Error
+			if err != nil {
+				err = config.DB.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
+					Where("no_peserta = ? AND atribut = ?", noPeserta, "original").First(&ibu).Error
+			}
 		}
+
 		if err != nil {
 			c.JSON(http.StatusOK, gin.H{"msg": "data tidak ditemukan"})
 			return
@@ -69,34 +79,46 @@ func IbuRoutes(r *gin.RouterGroup) {
 
 		statusIbu := c.PostForm("status_ibu")
 
-		// Build struct dari form data
-		req := models.Ibu{
-			NamaIbu:  c.PostForm("nama_ibu"),
-			StatusIbu: statusIbu,
+		data := map[string]interface{}{
+			"nama_ibu":   c.PostForm("nama_ibu"),
+			"status_ibu": statusIbu,
 		}
 
-		if statusIbu != "wafat" {
-			req.NikIbu = c.PostForm("nik_ibu")
-			req.TeleponIbu = c.PostForm("telepon_ibu")
-			req.AlamatIbu = c.PostForm("alamat_ibu")
+		if statusIbu == "wafat" {
+			data["nik_ibu"] = ""
+			data["telepon_ibu"] = ""
+			data["alamat_ibu"] = ""
+			data["provinsi_ibu"] = nil
+			data["kabkot_ibu"] = nil
+			data["kecamatan_ibu"] = nil
+			data["pekerjaan_ibu"] = ""
+			data["penghasilan_ibu"] = 0
+			data["sampingan_ibu"] = 0
+			data["scan_ktp_ibu"] = ""
+			data["scan_slip_ibu"] = ""
+			data["tempat_lahir_ibu"] = ""
+			data["tanggal_lahir_ibu"] = nil
+		} else {
+			data["nik_ibu"] = c.PostForm("nik_ibu")
+			data["telepon_ibu"] = c.PostForm("telepon_ibu")
+			data["alamat_ibu"] = c.PostForm("alamat_ibu")
 			if pkj, errArg := strconv.Atoi(c.PostForm("pekerjaan_ibu")); errArg == nil {
-				req.PekerjaanIbu = pkj
+				data["pekerjaan_ibu"] = pkj
 			}
-			req.TempatLahirIbu = c.PostForm("tempat_lahir_ibu")
+			data["tempat_lahir_ibu"] = c.PostForm("tempat_lahir_ibu")
 			if tgl, errTgl := time.Parse("2006-01-02", c.PostForm("tanggal_lahir_ibu")); errTgl == nil {
-				req.TanggalLahirIbu = &tgl
+				data["tanggal_lahir_ibu"] = &tgl
 			}
 
-			// Mapping IDs and Income
-			req.ProvinsiIbu = c.PostForm("provinsi_ibu")
-			req.KabkotIbu = c.PostForm("kabkot_ibu")
-			req.KecamatanIbu = c.PostForm("kecamatan_ibu")
-			
+			data["provinsi_ibu"] = c.PostForm("provinsi_ibu")
+			data["kabkot_ibu"] = c.PostForm("kabkot_ibu")
+			data["kecamatan_ibu"] = c.PostForm("kecamatan_ibu")
+
 			if pen, errPen := strconv.Atoi(c.PostForm("penghasilan_ibu")); errPen == nil {
-				req.PenghasilanIbu = pen
+				data["penghasilan_ibu"] = pen
 			}
 			if sam, errSam := strconv.Atoi(c.PostForm("sampingan_ibu")); errSam == nil {
-				req.SampinganIbu = sam
+				data["sampingan_ibu"] = sam
 			}
 
 			// --- LOGIKA DINAMIS & EFISIENSI (CLEANUP) ---
@@ -110,9 +132,10 @@ func IbuRoutes(r *gin.RouterGroup) {
 			fileKtp, errKtp := c.FormFile("file_scan_ktp_ibu")
 			if errKtp == nil {
 				utils.DeleteOldFile(oldIbu.ScanKtpIbu)
-				newPath, err := utils.HandleDynamicUpload(c, fileKtp, student.NamaCmahasiswa, np)
+				filename := fmt.Sprintf("KTP_Ibu_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
+				newPath, err := utils.HandleDynamicUpload(c, fileKtp, student.NamaCmahasiswa, np, filename)
 				if err == nil {
-					req.ScanKtpIbu = newPath
+					data["scan_ktp_ibu"] = newPath
 				}
 			}
 
@@ -120,21 +143,22 @@ func IbuRoutes(r *gin.RouterGroup) {
 			fileSlip, errSlip := c.FormFile("file_scan_slip_ibu")
 			if errSlip == nil {
 				utils.DeleteOldFile(oldIbu.ScanSlipIbu)
-				newPath, err := utils.HandleDynamicUpload(c, fileSlip, student.NamaCmahasiswa, np)
+				filename := fmt.Sprintf("Slip_Ibu_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
+				newPath, err := utils.HandleDynamicUpload(c, fileSlip, student.NamaCmahasiswa, np, filename)
 				if err == nil {
-					req.ScanSlipIbu = newPath
+					data["scan_slip_ibu"] = newPath
 				}
 			}
 		}
 
-		// STEP 1: Ambil data lama untuk di-log (sebelum update) — parity dengan Node.js
+		// STEP 1: Ambil data lama untuk di-log (sebelum update)
 		var existing models.Ibu
 		config.DB.Where("no_peserta = ? AND atribut = ?", np, "original").First(&existing)
 		now := time.Now()
 		ibuService.AddLog(existing, "original", np, &now)
 
 		// STEP 2: Update data
-		res, err := ibuService.Edit(req, np, "original")
+		res, err := ibuService.Edit(data, np, "original")
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
@@ -147,19 +171,19 @@ func IbuRoutes(r *gin.RouterGroup) {
 		np := noPeserta
 
 		statusIbu := c.PostForm("status_ibu")
-		req := models.Ibu{
-			NamaIbu:   c.PostForm("nama_ibu"),
-			StatusIbu: statusIbu,
+		data := map[string]interface{}{
+			"nama_ibu":   c.PostForm("nama_ibu"),
+			"status_ibu": statusIbu,
 		}
 
 		if statusIbu != "wafat" {
-			req.NikIbu = c.PostForm("nik_ibu")
-			req.TeleponIbu = c.PostForm("telepon_ibu")
-			req.AlamatIbu = c.PostForm("alamat_ibu")
+			data["nik_ibu"] = c.PostForm("nik_ibu")
+			data["telepon_ibu"] = c.PostForm("telepon_ibu")
+			data["alamat_ibu"] = c.PostForm("alamat_ibu")
 			if pkj, errArg := strconv.Atoi(c.PostForm("pekerjaan_ibu")); errArg == nil {
-				req.PekerjaanIbu = pkj
+				data["pekerjaan_ibu"] = pkj
 			}
-			req.TempatLahirIbu = c.PostForm("tempat_lahir_ibu")
+			data["tempat_lahir_ibu"] = c.PostForm("tempat_lahir_ibu")
 
 			// --- LOGIKA DINAMIS & EFISIENSI (CLEANUP) - SANGGAH ---
 			var student models.CMahasiswa
@@ -171,18 +195,20 @@ func IbuRoutes(r *gin.RouterGroup) {
 			fileKtp, errKtp := c.FormFile("file_scan_ktp_ibu")
 			if errKtp == nil {
 				utils.DeleteOldFile(oldIbu.ScanKtpIbu)
-				newPath, err := utils.HandleDynamicUpload(c, fileKtp, student.NamaCmahasiswa, np)
+				filename := fmt.Sprintf("KTP_Ibu_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
+				newPath, err := utils.HandleDynamicUpload(c, fileKtp, student.NamaCmahasiswa, np, filename)
 				if err == nil {
-					req.ScanKtpIbu = newPath
+					data["scan_ktp_ibu"] = newPath
 				}
 			}
 
 			fileSlip, errSlip := c.FormFile("file_scan_slip_ibu")
 			if errSlip == nil {
 				utils.DeleteOldFile(oldIbu.ScanSlipIbu)
-				newPath, err := utils.HandleDynamicUpload(c, fileSlip, student.NamaCmahasiswa, np)
+				filename := fmt.Sprintf("Slip_Ibu_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
+				newPath, err := utils.HandleDynamicUpload(c, fileSlip, student.NamaCmahasiswa, np, filename)
 				if err == nil {
-					req.ScanSlipIbu = newPath
+					data["scan_slip_ibu"] = newPath
 				}
 			}
 		}
@@ -192,7 +218,7 @@ func IbuRoutes(r *gin.RouterGroup) {
 		now := time.Now()
 		ibuService.AddLog(existing, "sanggah", np, &now)
 
-		res, err := ibuService.Edit(req, np, "sanggah")
+		res, err := ibuService.Edit(data, np, "sanggah")
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return

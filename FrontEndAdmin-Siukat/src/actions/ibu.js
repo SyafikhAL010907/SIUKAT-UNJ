@@ -10,9 +10,9 @@ export function updateData(token, input, id){
     }
 }
 
-export function fetchAllData(token, id){
+export function fetchAllData(token, id, atribut = ""){
     return function(dispatch){
-        ibu.getById(token, id).then((response) => {
+        ibu.getById(token, id, atribut).then((response) => {
             dispatch({
                 type: "FETCH_IBU_FULFILLED",
                 payload: response

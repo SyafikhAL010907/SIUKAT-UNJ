@@ -1,8 +1,5 @@
 import React from 'react'
-import {
-    Button, Alert,
-    Form, FormGroup, FormText, Label, Input, Card, CardTitle, Row
-} from 'reactstrap'
+import { Form } from 'reactstrap'
 import { captcha } from '../../../actions'
 import { auth } from '../../../api'
 import { Redirect } from 'react-router-dom'
@@ -22,133 +19,156 @@ class FormLogin extends React.Component {
             showPassword: false,
         }
     }
+
     UNSAFE_componentWillMount() {
         this.props.dispatch(captcha.fetchCaptcha())
-        this.setState({
-            authCookie: cookies.get(cookieName)
-        })
+        this.setState({ authCookie: cookies.get(cookieName) })
     }
-    handleNomorPendaftaran(e) {
-        this.setState({
-            no_peserta: e.target.value
-        })
-    }
-    handleTanggalLahir(e) {
-        this.setState({
-            password: e.target.value
-        })
-    }
+
+    handleNomorPendaftaran(e) { this.setState({ no_peserta: e.target.value }) }
+    handleTanggalLahir(e) { this.setState({ password: e.target.value }) }
     handleCaptcha(e) {
-        var self = this
         this.setState({
             jawaban: e.target.value,
-            kode_captcha: self.props.captcha.kode
+            kode_captcha: this.props.captcha.kode
         })
     }
+
     login = (e) => {
         e.preventDefault()
-        this.setState({
-            tombolMasuk: 'Mohon Menunggu'
-        })
+        this.setState({ tombolMasuk: 'Mohon Menunggu' })
         auth.login(this.state).then(res => {
             setToken(res.token);
             notif("Berhasil!", "Anda berhasil masuk", "success")
-            const flag = res.flag
-            this.setState({
-                authCookie: cookies.get(cookieName)
-            })
-
-            if (this.state.authCookie) {
-                if (flag === 'terima_ukt' || flag === 'pengumuman' || flag === 'sanggah_ukt' || flag === 'pengisian' || flag === 'selesai_sanggah' || flag === 'selesai_isi' || flag === 'tunggu_pengumuman') {
-                    this.props.history.push('/main/ukt')
-                } else {
-                    this.props.history.push('/main')
-                }
-            }
-        }, function (err) {
-            notif("Gagal!", "Periksa kembali nomor peserta, tanggal lahir, captcha dan verifikasi akademik", "error")
-        })
-        this.setState({
-            tombolMasuk: 'Masuk'
+            this.setState({ authCookie: cookies.get(cookieName) })
+        }, (err) => {
+            notif("Gagal!", "Periksa kembali data Anda", "error")
+        }).finally(() => {
+            this.setState({ tombolMasuk: 'Masuk' })
         })
     }
+
+    // Helper untuk warna badge status (pindah ke CSS Luxury)
+    getBadgeClass(stage) {
+        const s = stage?.toLowerCase() || '';
+        if (s.includes('snbp')) return 'lux-badge-snbp';
+        if (s.includes('snbt')) return 'lux-badge-snbt';
+        if (s.includes('mandiri')) return 'lux-badge-mandiri';
+        return 'lux-badge-soft';
+    }
+
     render() {
         const flag = this.props.cmahasiswa.flag
         if (this.state.authCookie) {
-            if (flag === 'terima_ukt' || flag === 'pengumuman' || flag === 'sanggah_ukt' || flag === 'pengisian' || flag === 'selesai_sanggah' || flag === 'selesai_isi' || flag === 'tunggu_pengumuman') {
-                return <Redirect to='/main/ukt' />
-            } else {
-                return <Redirect to='/main' />
-            }
+            const to = ['terima_ukt', 'pengumuman', 'sanggah_ukt', 'pengisian', 'selesai_sanggah', 'selesai_isi', 'tunggu_pengumuman'].includes(flag) 
+                ? '/main/ukt' : '/main';
+            return <Redirect to={to} />
         }
+
         const online = this.props.captcha.pertanyaan !== undefined;
         const stage_detail = this.props.stage;
         const open_login = this.props.open_login;
+
         return (
-            <Form onSubmit={this.login}>
-                {!online && <Alert color="danger" className="rounded-lg border-0 shadow-sm mb-4">Service Currently Offline</Alert>}
+            <Form onSubmit={this.login} className="lux-login-form">
                 
-                <FormGroup className="modern-input-group mb-4">
-                    <Label for="no_peserta" style={{color: '#ffffff', fontWeight: '800'}}>
-                        Nomor Peserta {" "}
-                        <span className="text-uppercase" style={{opacity: 1, fontSize: '0.8rem', fontWeight: '800', color: '#ffffff'}}>
-                            {stage_detail === 'mandiri' ? 'Mandiri Ujian Tulis' : stage_detail}
-                        </span>
-                    </Label>
-                    <Input type="text" name="no_peserta" id="no_peserta" placeholder="01234567890" onChange={this.handleNomorPendaftaran.bind(this)} disabled={!online} required />
-                </FormGroup>
-
-                <FormGroup className="modern-input-group mb-4">
-                    <Label for="password" style={{color: '#ffffff', fontWeight: '800'}}>
-                        Tanggal Lahir
-                        <span className="ml-2 font-weight-bold small" style={{opacity: 1, color: '#ffffff'}}>(Contoh: 31121999)</span>
-                    </Label>
-                    <div className="position-relative password-toggle-wrapper">
-                        <Input 
-                            type={this.state.showPassword ? "text" : "password"} 
-                            name="password" 
-                            id="password" 
-                            placeholder="ddmmyyyy" 
-                            onChange={this.handleTanggalLahir.bind(this)} 
-                            disabled={!online} 
-                            required 
-                            style={{ paddingRight: '45px' }}
-                        />
-                        <div 
-                            className="password-eye-btn" 
-                            onClick={() => this.setState({ showPassword: !this.state.showPassword })}
-                        >
-                            <i className={`fa ${this.state.showPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+                <div className="lux-form-body">
+                    {!online && (
+                        <div className="lux-alert-offline">
+                            <i className="fa fa-exclamation-triangle mr-2"></i> LAYANAN OFFLINE
                         </div>
-                    </div>
-                </FormGroup>
+                    )}
 
-                <FormGroup className="modern-input-group mb-4">
-                    <div className="bg-white rounded-lg p-2 mb-2 text-center text-emerald font-weight-bold shadow-sm" style={{fontSize: '0.9rem'}}>
-                        {online ? `Berapakah ${this.props.captcha.pertanyaan}?` : 'Offline'}
+                    {/* Field Nomor Peserta */}
+                    <div className="lux-input-group">
+                        <div className="lux-label-row">
+                            <label className="lux-label">Nomor Peserta</label>
+                            <span className={`lux-badge ${this.getBadgeClass(stage_detail)}`}>
+                                {stage_detail === 'mandiri' ? 'Mandiri' : stage_detail}
+                            </span>
+                        </div>
+                        <input 
+                            type="text" 
+                            className="lux-input"
+                            placeholder="Masukkan nomor pendaftaran"
+                            onChange={this.handleNomorPendaftaran.bind(this)}
+                            disabled={!online}
+                            required
+                        />
                     </div>
-                    <Input type="hidden" name="kode_captcha" id="kode_captcha" defaultValue={this.props.captcha.kode} disabled={!online} />
-                    <Input type="text" name="jawaban" id="jawaban" placeholder="Jawaban Anda" onChange={this.handleCaptcha.bind(this)} disabled={!online} required />
-                </FormGroup>
 
-                {open_login ? (
-                    <Button block className="modern-btn-primary py-3 font-weight-bold shadow mt-4" type="submit" disabled={!online}>
-                        <i className="fa fa-sign-in mr-2"></i> {this.state.tombolMasuk}
-                    </Button>
-                ) : (
-                    <Alert color="danger" className="rounded-lg border-0 shadow-sm mt-4 text-center font-weight-bold">
-                        Pengisian data ekonomi belum dibuka
-                    </Alert>
-                )}
+                    {/* Field Tanggal Lahir */}
+                    <div className="lux-input-group">
+                        <label className="lux-label px-1">Tanggal Lahir</label>
+                        <div className="lux-password-wrapper">
+                            <input 
+                                type={this.state.showPassword ? "text" : "password"} 
+                                className="lux-input"
+                                placeholder="ddmmyyyy"
+                                onChange={this.handleTanggalLahir.bind(this)}
+                                disabled={!online}
+                                required
+                            />
+                            <button 
+                                type="button"
+                                onClick={() => this.setState({ showPassword: !this.state.showPassword })}
+                                className="lux-password-toggle"
+                            >
+                                <i className={`fa ${this.state.showPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+                            </button>
+                        </div>
+                        <p className="text-white small italic px-1 mt-1" style={{ opacity: 0.6, fontSize: '10px' }}>Contoh: 17081945</p>
+                    </div>
+
+                    {/* Captcha Section */}
+                    <div className="lux-captcha-box">
+                        <div className="lux-captcha-header">
+                            <span className="lux-captcha-text">Verifikasi Keamanan</span>
+                            <div className="lux-captcha-q-row">
+                                <span className="lux-captcha-q-label">Hitung:</span>
+                                <span className="lux-captcha-q-badge">
+                                    {online ? this.props.captcha.pertanyaan : '...'}
+                                </span>
+                            </div>
+                        </div>
+                        <input 
+                            type="text" 
+                            className="lux-input text-center font-weight-bold"
+                            placeholder="Jawaban"
+                            onChange={this.handleCaptcha.bind(this)}
+                            disabled={!online}
+                            required
+                        />
+                    </div>
+                </div>
+
+                {/* Tombol Masuk */}
+                <div className="mt-4">
+                    {open_login ? (
+                        <button 
+                            type="submit" 
+                            disabled={!online}
+                            className="lux-btn-submit"
+                        >
+                            <span>{this.state.tombolMasuk}</span>
+                            <i className="fa fa-sign-in"></i>
+                        </button>
+                    ) : (
+                        <div className="bg-danger text-white text-center p-3 rounded-lg font-weight-bold small shadow-sm">
+                            PENGISIAN DATA BELUM DIBUKA
+                        </div>
+                    )}
+                    
+                    <div className="text-center mt-3">
+                         <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: '10px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '4px' }}>SIUKAT UNJ</span>
+                    </div>
+                </div>
             </Form>
         )
     }
 }
 
-
-export default connect((store) => {
-    return {
-        captcha: store.captcha.captcha,
-        cmahasiswa: store.cmahasiswa.cmahasiswa,
-    }
-})(FormLogin)
+export default connect((store) => ({
+    captcha: store.captcha.captcha,
+    cmahasiswa: store.cmahasiswa.cmahasiswa,
+}))(FormLogin)

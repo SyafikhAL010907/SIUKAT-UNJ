@@ -150,7 +150,7 @@ class Wali extends React.Component{
     }
     componentWillMount(){
         this.props.dispatch(provinsi.fetchProvinsi())
-        this.props.dispatch(wali.fetchAllData(cookies.get(cookieName), this.props.noPeserta))
+        this.props.dispatch(wali.fetchAllData(cookies.get(cookieName), this.props.noPeserta, this.props.atribut))
     }
     modalToggle = () => {
         this.setState({
@@ -175,73 +175,79 @@ class Wali extends React.Component{
         this.props.dispatch(reset('DataWaliSeleksi'))
     }
     render(){
+        const w = this.props.wali || {}
         return (
-            <Row>
-                <Col md={12}>
-                    <Row>
-                        <Col md="6">
-                            <h4>Wali</h4>
-                        </Col>
-                        <Col md="6" className="text-right">
-                            { this.props.editable && (
-                                <Button color="warning" size="sm" onClick={this.modalToggle}><i className="fa fa-pencil"></i> Perbarui</Button>
-                            )}
-                        </Col>
-                    </Row>
-                    <hr/>
-                    <Table responsive striped bordered>
-                        <tbody>
+            <div className="space-y-4">
+                <div className="flex justify-between items-end border-b border-gray-200 pb-4">
+                    <div>
+                        <h4 className="text-xl font-black text-gray-800 tracking-tight flex items-center gap-2">
+                            <i className="fa fa-shield text-blue-600"></i> Data Wali
+                        </h4>
+                        <p className="text-gray-500 text-sm">Informasi wali / penjamin mahasiswa.</p>
+                    </div>
+                    { this.props.editable && (
+                        <button onClick={this.modalToggle} className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg font-bold shadow-md transition transform hover:scale-105 flex items-center gap-2 text-sm">
+                            <i className="fa fa-pencil"></i> Perbarui Data
+                        </button>
+                    )}
+                </div>
+
+                <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                    <div className="p-4 border-b bg-blue-50 flex items-center gap-2 font-bold">
+                        <i className="fa fa-shield text-blue-600"></i>
+                        <span className="uppercase text-gray-700 tracking-wider text-sm">Informasi Wali</span>
+                    </div>
+                    <table className="w-full text-sm">
+                        <tbody className="divide-y divide-gray-100">
                             <tr>
-                                <td width="30%">Status Wali</td>
-                                <td width="5%">:</td>
-                                <td>{ this.props.wali.status_wali }</td>
+                                <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 w-1/3 text-xs uppercase">Status Wali</td>
+                                <td className="p-4">
+                                    <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase ${w.status_wali === 'ada' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
+                                        {w.status_wali === 'ada' ? 'Ada' : (w.status_wali === 'tidak' ? 'Tidak Ada' : 'Belum diisi')}
+                                    </span>
+                                </td>
                             </tr>
+                            { w.status_wali === "ada" && (<>
+                                <tr>
+                                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Nama Lengkap</td>
+                                    <td className="p-4 font-medium text-gray-800">{w.nama_wali || '-'}</td>
+                                </tr>
+                                <tr>
+                                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Alamat</td>
+                                    <td className="p-4 text-gray-700">
+                                        { w.provinsi != null
+                                            ? `${w.alamat_wali}, ${w.kecamatan.kecam_nama}, ${w.kabkot.kab_nama}, ${w.provinsi.provinsi_nama}`
+                                            : (w.alamat_wali || '-')
+                                        }
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Komitmen Pembiayaan</td>
+                                    <td className="p-4 font-bold text-emerald-700">{rupiah(w.kesanggupan_wali)} <span className="text-gray-400 font-normal text-xs">/ bulan</span></td>
+                                </tr>
+                                <tr>
+                                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Surat Komitmen</td>
+                                    <td className="p-4">
+                                        { (w.scan_wali && w.scan_wali !== "") ? (
+                                            <a href={storage+"/"+w.scan_wali} target="_blank" rel="noopener noreferrer"
+                                               className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 font-bold text-sm">
+                                                <i className="fa fa-download"></i> Lihat Surat Komitmen
+                                            </a>
+                                        ) : <span className="text-gray-400 italic text-xs">Belum diunggah</span>}
+                                    </td>
+                                </tr>
+                            </>)}
                         </tbody>
+                    </table>
+                </div>
 
-                        { this.props.wali.status_wali === "ada" && (
-                            <tbody>
-                                <tr>
-                                    <td>Nama</td>
-                                    <td>:</td>
-                                    <td>{ this.props.wali.nama_wali }</td>
-                                </tr>
-                                <tr>
-                                    <td>Alamat</td>
-                                    <td>:</td>
-                                    <td>
-                                    { this.props.wali.provinsi != null && 
-                                        ( this.props.wali.alamat_wali+", "+this.props.wali.kecamatan.kecam_nama+", "+this.props.wali.kabkot.kab_nama+", "+this.props.wali.provinsi.provinsi_nama )
-                                    }
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Komitmen Pembiayaan</td>
-                                    <td>:</td>
-                                    <td>{ rupiah(this.props.wali.kesanggupan_wali) } <b>/ bulan</b></td>
-                                </tr>
-                                <tr>
-                                    <td>Surat Komitmen Pembiayaan Pendukung</td>
-                                    <td>:</td>
-                                    <td>
-                                    { (this.props.wali.scan_wali !== "" && this.props.wali.scan_wali !== null) && (
-                                        <a href={ storage+"/"+this.props.wali.scan_wali } target="_blank" rel="noopener noreferrer">
-                                            <Button color="primary" size="sm"><i className="fa fa-download"></i> Lihat Scan Wali</Button>
-                                        </a>
-                                    )}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        )}
-                    </Table>
-
-                    <FormWali
-                        onSubmit={this.submitWali}
-                        initialValues={this.props.wali}
-                        toggleWali={this.state.modalToggle}
-                        handleToggleWali={this.modalToggle}
-                        /> 
-                </Col>
-            </Row>
+                <FormWali
+                    onSubmit={this.submitWali}
+                    initialValues={this.props.wali}
+                    toggleWali={this.state.modalToggle}
+                    handleToggleWali={this.modalToggle}
+                />
+            </div>
         )
     }
 }

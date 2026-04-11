@@ -56,7 +56,7 @@ class SelesaiIsi extends React.Component {
                         <p>
                             Anda dapat mengunduh bukti penyelesaian data UKT.<br />
                             Kami akan memproses data yang Anda masukkan.<br />
-                            Jangan lupa untuk <b>MASUK</b> kembali untuk melihat <b>HASIL UKT</b> pada tanggal<br /><b style={{ fontSize: '20px' }}>{this.props.info.pengumuman}</b>.
+                            Jangan lupa untuk <b>MASUK</b> kembali untuk melihat <b>HASIL UKT</b> pada tanggal<br /><b style={{ fontSize: '20px' }}>{this.props.info?.pengumuman || "-"}</b>.
                         </p>
                         <Row>
                             <Col md="6">

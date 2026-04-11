@@ -23,31 +23,18 @@ class DataTable extends React.Component {
                     </td>
                 )
             } else {
+                // Ambil ID secara tangguh (case-insensitive check) biar gak undefined
+                const pk = this.props.primaryKey;
+                const id = values[pk] || values[Object.keys(values).find(k => k.toLowerCase() === pk.toLowerCase())] || "undefined";
+
                 return (
                     <td key={key} className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                        {this.props.update !== undefined && this.props.delete !== undefined ? (
-                            <>
-                                <button 
-                                    onClick={(e) => this.props.update(e, values[this.props.primaryKey])}
-                                    className="inline-flex items-center px-3 py-1 bg-yellow-400 hover:bg-yellow-500 text-emerald-900 text-xs font-bold rounded transition-colors shadow-sm"
-                                >
-                                    <i className="fa fa-pencil mr-1"></i> Edit
-                                </button>
-                                <button 
-                                    onClick={(e) => this.props.update(e, values[this.props.primaryKey])}
-                                    className="inline-flex items-center px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded transition-colors shadow-sm"
-                                >
-                                    <i className="fa fa-close mr-1"></i> Hapus
-                                </button>
-                            </>
-                        ) : (
-                            <Link 
-                                to={"/admin/peserta/" + values[this.props.primaryKey]} 
-                                className="inline-flex items-center px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded transition-colors shadow-sm"
-                            >
-                                <i className="fa fa-eye mr-1"></i> Lihat
-                            </Link>
-                        )}
+                        <Link 
+                            to={"/admin/peserta/" + id} 
+                            className="inline-flex items-center px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded transition-colors shadow-sm"
+                        >
+                            <i className="fa fa-eye mr-1"></i> Lihat
+                        </Link>
                     </td>
                 )
             }
@@ -171,7 +158,7 @@ class DataTable extends React.Component {
                 <div className="px-5 py-4 flex flex-col md:flex-row justify-between items-center bg-gray-50 border-t border-emerald-100">
                     <div className="mb-4 md:mb-0">
                         <p className="text-sm text-gray-600">
-                            Menampilkan <span className="font-bold text-emerald-700">{(this.props.data.length > this.props.perPage) ? this.props.perPage : this.props.data.length}</span> dari <span className="font-bold text-emerald-700">{this.props.total}</span> data
+                            Menampilkan <span className="font-bold text-emerald-700">{(this.props.data && this.props.data.length > this.props.perPage) ? this.props.perPage : (this.props.data ? this.props.data.length : 0)}</span> dari <span className="font-bold text-emerald-700">{this.props.total || 0}</span> data
                         </p>
                     </div>
                     <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">

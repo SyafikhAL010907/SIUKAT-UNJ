@@ -5,8 +5,10 @@ import (
 	"BackEnd-Siukat/middlewares"
 	"BackEnd-Siukat/models"
 	"BackEnd-Siukat/services"
+	"BackEnd-Siukat/utils"
 	"net/http"
 	"time"
+	"fmt"
 
 	"github.com/gin-gonic/gin"
 )
@@ -46,15 +48,21 @@ func KeringananRoutes(r *gin.RouterGroup) {
 			Flag: c.PostForm("flag"),
 		}
 
-		fileScan, errScan := c.FormFile("file_scan_keringanan")
-		if errScan == nil {
-			filename := np + "_keringanan_" + fileScan.Filename
-			c.SaveUploadedFile(fileScan, "public/uploads/"+filename)
-			req.ScanKeringanan = filename
-		}
+		var student models.CMahasiswa
+		config.DB.Where("no_peserta = ?", np).First(&student)
 
 		var existing models.Keringanan
 		config.DB.Where("no_peserta = ? AND atribut = ?", np, "original").First(&existing)
+
+		fileScan, errScan := c.FormFile("file_scan_keringanan")
+		if errScan == nil {
+			utils.DeleteOldFile(existing.ScanKeringanan)
+			filename := fmt.Sprintf("Keringanan_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
+			newPath, err := utils.HandleDynamicUpload(c, fileScan, student.NamaCmahasiswa, np, filename)
+			if err == nil {
+				req.ScanKeringanan = newPath
+			}
+		}
 		now := time.Now()
 		srv.AddLog(existing, "original", np, &now)
 
@@ -70,7 +78,7 @@ func KeringananRoutes(r *gin.RouterGroup) {
 		noPeserta, _ := c.Get("no_peserta")
 		res, err := srv.GetByLoggedIn(noPeserta.(string))
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			c.JSON(http.StatusOK, models.Keringanan{})
 			return
 		}
 		c.JSON(http.StatusOK, res)

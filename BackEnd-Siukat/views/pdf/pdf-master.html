@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rekap Data Master SIUKAT - Universitas Negeri Jakarta</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 10px;
+            color: #000;
+            background: #fff;
+        }
+
+        /* =====================
+           HEADER KOP SURAT
+        ======================== */
+        .kop {
+            display: flex;
+            align-items: center;
+            border-bottom: 3px solid #006633;
+            padding-bottom: 10px;
+            margin-bottom: 8px;
+        }
+
+        .kop-logo {
+            width: 60px;
+            height: 60px;
+            margin-right: 15px;
+        }
+
+        .kop-text h1 {
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #006633;
+        }
+
+        .kop-text h2 {
+            font-size: 11px;
+            font-weight: normal;
+            color: #333;
+        }
+
+        .kop-text p {
+            font-size: 9px;
+            color: #666;
+        }
+
+        /* =====================
+           JUDUL DOKUMEN
+        ======================== */
+        .doc-title {
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .doc-title h3 {
+            font-size: 12px;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .doc-title p {
+            font-size: 9px;
+            color: #555;
+            margin-top: 2px;
+        }
+
+        /* =====================
+           TABEL DATA
+        ======================== */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 8px;
+        }
+
+        thead tr {
+            background-color: #006633;
+            color: #fff;
+        }
+
+        thead tr th {
+            padding: 6px 5px;
+            text-align: center;
+            font-size: 9px;
+            text-transform: uppercase;
+            border: 1px solid #004d26;
+            white-space: nowrap;
+        }
+
+        tbody tr td {
+            padding: 5px;
+            border: 1px solid #ccc;
+            font-size: 9px;
+            vertical-align: middle;
+        }
+
+        tbody tr:nth-child(odd) {
+            background-color: #f9fff9;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #ffffff;
+        }
+
+        tbody tr:hover {
+            background-color: #e6f4ea;
+        }
+
+        .text-center { text-align: center; }
+        .text-right  { text-align: right; }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 8px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .badge-green  { background: #d1fae5; color: #065f46; }
+        .badge-yellow { background: #fef3c7; color: #92400e; }
+        .badge-red    { background: #fee2e2; color: #991b1b; }
+        .badge-gray   { background: #f3f4f6; color: #374151; }
+        .badge-blue   { background: #dbeafe; color: #1e40af; }
+
+        /* =====================
+           FOOTER
+        ======================== */
+        .doc-footer {
+            margin-top: 16px;
+            font-size: 9px;
+            color: #888;
+            border-top: 1px solid #eee;
+            padding-top: 6px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* =====================
+           PRINT SETTINGS
+        ======================== */
+        @media print {
+            body  { margin: 0; }
+            .no-print { display: none !important; }
+            @page {
+                size: A4 landscape;
+                margin: 10mm;
+            }
+        }
+
+        /* =====================
+           PRINT BUTTON (non-print only)
+        ======================== */
+        .print-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #006633;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 9999;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .print-bar span {
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .btn-print {
+            background: #FFD700;
+            color: #006633;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .btn-print:hover {
+            background: #fbbf24;
+        }
+
+        .content-wrapper {
+            margin-top: 55px; /* beri ruang untuk print bar */
+            padding: 15px;
+        }
+
+        @media print {
+            .print-bar    { display: none !important; }
+            .content-wrapper { margin-top: 0 !important; padding: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PRINT BAR (hanya tampil di browser, hilang saat print) -->
+    <div class="print-bar no-print">
+        <span>📄 Data Master SIUKAT UNJ &mdash; Siap Cetak / Simpan PDF</span>
+        <button class="btn-print" onclick="window.print()">🖨️ Cetak / Unduh PDF</button>
+    </div>
+
+    <div class="content-wrapper">
+
+        <!-- KOP SURAT -->
+        <div class="kop">
+            <img src="/unj.png" alt="Logo UNJ" class="kop-logo" />
+            <div class="kop-text">
+                <h1>Universitas Negeri Jakarta</h1>
+                <h2>Sistem Informasi Uang Kuliah Tunggal (SIUKAT)</h2>
+                <p>Jl. Rawamangun Muka, Jakarta Timur 13220 &bull; Telp. (021) 4894909</p>
+            </div>
+        </div>
+
+        <!-- JUDUL -->
+        <div class="doc-title">
+            <h3>Rekap Data Master Calon Mahasiswa Baru</h3>
+            <p>Dicetak per: {{ now }}</p>
+        </div>
+
+        <!-- TABEL DATA -->
+        <table>
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>No. Peserta</th>
+                    <th>Nama Lengkap</th>
+                    <th>Bidik Misi</th>
+                    <th>Fakultas</th>
+                    <th>Program Studi</th>
+                    <th>Kelompok UKT</th>
+                    <th>Nominal UKT</th>
+                    <th>No. Registrasi</th>
+                    <th>Status</th>
+                    <th>UKT Tinggi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{ range $i, $row := .cmahasiswa }}
+                <tr>
+                    <td class="text-center">{{ add $i 1 }}</td>
+                    <td class="text-center"><b>{{ $row.NoPeserta }}</b></td>
+                    <td>{{ $row.NamaCmahasiswa }}</td>
+                    <td class="text-center">
+                        {{ if eq $row.BidikMisiCmahasiswa "Ya" }}
+                            <span class="badge badge-blue">Ya</span>
+                        {{ else }}
+                            <span class="badge badge-gray">Tidak</span>
+                        {{ end }}
+                    </td>
+                    <td>{{ if $row.Fakultas }}{{ $row.Fakultas.Nama }}{{ else }}-{{ end }}</td>
+                    <td>{{ if $row.Prodi }}{{ $row.Prodi.Nama }}{{ else }}-{{ end }}</td>
+                    <td class="text-center">
+                        {{ if $row.GolonganID }}
+                            <span class="badge badge-green">{{ $row.GolonganID }}</span>
+                        {{ else }}
+                            <span class="badge badge-gray">-</span>
+                        {{ end }}
+                    </td>
+                    <td class="text-right">
+                        {{ if $row.Ukt }}
+                            Rp {{ formatRupiah $row.Ukt.Nominal }}
+                        {{ else }}
+                            -
+                        {{ end }}
+                    </td>
+                    <td class="text-center">{{ if $row.NoRegistrasi }}{{ $row.NoRegistrasi }}{{ else }}-{{ end }}</td>
+                    <td class="text-center">
+                        {{ if eq $row.Flag "terima_ukt" }}
+                            <span class="badge badge-green">Terima</span>
+                        {{ else if eq $row.Flag "sanggah_ukt" }}
+                            <span class="badge badge-yellow">Sanggah</span>
+                        {{ else if eq $row.Flag "selesai_sanggah" }}
+                            <span class="badge badge-blue">Selesai Sanggah</span>
+                        {{ else if eq $row.Flag "pengumuman" }}
+                            <span class="badge badge-blue">Pengumuman</span>
+                        {{ else if eq $row.Flag "selesai_isi" }}
+                            <span class="badge badge-green">Selesai Isi</span>
+                        {{ else if eq $row.Flag "pengisian" }}
+                            <span class="badge badge-yellow">Pengisian</span>
+                        {{ else }}
+                            <span class="badge badge-gray">{{ $row.Flag }}</span>
+                        {{ end }}
+                    </td>
+                    <td class="text-center">
+                        {{ if eq $row.UktTinggi "ya" }}
+                            <span class="badge badge-red">Ya</span>
+                        {{ else }}
+                            -
+                        {{ end }}
+                    </td>
+                </tr>
+                {{ end }}
+            </tbody>
+        </table>
+
+        <!-- FOOTER -->
+        <div class="doc-footer">
+            <span>SIUKAT &copy; Pustikom Universitas Negeri Jakarta</span>
+            <span>Total Data: {{ len .cmahasiswa }} mahasiswa</span>
+        </div>
+
+    </div>
+
+</body>
+</html>

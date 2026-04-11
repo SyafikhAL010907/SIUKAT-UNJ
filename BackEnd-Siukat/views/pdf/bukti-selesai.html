@@ -1,4 +1,4 @@
-﻿<!DOCTYPE HTML>
+<!DOCTYPE HTML>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -78,38 +78,41 @@
                     <tr>
                         <td width="15%">Nama</td>
                         <td width="2%">:</td>
-                        <td><%= cmahasiswa.nama_cmahasiswa %></td>
+                        <td>{{ .cmahasiswa.NamaCmahasiswa }}</td>
                     </tr>
                     <tr>
                         <td>Nomor Peserta</td>
                         <td>:</td>
-                        <td><%= cmahasiswa.no_peserta %></td>
+                        <td>{{ .cmahasiswa.NoPeserta }}</td>
                         <td></td>
                     </tr>
                     <tr>
                         <td>Program Studi</td>
                         <td>:</td>
-                        <td><%= cmahasiswa.prodi.nama %></td>
+                        <td>{{ if .cmahasiswa.Prodi }}{{ .cmahasiswa.Prodi.Nama }}{{ else }}-{{ end }}</td>
                         <td></td>
                     </tr>
                     <tr>
                         <td>Fakultas</td>
                         <td>:</td>
-                        <td><%= cmahasiswa.fakultas.nama %></td>
+                        <td>{{ if .cmahasiswa.Fakultas }}{{ .cmahasiswa.Fakultas.Nama }}{{ else }}-{{ end }}</td>
                     </tr>
                 </table>
                 <br/>
                 <div class="box-note">
-                    Terimakasih anda telah melengkapi semua data di Sistem Informasi Uang Kuliah Tunggal Universitas Negeri Jakarta. Jangan lupa untuk <b>MASUK</b> (<i>Login</i>) kembali untuk melihat HASIL UKT pada tanggal <b><%= info.pengumuman %></b>.
+                    Terimakasih anda telah melengkapi semua data di Sistem Informasi Uang Kuliah Tunggal Universitas Negeri Jakarta. Jangan lupa untuk <b>MASUK</b> (<i>Login</i>) kembali untuk melihat HASIL UKT pada tanggal <b>{{ .info.Pengumuman }}</b>.
                 </div>
                 <br/>
                 <table width="100%">
                   <tr>
-                    <td><%= cmahasiswa.no_peserta %></td>
+                    <td>{{ .cmahasiswa.NoPeserta }}</td>
                     <td style="text-align: right; font-style: italic">Sistem Informasi UKT - Universitas Negeri Jakarta</td>
                   </tr>
                 </table>
             </div>
         </div>
+        <script>
+            window.print();
+        </script>
     </body>
 </html>

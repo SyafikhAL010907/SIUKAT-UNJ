@@ -3,15 +3,8 @@ import UNJ from '../dist/img/unj.png';
 import {
     Row,
     Col,
-    Card,
-    CardTitle,
-    CardText,
     Modal,
-    ModalHeader,
-    ModalBody,
-    ModalFooter,
-    Button,
-    Alert
+    Button
 } from 'reactstrap';
 import { FormLogin, JadwalUkt, Bantuan } from '../components';
 import { connect } from 'react-redux';
@@ -78,39 +71,70 @@ class Login extends Component {
     render() {
         const stage = this.props.info.stage;
         const stage_detail = this.props.info.stage_detail;
-        // const UpperStage = stage.toString();
         return (
             <div className="container-fluid bg-light min-vh-100 p-0">
                 <Row className="m-0 min-vh-100">
                     {stage !== 'snbp' && (
-                        <Modal isOpen={this.state.modal} modalTransition={{ timeout: 20 }} className="premium-modal modal-dialog-centered">
-                            <ModalHeader>
-                                <i className="fa fa-info-circle mr-2"></i> Pengumuman
-                            </ModalHeader>
-                            <ModalBody className="text-center">
-                                <div className="py-2">
-                                    Pengumuman UKT dapat dilihat pada <strong>Tanggal 08 Mei 2024 Pukul 19:00 WIB</strong>.
+                        <Modal
+                            isOpen={this.state.modal}
+                            modalTransition={{ timeout: 300 }}
+                            centered
+                            className="border-none"
+                            contentClassName="bg-transparent border-0"
+                        >
+                            <div className="lux-modal-card">
+                                {/* HEADER */}
+                                <div className="lux-modal-header">
+                                    <div className="lux-modal-icon-bg">
+                                        <i className="fa fa-info-circle text-warning font-size-30"></i>
+                                    </div>
+                                    <div className="ml-3">
+                                        <h3 className="mb-0 text-white font-weight-bold" style={{ fontSize: '1.2rem' }}>Pengumuman Penting</h3>
+                                        <p className="mb-0 text-white small" style={{ opacity: 0.8 }}>Informasi Akademik</p>
+                                    </div>
                                 </div>
-                            </ModalBody>
-                            <ModalFooter className="justify-content-center border-0 pt-0">
-                                <Button className="modern-btn-primary px-5 py-2 font-weight-bold shadow-sm" onClick={this.toggle} style={{borderRadius: '12px'}}>
-                                    Sip, Saya Mengerti
-                                </Button>
-                            </ModalFooter>
+
+                                {/* BODY */}
+                                <div className="lux-modal-body">
+                                    <p className="mb-2 text-muted small font-weight-bold text-uppercase" style={{ letterSpacing: '2px' }}>Jadwal Rilis</p>
+                                    <div className="bg-light rounded-lg p-4 transition-all">
+                                        <p className="text-secondary mb-2">
+                                            Pengumuman UKT dapat Anda akses mulai pada:
+                                        </p>
+                                        <h2 className="font-weight-bold" style={{ color: '#006633' }}>
+                                            08 Mei 2024
+                                        </h2>
+                                        <div className="badge badge-success px-3 py-2 rounded-pill font-weight-bold mt-2" style={{ backgroundColor: '#d1fae5', color: '#006633' }}>
+                                            Pukul 19:00 WIB
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* FOOTER */}
+                                <div className="lux-modal-footer">
+                                    <button
+                                        onClick={this.toggle}
+                                        className="lux-btn-submit py-3 mb-0 mt-3"
+                                        style={{ background: '#006633', color: '#fff' }}
+                                    >
+                                        <span>Sip, Saya Mengerti</span>
+                                        <i className="fa fa-arrow-right ml-2"></i>
+                                    </button>
+                                    <p className="mt-4 text-muted italic" style={{ fontSize: '11px' }}>
+                                        Pastikan koneksi internet Anda stabil saat waktu pengumuman.
+                                    </p>
+                                </div>
+                            </div>
                         </Modal>
                     )}
 
                     {stage === 'snmptn' && (
                         <Modal isOpen={this.state.modal} modalTransition={{ timeout: 20 }}>
-                            <ModalHeader>Pengumuman</ModalHeader>
-                            <ModalBody>
-                                Pengisian SIUKAT Sudah Bisa diisi
-                            </ModalBody>
-                            <ModalFooter>
-                                <Button color="primary" block={true} onClick={this.toggle}>
-                                    OK
-                                </Button>
-                            </ModalFooter>
+                            <div className="bg-white p-4 rounded-lg">
+                                <h5 className="font-weight-bold">Pengumuman</h5>
+                                <div className="py-3">Pengisian SIUKAT Sudah Bisa diisi</div>
+                                <Button color="primary" block onClick={this.toggle}>OK</Button>
+                            </div>
                         </Modal>
                     )}
 
@@ -127,40 +151,51 @@ class Login extends Component {
                                         Sistem Informasi Uang Kuliah Tunggal
                                     </h1>
                                     <div className="d-flex align-items-center mt-2">
-                                        <div className="badge px-3 py-2 rounded-lg font-weight-bold shadow-sm" style={{backgroundColor: 'var(--unj-green)', color: '#ffffff', fontSize: '0.8rem'}}>
+                                        <div className="badge px-3 py-2 rounded-lg font-weight-bold shadow-sm" style={{ backgroundColor: '#f0fdf4', color: '#166534' }}>
                                             UNIVERSITAS NEGERI JAKARTA
                                         </div>
-                                        <div className="ml-3 text-muted font-weight-bold border-left pl-3" style={{ textTransform: 'uppercase', fontSize: '0.9rem', letterSpacing: '1px' }}>
+                                        <div className="ml-3 font-weight-bold border-left pl-3" style={{ color: '#fbbf24', textTransform: 'uppercase', fontSize: '0.9rem', letterSpacing: '1px' }}>
                                             {stage_detail === 'mandiri' ? 'Mandiri Ujian Tulis' : stage_detail}
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <Row className="clearfix">
+
+                            <Row>
                                 <Col md={{ size: 8 }} xs={{ size: 12 }}>
-                                    <div className="premium-card shadow-sm border-0 p-1 mb-5 overflow-hidden">
-                                        <div className="bg-emerald-soft p-3 text-white font-weight-bold d-flex align-items-center">
-                                            <i className="fa fa-calendar mr-2"></i> Jadwal Kegiatan UKT
+                                    {/* JADWAL UKT */}
+                                    <div className="lux-card-schedule">
+                                        <div className="lux-card-header-green">
+                                            <i className="fa fa-calendar"></i>
+                                            Jadwal Kegiatan UKT
                                         </div>
-                                        <div className="p-3">
+                                        <div className="p-4">
                                             <JadwalUkt info={this.props.info} />
                                         </div>
                                     </div>
-                                    
-                                    <div className="premium-card shadow-sm border-0 overflow-hidden mb-5">
-                                        <div className="bg-emerald-soft p-3 text-white font-weight-bold d-flex align-items-center">
-                                            <i className="fa fa-play-circle mr-2"></i> Panduan Pembayaran UKT
+
+                                    {/* VIDEO PANDUAN */}
+                                    <div className="lux-card-schedule">
+                                        <div className="lux-card-header-gold">
+                                            <i className="fa fa-play-circle"></i>
+                                            Panduan Pembayaran UKT
                                         </div>
-                                        <div className="p-4 bg-white text-center">
-                                            <div className="rounded-lg overflow-hidden shadow-sm border">
-                                                <iframe width="100%" height="400" src="https://www.youtube.com/embed/fhgF8uaVbds" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+                                        <div className="p-4">
+                                            <div className="rounded-lg overflow-hidden shadow border bg-black">
+                                                <iframe
+                                                    style={{ height: '350px', width: '100%', border: 'none' }}
+                                                    src="https://www.youtube.com/embed/fhgF8uaVbds"
+                                                    title="YouTube video player"
+                                                    allowFullScreen
+                                                />
                                             </div>
                                         </div>
                                     </div>
                                 </Col>
+
                                 <Col md={{ size: 4 }} xs={{ size: 12 }}>
-                                    <div className="login-panel" style={{ marginTop: '0' }}>
-                                        <div className="premium-card border-0 shadow-sm rounded-lg overflow-hidden" style={{ background: '#fff1f2', borderLeft: '5px solid #ef4444' }}>
+                                    <div className="mb-4">
+                                        <div className="rounded-xl overflow-hidden shadow-sm" style={{ background: '#fff1f2', borderLeft: '5px solid #ef4444' }}>
                                             <div className="p-4">
                                                 <div className="d-flex align-items-center mb-2">
                                                     <div className="bg-danger rounded-circle mr-2 d-flex align-items-center justify-content-center shadow-sm" style={{width: '24px', height: '24px'}}>
@@ -168,84 +203,88 @@ class Login extends Component {
                                                     </div>
                                                     <h6 className="mb-0 font-weight-bold text-danger">Perhatian!</h6>
                                                 </div>
-                                                <CardText className="text-secondary font-weight-bold" style={{ fontSize: '0.85rem', lineHeight: '1.6' }}>
+                                                <p className="text-secondary font-weight-bold mb-0" style={{ fontSize: '0.85rem', lineHeight: '1.6' }}>
                                                     Isilah seluruh form isian dengan benar. Kesalahan
                                                     pengisian data akan mempengaruhi besarnya UKT yang
                                                     akan keluar.
-                                                </CardText>
+                                                </p>
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="login-panel">
-                                        <Bantuan />
-                                    </div>
+                                    <Bantuan />
                                 </Col>
                             </Row>
-                            {/* <Row className="clearfix">
-                                <Col md={{ size: 8 }}
-                                    xs={{ size: 12 }}>
-                                    <Alert >
-                                        <h5 style={{ textAlign: 'center' }}>Panduan Pembayaran UKT</h5>
-                                        <hr />
-                                        <iframe width="100%" height="400" src="https://www.youtube.com/embed/fhgF8uaVbds" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                                    </Alert>
-                                </Col>
-                            </Row> */}
-                            <hr />
-                            <Row className="clearfix">
-                                <Col md={12} xs={12} className="d-flex justify-content-center">
-                                    <span>
-                                        Siukat Front © 2017 - {new Date().getFullYear()} Pustikom
-                                        UNJ. All Rights Reserved.
-                                    </span>
-                                </Col>
-                            </Row>
+
+                            <hr className="my-5" />
+                            <div className="text-center text-muted small">
+                                Siukat Front © 2017 - {new Date().getFullYear()} Pustikom UNJ. All Rights Reserved.
+                            </div>
                         </div>
                     </Col>
+
                     <Col md={{ size: 3 }} xs={{ size: 12 }} className="px-0">
                         <div className="login-side">
-                            <div className="alert border-0 shadow-sm py-4 mb-5 text-center">
-                                <h6 className="font-weight-bold mb-3" style={{ opacity: 0.9 }}>
-                                    Bagi peserta selain <span className="text-uppercase">{stage_detail === 'mandiri' ? 'Mandiri Ujian Tulis' : stage_detail}</span>, silakan klik tombol:
-                                </h6>
-                                <Row className="m-0 g-2">
-                                    {stage_detail !== 'snbp' && (
-                                        <Col xs="12" className="p-1">
-                                            <Button block className="btn-soft-white py-2 shadow-sm" onClick={this.GoToSNMPTN}>
-                                                SNBP
-                                            </Button>
-                                        </Col>
-                                    )}
-                                    {stage_detail !== 'sbmptn' && (
-                                        <Col xs="6" className="p-1">
-                                            <Button block className="btn-soft-white py-2 shadow-sm" onClick={this.GoToSBMPTN}>
-                                                SNBT
-                                            </Button>
-                                        </Col>
-                                    )}
-                                    {stage_detail !== 'japres' && (
-                                        <Col xs="6" className="p-1">
-                                            <Button block className="btn-soft-white py-2 shadow-sm" onClick={this.GoToJapres}>
-                                                Japres
-                                            </Button>
-                                        </Col>
-                                    )}
-                                    {stage_detail !== 'mandiri' && (
-                                        <Col xs="12" className="p-1">
-                                            <Button block className="btn-soft-white py-2 shadow-sm" onClick={this.GoToMandiri}>
-                                                Mandiri
-                                            </Button>
-                                        </Col>
-                                    )}
-                                </Row>
+                            <div className="lux-jalur-card">
+                                <div className="text-center">
+                                    <div className="mb-4 d-inline-flex align-items-center justify-content-center" style={{ background: '#0066331a', height: '64px', width: '64px', borderRadius: '16px' }}>
+                                        <div className="bg-white rounded-lg shadow-sm d-flex align-items-center justify-content-center" style={{ height: '40px', width: '40px' }}>
+                                            <i className="fa fa-users" style={{ color: '#006633' }}></i>
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="mb-4">
+                                        <p className="text-muted small font-weight-bold mb-1">Bagi peserta selain</p>
+                                        <div className="badge badge-success py-2 px-4 shadow-sm" style={{ background: 'linear-gradient(135deg, #006633, #004d26)', fontSize: '11px', fontWeight: 'bold' }}>
+                                            {stage_detail === 'mandiri' ? 'Mandiri Ujian Tulis' : stage_detail}
+                                        </div>
+                                        <div className="d-flex align-items-center justify-content-center gap-2 mt-4 mb-2">
+                                            <span style={{ height: '1px', flex: 1, backgroundColor: '#eee' }}></span>
+                                            <span className="text-muted font-weight-bold small text-uppercase px-2" style={{ letterSpacing: '2px', fontSize: '9px' }}>Pilih Jalur Lain</span>
+                                            <span style={{ height: '1px', flex: 1, backgroundColor: '#eee' }}></span>
+                                        </div>
+                                    </div>
+
+                                    <div className="mt-4">
+                                        {stage_detail !== 'snbp' && (
+                                            <a href="#snbp" onClick={(e) => { e.preventDefault(); this.GoToSNMPTN(); }} className="lux-jalur-btn lux-jalur-btn-center">
+                                                <span>SNBP <i className="fa fa-chevron-right ml-2" style={{ fontSize: '0.8rem', opacity: 0.7 }}></i></span>
+                                            </a>
+                                        )}
+
+                                        <div className="row no-gutters mb-0">
+                                            {stage_detail !== 'sbmptn' && (
+                                                <div className={stage_detail !== 'japres' ? 'col-6 pr-1' : 'col-12'}>
+                                                    <a href="#snbt" onClick={(e) => { e.preventDefault(); this.GoToSBMPTN(); }} className="lux-jalur-btn lux-jalur-btn-center py-3">
+                                                        <i className="fa fa-graduation-cap text-primary"></i>
+                                                        <span>SNBT</span>
+                                                    </a>
+                                                </div>
+                                            )}
+                                            {stage_detail !== 'japres' && (
+                                                <div className={stage_detail !== 'sbmptn' ? 'col-6 pl-1' : 'col-12'}>
+                                                    <a href="#japres" onClick={(e) => { e.preventDefault(); this.GoToJapres(); }} className="lux-jalur-btn lux-jalur-btn-center py-3">
+                                                        <i className="fa fa-trophy text-warning"></i>
+                                                        <span>Japres</span>
+                                                    </a>
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        {stage_detail !== 'mandiri' && (
+                                            <a href="#mandiri" onClick={(e) => { e.preventDefault(); this.GoToMandiri(); }} className="lux-jalur-btn lux-jalur-btn-center">
+                                                <span>Mandiri <i className="fa fa-chevron-right ml-2" style={{ fontSize: '0.8rem', opacity: 0.7 }}></i></span>
+                                            </a>
+                                        )}
+                                    </div>
+                                </div>
                             </div>
                             
-                            <h3>Silakan Masuk</h3>
-                            <div className="login-form-wrapper mt-2">
+                            <h3 className="text-center mb-4 font-weight-bold text-white">Silakan Masuk</h3>
+                            <div className="login-form-wrapper">
                                 <FormLogin open_login={this.state.open_login} stage={stage_detail} history={this.props.history} />
                             </div>
                             
-                            <div className="mt-auto pt-5 text-center" style={{ opacity: 0.6, fontSize: '0.8rem' }}>
+                            <div className="mt-auto pt-5 text-center" style={{ opacity: 0.6, fontSize: '0.8rem', color: '#fff' }}>
                                 Siukat Front © 2017 - {new Date().getFullYear()} Pustikom UNJ.<br/>All Rights Reserved.
                             </div>
                         </div>
@@ -261,3 +300,4 @@ export default connect((store) => {
         info: store.info.info,
     };
 })(Login);
+

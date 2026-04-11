@@ -93,35 +93,35 @@
                 <tr>
                     <td></td>
                     <td width="40%">Nomor Peserta</td>
-                    <td><%= cmahasiswa.no_peserta %></td>
+                    <td>{{ .cmahasiswa.NoPeserta }}</td>
                     <td rowspan="6"></td>
                 </tr>
                 <tr>
                     <td></td>
                     <td>Nama</td>
-                    <td><%= cmahasiswa.nama_cmahasiswa %></td>
+                    <td>{{ .cmahasiswa.NamaCmahasiswa }}</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td>Alamat</td>
-                    <td><%= cmahasiswa.alamat_cmahasiswa %> Kec. <%= cmahasiswa.kecamatan.kecam_nama %> , <%= cmahasiswa.kabkot.kab_nama %> - <%= cmahasiswa.provinsi.provinsi_nama %> </td>
+                    <td>{{ .cmahasiswa.AlamatCmahasiswa }} Kec. {{ if .cmahasiswa.Kecamatan }}{{ .cmahasiswa.Kecamatan.KecamNama }}{{ else }}-{{ end }} , {{ if .cmahasiswa.Kabkot }}{{ .cmahasiswa.Kabkot.KabNama }}{{ else }}-{{ end }} - {{ if .cmahasiswa.Provinsi }}{{ .cmahasiswa.Provinsi.ProvinsiNama }}{{ else }}-{{ end }} </td>
                 </tr>
                 <tr>
                     <td></td>
                     <td>Jenis Kelamin</td>
                     <td>
-                        <%= cmahasiswa.gender_cmahasiswa.toUpperCase() %>
+                        {{ .cmahasiswa.GenderCmahasiswa }}
                     </td>
                 </tr>
                 <tr>
                     <td></td>
                     <td>Tempat, Tanggal Lahir</td>
-                    <td><%= cmahasiswa.tempat_lahir_cmahasiswa %>, <%= cmahasiswa.tanggal_lahir_cmahasiswa%></td>
+                    <td>{{ .cmahasiswa.TempatLahirCmahasiswa }}, {{ if .cmahasiswa.TanggalLahirCmahasiswa }}{{ .cmahasiswa.TanggalLahirCmahasiswa.Format "02-01-2006" }}{{ else }}-{{ end }}</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td>Penghasilan Sendiri</td>
-                    <td><%= cmahasiswa.penghasilan_cmahasiswa %></td>
+                    <td>{{ .cmahasiswa.PenghasilanCmahasiswa }}</td>
                 </tr>
                 <!--Data Rumah-->
                 <tr>
@@ -132,33 +132,33 @@
                 <tr>
                     <td></td>
                     <td>Status Kepemilikkan</td>
-                    <td><%= rumah.status_kepemilikan.replace("_", " "); %></td>
+                    <td>{{ .rumah.StatusKepemilikan }}</td>
                     <td rowspan="6"></td>
                 </tr>
                 <tr>
                     <td></td>
                     <td>Luas Tanah</td>
-                    <td><%= rumah.luas_tanah ? rumah.luas_tanah : "-" %></td>
+                    <td>{{ if .rumah.LuasTanah }}{{ .rumah.LuasTanah }}{{ else }}-{{ end }}</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td>Luas Bangunan</td>
-                    <td><%= rumah.luas_bangunan ? rumah.luas_bangunan : "-" %></td>
+                    <td>{{ if .rumah.LuasBangunan }}{{ .rumah.LuasBangunan }}{{ else }}-{{ end }}</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td>Biaya PBB</td>
-                    <td><%= rumah.biaya_pbb %></td>
+                    <td>{{ .rumah.BiayaPbb }}</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td>Biaya Kontrak</td>
-                    <td><%= rumah.biaya_kontrak %></td>
+                    <td>{{ .rumah.BiayaKontrak }}</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td>Jumlah KK yang tinggal di bangunan/tanah tersebut <small>(jika tinggal bersama saudara)</small></td>
-                    <td><%= rumah.jumlah_kepala_keluarga %></td>
+                    <td>{{ .rumah.JumlahKepalaKeluarga }}</td>
                 </tr>
             </table>
         </div>
@@ -179,37 +179,37 @@
                 <tr>
                     <td></td>
                     <td>Nama Ayah</td>
-                    <td><%= ayah.nama_ayah %></td>
+                    <td>{{ .ayah.NamaAyah }}</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td>NIK</td>
-                    <td><%= ayah.nik_ayah ? ayah.nik_ayah : "-" %></td>
+                    <td>{{ if .ayah.NikAyah }}{{ .ayah.NikAyah }}{{ else }}-{{ end }}</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td>Alamat</td>
-                    <td><%= ayah.alamat_ayah %> Kec. <%= ayah.kecamatan_ayah ? ayah.kecamatan.kecam_nama : "-" %> , <%= ayah.kabkot_ayah ? ayah.kabkot.kab_nama : "-" %> - <%= ayah.provinsi_ayah ? ayah.provinsi.provinsi_nama : "-" %></td>
+                    <td>{{ .ayah.AlamatAyah }} Kec. {{ if .ayah.Kecamatan }}{{ .ayah.Kecamatan.KecamNama }}{{ else }}-{{ end }} , {{ if .ayah.Kabkot }}{{ .ayah.Kabkot.KabNama }}{{ else }}-{{ end }} - {{ if .ayah.Provinsi }}{{ .ayah.Provinsi.ProvinsiNama }}{{ else }}-{{ end }}</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td>Tempat, Tanggal Lahir</td>
-                    <td><%= ayah.tempat_lahir_ayah ? ayah.tempat_lahir_ayah : "-" %>, <%= ayah.tanggal_lahir_ayah ? ayah.tanggal_lahir_ayah : "-" %></td>
+                    <td>{{ if .ayah.TempatLahirAyah }}{{ .ayah.TempatLahirAyah }}{{ else }}-{{ end }}, {{ if .ayah.TanggalLahirAyah }}{{ .ayah.TanggalLahirAyah }}{{ else }}-{{ end }}</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td>Pekerjaan</td>
-                    <td><%= ayah.pekerjaan_ayah ? ayah.pekerjaan.nama : "-" %></td>
+                    <td>{{ if .ayah.Pekerjaan }}{{ .ayah.Pekerjaan.Nama }}{{ else }}-{{ end }}</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td>Pendapatan</td>
-                    <td><%= ayah.penghasilan_ayah ? ayah.penghasilan_ayah : "-" %></td>
+                    <td>{{ if .ayah.PenghasilanAyah }}{{ .ayah.PenghasilanAyah }}{{ else }}-{{ end }}</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td>Penghasilan Sampingan</td>
-                    <td><%= ayah.sampingan_ayah ? ayah.sampingan_ayah : "-" %></td>
+                    <td>{{ if .ayah.SampinganAyah }}{{ .ayah.SampinganAyah }}{{ else }}-{{ end }}</td>
                 </tr>
 
                 <!--Data Ibu-->
@@ -220,37 +220,37 @@
                 <tr>
                     <td></td>
                     <td>Nama Ibu</td>
-                    <td><%= ibu.nama_ibu %></td>
+                    <td>{{ .ibu.NamaIbu }}</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td>NIK</td>
-                    <td><%= ibu.nik_ibu ? ibu.nik_ibu : "-" %></td>
+                    <td>{{ if .ibu.NikIbu }}{{ .ibu.NikIbu }}{{ else }}-{{ end }}</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td>Alamat</td>
-                    <td><%= ibu.alamat_ibu %> Kec. <%= ibu.kecamatan_ibu ? ibu.kecamatan.kecam_nama : "-" %> , <%= ibu.kabkot_ibu ? ibu.kabkot.kab_nama : "-" %> - <%= ibu.provinsi_ibu ? ibu.provinsi.provinsi_nama : "-" %></td>
+                    <td>{{ .ibu.AlamatIbu }} Kec. {{ if .ibu.Kecamatan }}{{ .ibu.Kecamatan.KecamNama }}{{ else }}-{{ end }} , {{ if .ibu.Kabkot }}{{ .ibu.Kabkot.KabNama }}{{ else }}-{{ end }} - {{ if .ibu.Provinsi }}{{ .ibu.Provinsi.ProvinsiNama }}{{ else }}-{{ end }}</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td>Tempat, Tanggal Lahir</td>
-                    <td><%= ibu.tempat_lahir_ibu ? ibu.tempat_lahir_ibu : "-" %>, <%= ibu.tanggal_lahir_ibu ? ibu.tanggal_lahir_ibu : "-" %></td>
+                    <td>{{ if .ibu.TempatLahirIbu }}{{ .ibu.TempatLahirIbu }}{{ else }}-{{ end }}, {{ if .ibu.TanggalLahirIbu }}{{ .ibu.TanggalLahirIbu }}{{ else }}-{{ end }}</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td>Pekerjaan</td>
-                    <td><%= ibu.pekerjaan_ibu ? ibu.pekerjaan.nama : "-" %></td>
+                    <td>{{ if .ibu.Pekerjaan }}{{ .ibu.Pekerjaan.Nama }}{{ else }}-{{ end }}</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td>Pendapatan</td>
-                    <td><%= ibu.penghasilan_ibu ? ibu.penghasilan_ibu : "-" %></td>
+                    <td>{{ if .ibu.PenghasilanIbu }}{{ .ibu.PenghasilanIbu }}{{ else }}-{{ end }}</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td>Penghasilan Sampingan</td>
-                    <td><%= ibu.sampingan_ibu ? ibu.sampingan_ibu : "-" %></td>
+                    <td>{{ if .ibu.SampinganIbu }}{{ .ibu.SampinganIbu }}{{ else }}-{{ end }}</td>
                 </tr>
                 <!--Data Wali-->
                 <tr>
@@ -261,18 +261,18 @@
                 <tr>
                     <td></td>
                     <td>Nama Wali</td>
-                    <td><%= wali.nama_wali ? wali.nama_wali : "-" %></td>
+                    <td>{{ if .wali.NamaWali }}{{ .wali.NamaWali }}{{ else }}-{{ end }}</td>
                     <td rowspan="3"></td>
                 </tr>
                 <tr>
                     <td></td>
                     <td>Alamat</td>
-                    <td><%= wali.alamat_wali ? wali.alamat_wali : "-" %></td>
+                    <td>{{ if .wali.AlamatWali }}{{ .wali.AlamatWali }}{{ else }}-{{ end }}</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td>Komitmen Pembiayaan per Bulan</td>
-                    <td><%= wali.kesanggupan_wali ? wali.kesanggupan_wali : "-" %></td>
+                    <td>{{ if .wali.KesanggupanWali }}{{ .wali.KesanggupanWali }}{{ else }}-{{ end }}</td>
                 </tr>
             </table>
         </div>
@@ -288,18 +288,18 @@
                 <tr>
                     <td></td>
                     <td>Nomor Pelanggan</td>
-                    <td><%= listrik.no_pelanggan %></td>
+                    <td>{{ .listrik.NoPelanggan }}</td>
                     <td rowspan="3"></td>
                 </tr>
                 <tr>
                     <td></td>
                     <td>Jenis Pemakaian Listrik</td>
-                    <td><%= listrik.jenis_pemakaian %></td>
+                    <td>{{ .listrik.JenisPemakaian }}</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td>Total Biaya Pemakaian Listrik (3 Bulan Terakhir)</td>
-                    <td><%= listrik.pengeluaran %></td>
+                    <td>{{ .listrik.Pengeluaran }}</td>
                 </tr>
 
                 <!--Kendaraan-->
@@ -311,23 +311,23 @@
                 <tr>
                     <td></td>
                     <td>Jumlah Motor</td>
-                    <td><%= kendaraan.jumlah_motor %></td>
+                    <td>{{ .kendaraan.JumlahMotor }}</td>
                     <td rowspan="4"></td>
                 </tr>
                 <tr>
                     <td></td>
                     <td>Total Semua Biaya Pajak Motor per Tahun</td>
-                    <td><%= kendaraan.pajak_motor %></td>
+                    <td>{{ .kendaraan.PajakMotor }}</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td>Jumlah Mobil</td>
-                    <td><%= kendaraan.jumlah_mobil %></td>
+                    <td>{{ .kendaraan.JumlahMobil }}</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td>Total Semua Biaya Pajak Mobil per Tahun</td>
-                    <td><%= kendaraan.pajak_mobil %></td>
+                    <td>{{ .kendaraan.PajakMobil }}</td>
                 </tr>
             </table>
             <div class="page-break"></div>  
@@ -336,7 +336,7 @@
             <table class="tanda-tangan">
                 <tr>
                     <td width="50%"></td>
-                    <td width="50%">................, .................................. <%= tahun %><br/></td>
+                    <td width="50%">................, .................................. {{ .tahun }}<br/></td>
                 </tr>
                 <tr>
                     <td width="50%">Orang Tua</td>
@@ -344,7 +344,7 @@
                 </tr>
                 <tr>
                     <td><br/><br/><br/><br/><br/>..........................................................</td>
-                    <td><br/><br/><small>Materai 6000</small><br/><br/><br/><%= cmahasiswa.nama_cmahasiswa.toUpperCase() %></td>
+                    <td><br/><br/><small>Materai 6000</small><br/><br/><br/>{{ .cmahasiswa.NamaCmahasiswa }}</td>
                 </tr>
                 <tr>
                     <td>NIK. ................................................</td>
@@ -381,227 +381,8 @@
             <br/>
             *Coret yang tidak perlu
         </div>
-
-
-
-        <!-- <div class="footer">
-                <table style="width: 100%;">
-                    <tr>
-                        <td style="width: 80%">
-                            <i>Sistem UKT Online - Universitas Negeri Jakarta</i>
-                        </td>
-                        <td style="text-align:right">
-                <tr>
-                    <td></td>
-                    <td>Pekerjaan</td>
-                    <td><%= ayah.pekerjaan_ayah ? ayah.pekerjaan.nama : "-" %></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Pendapatan</td>
-                    <td><%= ayah.penghasilan_ayah ? ayah.penghasilan_ayah : "-" %></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Penghasilan Sampingan</td>
-                    <td><%= ayah.sampingan_ayah ? ayah.sampingan_ayah : "-" %></td>
-                </tr>
-
-                <!--Data Ibu-->
-                <tr>
-                    <td></td>
-                    <td colspan="2" class="bold">Data Ibu</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Nama Ibu</td>
-                    <td><%= ibu.nama_ibu %></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>NIK</td>
-                    <td><%= ibu.nik_ibu ? ibu.nik_ibu : "-" %></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Alamat</td>
-                    <td><%= ibu.alamat_ibu %> Kec. <%= ibu.kecamatan_ibu ? ibu.kecamatan.kecam_nama : "-" %> , <%= ibu.kabkot_ibu ? ibu.kabkot.kab_nama : "-" %> - <%= ibu.provinsi_ibu ? ibu.provinsi.provinsi_nama : "-" %></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Tempat, Tanggal Lahir</td>
-                    <td><%= ibu.tempat_lahir_ibu ? ibu.tempat_lahir_ibu : "-" %>, <%= ibu.tanggal_lahir_ibu ? ibu.tanggal_lahir_ibu : "-" %></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Pekerjaan</td>
-                    <td><%= ibu.pekerjaan_ibu ? ibu.pekerjaan.nama : "-" %></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Pendapatan</td>
-                    <td><%= ibu.penghasilan_ibu ? ibu.penghasilan_ibu : "-" %></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Penghasilan Sampingan</td>
-                    <td><%= ibu.sampingan_ibu ? ibu.sampingan_ibu : "-" %></td>
-                </tr>
-                <!--Data Wali-->
-                <tr>
-                    <td width="5%" class="bold">D.</td>
-                    <td colspan="2" class="bold">Data Wali</td>
-                    <td width="10%" >Paraf Calon Mahasiswa</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Nama Wali</td>
-                    <td><%= wali.nama_wali ? wali.nama_wali : "-" %></td>
-                    <td rowspan="3"></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Alamat</td>
-                    <td><%= wali.alamat_wali ? wali.alamat_wali : "-" %></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Komitmen Pembiayaan per Bulan</td>
-                    <td><%= wali.kesanggupan_wali ? wali.kesanggupan_wali : "-" %></td>
-                </tr>
-            </table>
-        </div>
-        <div class="page-break"></div>        
-        <div class="frame">
-            <table class="data">
-                <!--Listrik-->
-                <tr>
-                    <td width="5%" class="bold">E.</td>
-                    <td colspan="2" class="bold">Data Beban Listrik PLN</td>
-                    <td width="10%" >Paraf Calon Mahasiswa</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Nomor Pelanggan</td>
-                    <td><%= listrik.no_pelanggan %></td>
-                    <td rowspan="3"></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Jenis Pemakaian Listrik</td>
-                    <td><%= listrik.jenis_pemakaian %></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Total Biaya Pemakaian Listrik (3 Bulan Terakhir)</td>
-                    <td><%= listrik.pengeluaran %></td>
-                </tr>
-
-                <!--Kendaraan-->
-                <tr>
-                    <td width="5%" class="bold">F.</td>
-                    <td colspan="2" class="bold">Data Kendaraan (yang dimiliki anggota keluarga dalam 1 KK)</td>
-                    <td width="10%" >Paraf Calon Mahasiswa</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Jumlah Motor</td>
-                    <td><%= kendaraan.jumlah_motor %></td>
-                    <td rowspan="4"></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Total Semua Biaya Pajak Motor per Tahun</td>
-                    <td><%= kendaraan.pajak_motor %></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Jumlah Mobil</td>
-                    <td><%= kendaraan.jumlah_mobil %></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Total Semua Biaya Pajak Mobil per Tahun</td>
-                    <td><%= kendaraan.pajak_mobil %></td>
-                </tr>
-            </table>
-            <div class="page-break"></div>  
-			<br/><br/><br/>
-            <p>Dengan ini kami menyatakan bahwa data yang dilampirkan di atas adalah benar adanya. Apabila di kemudian hari ditemukan bahwa data tersebut tidak benar atau palsu, maka kami bersedia untuk mempertanggungjawabkannya di muka hukum dan status mahasiswa dibatalkan.</p>
-            <table class="tanda-tangan">
-                <tr>
-                    <td width="50%"></td>
-                    <td width="50%">................, .................................. <%= tahun %><br/></td>
-                </tr>
-                <tr>
-                    <td width="50%">Orang Tua</td>
-                    <td width="50%">Calon Mahasiswa</td>
-                </tr>
-                <tr>
-                    <td><br/><br/><br/><br/><br/>..........................................................</td>
-                    <td><br/><br/><small>Materai 6000</small><br/><br/><br/><%= cmahasiswa.nama_cmahasiswa.toUpperCase() %></td>
-                </tr>
-                <tr>
-                    <td>NIK. ................................................</td>
-                    <td>NIK. ................................................</td>
-                </tr>
-                <tr>
-                    <td colspan=2 style="text-align: center"><br/>Mengetahui</td>
-                </tr>
-                <tr>
-                    <td width="50%"><br/>Tetangga 1 (Depan/Belakang/Kanan/Kiri)<sup>*</sup></td>
-                    <td width="50%"><br/>Tetangga 2 (Depan/Belakang/Kanan/Kiri)<sup>*</sup></td>
-                </tr>
-                <tr>
-                    <td><br/><br/><br/><br/><br/>..........................................................</td>
-                    <td><br/><br/><br/><br/><br/>..........................................................</td>
-                </tr>
-                <tr>
-                    <td>NIK. ................................................</td>
-                    <td>NIK. ................................................</td>
-                </tr>
-                <tr>
-                    <td width="50%"><br/>Ketua RW</td>
-                    <td width="50%"><br/>Ketua RT</td>
-                </tr>
-                <tr>
-                    <td><br/><br/><br/><br/><br/>..........................................................</td>
-                    <td><br/><br/><br/><br/><br/>..........................................................</td>
-                </tr>
-                <tr>
-                    <td>NIK. ................................................</td>
-                    <td>NIK. ................................................</td>
-                </tr>
-            </table>
-            <br/>
-            *Coret yang tidak perlu
-        </div>
-
-
-
-        <!-- <div class="footer">
-                <table style="width: 100%;">
-                    <tr>
-                        <td style="width: 80%">
-                            <i>Sistem UKT Online - Universitas Negeri Jakarta</i>
-                        </td>
-                        <td style="text-align:right">
-                            Halaman <span class="pagenum"></span> Dari 3
-                        </td>
-                    </tr>
-                </table>
-            </div> -->
-        <!-- <div id="pageFooter">
-            <table style="width: 100%;">
-                <tr>
-                    <td style="width: 80%" class="font-9">
-                        <i><%= cmahasiswa.no_peserta %> <%= cmahasiswa.nama_cmahasiswa %> - Sistem UKT Universitas Negeri Jakarta</i>
-                    </td>
-                    <td style="text-align:right" class="font-9">
-                        Halaman PAGE dari PAGES
-                    </td>
-                </tr>
-            </table>
-        </div> -->
+        <script>
+            window.print();
+        </script>
     </body>
 </html>

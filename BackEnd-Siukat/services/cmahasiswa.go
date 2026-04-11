@@ -448,7 +448,7 @@ func (s *CMahasiswaService) Datatable(page, perPage int, keyword string) (map[st
 
 	return map[string]interface{}{
 		"count":       count,
-		"rows":        mhs,
+		"rows": mhs,
 		"currentPage": page,
 		"perPage":     perPage,
 		"keyword":     keyword,
@@ -505,7 +505,7 @@ func (s *CMahasiswaService) DatatableSanggah(page, perPage int, keyword string) 
 
 	return map[string]interface{}{
 		"count":       count,
-		"rows":        mhs,
+		"rows": mhs,
 		"currentPage": page,
 		"perPage":     perPage,
 		"keyword":     keyword,

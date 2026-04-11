@@ -2,9 +2,9 @@ import axios from 'axios'
 import { service } from '../global'
 
 
-export function flagHitung(token,id){
+export function flagHitung(token, id, atribut = ""){
     return new Promise((resolve, reject) => {
-        axios.get(service+'/ukt/just-compute/'+id, {
+        axios.get(service + '/ukt/compute/' + id + '?atribut=' + atribut, {
             headers: {
                 "Authorization": "Bearer "+token
             }

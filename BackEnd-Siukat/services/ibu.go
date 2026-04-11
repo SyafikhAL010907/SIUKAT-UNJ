@@ -16,47 +16,8 @@ func (s *IbuService) Add(req models.Ibu, atribut string) (models.Ibu, error) {
 	return req, err
 }
 
-// Edit — Fix #3: Implementasi logika clear-field saat status_ibu == "wafat"
-// Parity dengan ibu.prototype.edit di Node.js
-func (s *IbuService) Edit(req models.Ibu, noPeserta string, atribut string) (models.Ibu, error) {
+func (s *IbuService) Edit(data map[string]interface{}, noPeserta string, atribut string) (models.Ibu, error) {
 	db := config.DB
-
-	data := map[string]interface{}{
-		"nama_ibu":   req.NamaIbu,
-		"status_ibu": req.StatusIbu,
-	}
-
-	if req.StatusIbu == "wafat" {
-		// Kalau wafat, kosongkan semua field sensitif — parity dengan Node.js
-		data["nik_ibu"] = ""
-		data["telepon_ibu"] = ""
-		data["alamat_ibu"] = ""
-		data["provinsi_ibu"] = nil
-		data["kabkot_ibu"] = nil
-		data["kecamatan_ibu"] = nil
-		data["pekerjaan_ibu"] = ""
-		data["penghasilan_ibu"] = 0
-		data["sampingan_ibu"] = 0
-		data["scan_ktp_ibu"] = ""
-		data["scan_slip_ibu"] = ""
-		data["tempat_lahir_ibu"] = ""
-		data["tanggal_lahir_ibu"] = nil
-	} else {
-		// Hidup / Bercerai: isi semua field
-		data["nik_ibu"] = req.NikIbu
-		data["telepon_ibu"] = req.TeleponIbu
-		data["alamat_ibu"] = req.AlamatIbu
-		data["provinsi_ibu"] = req.ProvinsiIbu
-		data["kabkot_ibu"] = req.KabkotIbu
-		data["kecamatan_ibu"] = req.KecamatanIbu
-		data["pekerjaan_ibu"] = req.PekerjaanIbu
-		data["penghasilan_ibu"] = req.PenghasilanIbu
-		data["sampingan_ibu"] = req.SampinganIbu
-		data["scan_ktp_ibu"] = req.ScanKtpIbu
-		data["scan_slip_ibu"] = req.ScanSlipIbu
-		data["tempat_lahir_ibu"] = req.TempatLahirIbu
-		data["tanggal_lahir_ibu"] = req.TanggalLahirIbu
-	}
 
 	if err := db.Model(&models.Ibu{}).Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).Updates(data).Error; err != nil {
 		return models.Ibu{}, err

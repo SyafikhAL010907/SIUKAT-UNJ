@@ -32,18 +32,30 @@ class DetailCmahasiswa extends React.Component {
     this.props.dispatch(cmahasiswa.flagSelesaiKlarifikasi(cookies.get(cookieName), this.props.match.params.no_peserta))
   }
 
-  selesaiHitung = () => {
-    this.props.dispatch(hitung.flagHitung(cookies.get(cookieName), this.props.match.params.no_peserta))
+  selesaiHitung = (e, atribut) => {
+    e.preventDefault();
+    const { dispatch, match } = this.props;
+    const token = cookies.get(cookieName);
+    const noPeserta = match.params.no_peserta;
+
+    // Hitung ulang → setelah selesai, langsung re-fetch data mahasiswa
+    // supaya "UKT Saat Ini" di header langsung update tanpa perlu refresh halaman
+    dispatch(hitung.flagHitung(token, noPeserta, atribut))
+      .then(() => {
+        dispatch(cmahasiswa.getById(token, noPeserta))
+      })
   }
 
   render() {
     const { activeTab } = this.state;
-    const isSanggah = this.props.cmahasiswa.atribut === "sanggah" && this.props.cmahasiswa.flag === "sanggah_ukt";
+    // Safety Check: Jika data cmahasiswa belom ada, jangan paksa render atribut
+    const isSanggah = this.props.cmahasiswa && this.props.cmahasiswa.atribut === "sanggah" && this.props.cmahasiswa.flag === "sanggah_ukt";
+    const fetchAtribut = isSanggah ? "sanggah" : "original";
 
     return (
       <div className="space-y-6">
         {/* Header Section: UKT Info & Actions */}
-        {this.props.cmahasiswa.golongan_id && (
+        {(this.props.cmahasiswa && this.props.cmahasiswa.golongan_id) && (
           <div className="bg-white p-6 rounded-2xl border border-emerald-100 shadow-sm flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="flex items-center space-x-4">
               <div className="bg-emerald-700 p-3 rounded-xl shadow-lg shadow-emerald-200">
@@ -117,30 +129,38 @@ class DetailCmahasiswa extends React.Component {
 
           {activeTab === '2' && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-fadeIn">
-              <Ayah noPeserta={this.props.match.params.no_peserta} editable={isSanggah} />
-              <Ibu noPeserta={this.props.match.params.no_peserta} editable={isSanggah || (this.props.user && this.props.user.role === "admin")} />
+              <Ayah noPeserta={this.props.match.params.no_peserta} editable={isSanggah} atribut={fetchAtribut} />
+              <Ibu noPeserta={this.props.match.params.no_peserta} editable={isSanggah || (this.props.user && this.props.user.role === "admin")} atribut={fetchAtribut} />
               <div className="lg:col-span-2 pt-6 border-t border-dashed">
-                <Wali noPeserta={this.props.match.params.no_peserta} editable={isSanggah || (this.props.user && this.props.user.role === "admin")} />
+                <Wali noPeserta={this.props.match.params.no_peserta} editable={isSanggah || (this.props.user && this.props.user.role === "admin")} atribut={fetchAtribut} />
               </div>
             </div>
           )}
 
           {activeTab === '3' && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-fadeIn">
-              <Rumah noPeserta={this.props.match.params.no_peserta} editable={isSanggah} />
-              <Listrik noPeserta={this.props.match.params.no_peserta} editable={isSanggah} />
+              <Rumah noPeserta={this.props.match.params.no_peserta} editable={isSanggah} atribut={fetchAtribut} />
+              <Listrik noPeserta={this.props.match.params.no_peserta} editable={isSanggah} atribut={fetchAtribut} />
             </div>
           )}
 
           {activeTab === '4' && (
             <div className="animate-fadeIn">
-              <Kendaraan noPeserta={this.props.match.params.no_peserta} editable={isSanggah} />
+              <Kendaraan 
+                noPeserta={this.props.match.params.no_peserta} 
+                editable={isSanggah} 
+                atribut={fetchAtribut}
+              />
             </div>
           )}
 
           {activeTab === '5' && (
             <div className="animate-fadeIn">
-              <Pendukung noPeserta={this.props.match.params.no_peserta} editable={isSanggah} />
+              <Pendukung 
+                noPeserta={this.props.match.params.no_peserta} 
+                editable={isSanggah} 
+                atribut={fetchAtribut}
+              />
             </div>
           )}
 
@@ -155,7 +175,8 @@ class DetailCmahasiswa extends React.Component {
               </div>
               
               <button 
-                onClick={this.selesaiHitung}
+                type="button"
+                onClick={(e) => this.selesaiHitung(e, fetchAtribut)}
                 className="w-full py-3 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl font-bold shadow-lg shadow-emerald-100 transition-all mb-8 flex items-center justify-center space-x-2"
               >
                 <i className="fa fa-refresh"></i>
@@ -168,7 +189,9 @@ class DetailCmahasiswa extends React.Component {
                     <tr className="border-b border-gray-100">
                       <th className="px-6 py-4 font-bold text-gray-600 bg-white w-1/2">UKT yang harusnya didapat</th>
                       <td className="px-6 py-4 font-extrabold text-emerald-700 italic">
-                        {this.props.hitung.choosenUkt} — {rupiah(this.props.ukt[this.props.hitung.choosenUkt])}
+                        { (this.props.hitung && this.props.hitung.choosenUkt) ? (
+                            `${this.props.hitung.choosenUkt} — ${rupiah(this.props.ukt[this.props.hitung.choosenUkt] || 0)}`
+                        ) : "Menghitung..." }
                       </td>
                     </tr>
                     <tr>

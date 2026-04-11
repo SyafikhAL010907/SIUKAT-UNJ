@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"strconv"
 	"time"
+	"fmt"
 
 	"github.com/gin-gonic/gin"
 )
@@ -60,17 +61,19 @@ func PendukungRoutes(r *gin.RouterGroup) {
 		fileUkt, errUkt := c.FormFile("file_scan_pernyataan_ukt_tinggi")
 		if errUkt == nil {
 			utils.DeleteOldFile(existing.ScanPernyataanUktTinggi)
-			newPath, err := utils.HandleDynamicUpload(c, fileUkt, student.NamaCmahasiswa, np)
+			filename := fmt.Sprintf("Pernyataan_UKT_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
+			newPath, err := utils.HandleDynamicUpload(c, fileUkt, student.NamaCmahasiswa, np, filename)
 			if err == nil {
 				req.ScanPernyataanUktTinggi = newPath
 			}
 		}
 
-		// File Kebenaran Data
+		// File Kebenaran Data (Surat Pernyataan)
 		fileKeb, errKeb := c.FormFile("file_scan_pernyataan_kebenaran")
 		if errKeb == nil {
 			utils.DeleteOldFile(existing.ScanPernyataanKebenaran)
-			newPath, err := utils.HandleDynamicUpload(c, fileKeb, student.NamaCmahasiswa, np)
+			filename := fmt.Sprintf("Surat_Pernyataan_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
+			newPath, err := utils.HandleDynamicUpload(c, fileKeb, student.NamaCmahasiswa, np, filename)
 			if err == nil {
 				req.ScanPernyataanKebenaran = newPath
 			}
@@ -80,7 +83,8 @@ func PendukungRoutes(r *gin.RouterGroup) {
 		fileKk, errKk := c.FormFile("file_scan_kk")
 		if errKk == nil {
 			utils.DeleteOldFile(existing.ScanKk)
-			newPath, err := utils.HandleDynamicUpload(c, fileKk, student.NamaCmahasiswa, np)
+			filename := fmt.Sprintf("Kartu_Keluarga_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
+			newPath, err := utils.HandleDynamicUpload(c, fileKk, student.NamaCmahasiswa, np, filename)
 			if err == nil {
 				req.ScanKk = newPath
 			}
@@ -116,7 +120,8 @@ func PendukungRoutes(r *gin.RouterGroup) {
 		fileUkt, errUkt := c.FormFile("file_scan_pernyataan_ukt_tinggi")
 		if errUkt == nil {
 			utils.DeleteOldFile(existing.ScanPernyataanUktTinggi)
-			newPath, err := utils.HandleDynamicUpload(c, fileUkt, student.NamaCmahasiswa, np)
+			filename := fmt.Sprintf("Pernyataan_UKT_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
+			newPath, err := utils.HandleDynamicUpload(c, fileUkt, student.NamaCmahasiswa, np, filename)
 			if err == nil {
 				req.ScanPernyataanUktTinggi = newPath
 			}
@@ -125,7 +130,8 @@ func PendukungRoutes(r *gin.RouterGroup) {
 		fileKeb, errKeb := c.FormFile("file_scan_pernyataan_kebenaran")
 		if errKeb == nil {
 			utils.DeleteOldFile(existing.ScanPernyataanKebenaran)
-			newPath, err := utils.HandleDynamicUpload(c, fileKeb, student.NamaCmahasiswa, np)
+			filename := fmt.Sprintf("Surat_Pernyataan_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
+			newPath, err := utils.HandleDynamicUpload(c, fileKeb, student.NamaCmahasiswa, np, filename)
 			if err == nil {
 				req.ScanPernyataanKebenaran = newPath
 			}
@@ -134,7 +140,8 @@ func PendukungRoutes(r *gin.RouterGroup) {
 		fileKk, errKk := c.FormFile("file_scan_kk")
 		if errKk == nil {
 			utils.DeleteOldFile(existing.ScanKk)
-			newPath, err := utils.HandleDynamicUpload(c, fileKk, student.NamaCmahasiswa, np)
+			filename := fmt.Sprintf("Kartu_Keluarga_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
+			newPath, err := utils.HandleDynamicUpload(c, fileKk, student.NamaCmahasiswa, np, filename)
 			if err == nil {
 				req.ScanKk = newPath
 			}
@@ -163,11 +170,19 @@ func PendukungRoutes(r *gin.RouterGroup) {
 
 	group.GET("/get-pendukung/:no_peserta", func(c *gin.Context) {
 		noPeserta := c.Param("no_peserta")
+		atribut := c.Query("atribut")
 		var model models.Pendukung
-		err := config.DB.Where("no_peserta = ? AND atribut = ?", noPeserta, "sanggah").First(&model).Error
-		if err != nil {
-			err = config.DB.Where("no_peserta = ? AND atribut = ?", noPeserta, "original").First(&model).Error
+		var err error
+
+		if atribut != "" {
+			err = config.DB.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&model).Error
+		} else {
+			err = config.DB.Where("no_peserta = ? AND atribut = ?", noPeserta, "sanggah").First(&model).Error
+			if err != nil {
+				err = config.DB.Where("no_peserta = ? AND atribut = ?", noPeserta, "original").First(&model).Error
+			}
 		}
+
 		if err != nil {
 			c.JSON(http.StatusOK, gin.H{"msg": "data tidak ditemukan"})
 			return

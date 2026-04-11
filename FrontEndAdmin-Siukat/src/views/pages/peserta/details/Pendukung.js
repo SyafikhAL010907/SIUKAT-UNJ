@@ -125,7 +125,7 @@ class Pendukung extends React.Component {
     }
 
     componentDidMount() {
-        this.props.dispatch(pendukung.getById(cookies.get(cookieName), this.props.noPeserta));
+        this.props.dispatch(pendukung.getById(cookies.get(cookieName), this.props.noPeserta, this.props.atribut));
     }
 
     modalToggle = () => {

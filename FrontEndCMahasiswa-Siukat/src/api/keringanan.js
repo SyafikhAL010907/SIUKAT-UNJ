@@ -32,7 +32,7 @@ export function updateData(token, input) {
 export function getData(token) {
     return new Promise((resolve, reject) => {
         axios
-            .get(service + '/keringanan/get-keringanan ', {
+            .get(service + '/keringanan/get-keringanan', {
                 headers: {
                     Authorization: 'Bearer ' + token,
                 },

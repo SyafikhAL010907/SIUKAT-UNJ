@@ -290,10 +290,14 @@ class DataWaliSeleksi extends React.Component {
     submitForm = (values) => {
         var formData = new FormData();
         for (var key in values) {
-            var file = key.startsWith('file_scan') ? key : null;
-            if (file) {
-                formData.append(key, values[key][0]);
-                document.getElementById(file).value = null;
+            var fileField = key.startsWith('file_scan') ? key : null;
+            if (fileField) {
+                // Pastikan file didefinisikan sebelum append (mencegah error saat edit tanpa re-upload)
+                if (values[key] && values[key].length > 0) {
+                    formData.append(key, values[key][0]);
+                    const el = document.getElementById(fileField);
+                    if (el) el.value = null;
+                }
             } else {
                 formData.append(key, values[key]);
             }
