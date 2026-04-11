@@ -12,6 +12,7 @@ import { info } from '../../actions';
 import moment from 'moment';
 import 'moment/locale/id';
 import momentTz from 'moment-timezone';
+import { notif, setToken } from '../../global';
 moment.locale('id');
 
 const open = '2020-08-24 08:00:00';
@@ -23,7 +24,12 @@ class Login extends Component {
             modal: true,
             stage: this.props.info.stage,
             stage_detail: this.props.info.stage_detail,
-            open_login: false
+            open_login: false,
+            // State for post-login validation modal
+            showValidationModal: false,
+            validationType: 'open', // 'open' | 'closed'
+            validationInfo: null,
+            tempAuthData: null
         };
         this.toggle = this.toggle.bind(this);
     }
@@ -32,6 +38,50 @@ class Login extends Component {
         this.setState({
             modal: !this.state.modal,
         });
+    }
+
+    toggleValidationModal = () => {
+        this.setState({
+            showValidationModal: !this.state.showValidationModal
+        });
+    }
+
+    // Callback from FormLogin after login attempt
+    handleLoginAttempt = (data, isError) => {
+        if (isError) {
+            // Jika jadwal tutup/belum buka (403 dari backend)
+            this.setState({
+                showValidationModal: true,
+                validationType: 'closed',
+                validationInfo: data.info
+            });
+        } else {
+            // Jika jadwal buka/diperpanjang -> Langsung masuk (Gas Pol!)
+            setToken(data.token);
+            notif("Berhasil!", "Anda berhasil masuk", "success");
+            window.location.reload();
+        }
+    }
+
+    // Confirms and executes actual login after OK is clicked on "Open" modal
+    confirmLogin = () => {
+        const { tempAuthData } = this.state;
+        if (tempAuthData) {
+            setToken(tempAuthData.token);
+            notif("Berhasil!", "Anda berhasil masuk", "success");
+            // Reload to trigger dashboard redirect
+            window.location.reload();
+        }
+    }
+
+    // Helper to get stage name from code
+    getStageName(code) {
+        switch (code) {
+            case 1: return 'SNBP (Seleksi Nasional Berdasarkan Prestasi)';
+            case 2: return 'SNBT (Seleksi Nasional Berdasarkan Tes)';
+            case 3: return 'MANDIRI (Ujian Tulis Mandiri)';
+            default: return 'UMUM';
+        }
     }
 
     UNSAFE_componentWillMount() {
@@ -128,15 +178,75 @@ class Login extends Component {
                         </Modal>
                     )}
 
-                    {stage === 'snmptn' && (
-                        <Modal isOpen={this.state.modal} modalTransition={{ timeout: 20 }}>
-                            <div className="bg-white p-4 rounded-lg">
-                                <h5 className="font-weight-bold">Pengumuman</h5>
-                                <div className="py-3">Pengisian SIUKAT Sudah Bisa diisi</div>
-                                <Button color="primary" block onClick={this.toggle}>OK</Button>
+                    {/* NEW POST-LOGIN VALIDATION MODAL */}
+                    <Modal
+                        isOpen={this.state.showValidationModal}
+                        toggle={this.toggleValidationModal}
+                        centered
+                        className="border-none"
+                        contentClassName="bg-transparent border-0"
+                    >
+                        <div className="lux-modal-card">
+                            <div className="lux-modal-header bg-danger">
+                                <div className="lux-modal-icon-bg">
+                                    <i className="fa fa-clock-o text-danger font-size-30"></i>
+                                </div>
+                                <div className="ml-3">
+                                    <h3 className="mb-0 text-white font-weight-bold" style={{ fontSize: '1.2rem' }}>Status Akses: Ditutup</h3>
+                                    <p className="mb-0 text-white small" style={{ opacity: 0.8 }}>Validasi Jalur Masuk</p>
+                                </div>
                             </div>
-                        </Modal>
-                    )}
+
+                            <div className="lux-modal-body text-center py-4">
+                                <span className="badge badge-pill badge-light px-3 py-2 mb-3 shadow-sm border text-uppercase font-weight-bold" style={{ letterSpacing: '1px', fontSize: '10px' }}>
+                                    {this.state.validationInfo ? this.getStageName(this.state.validationInfo.kode) : '...'}
+                                </span>
+                                
+                                <h4 className="font-weight-bold mb-3">
+                                    Akses Pengisian Belum Tersedia
+                                </h4>
+
+                                <div className="bg-light rounded-lg p-3 text-left">
+                                    <div className="d-flex align-items-center mb-2">
+                                        <i className="fa fa-calendar-check-o mr-2 text-primary"></i>
+                                        <div className="small font-weight-bold">Jadwal Pengisian:</div>
+                                    </div>
+                                    <div className="ml-4 small text-muted">
+                                        {this.state.validationInfo ? (
+                                            <>
+                                                {moment(this.state.validationInfo.tanggal_mulai).format('DD MMMM YYYY')} 
+                                                <span className="mx-2">s/d</span> 
+                                                {moment(this.state.validationInfo.tanggal_selesai).format('DD MMMM YYYY')}
+                                            </>
+                                        ) : 'Sedang memuat...'}
+                                    </div>
+
+                                    {this.state.validationInfo && this.state.validationInfo.tanggal_akhir && (
+                                        <div className="mt-2 pt-2 border-top">
+                                            <div className="d-flex align-items-center mb-1">
+                                                <i className="fa fa-clock-o mr-2 text-warning"></i>
+                                                <div className="small font-weight-bold text-warning">Tenggat Perpanjangan:</div>
+                                            </div>
+                                            <div className="ml-4 font-weight-bold text-danger">
+                                                {moment(this.state.validationInfo.tanggal_akhir).format('DD MMMM YYYY')}
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="lux-modal-footer">
+                                <button
+                                    onClick={this.toggleValidationModal}
+                                    className="lux-btn-submit py-3 mb-0"
+                                    style={{ background: '#ef4444', color: '#fff' }}
+                                >
+                                    <span>Saya Mengerti</span>
+                                    <i className="fa fa-times-circle ml-2"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </Modal>
 
                     <Col md={{ size: 9 }} xs={{ size: 12 }} className="px-0 bg-white">
                         <div className="login-content py-5 px-4 px-md-5">
@@ -154,9 +264,7 @@ class Login extends Component {
                                         <div className="badge px-3 py-2 rounded-lg font-weight-bold shadow-sm" style={{ backgroundColor: '#f0fdf4', color: '#166534' }}>
                                             UNIVERSITAS NEGERI JAKARTA
                                         </div>
-                                        <div className="ml-3 font-weight-bold border-left pl-3" style={{ color: '#fbbf24', textTransform: 'uppercase', fontSize: '0.9rem', letterSpacing: '1px' }}>
-                                            {stage_detail === 'mandiri' ? 'Mandiri Ujian Tulis' : stage_detail}
-                                        </div>
+                                        {/* REMOVED LEGACY STAGE TEXT (SNMPT/SNBT) FROM HEADER */}
                                     </div>
                                 </div>
                             </div>
@@ -280,8 +388,13 @@ class Login extends Component {
                             </div> */}
                             
                             <h3 className="text-center mb-4 font-weight-bold text-white">Silakan Masuk</h3>
-                            <div className="login-form-wrapper">
-                                <FormLogin open_login={this.state.open_login} stage={stage_detail} history={this.props.history} />
+                             <div className="login-form-wrapper">
+                                <FormLogin 
+                                    open_login={this.state.open_login} 
+                                    stage={stage_detail} 
+                                    history={this.props.history} 
+                                    onLoginAttempt={this.handleLoginAttempt}
+                                />
                             </div>
                             
                             <div className="mt-auto pt-5 text-center" style={{ opacity: 0.6, fontSize: '0.8rem', color: '#fff' }}>

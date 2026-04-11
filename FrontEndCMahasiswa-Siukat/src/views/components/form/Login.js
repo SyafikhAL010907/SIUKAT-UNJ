@@ -38,11 +38,21 @@ class FormLogin extends React.Component {
         e.preventDefault()
         this.setState({ tombolMasuk: 'Mohon Menunggu' })
         auth.login(this.state).then(res => {
-            setToken(res.token);
-            notif("Berhasil!", "Anda berhasil masuk", "success")
-            this.setState({ authCookie: cookies.get(cookieName) })
+            // Kirim data ke parent (Login.js) untuk divalidasi modalnya
+            if (this.props.onLoginAttempt) {
+                this.props.onLoginAttempt(res, false);
+            } else {
+                setToken(res.token);
+                notif("Berhasil!", "Anda berhasil masuk", "success")
+                this.setState({ authCookie: cookies.get(cookieName) })
+            }
         }, (err) => {
-            notif("Gagal!", "Periksa kembali data Anda", "error")
+            // Jika status 403 (Forbidden) dan ada data info jalur
+            if (err && err.status === 403 && err.data && err.data.info && this.props.onLoginAttempt) {
+                this.props.onLoginAttempt(err.data, true);
+            } else {
+                notif("Gagal!", "Periksa kembali data Anda", "error")
+            }
         }).finally(() => {
             this.setState({ tombolMasuk: 'Masuk' })
         })
@@ -83,9 +93,6 @@ class FormLogin extends React.Component {
                     <div className="lux-input-group">
                         <div className="lux-label-row">
                             <label className="lux-label">Nomor Peserta</label>
-                            <span className={`lux-badge ${this.getBadgeClass(stage_detail)}`}>
-                                {stage_detail === 'mandiri' ? 'Mandiri' : stage_detail}
-                            </span>
                         </div>
                         <input 
                             type="text" 

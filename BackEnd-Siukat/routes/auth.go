@@ -125,6 +125,9 @@ func AuthRoutes(r *gin.RouterGroup) {
 			flagStr = user.CMahasiswa.Flag
 		}
 
+		// LOG "CCTV" SEBELUM FILTER
+		log.Printf("DEBUG CCTV - Login Attempt: NoPeserta=%s, Role=%s, JalurMasuk=%d", user.NoPeserta, user.Role, user.JalurMasuk)
+
 		// Ambil data info berdasarkan jalur_masuk (kode)
 		var information models.Info
 		if user.JalurMasuk != 0 {
@@ -136,9 +139,8 @@ func AuthRoutes(r *gin.RouterGroup) {
 			wib := time.FixedZone("WIB", 7*3600) // GMT+7
 			now := time.Now().In(wib)
 			
-			log.Printf("DEBUG SATPAM - User: %s, Role: %s, Jalur: %d", user.NoPeserta, user.Role, user.JalurMasuk)
 			log.Printf("DEBUG SATPAM - Info DB: Mulai=%v, Selesai=%v, Akhir=%v", information.TanggalMulai, information.TanggalSelesai, information.TanggalAkhir)
-			log.Printf("DEBUG SATPAM - Current Time (WIB): %v", now)
+			log.Printf("DEBUG SATPAM - Current Time (WIB): %s", now.Format("2006-01-02 15:04:05"))
 
 			// Cek apakah jadwal sudah diatur
 			if information.TanggalMulai != nil && information.TanggalSelesai != nil {
