@@ -9,6 +9,7 @@ import {
     ModalHeader,
     ModalBody,
     ModalFooter,
+    Badge
 } from "reactstrap";
 import {
     DataDiri,
@@ -64,8 +65,6 @@ class TerimaSanggah extends React.Component {
     }
 
     unduhRegistrasi = () => {
-        // const param = "snmptn"
-        // const param = this.props.cmahasiswa.no_peserta.substring(0, 1) === '8' ? 'japres' : 'sbmptn'
         let param;
         if (this.props.cmahasiswa.no_peserta.substring(0, 1) === "8") {
             param = "japres";
@@ -98,229 +97,161 @@ class TerimaSanggah extends React.Component {
             return <Redirect to="/main/ukt" />;
         }
         return (
-            <div>
-                <Row className="margin-top-20">
-                    <Col md={2} xs={12}></Col>
-                    <Col md={8} xs={12}>
-                        <h4 className="text-center">Pengumuman Hasil UKT</h4>
-                        <hr />
+            <div className="p-3">
+                <Row className="justify-content-center">
+                    <Col md={10} lg={8} xs={12}>
+                        {/* Header Section */}
+                        <div className="text-center mb-5 mt-4">
+                            <h2 className="font-weight-bold" style={{ color: '#008d4c' }}>
+                                <i className="fa fa-bullhorn mr-3"></i>
+                                Pengumuman Hasil UKT
+                            </h2>
+                            <p className="text-muted">Universitas Negeri Jakarta</p>
+                            <div style={{ height: '4px', width: '60px', background: '#ffcc00', margin: '10px auto', borderRadius: '2px' }}></div>
+                        </div>
 
-                        <DataDiri />
+                        {/* Data Diri Card Styling */}
+                        <div className="shadow-sm rounded-lg mb-4 bg-white p-2">
+                            <DataDiri />
+                        </div>
+
+                        {/* Verification Results */}
                         {this.props.info.stage === "snbp" &&
                             this.props.verifikasi.result_akademik === "lolos" && (
-                                <div>
+                                <div className="mb-4 transform-hover">
                                     <VerifikasiSNMPTN
-                                        cardStyles="text-center text-white"
-                                        content="Lolos Verifikasi SNBP"
+                                        cardStyles="text-center text-white border-0 shadow"
+                                        content="Lolos Verifikasi Akademik SNBP"
                                         color="success"
-                                        icon="fa fa-graduation-cap"
+                                        icon="fa fa-check-circle fa-2x mb-2"
                                     />
                                 </div>
                             )}
+
                         {this.props.info.stage === "snbp" &&
                             this.props.verifikasi.result_akademik === "tidak_lolos" && (
-                                <VerifikasiSNMPTN
-                                    cardStyles="text-center text-white"
-                                    content="Tidak Lolos Verifikasi SNBP"
-                                    color="danger"
-                                    icon="fa fa-close"
-                                    message="Semoga berhasil di kesempatan lainnya 😊"
-                                />
+                                <div className="mb-4">
+                                    <VerifikasiSNMPTN
+                                        cardStyles="text-center text-white border-0 shadow"
+                                        content="Tidak Lolos Verifikasi Akademik SNBP"
+                                        color="danger"
+                                        icon="fa fa-times-circle fa-2x mb-2"
+                                        message="Jangan patah semangat, semoga sukses di jalur lain! 😊"
+                                    />
+                                </div>
                             )}
-                        {/* {this.props.info.stage === "snmptn" &&
-              this.props.verifikasi.result_akademik === "belum_verifikasi" && (
-                <VerifikasiSNMPTN
-                  cardStyles="text-center"
-                  content="Belum Melakukan Verifikasi SNMPTN"
-                  color="warning"
-                  icon="fa fa-info-circle"
-                  message="Segera hubungi Fakultas sesuai dengan Program Studi yang Anda pilih"
-                />
-              )} */}
+
+                        {/* Nominal UKT Section */}
                         {((this.props.info.stage === "snbp" &&
                             this.props.verifikasi.result_akademik === "lolos") ||
                             this.props.info.stage !== "snbp") && (
-                                <React.Fragment>
+                                <div className="shadow-sm rounded-lg border-top border-success" style={{ borderWidth: '5px !important' }}>
                                     <NominalUKT />
-                                </React.Fragment>
+                                </div>
                             )}
                     </Col>
-                    <Col md={2} xs={12}></Col>
                 </Row>
-                <hr />
+
+                <div className="my-5 py-3">
+                    <hr className="w-75" />
+                </div>
+
+                {/* Sanggah / Action Section */}
                 {((this.props.info.stage === "snbp" &&
                     this.props.verifikasi.result_akademik === "lolos") ||
                     this.props.info.stage !== "snbp") && (
-                        <div>
-                            {this.props.keringanan?.flag === null ? null :
-                                <Row>
-                                    <Col md={2} xs={12}></Col>
-                                    <Col md={8} xs={12}>
+                        <Row className="justify-content-center pb-5">
+                            <Col md={10} lg={8} xs={12}>
+                                {this.props.keringanan?.flag === null ? null :
+                                    <div className="mb-4">
                                         {this.props.keringanan?.flag === 'diterima' &&
-                                            <Card body color="green" inverse >
-                                                <div>
-                                                    Permohonan sanggah UKT Anda diterima.
-                                                    <br />
-                                                    Silakan lakukan pembayaran UKT pada bank mitra yang telah ditetapkan (Bank BNI, Mandiri, dan BTN) sebagai dasar untuk registrasi secara resmi sebagai mahasiswa Universitas Negeri Jakarta (UNJ)
-                                                </div>
+                                            <Card body className="border-0 shadow-sm text-white" style={{ background: '#008d4c' }}>
+                                                <h5 className="font-weight-bold"><i className="fa fa-check-circle mr-2"></i>Sanggah UKT Diterima</h5>
+                                                <p className="mb-0">Permohonan sanggah UKT Anda diterima. Silakan lakukan pembayaran pada bank mitra (BNI, Mandiri, BTN) untuk proses registrasi resmi mahasiswa UNJ.</p>
                                             </Card>
                                         }
                                         {this.props.keringanan?.flag === 'menunggu' &&
-                                            <Card body color="green" outlined >
-                                                <div>
-                                                    Camaba dan Orang tua camaba (tidak bisa di wakilkan) di wajibkan untuk datang untuk melakukan wawancara dan Validasi data di Kampus UNJ dengan membawa data pendukung pada :
-                                                    <br />
-                                                    tanggal : 16- 17 mei 2024
-                                                    <br />
-                                                    Pukul : 09:00 WIB
-                                                    <br />
-                                                    Tempat : AULA Hatta Lantai 2
+                                            <Card body className="border-success shadow-sm bg-light" style={{ borderLeft: '5px solid #008d4c' }}>
+                                                <h5 className="font-weight-bold text-success"><i className="fa fa-calendar-check-o mr-2"></i>Jadwal Wawancara & Validasi</h5>
+                                                <div className="pl-4 border-left ml-2 mt-2">
+                                                    <p className="mb-1"><strong><i className="fa fa-clock-o mr-2"></i>Waktu:</strong> 16 - 17 Mei 2024 | 09:00 WIB</p>
+                                                    <p className="mb-1"><strong><i className="fa fa-map-marker mr-2"></i>Tempat:</strong> AULA Hatta Lantai 2</p>
+                                                    <p className="text-danger mt-2 mb-0" style={{fontSize: '0.85rem'}}>* Camaba dan Orang tua wajib hadir (tidak bisa diwakilkan) membawa dokumen pendukung.</p>
                                                 </div>
                                             </Card>
                                         }
                                         {this.props.keringanan?.flag === 'ditolak' &&
-                                            <Card body color="danger" inverse >
-                                                <div>
-                                                    Mohon maaf permohonan sanggah UKT Anda ditolak.
-                                                    <br />
-                                                    Silakan lakukan pembayaran UKT pada bank mitra yang telah ditetapkan (Bank BNI, Mandiri, dan BTN) sebagai dasar untuk registrasi secara resmi sebagai mahasiswa Universitas Negeri Jakarta (UNJ)
-                                                </div>
+                                            <Card body className="border-0 shadow-sm text-white bg-danger">
+                                                <h5 className="font-weight-bold"><i className="fa fa-times-circle mr-2"></i>Sanggah UKT Ditolak</h5>
+                                                <p className="mb-0">Mohon maaf permohonan sanggah UKT Anda ditolak. Silakan lakukan pembayaran sesuai besaran UKT yang tertera melalui bank mitra.</p>
                                             </Card>
                                         }
-                                        <br />
-                                        {!this.props.keringanan?.flag || this.props.keringanan?.flag === 'diterima' || this.props.keringanan?.flag === 'ditolak' ?
-                                            <Card body color="green" outline >
-                                                <div>
-                                                    Bagi yang tidak ada perubahan data yang disebabkan kondisi luar biasa, maka proses selanjutnya Mengklik tombol <b>TERIMA</b> dan silahkan
-                                                    melakukan pembayaran UKT pada bank mitra yang telah ditetapkan (Bank BNI, Mandiri, dan BTN) sebagai dasar untuk registrasi secara resmi
-                                                    sebagai mahasiswa Universitas Negeri Jakarta (UNJ). <br />
-                                                    Apabila ada perubahan data yang disebabkan adanya kondisi luar biasa setelah pengumuman hasil maka  di berikan kesempatan untuk malakukan penyesuaian data baru Silahkan Klik Tombol
-                                                    <b>KLARIFIKASI</b> dan datang membawa bukti perubahan data
-                                                </div>
-                                                <Row className="margin-top-20">
-                                                    <Col md={4} xs={12}></Col>
-                                                    <Col md={4} xs={12}>
-                                                        <Button
-                                                            color="success"
-                                                            size="lg"
-                                                            block
-                                                            onClick={this.toggleTerima}
-                                                        >
-                                                            <i className="fa fa-check"></i> TERIMA
-                                                        </Button>
-                                                    </Col>
-                                                    <Col md={2} xs={12}></Col>
-                                                </Row>
-                                                <Row className="margin-top-20">
-                                                    <Col md={4} xs={12}></Col>
-                                                    <Col md={4} xs={12}>
-                                                        <Button
-                                                            color="success"
-                                                            size="lg"
-                                                            block
-                                                            onClick={this.toggleKlarifikasi}
-                                                        >
-                                                            <i className="fa fa-check"></i> KLARIFIKASI
-                                                        </Button>
-                                                    </Col>
-                                                    <Col md={2} xs={12}></Col>
-                                                </Row>
-                                            </Card>
-                                            : null
-                                        }
-                                    </Col>
-                                    <Col md={2} xs={12}></Col>
-                                </Row>
-                            }
-                            <Modal isOpen={this.state.modalTerima} toggle={this.toggleTerima}>
-                                <ModalHeader toggle={this.toggleTerima}>
-                                    Apakah Anda yakin?
-                                </ModalHeader>
-                                <ModalBody>
-                                    <Alert color="success">
-                                        <i className="fa fa-info-circle"></i> Anda menyetujui
-                                        keputusan penentuan kelompok UKT.
-                                    </Alert>
-                                </ModalBody>
-                                <ModalFooter className="text-right">
-                                    <Button color="success" onClick={this.klikTerima}>
-                                        Ya, Saya Yakin
-                                    </Button>{" "}
-                                    <Button color="danger" onClick={this.toggleTerima}>
-                                        Batalkan
-                                    </Button>
-                                </ModalFooter>
-                            </Modal>
+                                    </div>
+                                }
 
-                            <Modal
-                                isOpen={this.state.modalKlarifikasi}
-                                toggle={this.toggleKlarifikasi}
-                            >
-                                <ModalHeader toggle={this.toggleKlarifikasi}>
-                                    Apakah Anda yakin?
-                                </ModalHeader>
-                                <ModalBody>
-                                    <Alert color="danger">
-                                        <i className="fa fa-info-circle"></i> Verifikasi data UKT
-                                        digunakan untuk memverifikasi dokumen yang salah unggah.
-                                        Apabila tidak ada kesalahan pengunggahan dokumen maka Anda
-                                        tidak diperkenankan untuk melakukan verifikasi data UKT.
-                                        Verifikasi data UKT tidak otomatis menurunkan kelompok UKT
-                                        yang sudah ditentukan, bisa juga tetap atau bahkan naik dari
-                                        kelompok UKT sebelumnya.
-                                    </Alert>
-                                </ModalBody>
-                                <ModalFooter className="text-right">
-                                    <Button color="success" onClick={this.klikKlarifikasi}>
-                                        Ya, Saya Yakin
-                                    </Button>{" "}
-                                    <Button color="danger" onClick={this.toggleKlarifikasi}>
-                                        Batalkan
-                                    </Button>
-                                </ModalFooter>
-                            </Modal>
-                            {/* <hr />
-            <Row className="margin-top-20">
-              <Col md={3} xs={12}></Col>
-              <Col md={6} xs={12}>
-                <Card body color="green" inverse>
-                  <div>
-                    <i className="fa fa-info-circle"></i> Apa maksud dari
-                    pilihan TERIMA UKT?
-                  </div>
-                </Card>
-                <Card body className="card-body-terimasanggah">
-                  <ul className="list-reset">
-                    <li>
-                      <b>MENERIMA</b> adalah menyetujui besaran UKT per semester
-                      yang telah ditetapkan melalui pengisian UKT daring
-                    </li>
-                    <li>
-                      <b>Verifikasi data UKT</b> adalah proses memperbaiki
-                      dokumen yang salah diunggah pada saat pengisian UKT daring
-                      <br />
-                      &nbsp;
-                    </li>
-                    <li>
-                      <KetentuanKlarifikasi />
-                    </li>
-                  </ul>
-                </Card>
-              </Col>
-              <Col md={3} xs={12}>
-                <Card body color="green" inverse>
-                  <div>
-                    <i className="fa fa-info-circle"></i> Kapan proses
-                    VERIFIKASI DATA UKT dilaksanakan?
-                  </div>
-                </Card>
-                <Card body className="card-body-terimasanggah">
-                  <JadwalKlarifikasi />
-                </Card>
-              </Col>
-            </Row> */}
-                        </div>
+                                {!this.props.keringanan?.flag || this.props.keringanan?.flag === 'diterima' || this.props.keringanan?.flag === 'ditolak' ?
+                                    <Card body className="shadow-lg border-0 bg-white" style={{ borderRadius: '15px' }}>
+                                        <div className="p-2">
+                                            <h5 className="font-weight-bold mb-3"><i className="fa fa-info-circle text-primary mr-2"></i>Instruksi Lanjutan</h5>
+                                            <p className="text-muted" style={{ lineHeight: '1.6' }}>
+                                                Jika data sudah sesuai, klik tombol <strong>TERIMA</strong> untuk melanjutkan pembayaran. 
+                                                silahkan lanjut kepada halaman berikut ini <a href="/main/ukt" className="text-success font-weight-bold">Klik Disini</a>.
+                                            </p>
+                                            
+                                            <div className="mt-4 pt-3 border-top text-center">
+                                                <Button
+                                                    color="success"
+                                                    size="lg"
+                                                    className="px-5 shadow-sm font-weight-bold"
+                                                    style={{ borderRadius: '50px', backgroundColor: '#008d4c' }}
+                                                    onClick={this.toggleTerima}
+                                                >
+                                                    <i className="fa fa-check-circle mr-2"></i> TERIMA HASIL UKT
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    </Card>
+                                    : null
+                                }
+                            </Col>
+                        </Row>
                     )}
+
+                {/* Modals with enhanced UI */}
+                <Modal isOpen={this.state.modalTerima} toggle={this.toggleTerima} centered>
+                    <ModalHeader className="bg-success text-white border-0" toggle={this.toggleTerima}>
+                        Konfirmasi Persetujuan
+                    </ModalHeader>
+                    <ModalBody className="p-4 text-center">
+                        <i className="fa fa-question-circle fa-4x text-success mb-3"></i>
+                        <h5>Apakah Anda yakin menerima hasil UKT ini?</h5>
+                        <p className="text-muted">Dengan mengklik "Ya", Anda menyetujui besaran kelompok UKT yang telah ditetapkan.</p>
+                    </ModalBody>
+                    <ModalFooter className="border-0 justify-content-center pb-4">
+                        <Button color="success" className="px-4 font-weight-bold" onClick={this.klikTerima}>Ya, Saya Setuju</Button>
+                        <Button color="link" className="text-muted" onClick={this.toggleTerima}>Batalkan</Button>
+                    </ModalFooter>
+                </Modal>
+
+                <Modal isOpen={this.state.modalKlarifikasi} toggle={this.toggleKlarifikasi} centered size="lg">
+                    <ModalHeader className="bg-warning text-dark border-0" toggle={this.toggleKlarifikasi}>
+                        Peringatan Klarifikasi Data
+                    </ModalHeader>
+                    <ModalBody className="p-4">
+                        <Alert color="warning" className="border-0 shadow-sm">
+                            <h6 className="font-weight-bold font-italic"><i className="fa fa-warning mr-2"></i>PENTING:</h6>
+                            <ul className="mb-0">
+                                <li>Hanya untuk kesalahan pengunggahan dokumen.</li>
+                                <li>Tidak otomatis menurunkan kelompok UKT.</li>
+                                <li>Kelompok UKT bisa tetap atau bahkan <b>naik</b>.</li>
+                            </ul>
+                        </Alert>
+                    </ModalBody>
+                    <ModalFooter className="border-0">
+                        <Button color="success" onClick={this.klikKlarifikasi}>Lanjutkan Klarifikasi</Button>
+                        <Button color="danger" outline onClick={this.toggleKlarifikasi}>Batal</Button>
+                    </ModalFooter>
+                </Modal>
             </div>
         );
     }

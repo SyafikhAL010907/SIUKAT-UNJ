@@ -17,14 +17,14 @@ class Bantuan extends React.Component {
                         <div className="bg-light rounded-circle p-2 mr-3 text-primary shadow-sm" style={{width: '35px', height: '35px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                             <i className="fa fa-envelope-o"></i>
                         </div>
-                        <a href="mailto:cs.pendaftaran@unj.ac.id" className="text-dark font-weight-bold" style={{fontSize: '0.9rem'}}>cs.pendaftaran@unj.ac.id</a>
+                        <a href="-" className="text-dark font-weight-bold" style={{fontSize: '0.9rem'}}>-</a>
                     </div>
                     <div className="mb-3 d-flex align-items-center">
                         <div className="bg-light rounded-circle p-2 mr-3 text-info shadow-sm" style={{width: '35px', height: '35px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                             <i className="fa fa-telegram"></i>
                         </div>
                         <a href={this.props.info.kontak} target="_blank" rel="noopener noreferrer" className="text-dark font-weight-bold" style={{fontSize: '0.9rem'}}>
-                            @admisiunjofficial
+                            -
                         </a>
                     </div>
                     <div className="mb-3 d-flex align-items-center">
@@ -32,7 +32,7 @@ class Bantuan extends React.Component {
                             <i className="fa fa-instagram"></i>
                         </div>
                         <a href={this.props.info.instagram} target="_blank" rel="noopener noreferrer" className="text-dark font-weight-bold" style={{fontSize: '0.9rem'}}>
-                            @admisiunj
+                            -
                         </a>
                     </div>
                     <div className="mt-4 pt-3 border-top d-flex align-items-center">
@@ -40,8 +40,8 @@ class Bantuan extends React.Component {
                             <i className="fa fa-phone"></i>
                         </div>
                         <div>
-                            <div className="text-dark font-weight-bold" style={{fontSize: '1rem'}}>(021) 4788-2394</div>
-                            <div className="text-muted small">Senin - Jumat: 09.00 - 17.00 WIB</div>
+                            <div className="text-dark font-weight-bold" style={{fontSize: '1rem'}}>-</div>
+                            <div className="text-muted small">-</div>
                         </div>
                     </div>
                 </div>

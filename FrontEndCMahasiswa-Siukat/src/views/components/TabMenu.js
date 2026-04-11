@@ -148,7 +148,7 @@ class TabMenu extends React.Component {
                             </TabPane>
                             <TabPane tabId="3" className="h-100">
                                 <Card className="premium-card">
-                                    <CardTitle tag="h4">Status Kelengkapan Biodata</CardTitle>
+                                    <CardTitle tag="h4">Informasi Tabel UKT</CardTitle>
                                     <InfoBiodata />
                                 </Card>
                             </TabPane>

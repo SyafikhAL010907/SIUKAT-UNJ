@@ -352,7 +352,7 @@ class Terima extends React.Component {
                                     </Button>
                                 </div> */}
 
-                                <div>
+                                {/* <div>
                                     <Button
                                         color="primary"
                                         size="lg"
@@ -364,9 +364,9 @@ class Terima extends React.Component {
                                         {this.state.textSlipPembayaran}{' '}
                                         <i className="fa fa-info-circle"></i>
                                     </Button>
-                                </div>
+                                </div> */}
 
-                                <div style={{ textAlign: 'center' }}>
+                                {/* <div style={{ textAlign: 'center' }}>
                                     <Button
                                         color="success"
                                         size="lg"
@@ -383,7 +383,7 @@ class Terima extends React.Component {
                                             {this.props.info?.lapor_diri || "-"})
                                         </span>
                                     </Button>
-                                </div>
+                                </div> */}
                                 {/* <Button color="success" size="lg" block className="margin-top-20"><i className="fa fa-info-circle"></i> Lihat Informasi Tentang Lapor Diri <i className="fa fa-info-circle"></i></Button> */}
 
                                 {/* <Card body className="margin-top-20" color="danger" inverse>
