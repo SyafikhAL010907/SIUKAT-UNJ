@@ -3,7 +3,7 @@ import { Button,
          Col, Alert,
          Form, FormGroup, FormText, Label, Row, Table, 
          Modal, ModalBody, ModalHeader, ModalFooter  } from 'reactstrap'
-import { Link } from 'react-router-dom'         
+import { Link, withRouter } from 'react-router-dom'         
 import { Field, reduxForm, reset, formValueSelector } from 'redux-form'
 import { InputBs, InputFileBs, money } from '../../../components'
 import { wali, provinsi, kabkot, kecamatan } from '../../../../actions'   
@@ -24,11 +24,14 @@ let FormWali = (props) => {
         dispatch(kecamatan.fetchForWali(e.target.value))
     }
     return (
-        <Form onSubmit={handleSubmit} id="form-wali" className="form-horizontal">        
-            <Modal isOpen={toggleWali} toggle={handleToggleWali} size="lg"
-            className={'modal-success'}>
-                <ModalHeader toggle={handleToggleWali}>Form Wali</ModalHeader>
-                <ModalBody>
+        <Modal isOpen={toggleWali} toggle={handleToggleWali} size="lg" centered className="border-none">
+            <div className="bg-white rounded-3xl overflow-hidden shadow-2xl">
+                <div className="bg-emerald-600 p-6 flex justify-between items-center text-white">
+                    <h3 className="text-xl font-bold">Perbarui Data Wali</h3>
+                    <button onClick={handleToggleWali} className="hover:rotate-90 transition-transform text-2xl">&times;</button>
+                </div>
+                
+                <form onSubmit={handleSubmit} className="p-8 max-h-[70vh] overflow-y-auto">
                     <FormGroup row>
                         <Label for="status_wali" md={3}>Status Wali</Label>                                             
                         <Col md={2}>
@@ -129,13 +132,16 @@ let FormWali = (props) => {
                             </FormGroup>
                         </div>
                     )} 
-                </ModalBody>
-                <ModalFooter className="text-right">
-                    <Button color="success" type="submit" form="form-wali" disabled={pristine || submitting}><i className="fa fa-save"></i> Simpan</Button>{' '}
-                    <Button color="warning" onClick={handleToggleWali}>Batal</Button>
-                </ModalFooter>
-            </Modal>
-        </Form>
+                </form>
+
+                <div className="mt-10 flex justify-end space-x-3 border-t pt-6">
+                    <button type="button" onClick={handleToggleWali} className="px-6 py-2.5 font-bold text-gray-500">Batal</button>
+                    <button type="submit" disabled={pristine || submitting} className="bg-emerald-600 text-white px-8 py-2.5 rounded-xl font-bold shadow-lg">
+                        <i className="fa fa-save mr-2"></i> Simpan Perubahan
+                    </button>
+                </div>
+            </div>
+        </Modal>
     )
 }
 class Wali extends React.Component{
@@ -151,6 +157,16 @@ class Wali extends React.Component{
     componentWillMount(){
         this.props.dispatch(provinsi.fetchProvinsi())
         this.props.dispatch(wali.fetchAllData(cookies.get(cookieName), this.props.noPeserta, this.props.atribut))
+    }
+
+    componentDidMount() {
+        // Otomatis buka modal jika navigasi datang dari button "Sanggah" di DataTable
+        const { location } = this.props;
+        if (location.state && location.state.modeEdit) {
+            setTimeout(() => {
+                this.setState({ modalToggle: true });
+            }, 800);
+        }
     }
     modalToggle = () => {
         this.setState({
@@ -171,13 +187,28 @@ class Wali extends React.Component{
                 formData.append(key, values[key])
             }
         }
-        this.props.dispatch(wali.updateData(cookies.get(cookieName), formData, this.props.noPeserta))
+        this.props.dispatch(wali.updateData(cookies.get(cookieName), formData, this.props.noPeserta)).then(() => {
+            this.modalToggle();
+            // Refetch data agar tampilan InfoItem langsung terupdate
+            this.props.dispatch(wali.fetchAllData(cookies.get(cookieName), this.props.noPeserta, this.props.atribut))
+        })
         this.props.dispatch(reset('DataWaliSeleksi'))
     }
     render(){
-        const w = this.props.wali || {}
+        const { wali: w_raw, location } = this.props;
+        const w = w_raw || {}
+        const isModeSanggah = location.state && location.state.modeEdit;
+
         return (
             <div className="space-y-4">
+                {/* Banner Mode Sanggah */}
+                {isModeSanggah && (
+                    <div className="mb-4 p-4 bg-orange-50 border border-orange-200 rounded-2xl flex items-center text-orange-700 animate-pulse">
+                        <i className="fa fa-info-circle mr-3 text-xl"></i>
+                        <span className="text-sm font-bold uppercase">Mode Sanggah Aktif: Anda dapat mengubah data wali sekarang.</span>
+                    </div>
+                )}
+
                 <div className="flex justify-between items-end border-b border-gray-200 pb-4">
                     <div>
                         <h4 className="text-xl font-black text-gray-800 tracking-tight flex items-center gap-2">
@@ -185,9 +216,9 @@ class Wali extends React.Component{
                         </h4>
                         <p className="text-gray-500 text-sm">Informasi wali / penjamin mahasiswa.</p>
                     </div>
-                    { this.props.editable && (
-                        <button onClick={this.modalToggle} className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg font-bold shadow-md transition transform hover:scale-105 flex items-center gap-2 text-sm">
-                            <i className="fa fa-pencil"></i> Perbarui Data
+                    { isModeSanggah && (
+                        <button onClick={this.modalToggle} className="bg-amber-600 text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-amber-700 transition-all shadow-md">
+                            <i className="fa fa-pencil mr-2"></i> Perbarui Data
                         </button>
                     )}
                 </div>
@@ -273,8 +304,8 @@ FormWali = connect((store) => {
     kabkot, kecamatan
 })(FormWali)
 
-export default connect(
+export default withRouter(connect(
     (store) => ({
         wali: store.wali.wali,
     })
-)(Wali)
+)(Wali))

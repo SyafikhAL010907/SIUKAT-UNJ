@@ -461,7 +461,7 @@ func (s *CMahasiswaService) DatatableSanggah(page, perPage int, keyword string) 
 	var mhs []models.CMahasiswa
 	var count int64
 
-	query := db.Model(&models.CMahasiswa{}).Preload("Fakultas").Preload("Prodi").Where("flag = ?", "sanggah_ukt")
+	query := db.Model(&models.CMahasiswa{}).Preload("Fakultas").Preload("Prodi").Where("flag = ? AND atribut = ?", "sanggah_ukt", "sanggah")
 	
 	if keyword != "" {
 		query = query.Where("no_peserta LIKE ? OR nama_cmahasiswa LIKE ?", "%"+keyword+"%", "%"+keyword+"%")

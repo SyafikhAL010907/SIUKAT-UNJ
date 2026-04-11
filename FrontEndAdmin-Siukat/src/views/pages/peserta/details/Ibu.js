@@ -7,6 +7,8 @@ import { InputBs, InputDayPicker, InputFileBs, money } from '../../../components
 import { cookies, cookieName, rupiah, storage, service } from '../../../../global'
 import { connect } from 'react-redux'
 
+import { withRouter } from 'react-router-dom'
+
 let FormIbu = (props) => {
     const { handleSubmit, handleToggleIbu, toggleIbu,
             pristine, submitting, dispatch,
@@ -21,11 +23,14 @@ let FormIbu = (props) => {
         dispatch(kecamatan.fetchForIbu(e.target.value))
     }
     return (
-        <Form onSubmit={handleSubmit} id="form-ibu" className="form-horizontal">        
-            <Modal isOpen={toggleIbu} toggle={handleToggleIbu} size="lg"
-            className={'modal-success'}>
-                <ModalHeader toggle={handleToggleIbu}>Form Ibu</ModalHeader>
-                <ModalBody>
+        <Modal isOpen={toggleIbu} toggle={handleToggleIbu} size="lg" centered className="border-none">
+            <div className="bg-white rounded-3xl overflow-hidden shadow-2xl">
+                <div className="bg-emerald-600 p-6 flex justify-between items-center text-white">
+                    <h3 className="text-xl font-bold">Perbarui Data Ibu</h3>
+                    <button onClick={handleToggleIbu} className="hover:rotate-90 transition-transform text-2xl">&times;</button>
+                </div>
+                
+                <form onSubmit={handleSubmit} className="p-8 max-h-[70vh] overflow-y-auto">
                     <FormGroup row>
                         <Label for="nama_ibu" md={3}>Nama Lengkap</Label>
                         <Col md={9}>
@@ -180,13 +185,16 @@ let FormIbu = (props) => {
                             </FormGroup>
                         </div>
                     )}
-                </ModalBody>
-                <ModalFooter className="text-right">
-                    <Button color="success" type="submit" form="form-ibu" disabled={pristine || submitting}><i className="fa fa-save"></i> Simpan</Button>{' '}
-                    <Button color="warning" onClick={handleToggleIbu}>Batal</Button>
-                </ModalFooter>
-            </Modal>
-        </Form>
+                </form>
+
+                <div className="mt-10 flex justify-end space-x-3 border-t pt-6">
+                    <button type="button" onClick={handleToggleIbu} className="px-6 py-2.5 font-bold text-gray-500">Batal</button>
+                    <button type="submit" disabled={pristine || submitting} className="bg-emerald-600 text-white px-8 py-2.5 rounded-xl font-bold shadow-lg">
+                        <i className="fa fa-save mr-2"></i> Simpan Perubahan
+                    </button>
+                </div>
+            </div>
+        </Modal>
     )
 }
 
@@ -204,6 +212,16 @@ class Ibu extends React.Component{
         this.props.dispatch(pekerjaan.fetchPekerjaan(cookies.get(cookieName)))
         this.props.dispatch(provinsi.fetchProvinsi())
         this.props.dispatch(ibu.fetchAllData(cookies.get(cookieName), this.props.noPeserta, this.props.atribut))
+    }
+
+    componentDidMount() {
+        // Otomatis buka modal jika navigasi datang dari button "Sanggah" di DataTable
+        const { location } = this.props;
+        if (location.state && location.state.modeEdit) {
+            setTimeout(() => {
+                this.setState({ modalToggle: true });
+            }, 800);
+        }
     }
     modalToggle = () => {
         this.setState({
@@ -224,13 +242,28 @@ class Ibu extends React.Component{
                 formData.append(key, values[key])
             }
         }
-        this.props.dispatch(ibu.updateData(cookies.get(cookieName), formData, this.props.noPeserta))
-        this.props.dispatch(reset('DataIbu'))        
+        this.props.dispatch(ibu.updateData(cookies.get(cookieName), formData, this.props.noPeserta)).then(() => {
+            this.modalToggle();
+            // Refetch data agar tampilan InfoItem langsung terupdate
+            this.props.dispatch(ibu.fetchAllData(cookies.get(cookieName), this.props.noPeserta, this.props.atribut))
+        })
+        this.props.dispatch(reset('DataIbuSeleksi'))        
     }
     render(){
-        const ibu = this.props.ibu || {}
+        const { ibu, location } = this.props;
+        const data = ibu || {}
+        const isModeSanggah = location.state && location.state.modeEdit;
+
         return (
             <div className="space-y-4">
+                {/* Banner Notifikasi Mode Sanggah */}
+                {isModeSanggah && (
+                    <div className="mb-4 p-4 bg-orange-50 border border-orange-200 rounded-2xl flex items-center text-orange-700 animate-pulse">
+                        <i className="fa fa-info-circle mr-3 text-xl"></i>
+                        <span className="text-sm font-bold uppercase">Mode Sanggah Aktif: Anda dapat mengubah data ibu sekarang.</span>
+                    </div>
+                )}
+
                 <div className="flex justify-between items-end border-b border-gray-200 pb-4">
                     <div>
                         <h4 className="text-xl font-black text-gray-800 tracking-tight flex items-center gap-2">
@@ -238,9 +271,9 @@ class Ibu extends React.Component{
                         </h4>
                         <p className="text-gray-500 text-sm">Informasi orang tua kandung / ibu.</p>
                     </div>
-                    { this.props.editable && (
-                        <button onClick={this.modalToggle} className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg font-bold shadow-md transition transform hover:scale-105 flex items-center gap-2 text-sm">
-                            <i className="fa fa-pencil"></i> Perbarui Data
+                    { isModeSanggah && (
+                        <button onClick={this.modalToggle} className="bg-amber-600 text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-amber-700 transition-all shadow-md">
+                            <i className="fa fa-pencil mr-2"></i> Perbarui Data
                         </button>
                     )}
                 </div>
@@ -254,26 +287,26 @@ class Ibu extends React.Component{
                         <tbody className="divide-y divide-gray-100">
                             <tr>
                                 <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 w-1/3 text-xs uppercase">Nama Lengkap</td>
-                                <td className="p-4 font-medium text-gray-800">{ibu.nama_ibu || '-'}</td>
+                                <td className="p-4 font-medium text-gray-800">{data.nama_ibu || '-'}</td>
                             </tr>
                             <tr>
                                 <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Status</td>
                                 <td className="p-4">
-                                    <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase ${ibu.status_ibu === 'hidup' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                                        {ibu.status_ibu || 'Belum diisi'}
+                                    <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase ${data.status_ibu === 'hidup' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                                        {data.status_ibu || 'Belum diisi'}
                                     </span>
                                 </td>
                             </tr>
-                            { ibu.status_ibu === "hidup" && (<>
+                            { data.status_ibu === "hidup" && (<>
                                 <tr>
                                     <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">NIK</td>
-                                    <td className="p-4 font-mono text-gray-700">{ibu.nik_ibu || '-'}</td>
+                                    <td className="p-4 font-mono text-gray-700">{data.nik_ibu || '-'}</td>
                                 </tr>
                                 <tr>
                                     <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">KTP</td>
                                     <td className="p-4">
-                                        { (ibu.scan_ktp_ibu && ibu.scan_ktp_ibu !== "") ? (
-                                            <a href={storage+"/"+ibu.scan_ktp_ibu} target="_blank" rel="noopener noreferrer"
+                                        { (data.scan_ktp_ibu && data.scan_ktp_ibu !== "") ? (
+                                            <a href={storage+"/"+data.scan_ktp_ibu} target="_blank" rel="noopener noreferrer"
                                                className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 font-bold text-sm">
                                                 <i className="fa fa-download"></i> Lihat KTP
                                             </a>
@@ -282,34 +315,34 @@ class Ibu extends React.Component{
                                 </tr>
                                 <tr>
                                     <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Tempat, Tgl Lahir</td>
-                                    <td className="p-4 text-gray-700">{ibu.tempat_lahir_ibu ? `${ibu.tempat_lahir_ibu}, ${ibu.tanggal_lahir_ibu}` : '-'}</td>
+                                    <td className="p-4 text-gray-700">{data.tempat_lahir_ibu ? `${data.tempat_lahir_ibu}, ${data.tanggal_lahir_ibu}` : '-'}</td>
                                 </tr>
                                 <tr>
                                     <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Alamat</td>
                                     <td className="p-4 text-gray-700">
-                                        { ibu.provinsi != null
-                                            ? `${ibu.alamat_ibu}, ${ibu.kecamatan.kecam_nama}, ${ibu.kabkot.kab_nama}, ${ibu.provinsi.provinsi_nama}`
-                                            : (ibu.alamat_ibu || '-')
+                                        { data.provinsi != null
+                                            ? `${data.alamat_ibu}, ${data.kecamatan.kecam_nama}, ${data.kabkot.kab_nama}, ${data.provinsi.provinsi_nama}`
+                                            : (data.alamat_ibu || '-')
                                         }
                                     </td>
                                 </tr>
                                 <tr>
                                     <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Pekerjaan</td>
-                                    <td className="p-4 text-gray-700">{ibu.pekerjaan?.nama || '-'}</td>
+                                    <td className="p-4 text-gray-700">{data.pekerjaan?.nama || '-'}</td>
                                 </tr>
                                 <tr>
                                     <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Penghasilan</td>
-                                    <td className="p-4 font-bold text-emerald-700">{rupiah(ibu.penghasilan_ibu)} <span className="text-gray-400 font-normal text-xs">/ bulan</span></td>
+                                    <td className="p-4 font-bold text-emerald-700">{rupiah(data.penghasilan_ibu)} <span className="text-gray-400 font-normal text-xs">/ bulan</span></td>
                                 </tr>
                                 <tr>
                                     <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Penghasilan Sampingan</td>
-                                    <td className="p-4 font-bold text-emerald-700">{rupiah(ibu.sampingan_ibu)} <span className="text-gray-400 font-normal text-xs">/ bulan</span></td>
+                                    <td className="p-4 font-bold text-emerald-700">{rupiah(data.sampingan_ibu)} <span className="text-gray-400 font-normal text-xs">/ bulan</span></td>
                                 </tr>
                                 <tr>
                                     <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Bukti Penghasilan</td>
                                     <td className="p-4">
-                                        { (ibu.scan_slip_ibu && ibu.scan_slip_ibu !== "") ? (
-                                            <a href={storage+"/"+ibu.scan_slip_ibu} target="_blank" rel="noopener noreferrer"
+                                        { (data.scan_slip_ibu && data.scan_slip_ibu !== "") ? (
+                                            <a href={storage+"/"+data.scan_slip_ibu} target="_blank" rel="noopener noreferrer"
                                                className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 font-bold text-sm">
                                                 <i className="fa fa-download"></i> Lihat Slip Gaji
                                             </a>
@@ -318,7 +351,7 @@ class Ibu extends React.Component{
                                 </tr>
                                 <tr>
                                     <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Nomor Telepon</td>
-                                    <td className="p-4 font-mono text-gray-700">{ibu.telepon_ibu || '-'}</td>
+                                    <td className="p-4 font-mono text-gray-700">{data.telepon_ibu || '-'}</td>
                                 </tr>
                             </>)}
                         </tbody>
@@ -360,8 +393,8 @@ FormIbu = connect((store) => {
     kabkot, kecamatan
 })(FormIbu)
 
-export default connect(
+export default withRouter(connect(
     (store) => ({
         ibu: store.ibu.ibu,
     })
-)(Ibu)
+)(Ibu))

@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import { Field, reduxForm, reset, formValueSelector } from 'redux-form';
 import { pendukung } from '../../../../actions';
 import { InputBs, InputFileBs } from '../../../components';
@@ -126,6 +127,14 @@ class Pendukung extends React.Component {
 
     componentDidMount() {
         this.props.dispatch(pendukung.getById(cookies.get(cookieName), this.props.noPeserta, this.props.atribut));
+
+        // Otomatis buka modal jika navigasi datang dari button "Sanggah" di DataTable
+        const { location } = this.props;
+        if (location.state && location.state.modeEdit) {
+            setTimeout(() => {
+                this.setState({ modalToggle: true });
+            }, 800);
+        }
     }
 
     modalToggle = () => {
@@ -144,15 +153,28 @@ class Pendukung extends React.Component {
                 formData.append(key, values[key]);
             }
         }
-        this.props.dispatch(pendukung.updateData(cookies.get(cookieName), formData, this.props.noPeserta));
+        this.props.dispatch(pendukung.updateData(cookies.get(cookieName), formData, this.props.noPeserta)).then(() => {
+            this.modalToggle();
+            // Refetch data agar tampilan InfoItem langsung terupdate
+            this.props.dispatch(pendukung.getById(cookies.get(cookieName), this.props.noPeserta, this.props.atribut));
+        });
         this.props.dispatch(reset('DataPendukungSeleksi'));
     }
 
     render() {
-        const { pendukung, editable } = this.props;
+        const { pendukung, location } = this.props;
+        const isModeSanggah = location.state && location.state.modeEdit;
 
         return (
             <div className="w-full bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-6">
+                {/* Banner Mode Sanggah */}
+                {isModeSanggah && (
+                    <div className="p-4 bg-orange-50 border-b border-orange-200 flex items-center text-orange-700 animate-pulse">
+                        <i className="fa fa-info-circle mr-3 text-xl"></i>
+                        <span className="text-sm font-bold uppercase">Mode Sanggah Aktif: Anda dapat mengubah berkas pendukung sekarang.</span>
+                    </div>
+                )}
+
                 {/* Header Card */}
                 <div className="flex items-center justify-between p-5 border-b border-gray-100 bg-gray-50/50">
                     <div className="flex items-center space-x-3">
@@ -161,12 +183,12 @@ class Pendukung extends React.Component {
                         </div>
                         <h4 className="text-lg font-bold text-gray-800 tracking-tight italic uppercase">Berkas Pendukung</h4>
                     </div>
-                    {editable && (
+                    {isModeSanggah && (
                         <button
                             onClick={this.modalToggle}
-                            className="flex items-center px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white text-xs font-bold rounded-lg shadow-sm transition-all transform hover:scale-105"
+                            className="bg-amber-600 text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-amber-700 transition-all shadow-md"
                         >
-                            <i className="fa fa-pencil mr-2"></i> PERBARUI
+                            <i className="fa fa-pencil mr-2"></i> Perbarui Data
                         </button>
                     )}
                 </div>
@@ -217,4 +239,4 @@ const mapStateToProps = (store) => ({
     pendukung: store.pendukung.pendukung || {},
 });
 
-export default connect(mapStateToProps)(Pendukung);
+export default withRouter(connect(mapStateToProps)(Pendukung));

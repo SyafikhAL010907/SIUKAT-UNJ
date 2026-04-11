@@ -7,6 +7,8 @@ import { InputBs, InputDayPicker, InputFileBs, money } from '../../../components
 import { cookies, cookieName, rupiah, storage, service } from '../../../../global'
 import { connect } from 'react-redux'
 
+import { withRouter } from 'react-router-dom'
+
 let FormAyah = (props) => {
     const { handleSubmit, handleToggleAyah, toggleAyah,
             pristine, submitting, dispatch,
@@ -21,11 +23,14 @@ let FormAyah = (props) => {
         dispatch(kecamatan.fetchForAyah(e.target.value))
     }
     return (
-        <Form onSubmit={handleSubmit} id="form-ayah" className="form-horizontal">        
-            <Modal isOpen={toggleAyah} toggle={handleToggleAyah} size="lg"
-            className={'modal-success'}>
-                <ModalHeader toggle={handleToggleAyah}>Form Ayah</ModalHeader>
-                <ModalBody>
+        <Modal isOpen={toggleAyah} toggle={handleToggleAyah} size="lg" centered className="border-none">
+            <div className="bg-white rounded-3xl overflow-hidden shadow-2xl">
+                <div className="bg-emerald-600 p-6 flex justify-between items-center text-white">
+                    <h3 className="text-xl font-bold">Perbarui Data Ayah</h3>
+                    <button onClick={handleToggleAyah} className="hover:rotate-90 transition-transform text-2xl">&times;</button>
+                </div>
+                
+                <form onSubmit={handleSubmit} className="p-8 max-h-[70vh] overflow-y-auto">
                     <FormGroup row>
                         <Label for="nama_ayah" md={3}>Nama Lengkap</Label>
                         <Col md={9}>
@@ -180,13 +185,16 @@ let FormAyah = (props) => {
                             </FormGroup>
                         </div>
                     )}
-                </ModalBody>
-                <ModalFooter className="text-right">
-                    <Button color="success" type="submit" form="form-ayah" disabled={pristine || submitting}><i className="fa fa-save"></i> Simpan</Button>{' '}
-                    <Button color="warning" onClick={handleToggleAyah}>Batal</Button>
-                </ModalFooter>
-            </Modal>
-        </Form>
+                </form>
+
+                <div className="mt-10 flex justify-end space-x-3 border-t pt-6">
+                    <button type="button" onClick={handleToggleAyah} className="px-6 py-2.5 font-bold text-gray-500">Batal</button>
+                    <button type="submit" disabled={pristine || submitting} className="bg-emerald-600 text-white px-8 py-2.5 rounded-xl font-bold shadow-lg">
+                        <i className="fa fa-save mr-2"></i> Simpan Perubahan
+                    </button>
+                </div>
+            </div>
+        </Modal>
     )
 }
 
@@ -204,6 +212,16 @@ class Ayah extends React.Component{
         this.props.dispatch(pekerjaan.fetchPekerjaan(cookies.get(cookieName)))
         this.props.dispatch(provinsi.fetchProvinsi())
         this.props.dispatch(ayah.fetchAllData(cookies.get(cookieName), this.props.noPeserta, this.props.atribut))
+    }
+
+    componentDidMount() {
+        // Otomatis buka modal jika navigasi datang dari button "Sanggah" di DataTable
+        const { location } = this.props;
+        if (location.state && location.state.modeEdit) {
+            setTimeout(() => {
+                this.setState({ modalToggle: true });
+            }, 800);
+        }
     }
     modalToggle = () => {
         this.setState({
@@ -224,13 +242,28 @@ class Ayah extends React.Component{
                 formData.append(key, values[key])
             }
         }
-        this.props.dispatch(ayah.updateData(cookies.get(cookieName), formData, this.props.noPeserta))
-        this.props.dispatch(reset('DataAyah'))        
+        this.props.dispatch(ayah.updateData(cookies.get(cookieName), formData, this.props.noPeserta)).then(() => {
+            this.modalToggle();
+            // Refetch data agar tampilan InfoItem langsung terupdate
+            this.props.dispatch(ayah.fetchAllData(cookies.get(cookieName), this.props.noPeserta, this.props.atribut))
+        })
+        this.props.dispatch(reset('DataAyahSeleksi'))        
     }
     render(){
-        const ayah = this.props.ayah || {}
+        const { ayah, location } = this.props;
+        const data = ayah || {}
+        const isModeSanggah = location.state && location.state.modeEdit;
+
         return (
             <div className="space-y-4">
+                {/* Banner Notifikasi Mode Sanggah */}
+                {isModeSanggah && (
+                    <div className="mb-4 p-4 bg-orange-50 border border-orange-200 rounded-2xl flex items-center text-orange-700 animate-pulse">
+                        <i className="fa fa-info-circle mr-3 text-xl"></i>
+                        <span className="text-sm font-bold uppercase">Mode Sanggah Aktif: Anda dapat mengubah data ayah sekarang.</span>
+                    </div>
+                )}
+
                 {/* Header */}
                 <div className="flex justify-between items-end border-b border-gray-200 pb-4">
                     <div>
@@ -239,9 +272,9 @@ class Ayah extends React.Component{
                         </h4>
                         <p className="text-gray-500 text-sm">Informasi orang tua kandung / ayah.</p>
                     </div>
-                    { this.props.editable && (
-                        <button onClick={this.modalToggle} className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg font-bold shadow-md transition transform hover:scale-105 flex items-center gap-2 text-sm">
-                            <i className="fa fa-pencil"></i> Perbarui Data
+                    { isModeSanggah && (
+                        <button onClick={this.modalToggle} className="bg-amber-600 text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-amber-700 transition-all shadow-md">
+                            <i className="fa fa-pencil mr-2"></i> Perbarui Data
                         </button>
                     )}
                 </div>
@@ -256,27 +289,27 @@ class Ayah extends React.Component{
                         <tbody className="divide-y divide-gray-100">
                             <tr>
                                 <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 w-1/3 text-xs uppercase">Nama Lengkap</td>
-                                <td className="p-4 font-medium text-gray-800">{ayah.nama_ayah || '-'}</td>
+                                <td className="p-4 font-medium text-gray-800">{data.nama_ayah || '-'}</td>
                             </tr>
                             <tr>
                                 <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Status</td>
                                 <td className="p-4">
-                                    <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase ${ayah.status_ayah === 'hidup' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                                        {ayah.status_ayah || 'Belum diisi'}
+                                    <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase ${data.status_ayah === 'hidup' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                                        {data.status_ayah || 'Belum diisi'}
                                     </span>
                                 </td>
                             </tr>
 
-                            { ayah.status_ayah === "hidup" && (<>
+                            { data.status_ayah === "hidup" && (<>
                                 <tr>
                                     <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">NIK</td>
-                                    <td className="p-4 font-mono text-gray-700">{ayah.nik_ayah || '-'}</td>
+                                    <td className="p-4 font-mono text-gray-700">{data.nik_ayah || '-'}</td>
                                 </tr>
                                 <tr>
                                     <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">KTP</td>
                                     <td className="p-4">
-                                        { (ayah.scan_ktp_ayah && ayah.scan_ktp_ayah !== "") ? (
-                                            <a href={storage+"/"+ayah.scan_ktp_ayah} target="_blank" rel="noopener noreferrer"
+                                        { (data.scan_ktp_ayah && data.scan_ktp_ayah !== "") ? (
+                                            <a href={storage+"/"+data.scan_ktp_ayah} target="_blank" rel="noopener noreferrer"
                                                className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 font-bold text-sm">
                                                 <i className="fa fa-download"></i> Lihat KTP
                                             </a>
@@ -285,34 +318,34 @@ class Ayah extends React.Component{
                                 </tr>
                                 <tr>
                                     <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Tempat, Tgl Lahir</td>
-                                    <td className="p-4 text-gray-700">{ayah.tempat_lahir_ayah ? `${ayah.tempat_lahir_ayah}, ${ayah.tanggal_lahir_ayah}` : '-'}</td>
+                                    <td className="p-4 text-gray-700">{data.tempat_lahir_ayah ? `${data.tempat_lahir_ayah}, ${data.tanggal_lahir_ayah}` : '-'}</td>
                                 </tr>
                                 <tr>
                                     <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Alamat</td>
                                     <td className="p-4 text-gray-700">
-                                        { ayah.provinsi != null
-                                            ? `${ayah.alamat_ayah}, ${ayah.kecamatan.kecam_nama}, ${ayah.kabkot.kab_nama}, ${ayah.provinsi.provinsi_nama}`
-                                            : (ayah.alamat_ayah || '-')
+                                        { data.provinsi != null
+                                            ? `${data.alamat_ayah}, ${data.kecamatan.kecam_nama}, ${data.kabkot.kab_nama}, ${data.provinsi.provinsi_nama}`
+                                            : (data.alamat_ayah || '-')
                                         }
                                     </td>
                                 </tr>
                                 <tr>
                                     <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Pekerjaan</td>
-                                    <td className="p-4 text-gray-700">{ayah.pekerjaan?.nama || '-'}</td>
+                                    <td className="p-4 text-gray-700">{data.pekerjaan?.nama || '-'}</td>
                                 </tr>
                                 <tr>
                                     <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Penghasilan</td>
-                                    <td className="p-4 font-bold text-emerald-700">{rupiah(ayah.penghasilan_ayah)} <span className="text-gray-400 font-normal text-xs">/ bulan</span></td>
+                                    <td className="p-4 font-bold text-emerald-700">{rupiah(data.penghasilan_ayah)} <span className="text-gray-400 font-normal text-xs">/ bulan</span></td>
                                 </tr>
                                 <tr>
                                     <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Penghasilan Sampingan</td>
-                                    <td className="p-4 font-bold text-emerald-700">{rupiah(ayah.sampingan_ayah)} <span className="text-gray-400 font-normal text-xs">/ bulan</span></td>
+                                    <td className="p-4 font-bold text-emerald-700">{rupiah(data.sampingan_ayah)} <span className="text-gray-400 font-normal text-xs">/ bulan</span></td>
                                 </tr>
                                 <tr>
                                     <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Bukti Penghasilan</td>
                                     <td className="p-4">
-                                        { (ayah.scan_slip_ayah && ayah.scan_slip_ayah !== "") ? (
-                                            <a href={storage+"/"+ayah.scan_slip_ayah} target="_blank" rel="noopener noreferrer"
+                                        { (data.scan_slip_ayah && data.scan_slip_ayah !== "") ? (
+                                            <a href={storage+"/"+data.scan_slip_ayah} target="_blank" rel="noopener noreferrer"
                                                className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 font-bold text-sm">
                                                 <i className="fa fa-download"></i> Lihat Slip Gaji
                                             </a>
@@ -321,7 +354,7 @@ class Ayah extends React.Component{
                                 </tr>
                                 <tr>
                                     <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Nomor Telepon</td>
-                                    <td className="p-4 font-mono text-gray-700">{ayah.telepon_ayah || '-'}</td>
+                                    <td className="p-4 font-mono text-gray-700">{data.telepon_ayah || '-'}</td>
                                 </tr>
                             </>)}
                         </tbody>
@@ -362,8 +395,8 @@ FormAyah = connect((store) => {
     kabkot, kecamatan
 })(FormAyah)
 
-export default connect(
+export default withRouter(connect(
     (store) => ({
         ayah: store.ayah.ayah,
     })
-)(Ayah)
+)(Ayah))

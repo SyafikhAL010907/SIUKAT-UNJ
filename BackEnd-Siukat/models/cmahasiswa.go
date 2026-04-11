@@ -28,7 +28,7 @@ type CMahasiswa struct {
 	WaktuSelesai           *time.Time `gorm:"column:waktu_selesai;type:datetime" json:"waktu_selesai"`
 	Atribut                string     `gorm:"column:atribut;type:enum('original','sanggah')" json:"atribut"`
 	Tagihan                string     `gorm:"column:tagihan;type:varchar(255)" json:"tagihan"`
-	NoRegistrasi           string     `gorm:"column:no_registrasi;type:varchar(255)" json:"no_registrasi"`
+	NoRegistrasi           *string     `gorm:"column:no_registrasi;type:varchar(255)" json:"no_registrasi"`
 	Spu                    int        `gorm:"column:spu" json:"spu"`
 	Penalty                string     `gorm:"column:penalty;type:enum('1','0')" json:"penalty"`
 

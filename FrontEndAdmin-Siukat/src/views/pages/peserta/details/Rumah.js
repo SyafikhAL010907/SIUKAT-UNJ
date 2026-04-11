@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import { Field, reduxForm, reset, formValueSelector } from 'redux-form';
 import { rumah } from '../../../../actions';
 import { InputBs, InputFileBs, money } from '../../../components';
@@ -28,13 +29,13 @@ let FormRumah = (props) => {
                 <div className="relative flex flex-col w-full bg-white border-0 rounded-lg shadow-lg outline-none focus:outline-none max-h-[90vh]">
                     
                     {/* Header */}
-                    <div className="flex items-start justify-between p-4 border-b border-solid border-gray-200 rounded-t bg-green-600 text-white">
-                        <h3 className="text-xl font-semibold italic">Form Data Rumah</h3>
+                    <div className="flex items-start justify-between p-6 border-b border-solid border-gray-200 rounded-t bg-emerald-600 text-white">
+                        <h3 className="text-xl font-bold">Perbarui Data Rumah</h3>
                         <button
-                            className="p-1 ml-auto bg-transparent border-0 text-white float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                            className="p-1 ml-auto bg-transparent border-0 text-white float-right text-3xl leading-none font-semibold outline-none focus:outline-none hover:rotate-90 transition-transform"
                             onClick={handleToggleRumah}
                         >
-                            <span>×</span>
+                            <span>&times;</span>
                         </button>
                     </div>
 
@@ -179,12 +180,12 @@ let FormRumah = (props) => {
                             Batal
                         </button>
                         <button
-                            className="px-6 py-2 text-sm font-bold text-white uppercase bg-green-600 rounded shadow hover:shadow-lg outline-none focus:outline-none transition-all duration-150 disabled:opacity-50"
+                            className="px-10 py-3 text-sm font-bold text-white uppercase bg-emerald-600 rounded-xl shadow-lg hover:shadow-xl outline-none focus:outline-none transition-all duration-150 disabled:opacity-50"
                             type="submit"
                             form="form-rumah"
                             disabled={pristine || submitting}
                         >
-                            <i className="fa fa-save mr-2"></i> Simpan
+                            <i className="fa fa-save mr-2"></i> Simpan Perubahan
                         </button>
                     </div>
                 </div>
@@ -226,6 +227,16 @@ class Rumah extends React.Component {
         this.props.dispatch(rumah.getById(cookies.get(cookieName), this.props.noPeserta, this.props.atribut));
     }
 
+    componentDidMount() {
+        // Otomatis buka modal jika navigasi datang dari button "Sanggah" di DataTable
+        const { location } = this.props;
+        if (location.state && location.state.modeEdit) {
+            setTimeout(() => {
+                this.setState({ modalToggle: true });
+            }, 800);
+        }
+    }
+
     modalToggle = () => {
         this.setState({ modalToggle: !this.state.modalToggle });
     }
@@ -243,27 +254,40 @@ class Rumah extends React.Component {
                 formData.append(key, values[key]);
             }
         }
-        this.props.dispatch(rumah.updateData(cookies.get(cookieName), formData, this.props.noPeserta));
+        this.props.dispatch(rumah.updateData(cookies.get(cookieName), formData, this.props.noPeserta)).then(() => {
+            this.modalToggle();
+            // Refetch data agar tampilan InfoItem langsung terupdate
+            this.props.dispatch(rumah.getById(cookies.get(cookieName), this.props.noPeserta, this.props.atribut));
+        });
         this.props.dispatch(reset('DataRumahSeleksi'));
     }
 
     render() {
-        const { rumah, editable } = this.props;
+        const { rumah, location } = this.props;
+        const isModeSanggah = location.state && location.state.modeEdit;
 
         return (
             <div className="w-full bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                {/* Banner Mode Sanggah */}
+                {isModeSanggah && (
+                    <div className="p-4 bg-orange-50 border-b border-orange-200 flex items-center text-orange-700 animate-pulse">
+                        <i className="fa fa-info-circle mr-3 text-xl"></i>
+                        <span className="text-sm font-bold uppercase">Mode Sanggah Aktif: Anda dapat mengubah data rumah sekarang.</span>
+                    </div>
+                )}
+
                 {/* Header Bagian */}
                 <div className="flex flex-row items-center justify-between p-5 bg-gray-50 border-b border-gray-200">
                     <div className="flex items-center space-x-2">
                         <div className="w-2 h-6 bg-yellow-400 rounded-full"></div>
                         <h4 className="text-xl font-bold text-gray-800 tracking-tight text-uppercase italic">Informasi Rumah</h4>
                     </div>
-                    {editable && (
+                    {isModeSanggah && (
                         <button
                             onClick={this.modalToggle}
-                            className="flex items-center px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white text-sm font-bold rounded-lg shadow-md transition transform hover:-translate-y-0.5 active:translate-y-0"
+                            className="bg-amber-600 text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-amber-700 transition-all shadow-md"
                         >
-                            <i className="fa fa-pencil mr-2"></i> PERBARUI
+                            <i className="fa fa-pencil mr-2"></i> Perbarui Data
                         </button>
                     )}
                 </div>
@@ -368,8 +392,8 @@ class Rumah extends React.Component {
 }
 
 // Map Redux State to Props
-export default connect(
+export default withRouter(connect(
     (store) => ({
         rumah: store.rumah.rumah,
     })
-)(Rumah);
+)(Rumah));

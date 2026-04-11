@@ -28,7 +28,7 @@ type LogCMahasiswa struct {
 	WaktuSelesai           *time.Time `gorm:"column:waktu_selesai;type:datetime" json:"waktu_selesai"`
 	Atribut                string     `gorm:"column:atribut;type:enum('original','sanggah')" json:"atribut"`
 	Tagihan                string     `gorm:"column:tagihan;type:varchar(255)" json:"tagihan"`
-	NoRegistrasi           string     `gorm:"column:no_registrasi;type:varchar(255)" json:"no_registrasi"`
+	NoRegistrasi           *string     `gorm:"column:no_registrasi;type:varchar(255)" json:"no_registrasi"`
 	Executor               string     `gorm:"column:executor;type:varchar(255)" json:"executor"`
 	Timestamp              *time.Time `gorm:"column:timestamp;type:datetime" json:"timestamp"`
 }

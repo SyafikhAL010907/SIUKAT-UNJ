@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import { Field, reduxForm, reset, formValueSelector } from 'redux-form';
 import { kendaraan as kendaraanAction } from '../../../../actions';
 import { InputBs, InputFileBs, money } from '../../../components';
@@ -24,12 +25,12 @@ let FormKendaraan = (props) => {
                 <div className="bg-white rounded-xl shadow-2xl overflow-hidden border-0">
                     
                     {/* Header */}
-                    <div className="bg-green-700 px-6 py-4 flex justify-between items-center text-white">
-                        <h3 className="text-lg font-bold flex items-center gap-2">
+                    <div className="bg-emerald-600 px-6 py-4 flex justify-between items-center text-white">
+                        <h3 className="text-xl font-bold flex items-center gap-2">
                             <i className="fas fa-motorcycle"></i> Form Data Kendaraan
                         </h3>
-                        <button onClick={handleToggleKendaraan} className="hover:rotate-90 transition-transform duration-300">
-                            <i className="fas fa-times text-xl"></i>
+                        <button onClick={handleToggleKendaraan} className="hover:rotate-90 transition-transform duration-300 text-2xl">
+                            &times;
                         </button>
                     </div>
 
@@ -141,8 +142,8 @@ let FormKendaraan = (props) => {
                     <div className="p-4 bg-gray-100 flex justify-end gap-3">
                         <button onClick={handleToggleKendaraan} className="px-6 py-2 rounded-lg bg-gray-400 text-white hover:bg-gray-500 font-bold transition">Batal</button>
                         <button type="submit" form="form-kendaraan" disabled={pristine || submitting} 
-                                className="px-6 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 font-bold shadow-lg disabled:opacity-50 transition">
-                            <i className="fa fa-save mr-2"></i> Simpan Data
+                                className="px-8 py-2.5 rounded-xl bg-emerald-600 text-white hover:bg-emerald-700 font-bold shadow-lg disabled:opacity-50 transition">
+                            <i className="fa fa-save mr-2"></i> Simpan Perubahan
                         </button>
                     </div>
                 </div>
@@ -162,6 +163,16 @@ class Kendaraan extends React.Component {
         this.props.dispatch(kendaraanAction.getById(cookies.get(cookieName), this.props.noPeserta, this.props.atribut));
     }
 
+    componentDidMount() {
+        // Otomatis buka modal jika navigasi datang dari button "Sanggah" di DataTable
+        const { location } = this.props;
+        if (location.state && location.state.modeEdit) {
+            setTimeout(() => {
+                this.setState({ modalToggle: true });
+            }, 800);
+        }
+    }
+
     modalToggle = () => {
         this.setState({ modalToggle: !this.state.modalToggle });
     }
@@ -178,7 +189,11 @@ class Kendaraan extends React.Component {
                 formData.append(key, values[key]);
             }
         }
-        this.props.dispatch(kendaraanAction.updateData(cookies.get(cookieName), formData, this.props.noPeserta));
+        this.props.dispatch(kendaraanAction.updateData(cookies.get(cookieName), formData, this.props.noPeserta)).then(() => {
+            this.modalToggle();
+            // Refetch data agar tampilan InfoItem langsung terupdate
+            this.props.dispatch(kendaraanAction.getById(cookies.get(cookieName), this.props.noPeserta, this.props.atribut));
+        });
         this.props.dispatch(reset('DataKendaraanSeleksi'));
     }
 
@@ -237,18 +252,27 @@ class Kendaraan extends React.Component {
     }
 
     render() {
-        const { kendaraan: data, editable } = this.props;
+        const { kendaraan: data, location } = this.props;
+        const isModeSanggah = location.state && location.state.modeEdit;
 
         return (
             <div className="space-y-6">
+                {/* Banner Mode Sanggah */}
+                {isModeSanggah && (
+                    <div className="mb-4 p-4 bg-orange-50 border border-orange-200 rounded-2xl flex items-center text-orange-700 animate-pulse">
+                        <i className="fa fa-info-circle mr-3 text-xl"></i>
+                        <span className="text-sm font-bold uppercase">Mode Sanggah Aktif: Anda dapat mengubah data kendaraan sekarang.</span>
+                    </div>
+                )}
+
                 <div className="flex justify-between items-end border-b border-gray-200 pb-4">
                     <div>
                         <h4 className="text-2xl font-black text-gray-800 tracking-tight">Inventaris Kendaraan</h4>
                         <p className="text-gray-500 text-sm">Data motor dan mobil keluarga yang tercatat di KK.</p>
                     </div>
-                    {editable && (
-                        <button onClick={this.modalToggle} className="bg-yellow-500 hover:bg-yellow-600 text-white px-5 py-2 rounded-lg font-bold shadow-md transition transform hover:scale-105 flex items-center gap-2">
-                            <i className="fa fa-pencil"></i> Perbarui Data
+                    {isModeSanggah && (
+                        <button onClick={this.modalToggle} className="bg-amber-600 text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-amber-700 transition-all shadow-md">
+                            <i className="fa fa-pencil mr-2"></i> Perbarui Data
                         </button>
                     )}
                 </div>
@@ -282,6 +306,6 @@ FormKendaraan = connect((store) => {
     return { status_motor, status_mobil, pajak_motor, pajak_mobil };
 })(FormKendaraan);
 
-export default connect(
+export default withRouter(connect(
     (store) => ({ kendaraan: store.kendaraan.kendaraan })
-)(Kendaraan);
+)(Kendaraan));
