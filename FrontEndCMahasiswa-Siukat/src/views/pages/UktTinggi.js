@@ -3,6 +3,7 @@ import {
     TabContent, TabPane,
     Row, Col,
     ListGroup, ListGroupItem,
+    Card, CardBody, Button
 } from 'reactstrap';
 import classnames from 'classnames';
 import { DataPribadi, DataAyah, DataIbu, DataWali, DataPendukung, Verifikasi, InfoUktTinggi, BatalUktTinggi } from '../components';
@@ -11,7 +12,22 @@ import { cookies, cookieName } from '../../global';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
-// Style tambahan untuk menyelaraskan sidebar agar rapi
+// Komponen Internal untuk Tampilan Data Belum Lengkap
+const DataBelumLengkap = ({ toggle }) => (
+    <Card className="border-danger shadow-sm">
+        <CardBody className="text-center py-5">
+            <i className="fa fa-exclamation-triangle text-danger mb-3" style={{ fontSize: '4rem' }}></i>
+            <h3 className="font-weight-bold">Data Belum Lengkap</h3>
+            <p className="text-muted mb-4">
+                Anda belum dapat melakukan verifikasi. Silakan lengkapi seluruh dokumen dan data pada menu di samping kiri (yang belum memiliki tanda checklist hijau).
+            </p>
+            <Button color="primary" onClick={() => toggle('1')}>
+                <i className="fa fa-arrow-left mr-2"></i> Kembali Lengkapi Data
+            </Button>
+        </CardBody>
+    </Card>
+);
+
 const styles = {
     sidebarItem: {
         display: 'flex',
@@ -28,10 +44,8 @@ const styles = {
 class UktTinggi extends React.Component {
     constructor(props) {
         super(props);
-
         this.toggle = this.toggle.bind(this);
         this.updateVerifikasi = this.updateVerifikasi.bind(this);
-
         this.state = {
             activeTab: '1',
         };
@@ -42,7 +56,6 @@ class UktTinggi extends React.Component {
         this.props.dispatch(cmahasiswa.checkDataComplete(cookies.get(cookieName)));
     }
 
-    // Fungsi ini dipanggil setelah tombol "Simpan" di komponen anak diklik
     updateVerifikasi() {
         setTimeout(() => {
             this.props.dispatch(cmahasiswa.checkDataComplete(cookies.get(cookieName)));
@@ -51,19 +64,6 @@ class UktTinggi extends React.Component {
 
     toggle(tab) {
         if (this.state.activeTab !== tab) {
-            // Logic Pencegahan: Cek kelengkapan data sebelum masuk ke tab Verifikasi (ID 6)
-            if (tab === '6') {
-                const v = this.props.verifikasi;
-                const isComplete = (
-                    v.cmahasiswa && v.ayah && v.ibu && v.wali && v.pendukung
-                );
-
-                if (!isComplete) {
-                    alert("Mohon lengkapi semua data terlebih dahulu sebelum melakukan verifikasi.");
-                    return;
-                }
-            }
-
             this.setState({
                 activeTab: tab,
             });
@@ -75,7 +75,17 @@ class UktTinggi extends React.Component {
             return <Redirect to="/main/ukt" />;
         }
 
-        // Helper untuk merender Icon Checklist secara konsisten
+        const { verifikasi } = this.props;
+        
+        // Logika pengecekan kelengkapan
+        const isAllComplete = (
+            verifikasi.cmahasiswa && 
+            verifikasi.ayah && 
+            verifikasi.ibu && 
+            verifikasi.wali && 
+            verifikasi.pendukung
+        );
+
         const renderCheck = (isComplete) => {
             if (isComplete === 1 || isComplete === true) {
                 return (
@@ -97,64 +107,55 @@ class UktTinggi extends React.Component {
                             <ListGroupItem
                                 className={classnames({ active: this.state.activeTab === '1' })}
                                 onClick={(e) => { e.preventDefault(); this.toggle('1'); }}
-                                tag="a"
-                                href=""
-                                style={styles.sidebarItem}
+                                tag="a" href="" style={styles.sidebarItem}
                             >
                                 <span><i className="fa fa-user mr-2"></i> Data Pribadi</span>
-                                {renderCheck(this.props.verifikasi.cmahasiswa)}
+                                {renderCheck(verifikasi.cmahasiswa)}
                             </ListGroupItem>
 
                             <ListGroupItem
                                 className={classnames({ active: this.state.activeTab === '2' })}
                                 onClick={(e) => { e.preventDefault(); this.toggle('2'); }}
-                                tag="a"
-                                href=""
-                                style={styles.sidebarItem}
+                                tag="a" href="" style={styles.sidebarItem}
                             >
                                 <span><i className="fa fa-male mr-2"></i> Data Ayah</span>
-                                {renderCheck(this.props.verifikasi.ayah)}
+                                {renderCheck(verifikasi.ayah)}
                             </ListGroupItem>
 
                             <ListGroupItem
                                 className={classnames({ active: this.state.activeTab === '3' })}
                                 onClick={(e) => { e.preventDefault(); this.toggle('3'); }}
-                                tag="a"
-                                href=""
-                                style={styles.sidebarItem}
+                                tag="a" href="" style={styles.sidebarItem}
                             >
                                 <span><i className="fa fa-female mr-2"></i> Data Ibu</span>
-                                {renderCheck(this.props.verifikasi.ibu)}
+                                {renderCheck(verifikasi.ibu)}
                             </ListGroupItem>
 
                             <ListGroupItem
                                 className={classnames({ active: this.state.activeTab === '4' })}
                                 onClick={(e) => { e.preventDefault(); this.toggle('4'); }}
-                                tag="a"
-                                href=""
-                                style={styles.sidebarItem}
+                                tag="a" href="" style={styles.sidebarItem}
                             >
                                 <span><i className="fa fa-users mr-2"></i> Data Wali</span>
-                                {renderCheck(this.props.verifikasi.wali)}
+                                {renderCheck(verifikasi.wali)}
                             </ListGroupItem>
 
                             <ListGroupItem
                                 className={classnames({ active: this.state.activeTab === '5' })}
                                 onClick={(e) => { e.preventDefault(); this.toggle('5'); }}
-                                tag="a"
-                                href=""
-                                style={styles.sidebarItem}
+                                tag="a" href="" style={styles.sidebarItem}
                             >
                                 <span><i className="fa fa-file-text mr-2"></i> Surat Pernyataan</span>
-                                {renderCheck(this.props.verifikasi.pendukung)}
+                                {renderCheck(verifikasi.pendukung)}
                             </ListGroupItem>
 
                             <ListGroupItem
-                                className={classnames({ active: this.state.activeTab === '6' })}
+                                className={classnames({ 
+                                    active: this.state.activeTab === '6',
+                                    'bg-light': !isAllComplete && this.state.activeTab !== '6' 
+                                })}
                                 onClick={(e) => { e.preventDefault(); this.toggle('6'); }}
-                                tag="a"
-                                href=""
-                                style={styles.sidebarItem}
+                                tag="a" href="" style={styles.sidebarItem}
                             >
                                 <span><i className="fa fa-check-square mr-2"></i> Verifikasi</span>
                             </ListGroupItem>
@@ -166,32 +167,31 @@ class UktTinggi extends React.Component {
                     <Col md="9" xs="12">
                         <TabContent activeTab={this.state.activeTab}>
                             <TabPane tabId="1">
-                                <DataPribadi updateVerifikasi={this.updateVerifikasi} allow={this.props.verifikasi.cmahasiswa} />
+                                <DataPribadi updateVerifikasi={this.updateVerifikasi} allow={verifikasi.cmahasiswa} />
                             </TabPane>
                             <TabPane tabId="2">
-                                <DataAyah updateVerifikasi={this.updateVerifikasi} allow={this.props.verifikasi.ayah} />
+                                <DataAyah updateVerifikasi={this.updateVerifikasi} allow={verifikasi.ayah} />
                             </TabPane>
                             <TabPane tabId="3">
-                                <DataIbu updateVerifikasi={this.updateVerifikasi} allow={this.props.verifikasi.ibu} />
+                                <DataIbu updateVerifikasi={this.updateVerifikasi} allow={verifikasi.ibu} />
                             </TabPane>
                             <TabPane tabId="4">
-                                <DataWali updateVerifikasi={this.updateVerifikasi} allow={this.props.verifikasi.wali} />
+                                <DataWali updateVerifikasi={this.updateVerifikasi} allow={verifikasi.wali} />
                             </TabPane>
                             <TabPane tabId="5">
-                                <DataPendukung updateVerifikasi={this.updateVerifikasi} allow={this.props.verifikasi.pendukung} />
+                                <DataPendukung updateVerifikasi={this.updateVerifikasi} allow={verifikasi.pendukung} />
                             </TabPane>
+                            
                             <TabPane tabId="6">
-                                <Verifikasi
-                                    updateVerifikasi={this.updateVerifikasi}
-                                    router={this.props}
-                                    allow={
-                                        (this.props.verifikasi.cmahasiswa
-                                            && this.props.verifikasi.ayah
-                                            && this.props.verifikasi.ibu
-                                            && this.props.verifikasi.wali
-                                            && this.props.verifikasi.pendukung)
-                                    }
-                                />
+                                {isAllComplete ? (
+                                    <Verifikasi
+                                        updateVerifikasi={this.updateVerifikasi}
+                                        router={this.props}
+                                        allow={true}
+                                    />
+                                ) : (
+                                    <DataBelumLengkap toggle={this.toggle} />
+                                )}
                             </TabPane>
                         </TabContent>
                     </Col>
