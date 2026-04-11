@@ -23,7 +23,7 @@ func ConnectDB() {
 		port = "3306"
 	}
 
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Asia%%2FJakarta",
 		user, password, host, port, dbname)
 
 	// Custom logger agar query lebih teratur tampilnya (optional, mirroring console logging biasa)
@@ -43,6 +43,9 @@ func ConnectDB() {
 	if err != nil {
 		log.Fatalf("FAILED: Unable to connect to database: %v", err)
 	}
+
+	// Set timezone ke WIB (+07:00) secara manual pas koneksi terbuka
+	db.Exec("SET time_zone = '+07:00'")
 
 	fmt.Println("SUCCESS: Connection to database has been established successfully (GORM SQL).")
 	DB = db

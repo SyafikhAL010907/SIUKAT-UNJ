@@ -1,9 +1,10 @@
 import axios from 'axios'
 import { service, notif, errLog } from '../global'
 
-export function fetchInfo(){
+export function fetchInfo(kode){
     return new Promise((resolve, reject) => {
-        axios.get(service+'/info')
+        const url = kode ? service+'/info?kode='+kode : service+'/info'
+        axios.get(url)
             .then((response) => {
                 resolve(response.data)
             })

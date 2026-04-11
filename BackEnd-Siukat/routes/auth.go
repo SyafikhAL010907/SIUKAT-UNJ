@@ -111,7 +111,7 @@ func AuthRoutes(r *gin.RouterGroup) {
 
 		token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 			"id":  user.NoPeserta,
-			"exp": time.Now().Add(time.Hour * 5).Unix(), // 18000 seconds = 5 hours
+			"exp": time.Now().Add(time.Hour * 24 * 7).Unix(), // 7 Days
 		})
 
 		tokenString, err := token.SignedString([]byte(secret))
@@ -125,10 +125,66 @@ func AuthRoutes(r *gin.RouterGroup) {
 			flagStr = user.CMahasiswa.Flag
 		}
 
+		// Ambil data info berdasarkan jalur_masuk (kode)
+		var information models.Info
+		if user.JalurMasuk != 0 {
+			config.DB.Where("kode = ?", user.JalurMasuk).First(&information)
+		}
+
+		// LOGIK AKSES JADWAL (Hanya untuk cmahasiswa)
+		if user.Role == "cmahasiswa" && user.JalurMasuk != 0 {
+			wib := time.FixedZone("WIB", 7*3600) // GMT+7
+			now := time.Now().In(wib)
+			
+			log.Printf("DEBUG SATPAM - User: %s, Role: %s, Jalur: %d", user.NoPeserta, user.Role, user.JalurMasuk)
+			log.Printf("DEBUG SATPAM - Info DB: Mulai=%v, Selesai=%v, Akhir=%v", information.TanggalMulai, information.TanggalSelesai, information.TanggalAkhir)
+			log.Printf("DEBUG SATPAM - Current Time (WIB): %v", now)
+
+			// Cek apakah jadwal sudah diatur
+			if information.TanggalMulai != nil && information.TanggalSelesai != nil {
+				isStarted := now.After(*information.TanggalMulai)
+				// Tambah 24 jam supaya jam tutupnya bener-bener di akhir hari (jam 23:59:59)
+				isNormalOpen := now.Before(information.TanggalSelesai.Add(time.Hour * 24))
+				
+				// Cek Perpanjangan (Tanggal Akhir)
+				isExtended := false
+				if information.TanggalAkhir != nil {
+					isExtended = now.Before(information.TanggalAkhir.Add(time.Hour * 24))
+				}
+
+				log.Printf("DEBUG SATPAM - Result: isStarted=%v, isNormalOpen=%v, isExtended=%v", isStarted, isNormalOpen, isExtended)
+
+				// Jika belum mulai ATAU (sudah tutup normal DAN tidak ada perpanjangan/perpanjangan habis)
+				if !isStarted {
+					log.Printf("DEBUG SATPAM - BLOCK: Belum mulai")
+					c.JSON(http.StatusForbidden, gin.H{
+						"message": "Maaf, pendaftaran/pengisian data untuk jalur Anda belum dibuka.",
+						"info":    information,
+					})
+					return
+				}
+
+				if !isNormalOpen && !isExtended {
+					log.Printf("DEBUG SATPAM - BLOCK: Sudah tutup")
+					c.JSON(http.StatusForbidden, gin.H{
+						"message": "Maaf, pendaftaran/pengisian data untuk jalur Anda sudah ditutup.",
+						"info":    information,
+					})
+					return
+				}
+				log.Printf("DEBUG SATPAM - ALLOW: Gerbang dibuka")
+			} else {
+				log.Printf("DEBUG SATPAM - SKIP: Tanggal Mulai/Selesai NULL di database")
+			}
+		} else {
+			log.Printf("DEBUG SATPAM - SKIP: User bukan cmahasiswa atau JalurMasuk 0 (Role: %s, Jalur: %d)", user.Role, user.JalurMasuk)
+		}
+
 		c.JSON(http.StatusOK, gin.H{
 			"message": "ok",
 			"token":   tokenString,
 			"flag":    flagStr,
+			"info":    information,
 		})
 	})
 

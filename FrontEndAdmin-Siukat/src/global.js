@@ -14,6 +14,9 @@ const successIcon   = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAgCAY
 const errLog = (err) => {
     if(err !== undefined){
         if(err.data !== undefined && err.data !== ""){
+            if (typeof err.data === 'object' && err.data.error) {
+                return err.data.error
+            }
             return (typeof err.data === 'string') ? err.data : JSON.stringify(err.data)
         }else if(err.message !== undefined){
             return err.message

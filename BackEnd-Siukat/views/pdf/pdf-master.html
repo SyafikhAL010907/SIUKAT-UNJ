@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -116,8 +117,13 @@
             background-color: #e6f4ea;
         }
 
-        .text-center { text-align: center; }
-        .text-right  { text-align: right; }
+        .text-center {
+            text-align: center;
+        }
+
+        .text-right {
+            text-align: right;
+        }
 
         .badge {
             display: inline-block;
@@ -128,11 +134,30 @@
             text-transform: uppercase;
         }
 
-        .badge-green  { background: #d1fae5; color: #065f46; }
-        .badge-yellow { background: #fef3c7; color: #92400e; }
-        .badge-red    { background: #fee2e2; color: #991b1b; }
-        .badge-gray   { background: #f3f4f6; color: #374151; }
-        .badge-blue   { background: #dbeafe; color: #1e40af; }
+        .badge-green {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge-yellow {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-red {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .badge-gray {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .badge-blue {
+            background: #dbeafe;
+            color: #1e40af;
+        }
 
         /* =====================
            FOOTER
@@ -151,8 +176,14 @@
            PRINT SETTINGS
         ======================== */
         @media print {
-            body  { margin: 0; }
-            .no-print { display: none !important; }
+            body {
+                margin: 0;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+
             @page {
                 size: A4 landscape;
                 margin: 10mm;
@@ -174,7 +205,7 @@
             justify-content: space-between;
             align-items: center;
             z-index: 9999;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
 
         .print-bar span {
@@ -198,16 +229,24 @@
         }
 
         .content-wrapper {
-            margin-top: 55px; /* beri ruang untuk print bar */
+            margin-top: 55px;
+            /* beri ruang untuk print bar */
             padding: 15px;
         }
 
         @media print {
-            .print-bar    { display: none !important; }
-            .content-wrapper { margin-top: 0 !important; padding: 0; }
+            .print-bar {
+                display: none !important;
+            }
+
+            .content-wrapper {
+                margin-top: 0 !important;
+                padding: 0;
+            }
         }
     </style>
 </head>
+
 <body>
 
     <!-- PRINT BAR (hanya tampil di browser, hilang saat print) -->
@@ -259,50 +298,50 @@
                     <td>{{ $row.NamaCmahasiswa }}</td>
                     <td class="text-center">
                         {{ if eq $row.BidikMisiCmahasiswa "Ya" }}
-                            <span class="badge badge-blue">Ya</span>
+                        <span class="badge badge-blue">Ya</span>
                         {{ else }}
-                            <span class="badge badge-gray">Tidak</span>
+                        <span class="badge badge-gray">Tidak</span>
                         {{ end }}
                     </td>
                     <td>{{ if $row.Fakultas }}{{ $row.Fakultas.Nama }}{{ else }}-{{ end }}</td>
                     <td>{{ if $row.Prodi }}{{ $row.Prodi.Nama }}{{ else }}-{{ end }}</td>
                     <td class="text-center">
                         {{ if $row.GolonganID }}
-                            <span class="badge badge-green">{{ $row.GolonganID }}</span>
+                        <span class="badge badge-green">{{ $row.GolonganID }}</span>
                         {{ else }}
-                            <span class="badge badge-gray">-</span>
+                        <span class="badge badge-gray">-</span>
                         {{ end }}
                     </td>
                     <td class="text-right">
                         {{ if $row.Ukt }}
-                            Rp {{ formatRupiah $row.Ukt.Nominal }}
+                        Rp {{ formatRupiah $row.Ukt.Nominal }}
                         {{ else }}
-                            -
+                        -
                         {{ end }}
                     </td>
                     <td class="text-center">{{ if $row.NoRegistrasi }}{{ $row.NoRegistrasi }}{{ else }}-{{ end }}</td>
                     <td class="text-center">
                         {{ if eq $row.Flag "terima_ukt" }}
-                            <span class="badge badge-green">Terima</span>
+                        <span class="badge badge-green">Terima</span>
                         {{ else if eq $row.Flag "sanggah_ukt" }}
-                            <span class="badge badge-yellow">Sanggah</span>
+                        <span class="badge badge-yellow">Sanggah</span>
                         {{ else if eq $row.Flag "selesai_sanggah" }}
-                            <span class="badge badge-blue">Selesai Sanggah</span>
+                        <span class="badge badge-blue">Selesai Sanggah</span>
                         {{ else if eq $row.Flag "pengumuman" }}
-                            <span class="badge badge-blue">Pengumuman</span>
+                        <span class="badge badge-blue">Pengumuman</span>
                         {{ else if eq $row.Flag "selesai_isi" }}
-                            <span class="badge badge-green">Selesai Isi</span>
+                        <span class="badge badge-green">Selesai Isi</span>
                         {{ else if eq $row.Flag "pengisian" }}
-                            <span class="badge badge-yellow">Pengisian</span>
+                        <span class="badge badge-yellow">Pengisian</span>
                         {{ else }}
-                            <span class="badge badge-gray">{{ $row.Flag }}</span>
+                        <span class="badge badge-gray">{{ $row.Flag }}</span>
                         {{ end }}
                     </td>
                     <td class="text-center">
                         {{ if eq $row.UktTinggi "ya" }}
-                            <span class="badge badge-red">Ya</span>
+                        <span class="badge badge-red">Ya</span>
                         {{ else }}
-                            -
+                        -
                         {{ end }}
                     </td>
                 </tr>
@@ -319,4 +358,5 @@
     </div>
 
 </body>
+
 </html>

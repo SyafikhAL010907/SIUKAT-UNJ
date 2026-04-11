@@ -6,6 +6,7 @@ type User struct {
 	Role       string      `gorm:"column:role;type:enum('cmahasiswa','admin')" json:"role"`
 
 	CMahasiswa *CMahasiswa `gorm:"foreignKey:NoPeserta;references:NoPeserta" json:"cmahasiswa,omitempty"`
+	JalurMasuk int         `gorm:"column:jalur_masuk;type:int" json:"jalur_masuk"`
 }
 
 func (User) TableName() string {
