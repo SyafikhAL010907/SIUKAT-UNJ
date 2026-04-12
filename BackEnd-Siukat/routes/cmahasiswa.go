@@ -9,8 +9,7 @@ import (
 	"fmt"
 	"mime/multipart"
 	"net/http"
-	"os"
-	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -143,6 +142,12 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 		originalRumah, _ := rumahService.GetByLoggedIn(np)
 		originalWali, _ := waliService.GetByLoggedIn(np)
 
+		// 1. Physically CLONE the document folder from Original to Sanggah
+		if err := utils.CopyStudentFiles(originalMhs.NamaCmahasiswa, np, "original", "sanggah"); err != nil {
+			fmt.Printf("⚠️ WARNING: Folder cloning partially failed for %s: %v\n", np, err)
+			// We continue because some files might not exist or folder might already be there
+		}
+
 		// Jalankan semua operasi dalam satu atomic transaction
 		if err := config.DB.Transaction(func(tx *gorm.DB) error {
 
@@ -158,6 +163,10 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 			sanggahMhs.Provinsi = nil
 			sanggahMhs.Kabkot = nil
 			sanggahMhs.Kecamatan = nil
+			
+			// Update Path: Original/ -> Sanggah/
+			sanggahMhs.FotoCmahasiswa = strings.ReplaceAll(sanggahMhs.FotoCmahasiswa, "/Original/", "/Sanggah/")
+
 			if err := tx.Create(&sanggahMhs).Error; err != nil {
 				return fmt.Errorf("gagal insert copy cmahasiswa: %v", err)
 			}
@@ -167,6 +176,8 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 				sanggahAyah := originalAyah
 				sanggahAyah.IDAyah = 0
 				sanggahAyah.Atribut = "sanggah"
+				sanggahAyah.ScanKtpAyah = strings.ReplaceAll(sanggahAyah.ScanKtpAyah, "/Original/", "/Sanggah/")
+				sanggahAyah.ScanSlipAyah = strings.ReplaceAll(sanggahAyah.ScanSlipAyah, "/Original/", "/Sanggah/")
 				if err := tx.Create(&sanggahAyah).Error; err != nil {
 					return fmt.Errorf("gagal insert copy ayah: %v", err)
 				}
@@ -177,6 +188,8 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 				sanggahIbu := originalIbu
 				sanggahIbu.IDIbu = 0
 				sanggahIbu.Atribut = "sanggah"
+				sanggahIbu.ScanKtpIbu = strings.ReplaceAll(sanggahIbu.ScanKtpIbu, "/Original/", "/Sanggah/")
+				sanggahIbu.ScanSlipIbu = strings.ReplaceAll(sanggahIbu.ScanSlipIbu, "/Original/", "/Sanggah/")
 				if err := tx.Create(&sanggahIbu).Error; err != nil {
 					return fmt.Errorf("gagal insert copy ibu: %v", err)
 				}
@@ -187,6 +200,8 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 				sanggahKendaraan := originalKendaraan
 				sanggahKendaraan.IDKendaraan = 0
 				sanggahKendaraan.Atribut = "sanggah"
+				sanggahKendaraan.ScanMotor = strings.ReplaceAll(sanggahKendaraan.ScanMotor, "/Original/", "/Sanggah/")
+				sanggahKendaraan.ScanMobil = strings.ReplaceAll(sanggahKendaraan.ScanMobil, "/Original/", "/Sanggah/")
 				if err := tx.Create(&sanggahKendaraan).Error; err != nil {
 					return fmt.Errorf("gagal insert copy kendaraan: %v", err)
 				}
@@ -197,6 +212,7 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 				sanggahListrik := originalListrik
 				sanggahListrik.IDListrik = 0
 				sanggahListrik.Atribut = "sanggah"
+				sanggahListrik.ScanListrik = strings.ReplaceAll(sanggahListrik.ScanListrik, "/Original/", "/Sanggah/")
 				if err := tx.Create(&sanggahListrik).Error; err != nil {
 					return fmt.Errorf("gagal insert copy listrik: %v", err)
 				}
@@ -207,6 +223,9 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 				sanggahPendukung := originalPendukung
 				sanggahPendukung.IDPendukung = 0
 				sanggahPendukung.Atribut = "sanggah"
+				sanggahPendukung.ScanPernyataanUktTinggi = strings.ReplaceAll(sanggahPendukung.ScanPernyataanUktTinggi, "/Original/", "/Sanggah/")
+				sanggahPendukung.ScanPernyataanKebenaran = strings.ReplaceAll(sanggahPendukung.ScanPernyataanKebenaran, "/Original/", "/Sanggah/")
+				sanggahPendukung.ScanKk = strings.ReplaceAll(sanggahPendukung.ScanKk, "/Original/", "/Sanggah/")
 				if err := tx.Create(&sanggahPendukung).Error; err != nil {
 					return fmt.Errorf("gagal insert copy pendukung: %v", err)
 				}
@@ -217,6 +236,8 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 				sanggahRumah := originalRumah
 				sanggahRumah.IDRumah = 0
 				sanggahRumah.Atribut = "sanggah"
+				sanggahRumah.ScanPbb = strings.ReplaceAll(sanggahRumah.ScanPbb, "/Original/", "/Sanggah/")
+				sanggahRumah.ScanKontrak = strings.ReplaceAll(sanggahRumah.ScanKontrak, "/Original/", "/Sanggah/")
 				if err := tx.Create(&sanggahRumah).Error; err != nil {
 					return fmt.Errorf("gagal insert copy rumah: %v", err)
 				}
@@ -227,9 +248,20 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 				sanggahWali := originalWali
 				sanggahWali.IDWali = 0
 				sanggahWali.Atribut = "sanggah"
+				sanggahWali.ScanWali = strings.ReplaceAll(sanggahWali.ScanWali, "/Original/", "/Sanggah/")
 				if err := tx.Create(&sanggahWali).Error; err != nil {
 					return fmt.Errorf("gagal insert copy wali: %v", err)
 				}
+			}
+
+			// 10. INSERT copy tb_keringanan (if exists)
+			var originalKeringanan models.Keringanan
+			if err := config.DB.Where("no_peserta = ? AND atribut = ?", np, "original").First(&originalKeringanan).Error; err == nil {
+				sanggahKeringanan := originalKeringanan
+				sanggahKeringanan.IDKeringanan = 0
+				sanggahKeringanan.Atribut = "sanggah"
+				sanggahKeringanan.ScanKeringanan = strings.ReplaceAll(sanggahKeringanan.ScanKeringanan, "/Original/", "/Sanggah/")
+				tx.Create(&sanggahKeringanan)
 			}
 
 			return nil
@@ -282,6 +314,11 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 		var oRumah models.Rumah; config.DB.Where("no_peserta = ? AND atribut = ?", np, "original").First(&oRumah)
 		var oWali models.Wali; config.DB.Where("no_peserta = ? AND atribut = ?", np, "original").First(&oWali)
 
+		// 2.5 Physically CLONE the document folder from Original to Sanggah
+		if err := utils.CopyStudentFiles(originalMhs.NamaCmahasiswa, np, "original", "sanggah"); err != nil {
+			fmt.Printf("⚠️ WARNING: Folder cloning partially failed for %s: %v\n", np, err)
+		}
+
 		// 3. COPY TO SANGGAH: Simpan sebagai record baru dengan atribut='sanggah'
 		if err := config.DB.Transaction(func(tx *gorm.DB) error {
 			sanggahMhs := originalMhs
@@ -292,37 +329,63 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 			sanggahMhs.Fakultas = nil; sanggahMhs.Prodi = nil; sanggahMhs.Ukt = nil
 			sanggahMhs.Provinsi = nil; sanggahMhs.Kabkot = nil; sanggahMhs.Kecamatan = nil
 			
+			// Update Path: Original/ -> Sanggah/
+			sanggahMhs.FotoCmahasiswa = strings.ReplaceAll(sanggahMhs.FotoCmahasiswa, "/Original/", "/Sanggah/")
+
 			if err := tx.Create(&sanggahMhs).Error; err != nil {
 				return fmt.Errorf("gagal insert copy cmahasiswa: %v", err)
 			}
 			
 			if oAyah.NoPeserta != "" {
 				sAyah := oAyah; sAyah.IDAyah = 0; sAyah.Atribut = "sanggah"
+				sAyah.ScanKtpAyah = strings.ReplaceAll(sAyah.ScanKtpAyah, "/Original/", "/Sanggah/")
+				sAyah.ScanSlipAyah = strings.ReplaceAll(sAyah.ScanSlipAyah, "/Original/", "/Sanggah/")
 				tx.Create(&sAyah)
 			}
 			if oIbu.NoPeserta != "" {
 				sIbu := oIbu; sIbu.IDIbu = 0; sIbu.Atribut = "sanggah"
+				sIbu.ScanKtpIbu = strings.ReplaceAll(sIbu.ScanKtpIbu, "/Original/", "/Sanggah/")
+				sIbu.ScanSlipIbu = strings.ReplaceAll(sIbu.ScanSlipIbu, "/Original/", "/Sanggah/")
 				tx.Create(&sIbu)
 			}
 			if oKendaraan.NoPeserta != "" {
 				sKendaraan := oKendaraan; sKendaraan.IDKendaraan = 0; sKendaraan.Atribut = "sanggah"
+				sKendaraan.ScanMotor = strings.ReplaceAll(sKendaraan.ScanMotor, "/Original/", "/Sanggah/")
+				sKendaraan.ScanMobil = strings.ReplaceAll(sKendaraan.ScanMobil, "/Original/", "/Sanggah/")
 				tx.Create(&sKendaraan)
 			}
 			if oListrik.NoPeserta != "" {
 				sListrik := oListrik; sListrik.IDListrik = 0; sListrik.Atribut = "sanggah"
+				sListrik.ScanListrik = strings.ReplaceAll(sListrik.ScanListrik, "/Original/", "/Sanggah/")
 				tx.Create(&sListrik)
 			}
 			if oPendukung.NoPeserta != "" {
 				sPendukung := oPendukung; sPendukung.IDPendukung = 0; sPendukung.Atribut = "sanggah"
+				sPendukung.ScanPernyataanUktTinggi = strings.ReplaceAll(sPendukung.ScanPernyataanUktTinggi, "/Original/", "/Sanggah/")
+				sPendukung.ScanPernyataanKebenaran = strings.ReplaceAll(sPendukung.ScanPernyataanKebenaran, "/Original/", "/Sanggah/")
+				sPendukung.ScanKk = strings.ReplaceAll(sPendukung.ScanKk, "/Original/", "/Sanggah/")
 				tx.Create(&sPendukung)
 			}
 			if oRumah.NoPeserta != "" {
 				sRumah := oRumah; sRumah.IDRumah = 0; sRumah.Atribut = "sanggah"
+				sRumah.ScanPbb = strings.ReplaceAll(sRumah.ScanPbb, "/Original/", "/Sanggah/")
+				sRumah.ScanKontrak = strings.ReplaceAll(sRumah.ScanKontrak, "/Original/", "/Sanggah/")
 				tx.Create(&sRumah)
 			}
 			if oWali.NoPeserta != "" {
 				sWali := oWali; sWali.IDWali = 0; sWali.Atribut = "sanggah"
+				sWali.ScanWali = strings.ReplaceAll(sWali.ScanWali, "/Original/", "/Sanggah/")
 				tx.Create(&sWali)
+			}
+
+			// 10. INSERT copy tb_keringanan (if exists)
+			var oKeringanan models.Keringanan
+			if err := config.DB.Where("no_peserta = ? AND atribut = ?", np, "original").First(&oKeringanan).Error; err == nil {
+				sKeringanan := oKeringanan
+				sKeringanan.IDKeringanan = 0
+				sKeringanan.Atribut = "sanggah"
+				sKeringanan.ScanKeringanan = strings.ReplaceAll(sKeringanan.ScanKeringanan, "/Original/", "/Sanggah/")
+				tx.Create(&sKeringanan)
 			}
 			return nil
 		}); err != nil {
@@ -482,7 +545,7 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 
 		// SEKARANG: Otomatis hapus foto profil lama (apapun ekstensinya .jpg/.png) di dalam HandleDynamicUpload
 		filename := fmt.Sprintf("Profile_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
-		savedPath, errUpload := utils.HandleDynamicUpload(c, file, student.NamaCmahasiswa, np, filename)
+		savedPath, errUpload := utils.HandleDynamicUpload(c, file, student.NamaCmahasiswa, np, student.Atribut, filename)
 		if errUpload != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal mengupload foto: " + errUpload.Error()})
 			return
@@ -545,10 +608,14 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 					// Upload baru dengan nama tetap "foto_profil" (Sesuai Request USER)
 					// HandleDynamicUpload otomatis cari & hapus file "foto_profil.*" lain untuk safety
 					filename := fmt.Sprintf("Profile_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
-					savedPath, errUpload := utils.HandleDynamicUpload(c, fileHeader, student.NamaCmahasiswa, np, filename)
+					savedPath, errUpload := utils.HandleDynamicUpload(c, fileHeader, student.NamaCmahasiswa, np, student.Atribut, filename)
+					
+					fmt.Printf("📸 DEBUG UPLOAD: Student [%s] Atribut [%s] SavedPath [%s]\n", np, student.Atribut, savedPath)
+					
 					if errUpload == nil {
 						updateData["foto_cmahasiswa"] = savedPath
 					} else {
+						fmt.Printf("❌ DEBUG UPLOAD ERROR: %v\n", errUpload)
 						c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal mengupload foto profil: " + errUpload.Error()})
 						return
 					}
@@ -631,9 +698,10 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 	cmahasiswaGroup.PUT("/edit/:no_peserta", func(c *gin.Context) {
 		np := c.Param("no_peserta")
 		
-		var student models.CMahasiswa
-		if err := config.DB.Where("no_peserta = ?", np).First(&student).Error; err != nil {
-			c.JSON(http.StatusNotFound, gin.H{"error": "Student not found"})
+		// 1. Ambil data student (Gunakan Service agar dapet yang AKTIF: Sanggah > Original)
+		student, err := cmahasiswaService.GetCmahasiswa(np)
+		if err != nil {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Data mahasiswa tidak ditemukan"})
 			return
 		}
 
@@ -651,25 +719,22 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 			}
 		}
 
-		// 2. Handle File Upload (Pas Foto)
+		// 2. Handle File Upload (Pas Foto) — SEKARANG: Pakai HandleDynamicUpload (Parity dengan Student)
 		files := form.File["file_foto_cmahasiswa"]
 		if len(files) > 0 {
 			file := files[0]
-			// Path destination: uploads/Nama_NoPeserta/Profile_Nama_NoPeserta.ext
-			folderName := fmt.Sprintf("%s_%s", utils.SanitizeString(student.NamaCmahasiswa), student.NoPeserta)
-			uploadDir := filepath.Join("uploads", folderName)
-			os.MkdirAll(uploadDir, os.ModePerm)
+			
+			// HAPUS FILE FISIK LAMA (Cleanup)
+			utils.DeleteOldFile(student.FotoCmahasiswa)
 
-			ext := filepath.Ext(file.Filename)
-			fileName := fmt.Sprintf("Profile_%s_%s%s", utils.SanitizeString(student.NamaCmahasiswa), student.NoPeserta, ext)
-			filePath := filepath.Join(uploadDir, fileName)
-
-			if err := c.SaveUploadedFile(file, filePath); err != nil {
-				c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal menyimpan foto: " + err.Error()})
+			// Simpan baru menggunakan helper (Otomatis Wildcard Cleanup inside)
+			filename := fmt.Sprintf("Profile_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), student.NoPeserta)
+			savedPath, errUpload := utils.HandleDynamicUpload(c, file, student.NamaCmahasiswa, student.NoPeserta, student.Atribut, filename)
+			if errUpload != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal mengupload foto: " + errUpload.Error()})
 				return
 			}
-			// DB path use forward slash for URL compatibility
-			updateData["foto_cmahasiswa"] = filepath.ToSlash(filePath)
+			updateData["foto_cmahasiswa"] = savedPath
 		}
 
 		// 3. Filter Valid DB Fields

@@ -63,7 +63,7 @@ func WaliRoutes(r *gin.RouterGroup) {
 		if errScan == nil {
 			utils.DeleteOldFile(existing.ScanWali)
 			filename := fmt.Sprintf("Surat_Wali_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
-			newPath, err := utils.HandleDynamicUpload(c, fileScan, student.NamaCmahasiswa, np, filename)
+			newPath, err := utils.HandleDynamicUpload(c, fileScan, student.NamaCmahasiswa, np, "original", filename)
 			if err == nil {
 				data["scan_wali"] = newPath
 			}
@@ -105,7 +105,7 @@ func WaliRoutes(r *gin.RouterGroup) {
 		if errScan == nil {
 			utils.DeleteOldFile(existing.ScanWali)
 			filename := fmt.Sprintf("Surat_Wali_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
-			newPath, err := utils.HandleDynamicUpload(c, fileScan, student.NamaCmahasiswa, np, filename)
+			newPath, err := utils.HandleDynamicUpload(c, fileScan, student.NamaCmahasiswa, np, "sanggah", filename)
 			if err == nil {
 				data["scan_wali"] = newPath
 			}

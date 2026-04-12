@@ -68,7 +68,7 @@ func KendaraanRoutes(r *gin.RouterGroup) {
 			if errMtr == nil {
 				utils.DeleteOldFile(existing.ScanMotor)
 				filename := fmt.Sprintf("STNK_Motor_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
-				newPath, err := utils.HandleDynamicUpload(c, fileMtr, student.NamaCmahasiswa, np, filename)
+				newPath, err := utils.HandleDynamicUpload(c, fileMtr, student.NamaCmahasiswa, np, "original", filename)
 				if err == nil {
 					req.ScanMotor = newPath
 					req.StatusMotor = "ada"
@@ -87,7 +87,7 @@ func KendaraanRoutes(r *gin.RouterGroup) {
 			if errMbl == nil {
 				utils.DeleteOldFile(existing.ScanMobil)
 				filename := fmt.Sprintf("STNK_Mobil_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
-				newPath, err := utils.HandleDynamicUpload(c, fileMbl, student.NamaCmahasiswa, np, filename)
+				newPath, err := utils.HandleDynamicUpload(c, fileMbl, student.NamaCmahasiswa, np, "original", filename)
 				if err == nil {
 					req.ScanMobil = newPath
 					req.StatusMobil = "ada"
@@ -133,7 +133,7 @@ func KendaraanRoutes(r *gin.RouterGroup) {
 			if errMtr == nil {
 				utils.DeleteOldFile(existing.ScanMotor)
 				filename := fmt.Sprintf("STNK_Motor_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
-				newPath, err := utils.HandleDynamicUpload(c, fileMtr, student.NamaCmahasiswa, np, filename)
+				newPath, err := utils.HandleDynamicUpload(c, fileMtr, student.NamaCmahasiswa, np, "sanggah", filename)
 				if err == nil {
 					req.ScanMotor = newPath
 					req.StatusMotor = "ada"
@@ -152,7 +152,7 @@ func KendaraanRoutes(r *gin.RouterGroup) {
 			if errMbl == nil {
 				utils.DeleteOldFile(existing.ScanMobil)
 				filename := fmt.Sprintf("STNK_Mobil_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
-				newPath, err := utils.HandleDynamicUpload(c, fileMbl, student.NamaCmahasiswa, np, filename)
+				newPath, err := utils.HandleDynamicUpload(c, fileMbl, student.NamaCmahasiswa, np, "sanggah", filename)
 				if err == nil {
 					req.ScanMobil = newPath
 					req.StatusMobil = "ada"

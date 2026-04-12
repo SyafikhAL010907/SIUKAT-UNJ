@@ -318,166 +318,129 @@ class Terima extends React.Component {
 
         // bio_ system removed — biodata gating no longer applies
         const biodataIsBelumLengkap = false;
-
         return (
-            <div>
-                <Row className="margin-top-20">
-                    <Col md={2} xs={12}></Col>
-                    <Col md={8} xs={12}>
-                        <h4 className="text-center">
-                            {!biodataIsBelumLengkap && <>
-                                <i className="fa fa-check"></i> Proses Pengisian UKT Telah Selesai{' '}
-                                <i className="fa fa-check"></i>
-                            </>}
-                            {biodataIsBelumLengkap && <>
-                                <i className="fa fa-exclamation-circle"></i> Ups, anda belum dapat melihat hasil UKT!{' '}
-                                <i className="fa fa-exclamation-circle"></i>
-                            </>}
-                        </h4>
-                        <hr />
-                        <DataDiri />
-                        {!biodataIsBelumLengkap &&
-                            <>
-                                <NominalUKT />
-                                {/* <div>
-                                    <Button
-                                        color="primary"
-                                        size="lg"
-                                        block
-                                        className="margin-top-20"
-                                        onClick={this.unduhRegistrasi}
-                                    >
-                                        <i className="fa fa-info-circle"></i> Unduh Dokumen ketentuan
-                                        Registrasi <i className="fa fa-info-circle"></i>
-                                    </Button>
-                                </div> */}
+            <div className="p-0 animate-fade-in">
+                <Row className="justify-content-center">
+                    <Col md={10} lg={8} xs={12}>
+                        <Card className="premium-card shadow-lg mt-4 border-0 overflow-hidden">
+                            {!biodataIsBelumLengkap && (
+                                <div className="bg-emerald-soft p-4 p-md-5 text-center text-white position-relative">
+                                    <div className="position-absolute" style={{ top: '20px', right: '30px', opacity: 0.1 }}>
+                                        <i className="fa fa-university fa-5x"></i>
+                                    </div>
+                                    <div className="d-inline-block p-3 rounded-circle bg-white shadow-sm mb-3">
+                                        <i className="fa fa-check fa-2x text-emerald"></i>
+                                    </div>
+                                    <h2 className="font-weight-bold mb-1 text-white" style={{ letterSpacing: '-0.5px' }}>
+                                        Proses Pengisian UKT Selesai
+                                    </h2>
+                                    <p className="mb-0 opacity-80" style={{ fontSize: '1.1rem' }}>
+                                        Selamat! Anda telah menyelesaikan seluruh tahapan penentuan UKT.
+                                    </p>
+                                </div>
+                            )}
 
-                                {/* <div>
-                                    <Button
-                                        color="primary"
-                                        size="lg"
-                                        block
-                                        className="margin-top-20"
-                                        onClick={this.unduhSlipPembayaran}
-                                    >
-                                        <i className="fa fa-info-circle"></i>{' '}
-                                        {this.state.textSlipPembayaran}{' '}
-                                        <i className="fa fa-info-circle"></i>
-                                    </Button>
-                                </div> */}
+                            {biodataIsBelumLengkap && (
+                                <div className="bg-danger p-4 p-md-5 text-center text-white">
+                                    <i className="fa fa-exclamation-triangle fa-3x mb-3 text-white"></i>
+                                    <h2 className="font-weight-bold mb-1 text-white">
+                                        Lengkapi Biodata Anda
+                                    </h2>
+                                    <p className="mb-0 opacity-80">
+                                        Anda belum dapat melihat hasil UKT sebelum melengkapi biodata.
+                                    </p>
+                                </div>
+                            )}
 
-                                {/* <div style={{ textAlign: 'center' }}>
+                            <div className="card-body p-4 p-md-5">
+                                <div className="mb-5 overflow-hidden rounded-xl border">
+                                    <DataDiri />
+                                </div>
+
+                                {!biodataIsBelumLengkap && (
+                                    <>
+                                        <div className="mb-5 rounded-xl overflow-hidden shadow-sm border" style={{ borderColor: '#10b981' }}>
+                                            <div className="bg-light p-3 border-bottom d-flex align-items-center">
+                                                <i className="fa fa-money text-success mr-3 fa-lg"></i>
+                                                <h6 className="mb-0 font-weight-bold color-emerald text-uppercase" style={{ letterSpacing: '1px' }}>Ketetapan Hasil UKT</h6>
+                                            </div>
+                                            <NominalUKT />
+                                        </div>
+
+                                        <div className="bg-light p-4 rounded-xl mb-4 border text-center">
+                                            <i className="fa fa-info-circle text-primary mb-2 fa-2x"></i>
+                                            <h6 className="font-weight-bold">Tahap Selanjutnya</h6>
+                                            <p className="text-muted small mb-0 mx-auto" style={{ maxWidth: '500px' }}>
+                                                Silakan unduh slip pembayaran Anda dan lakukan pembayaran melalui bank mitra UNJ untuk mendapatkan Nomor Induk Mahasiswa (NIM).
+                                            </p>
+                                        </div>
+
+                                        <div className="text-center pt-4 border-top">
+                                            <Alert color="success" className="rounded-xl border-0 shadow-sm py-3 mb-0">
+                                                <i className="fa fa-check-circle mr-2"></i>
+                                                Anda bisa keluar dari sistem ini sekarang. Silakan login kembali secara berkala untuk info terbaru.
+                                            </Alert>
+                                        </div>
+                                    </>
+                                )}
+
+                                {biodataIsBelumLengkap && (
+                                    <div className="text-center py-4">
+                                        <p className="text-muted mb-4">
+                                            Silakan lengkapi biodata Anda terlebih dahulu pada menu yang telah disediakan.
+                                        </p>
+                                        <Button 
+                                            className="modern-btn-primary px-5 py-3 shadow-lg" 
+                                            style={{ borderRadius: '50px' }}
+                                            onClick={this.handleLamanBiodata}
+                                        >
+                                            <i className="fa fa-arrow-circle-left mr-2"></i> Menuju Laman Biodata
+                                        </Button>
+                                    </div>
+                                )}
+                            </div>
+                        </Card>
+                    </Col>
+                </Row>
+
+                {/* Modals remains unchanged for logic */}
+                <Modal
+                    id="modal-cetak-nim"
+                    isOpen={this.state.modal}
+                    size="lg"
+                    toggle={(e) => this.modalClose(e)}
+                >
+                    <ModalBody toggle={(e) => this.modalClose(e)}>
+                        <ComponentToPrint
+                            ref={(el) => (this.componentRef = el)}
+                            cmahasiswa={this.props.cmahasiswa}
+                            nim={this.state.NIM}
+                            info={this.props.info}
+                        />
+                        <Button
+                            onClick={(e) => this.modalClose(e)}
+                            style={{ margin: '0px 20px', float: 'right' }}
+                        >
+                            Cancel
+                        </Button>
+                        <ReactToPrint
+                            trigger={() => {
+                                return (
                                     <Button
                                         color="success"
-                                        size="lg"
-                                        block
-                                        className="margin-top-20"
-                                        onClick={this.cekPembayanUKT}
-                                    // disabled
+                                        style={{ marginRight: '20px', float: 'right' }}
                                     >
-                                        <i className="fa fa-info-circle"></i> {this.state.textCetakNIM}{' '}
-                                        <i className="fa fa-info-circle"></i>
-                                        <br />
-                                        <span>
-                                            (Silakan login kembali pada tanggal{" "}
-                                            {this.props.info?.lapor_diri || "-"})
-                                        </span>
+                                        <i className="fa fa-print"></i> Cetak Bukti NIM
                                     </Button>
-                                </div> */}
-                                {/* <Button color="success" size="lg" block className="margin-top-20"><i className="fa fa-info-circle"></i> Lihat Informasi Tentang Lapor Diri <i className="fa fa-info-circle"></i></Button> */}
-
-                                {/* <Card body className="margin-top-20" color="danger" inverse>
-              <CardTitle>
-                <i className="fa fa-info-circle"></i> Catatan
-              </CardTitle>
-              <div className="card-body">
-                <ul className="list-reset">
-                  <li>
-                    LAPOR DIRI dilakukan di BAKHUM UNJ pada tanggal{" "}
-                    {this.props.info.lapor_diri} dan tidak boleh diwakilkan.
-                    Wajib membawa berkas-berkas yang tertera pada Dokumen yang
-                    dapat diunduh di atas.
-                  </li>
-                  <li>
-                    Calon Mahasiswa yang tidak melakukan Registrasi ke BAKHUM
-                    UNJ, tidak bisa melakukan pembayaran dan dianggap
-                    mengundurkan diri
-                  </li>
-                  <li>
-                    Slip pembayaran yang sudah diunduh harap dicetak dan dibawa
-                    pada saat lapor diri
-                  </li>
-                  <li>
-                    PESERTA BIDIKMISI YANG LOLOS VERIFIKASI TIDAK PERLU
-                    MELAKUKAN PEMBAYARAN.
-                  </li>
-                </ul>
-              </div>
-            </Card> */}
-
-                                <Modal
-                                    id="modal-cetak-nim"
-                                    isOpen={this.state.modal}
-                                    size="lg"
-                                    toggle={(e) => this.modalClose(e)}
-                                >
-                                    {/* <ModalHeader toggle={(e) => this.modalClose(e)}>
-                Cetak Nomor Induk Mahasiswa Universitas Negeri Jakarta 2020
-              </ModalHeader> */}
-                                    <ModalBody toggle={(e) => this.modalClose(e)}>
-                                        <ComponentToPrint
-                                            ref={(el) => (this.componentRef = el)}
-                                            cmahasiswa={this.props.cmahasiswa}
-                                            nim={this.state.NIM}
-                                            info={this.props.info}
-                                        />
-                                        <Button
-                                            onClick={(e) => this.modalClose(e)}
-                                            style={{ margin: '0px 20px', float: 'right' }}
-                                        >
-                                            Cancel
-                                        </Button>
-                                        <ReactToPrint
-                                            trigger={() => {
-                                                return (
-                                                    <Button
-                                                        color="success"
-                                                        style={{ marginRight: '20px', float: 'right' }}
-                                                    >
-                                                        <i className="fa fa-print"></i> Cetak Bukti NIM
-                                                    </Button>
-                                                );
-                                            }}
-                                            content={() => this.componentRef}
-                                        />
-                                    </ModalBody>
-                                </Modal>
-                                <Alert color="success" className="margin-top-20 text-center">
-                                    <i className="fa fa-check"></i>
-                                    Anda bisa keluar dari sistem ini sekarang.
-                                    <i className="fa fa-check"></i>
-                                </Alert>
-                            </>
-                        }
-
-                        {biodataIsBelumLengkap && <>
-                            <Card body className="text-center" color="warning">
-                                <h4 className="text-center">Anda belum melengkapi biodata pada laman biodata</h4>
-                                <hr />
-                                <h5>
-                                    Silahkan untuk melengkapi biodata anda pada laman biodata{" "}
-                                </h5>
-                                <br />
-                                <Button className="btn btn-success" onClick={this.handleLamanBiodata}>
-                                    <i className="fa fa-arrow-circle-left"></i> Menuju ke laman Biodata
-                                </Button>
-                            </Card>
-                        </>}
-                    </Col>
-                    <Col md={2} xs={12}></Col>
-                </Row>
+                                );
+                            }}
+                            content={() => this.componentRef}
+                        />
+                    </ModalBody>
+                </Modal>
             </div>
         );
+
     }
 }
 

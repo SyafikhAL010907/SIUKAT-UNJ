@@ -97,125 +97,154 @@ class TerimaSanggah extends React.Component {
             return <Redirect to="/main/ukt" />;
         }
         return (
-            <div className="p-3">
+            <div className="p-0 animate-fade-in">
                 <Row className="justify-content-center">
                     <Col md={10} lg={8} xs={12}>
-                        {/* Header Section */}
-                        <div className="text-center mb-5 mt-4">
-                            <h2 className="font-weight-bold" style={{ color: '#008d4c' }}>
-                                <i className="fa fa-bullhorn mr-3"></i>
-                                Pengumuman Hasil UKT
-                            </h2>
-                            <p className="text-muted">Universitas Negeri Jakarta</p>
-                            <div style={{ height: '4px', width: '60px', background: '#ffcc00', margin: '10px auto', borderRadius: '2px' }}></div>
-                        </div>
-
-                        {/* Data Diri Card Styling */}
-                        <div className="shadow-sm rounded-lg mb-4 bg-white p-2">
-                            <DataDiri />
-                        </div>
-
-                        {/* Verification Results */}
-                        {this.props.info.stage === "snbp" &&
-                            this.props.verifikasi.result_akademik === "lolos" && (
-                                <div className="mb-4 transform-hover">
-                                    <VerifikasiSNMPTN
-                                        cardStyles="text-center text-white border-0 shadow"
-                                        content="Lolos Verifikasi Akademik SNBP"
-                                        color="success"
-                                        icon="fa fa-check-circle fa-2x mb-2"
-                                    />
+                        <Card className="premium-card shadow-lg mt-4 border-0 overflow-hidden">
+                            {/* Branded Header Section */}
+                            <div className="bg-emerald-soft p-4 p-md-5 text-center text-white position-relative">
+                                <div className="position-absolute" style={{ top: '20px', right: '30px', opacity: 0.1 }}>
+                                    <i className="fa fa-university fa-5x"></i>
                                 </div>
-                            )}
-
-                        {this.props.info.stage === "snbp" &&
-                            this.props.verifikasi.result_akademik === "tidak_lolos" && (
-                                <div className="mb-4">
-                                    <VerifikasiSNMPTN
-                                        cardStyles="text-center text-white border-0 shadow"
-                                        content="Tidak Lolos Verifikasi Akademik SNBP"
-                                        color="danger"
-                                        icon="fa fa-times-circle fa-2x mb-2"
-                                        message="Jangan patah semangat, semoga sukses di jalur lain! 😊"
-                                    />
+                                <i className="fa fa-bullhorn fa-3x mb-3 text-white"></i>
+                                <h2 className="font-weight-bold mb-1 text-white" style={{ letterSpacing: '-0.5px' }}>
+                                    Pengumuman Hasil UKT
+                                </h2>
+                                <p className="mb-0 opacity-80" style={{ fontSize: '1.1rem' }}>
+                                    Universitas Negeri Jakarta
+                                </p>
+                                <div className="badge badge-pill mt-3 px-4 py-2" style={{ backgroundColor: '#ffcc00', color: '#0f6d3f', fontWeight: 'bold' }}>
+                                    <i className="fa fa-info-circle mr-2"></i>Status: Hasil Verifikasi Tersedia
                                 </div>
-                            )}
+                            </div>
 
-                        {/* Nominal UKT Section */}
-                        {((this.props.info.stage === "snbp" &&
-                            this.props.verifikasi.result_akademik === "lolos") ||
-                            this.props.info.stage !== "snbp") && (
-                                <div className="shadow-sm rounded-lg border-top border-success" style={{ borderWidth: '5px !important' }}>
-                                    <NominalUKT />
+                            <div className="card-body p-4 p-md-5">
+                                {/* Data Diri Section */}
+                                <div className="mb-5 overflow-hidden rounded-xl border">
+                                    <DataDiri />
                                 </div>
-                            )}
-                    </Col>
-                </Row>
 
-                <div className="my-5 py-3">
-                    <hr className="w-75" />
-                </div>
+                                {/* Verification Results */}
+                                {this.props.info.stage === "snbp" &&
+                                    this.props.verifikasi.result_akademik === "lolos" && (
+                                        <div className="mb-4">
+                                            <VerifikasiSNMPTN
+                                                cardStyles="text-center text-white border-0 shadow-sm rounded-xl py-4"
+                                                content="Lolos Verifikasi Akademik SNBP"
+                                                color="success"
+                                                icon="fa fa-check-circle fa-2x mb-2"
+                                            />
+                                        </div>
+                                    )}
 
-                {/* Sanggah / Action Section */}
-                {((this.props.info.stage === "snbp" &&
-                    this.props.verifikasi.result_akademik === "lolos") ||
-                    this.props.info.stage !== "snbp") && (
-                        <Row className="justify-content-center pb-5">
-                            <Col md={10} lg={8} xs={12}>
-                                {this.props.keringanan?.flag === null ? null :
-                                    <div className="mb-4">
+                                {this.props.info.stage === "snbp" &&
+                                    this.props.verifikasi.result_akademik === "tidak_lolos" && (
+                                        <div className="mb-4">
+                                            <VerifikasiSNMPTN
+                                                cardStyles="text-center text-white border-0 shadow-sm rounded-xl py-4"
+                                                content="Tidak Lolos Verifikasi Akademik SNBP"
+                                                color="danger"
+                                                icon="fa fa-times-circle fa-2x mb-2"
+                                                message="Jangan patah semangat, tetap semangat untuk langkah selanjutnya! ✨"
+                                            />
+                                        </div>
+                                    )}
+
+                                {/* Nominal UKT Section */}
+                                {((this.props.info.stage === "snbp" &&
+                                    this.props.verifikasi.result_akademik === "lolos") ||
+                                    this.props.info.stage !== "snbp") && (
+                                        <div className="mb-5 rounded-xl overflow-hidden shadow-sm border" style={{ borderColor: '#10b981' }}>
+                                            <div className="bg-light p-3 border-bottom d-flex align-items-center">
+                                                <i className="fa fa-money text-success mr-3 fa-lg"></i>
+                                                <h6 className="mb-0 font-weight-bold color-emerald text-uppercase" style={{ letterSpacing: '1px' }}>Besaran UKT Anda</h6>
+                                            </div>
+                                            <NominalUKT />
+                                        </div>
+                                    )}
+
+                                {/* Status Info / Action */}
+                                {this.props.keringanan?.flag !== null && (
+                                    <div className="mb-5">
                                         {this.props.keringanan?.flag === 'diterima' &&
-                                            <Card body className="border-0 shadow-sm text-white" style={{ background: '#008d4c' }}>
-                                                <h5 className="font-weight-bold"><i className="fa fa-check-circle mr-2"></i>Sanggah UKT Diterima</h5>
-                                                <p className="mb-0">Permohonan sanggah UKT Anda diterima. Silakan lakukan pembayaran pada bank mitra (BNI, Mandiri, BTN) untuk proses registrasi resmi mahasiswa UNJ.</p>
-                                            </Card>
+                                            <div className="p-4 rounded-xl shadow-sm text-white" style={{ background: 'linear-gradient(135deg, #0f6d3f 0%, #16a34a 100%)' }}>
+                                                <div className="d-flex align-items-center mb-2">
+                                                    <i className="fa fa-check-circle fa-2x mr-3"></i>
+                                                    <h5 className="font-weight-bold mb-0">Sanggah UKT Diterima</h5>
+                                                </div>
+                                                <p className="mb-0 mt-3 opacity-90" style={{ lineHeight: '1.6' }}>
+                                                    Selamat! Permohonan sanggah UKT Anda telah <strong>Diterima</strong>. Silakan lakukan pembayaran pada bank mitra (BNI, Mandiri, BTN) untuk proses registrasi resmi mahasiswa UNJ.
+                                                </p>
+                                            </div>
                                         }
                                         {this.props.keringanan?.flag === 'menunggu' &&
-                                            <Card body className="border-success shadow-sm bg-light" style={{ borderLeft: '5px solid #008d4c' }}>
-                                                <h5 className="font-weight-bold text-success"><i className="fa fa-calendar-check-o mr-2"></i>Jadwal Wawancara & Validasi</h5>
-                                                <div className="pl-4 border-left ml-2 mt-2">
-                                                    <p className="mb-1"><strong><i className="fa fa-clock-o mr-2"></i>Waktu:</strong> 16 - 17 Mei 2024 | 09:00 WIB</p>
-                                                    <p className="mb-1"><strong><i className="fa fa-map-marker mr-2"></i>Tempat:</strong> AULA Hatta Lantai 2</p>
-                                                    <p className="text-danger mt-2 mb-0" style={{fontSize: '0.85rem'}}>* Camaba dan Orang tua wajib hadir (tidak bisa diwakilkan) membawa dokumen pendukung.</p>
+                                            <div className="p-4 rounded-xl shadow-sm border-left bg-light" style={{ borderLeft: '6px solid #ffcc00' }}>
+                                                <div className="d-flex align-items-center mb-3">
+                                                    <div className="p-3 rounded-circle bg-white shadow-sm mr-3 text-warning">
+                                                        <i className="fa fa-calendar-check-o fa-lg"></i>
+                                                    </div>
+                                                    <div>
+                                                        <h5 className="font-weight-bold mb-0 text-dark">Jadwal Wawancara Klarifikasi</h5>
+                                                        <span className="text-muted small">Status: Menunggu Validasi Lapangan</span>
+                                                    </div>
                                                 </div>
-                                            </Card>
+                                                <div className="pl-2 mt-4">
+                                                    <div className="row">
+                                                        <div className="col-md-6 mb-3">
+                                                            <div className="font-weight-bold text-muted small text-uppercase mb-1">Waktu:</div>
+                                                            <div className="color-emerald font-weight-bold"><i className="fa fa-clock-o mr-2"></i>16 - 17 Mei 2024 | 09:00 WIB</div>
+                                                        </div>
+                                                        <div className="col-md-6 mb-3">
+                                                            <div className="font-weight-bold text-muted small text-uppercase mb-1">Tempat:</div>
+                                                            <div className="color-emerald font-weight-bold"><i className="fa fa-map-marker mr-2"></i>AULA Hatta Lantai 2</div>
+                                                        </div>
+                                                    </div>
+                                                    <Alert color="warning" className="border-0 shadow-sm mt-3 py-2 px-3 rounded-lg" style={{ fontSize: '0.85rem' }}>
+                                                        <i className="fa fa-warning mr-2"></i>
+                                                        <strong>PENTING:</strong> Camaba dan Orang tua <b>wajib hadir</b> (tidak bisa diwakilkan) dengan membawa dokumen pendukung asli.
+                                                    </Alert>
+                                                </div>
+                                            </div>
                                         }
                                         {this.props.keringanan?.flag === 'ditolak' &&
-                                            <Card body className="border-0 shadow-sm text-white bg-danger">
-                                                <h5 className="font-weight-bold"><i className="fa fa-times-circle mr-2"></i>Sanggah UKT Ditolak</h5>
-                                                <p className="mb-0">Mohon maaf permohonan sanggah UKT Anda ditolak. Silakan lakukan pembayaran sesuai besaran UKT yang tertera melalui bank mitra.</p>
-                                            </Card>
+                                            <div className="p-4 rounded-xl shadow-sm text-white bg-danger" style={{ background: 'linear-gradient(135deg, #dc2626 0%, #ef4444 100%)' }}>
+                                                <div className="d-flex align-items-center mb-2">
+                                                    <i className="fa fa-times-circle fa-2x mr-3"></i>
+                                                    <h5 className="font-weight-bold mb-0">Sanggah UKT Ditolak</h5>
+                                                </div>
+                                                <p className="mb-0 mt-3 opacity-90" style={{ lineHeight: '1.6' }}>
+                                                    Mohon maaf permohonan sanggah UKT Anda ditolak. Silakan lakukan pembayaran sesuai besaran UKT yang tertera melalui bank mitra universitas.
+                                                </p>
+                                            </div>
                                         }
                                     </div>
-                                }
+                                )}
 
-                                {!this.props.keringanan?.flag || this.props.keringanan?.flag === 'diterima' || this.props.keringanan?.flag === 'ditolak' ?
-                                    <Card body className="shadow-lg border-0 bg-white" style={{ borderRadius: '15px' }}>
-                                        <div className="p-2">
-                                            <h5 className="font-weight-bold mb-3"><i className="fa fa-info-circle text-primary mr-2"></i>Instruksi Lanjutan</h5>
-                                            <p className="text-muted" style={{ lineHeight: '1.6' }}>
-                                                Jika data sudah sesuai, klik tombol <strong>TERIMA</strong> untuk melanjutkan pembayaran. 
-                                                silahkan lanjut kepada halaman berikut ini <a href="/main/ukt" className="text-success font-weight-bold">Klik Disini</a>.
+                                {/* Instruction for Acceptance */}
+                                {(!this.props.keringanan?.flag || this.props.keringanan?.flag === 'diterima' || this.props.keringanan?.flag === 'ditolak') && (
+                                    <div className="text-center pt-5 border-top">
+                                        <div className="mb-4">
+                                            <i className="fa fa-info-circle text-primary mb-2 fa-lg"></i>
+                                            <h5>Konfirmasi Persetujuan UKT</h5>
+                                            <p className="text-muted mx-auto" style={{ maxWidth: '500px' }}>
+                                                Jika data sudah sesuai, klik tombol di bawah untuk menyetujui hasil ketetapan UKT dan melanjutkan ke proses pembayaran.
                                             </p>
-                                            
-                                            <div className="mt-4 pt-3 border-top text-center">
-                                                <Button
-                                                    color="success"
-                                                    size="lg"
-                                                    className="px-5 shadow-sm font-weight-bold"
-                                                    style={{ borderRadius: '50px', backgroundColor: '#008d4c' }}
-                                                    onClick={this.toggleTerima}
-                                                >
-                                                    <i className="fa fa-check-circle mr-2"></i> TERIMA HASIL UKT
-                                                </Button>
-                                            </div>
                                         </div>
-                                    </Card>
-                                    : null
-                                }
-                            </Col>
-                        </Row>
-                    )}
+                                        <Button
+                                            color="success"
+                                            size="lg"
+                                            className="px-5 py-3 shadow-lg font-weight-bold modern-btn-primary"
+                                            style={{ borderRadius: '50px' }}
+                                            onClick={this.toggleTerima}
+                                        >
+                                            <i className="fa fa-check-circle mr-2"></i> TERIMA HASIL UKT
+                                        </Button>
+                                    </div>
+                                )}
+                            </div>
+                        </Card>
+                    </Col>
+                </Row>
 
                 {/* Modals with enhanced UI */}
                 <Modal isOpen={this.state.modalTerima} toggle={this.toggleTerima} centered>

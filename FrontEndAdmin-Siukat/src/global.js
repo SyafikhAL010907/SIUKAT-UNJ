@@ -2,8 +2,34 @@ import swal from 'sweetalert'
 import moment from 'moment'
 import Cookies from 'universal-cookie';
 
-const cookies = new Cookies();
+const _cookies = new Cookies();
 
+// Wrap cookies so .get(cookieName) always falls back to sessionStorage
+const cookies = new Proxy(_cookies, {
+    get(target, prop) {
+        if (prop === 'get') {
+            return function (name, ...args) {
+                // Prioritaskan sessionStorage untuk token login agar otomatis logout saat tab ditutup
+                if (name === cookieName && typeof sessionStorage !== 'undefined') {
+                    const ssVal = sessionStorage.getItem('siukat_token');
+                    // Jika di sessionStorage kosong atau berisi string "undefined", paksa hapus cookie (Logout)
+                    if (!ssVal || ssVal === 'undefined' || ssVal === 'null') {
+                        if (target.get(name)) target.remove(name, { path: '/' });
+                        return undefined;
+                    }
+                    // Pastikan cookie tetap sinkron (untuk backend/request)
+                    if (target.get(name) !== ssVal) {
+                        target.set(name, ssVal, { path: '/' });
+                    }
+                    return ssVal;
+                }
+                return target.get(name, ...args);
+            };
+        }
+        const value = target[prop];
+        return typeof value === 'function' ? value.bind(target) : value;
+    }
+});
 const service       = 'http://localhost:8080/api/v1'
 const storage       = service+"/uploads"
 const cookieName    = '1D0742F0123V312'
@@ -12,20 +38,23 @@ const infoIcon      = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAfCAY
 const successIcon   = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAgCAYAAADqgqNBAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAD9UlEQVRIiZ2WzWucRRzHPzO7efYlu8HmxfRiaMMWxByECnpaPAmezH9QC/0ThJ4LXmx79VRb0IMnT/4FBWuo8WBAaVEJ0q5IqzEbNLubZrN5xsO87Mw88ySpA5M8efLMfH7f39uM4P8PUfKcGir1HC66/+UF4D5w4eStVPLd+/PLvNdeuPZR560vTgMDSkZbXH1psFLehEq1eu/2L99fRQsTgGQqMhAbw19uRGArbKZWu3v7580PPbCdvgHi5eApdzsj8sCpM/X63VuPv7sSwQMDzg4PVCrIczOV+10XYQplzcZnNx89LPPAGeAWlvyf+aFw3yilUN73tdnmnZuPHl5JGHCC20+EGrX2txnf7P5Jf3xYMKI227zzyU8bHxAlXDW5cdk7D+SSTOEM6R+/4ONffwTf/VKAlHA0eRP42higivA8Dxf6HrAgm1XuXe49K7O33UfEHrRgAaii8hSUqKRc0pksd970jBSAUFp1iUd9+FRyDM6jTE9NCw92MspjbybdbpeVgDv1JmvtOeZnMrdgnOf0RgO29vYYTI50TitMbgtvhmAfHqkOwRnQPbfISqNZcF0mJZ3WHCvNFpu7O2zv7+skU2i32zBr9d6LsM6FKx9fcZ7TfWUhCY6N6C4tc75RNzBPOYCQNhvc9Jv+1CleLDvN2VPB/uguncf1Eetg4cTiP4RNJs9DQ3LF2uzcqcCVRptP197lxqW3aVWrdFptAvUIHYrwSE21V79mFfNZxuutc6wvr7KY1ZPg66uXaVaqLGYNABaymtldesqd6oLyoOHHJbS+fJH15YvcuPQOK412Ejw6nnDrtx8AmM8yDQxKUMSFXrhMJMe3/WcANCtVrq9eZqXRToJ7B/uALj8HDpuLDX6yzgtjnOds7Gn4tdfecAZYY2IwQP9oHNX4mWMejt5oCMDG3jPu/f7YQcvAAE9HQ6/EghxOwoNE8C3e+mdPuzEyoAzcGw3pj8eAV+Mll9uE24XODVMig+NjNvt/01181RkwOp6we/SiAO6PD3mw+5d2ccyVsnCyhHD7gW0KUhuwPRwwmEzoLi7Rqs6w9e9OweTecMCD3R3Gep9iXw/RLuFsv51aqkyC5MaQiuT5+JCv/ujRabZZyDLma7qWnx8c8HQ0pD8Z64uRNGvdYSKsMAdNKVfB2WsXS6kvGRJQku3RgO1R7EFzW7HwWHXxSA3gU/XCxFwJDcyNAbbpiKh+bfv0DxJXWt7fKj70iwkXxtwaoJiGwAc74V5Zxf28RHUMD0sNvEQRUPFuN37r9L9NeSElzoywyUj5OfBkqiKKm5A6BFInIRWbYCbeohT8xOwdjDKfiMTzyR1jqqoQW+JCM+M/oQ0MxVFidYQAAAAASUVORK5CYII='
 
 const errLog = (err) => {
-    if(err !== undefined){
-        if(err.data !== undefined && err.data !== ""){
-            if (typeof err.data === 'object' && err.data.error) {
-                return err.data.error
-            }
-            return (typeof err.data === 'string') ? err.data : JSON.stringify(err.data)
-        }else if(err.message !== undefined){
-            return err.message
-        }else {
-            return `Error: ${err.status} ${err.statusText}`
+    if (err && err.data) {
+        // Jika backend mengirim string langsung
+        if (typeof err.data === 'string') return err.data;
+        
+        // Jika backend mengirim objek (misal: Gin default error)
+        if (typeof err.data === 'object') {
+            if (err.data.error) return err.data.error;
+            if (err.data.message) return err.data.message;
+            return JSON.stringify(err.data);
         }
-    }else {
-        return "Tidak didefinisikan"
     }
+    
+    if (err && err.statusText) {
+        return `Error ${err.status}: ${err.statusText}`;
+    }
+    
+    return "Terjadi kesalahan tidak dikenal pada server.";
 }
 
 const notif = function(title, msg, type){
@@ -53,6 +82,30 @@ const dateConverter = (date) => {
     return (date !== "0000-00-00") ? moment(birthdate).format("DD MMMM YYYY") : ""
 }
 
+const getToken = () => {
+    if (typeof sessionStorage !== 'undefined') {
+        const token = sessionStorage.getItem('siukat_token');
+        if (token === 'undefined' || token === 'null' || !token) return undefined;
+        return token;
+    }
+    const cookieToken = cookies.get(cookieName);
+    return (cookieToken === 'undefined' || cookieToken === 'null') ? undefined : cookieToken;
+};
+
+const setToken = (token) => {
+    if (typeof sessionStorage !== 'undefined') {
+        sessionStorage.setItem('siukat_token', token);
+    }
+    cookies.set(cookieName, token, { path: '/' });
+};
+
+const removeToken = () => {
+    if (typeof sessionStorage !== 'undefined') {
+        sessionStorage.removeItem('siukat_token');
+    }
+    cookies.remove(cookieName, { path: '/' });
+};
+
 export {
     cookies,
     service,
@@ -65,4 +118,7 @@ export {
     rupiah,
     errLog,
     dateConverter,
+    getToken,
+    setToken,
+    removeToken,
 }

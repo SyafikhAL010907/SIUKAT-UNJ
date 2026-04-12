@@ -126,6 +126,7 @@ let FormAyahSeleksi = (props) => {
                             <SyaratScan />
                         </Col>
                         {props.initialValues.scan_ktp_ayah && (
+                            <Col md={4}>
                                 <a
                                     href={
                                         storage +
@@ -134,11 +135,11 @@ let FormAyahSeleksi = (props) => {
                                     }
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="modern-btn-primary py-2 w-100 btn text-white"
-                                    style={{fontSize: '0.85rem'}}
+                                    className="btn btn-success btn-block"
                                 >
-                                    <i className="fa fa-file-pdf-o mr-2"></i> Lihat KTP Ayah
+                                    <i className="fa fa-file"></i> Lihat KTP Ayah
                                 </a>
+                            </Col>
                         )}
                     </FormGroup>
                     <FormGroup row className="mb-4">

@@ -133,7 +133,7 @@ func IbuRoutes(r *gin.RouterGroup) {
 			if errKtp == nil {
 				utils.DeleteOldFile(oldIbu.ScanKtpIbu)
 				filename := fmt.Sprintf("KTP_Ibu_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
-				newPath, err := utils.HandleDynamicUpload(c, fileKtp, student.NamaCmahasiswa, np, filename)
+				newPath, err := utils.HandleDynamicUpload(c, fileKtp, student.NamaCmahasiswa, np, "original", filename)
 				if err == nil {
 					data["scan_ktp_ibu"] = newPath
 				}
@@ -144,7 +144,7 @@ func IbuRoutes(r *gin.RouterGroup) {
 			if errSlip == nil {
 				utils.DeleteOldFile(oldIbu.ScanSlipIbu)
 				filename := fmt.Sprintf("Slip_Ibu_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
-				newPath, err := utils.HandleDynamicUpload(c, fileSlip, student.NamaCmahasiswa, np, filename)
+				newPath, err := utils.HandleDynamicUpload(c, fileSlip, student.NamaCmahasiswa, np, "original", filename)
 				if err == nil {
 					data["scan_slip_ibu"] = newPath
 				}
@@ -196,7 +196,7 @@ func IbuRoutes(r *gin.RouterGroup) {
 			if errKtp == nil {
 				utils.DeleteOldFile(oldIbu.ScanKtpIbu)
 				filename := fmt.Sprintf("KTP_Ibu_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
-				newPath, err := utils.HandleDynamicUpload(c, fileKtp, student.NamaCmahasiswa, np, filename)
+				newPath, err := utils.HandleDynamicUpload(c, fileKtp, student.NamaCmahasiswa, np, "sanggah", filename)
 				if err == nil {
 					data["scan_ktp_ibu"] = newPath
 				}
@@ -206,7 +206,7 @@ func IbuRoutes(r *gin.RouterGroup) {
 			if errSlip == nil {
 				utils.DeleteOldFile(oldIbu.ScanSlipIbu)
 				filename := fmt.Sprintf("Slip_Ibu_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
-				newPath, err := utils.HandleDynamicUpload(c, fileSlip, student.NamaCmahasiswa, np, filename)
+				newPath, err := utils.HandleDynamicUpload(c, fileSlip, student.NamaCmahasiswa, np, "sanggah", filename)
 				if err == nil {
 					data["scan_slip_ibu"] = newPath
 				}

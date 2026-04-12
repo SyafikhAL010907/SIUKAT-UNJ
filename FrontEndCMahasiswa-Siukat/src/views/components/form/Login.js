@@ -4,7 +4,7 @@ import { captcha } from '../../../actions'
 import { auth } from '../../../api'
 import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { notif, setToken, cookies, cookieName } from '../../../global';
+import { notif, setToken, cookies, cookieName, errLog } from '../../../global';
 
 class FormLogin extends React.Component {
     constructor(props) {
@@ -34,6 +34,15 @@ class FormLogin extends React.Component {
         })
     }
 
+    getStageName(code) {
+        switch (Number(code)) {
+            case 1: return 'SNBP';
+            case 2: return 'SNBT';
+            case 3: return 'MANDIRI';
+            default: return 'Siukat';
+        }
+    }
+
     login = (e) => {
         e.preventDefault()
         this.setState({ tombolMasuk: 'Mohon Menunggu' })
@@ -47,11 +56,12 @@ class FormLogin extends React.Component {
                 this.setState({ authCookie: cookies.get(cookieName) })
             }
         }, (err) => {
+            const errorMsg = errLog({ response: err });
             // Jika status 403 (Forbidden) dan ada data info jalur
             if (err && err.status === 403 && err.data && err.data.info && this.props.onLoginAttempt) {
                 this.props.onLoginAttempt(err.data, true);
             } else {
-                notif("Gagal!", "Periksa kembali data Anda", "error")
+                notif("Gagal Masuk!", errorMsg || "Periksa kembali data Anda", "error")
             }
         }).finally(() => {
             this.setState({ tombolMasuk: 'Masuk' })
@@ -69,7 +79,8 @@ class FormLogin extends React.Component {
 
     render() {
         const flag = this.props.cmahasiswa.flag
-        if (this.state.authCookie) {
+        // Jika token valid (ada dan bukan string "undefined"/"null"), baru redirect ke dashboard
+        if (this.state.authCookie && this.state.authCookie !== 'undefined' && this.state.authCookie !== 'null') {
             const to = ['terima_ukt', 'pengumuman', 'sanggah_ukt', 'pengisian', 'selesai_sanggah', 'selesai_isi', 'tunggu_pengumuman'].includes(flag) 
                 ? '/main/ukt' : '/main';
             return <Redirect to={to} />
@@ -83,11 +94,6 @@ class FormLogin extends React.Component {
             <Form onSubmit={this.login} className="lux-login-form">
                 
                 <div className="lux-form-body">
-                    {!online && (
-                        <div className="lux-alert-offline">
-                            <i className="fa fa-exclamation-triangle mr-2"></i> LAYANAN OFFLINE
-                        </div>
-                    )}
 
                     {/* Field Nomor Peserta */}
                     <div className="lux-input-group">

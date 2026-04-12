@@ -222,7 +222,7 @@ class Pribadi extends React.Component {
                 <div className="flex flex-col md:flex-row gap-10">
                     <div className="flex flex-col items-center md:w-1/4">
                         <img 
-                            src={data.foto_cmahasiswa ? `${storage}/${data.foto_cmahasiswa}` : defaultPhoto} 
+                            src={data.foto_cmahasiswa ? `${storage}/${data.foto_cmahasiswa}?t=${new Date(data.updated_at || Date.now()).getTime()}` : defaultPhoto} 
                             className="w-48 h-60 object-cover rounded-2xl shadow-lg border-4 border-white" 
                             alt="profil"
                             onError={(e) => {e.target.src = defaultPhoto}}

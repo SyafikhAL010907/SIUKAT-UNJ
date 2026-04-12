@@ -4,7 +4,7 @@ import { captcha } from '../../../../../actions';
 import { user } from '../../../../../api';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { notif, cookies, cookieName } from '../../../../../global';
+import { notif, cookies, cookieName, getToken, setToken } from '../../../../../global';
 
 class Login extends Component {
   constructor(props) {
@@ -22,7 +22,7 @@ class Login extends Component {
   componentWillMount() {
     this.props.dispatch(captcha.fetchCaptcha());
     this.setState({
-      authCookie: cookies.get(cookieName)
+      authCookie: getToken()
     });
   }
 
@@ -39,9 +39,9 @@ class Login extends Component {
     e.preventDefault();
     this.setState({ tombolMasuk: 'Mohon Menunggu...' });
     user.login(this.state).then(res => {
-      cookies.set(cookieName, res.token, { path: "/" });
+      setToken(res.token);
       notif("Berhasil!", "Anda berhasil masuk", "success");
-      this.setState({ authCookie: cookies.get(cookieName) });
+      this.setState({ authCookie: getToken() });
     }, (err) => {
       notif("Gagal!", "Periksa kembali data Anda", "error");
       this.setState({ tombolMasuk: 'Masuk' });
@@ -49,7 +49,8 @@ class Login extends Component {
   }
 
   render() {
-    if (this.state.authCookie !== undefined) {
+    // Jika token valid (ada dan bukan string "undefined"/"null"), baru redirect ke dashboard
+    if (this.state.authCookie && this.state.authCookie !== 'undefined' && this.state.authCookie !== 'null') {
       return <Redirect to='/admin/dashboard' />;
     }
 

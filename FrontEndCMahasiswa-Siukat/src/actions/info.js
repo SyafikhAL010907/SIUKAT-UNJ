@@ -1,8 +1,8 @@
 import { info } from '../api';
 
-export function fetchInfo(){
+export function fetchInfo(kode){
     return {
         type: 'FETCH_INFO',
-        payload: info.fetchInfo()
+        payload: info.fetchInfo(kode)
     };
 }

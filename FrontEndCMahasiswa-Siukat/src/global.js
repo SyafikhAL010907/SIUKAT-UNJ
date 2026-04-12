@@ -4,25 +4,38 @@ import Cookies from 'universal-cookie';
 
 const _cookies = new Cookies();
 
-const cookieName = (typeof process !== 'undefined' && process.env.REACT_APP_COOKIE_NAME) 
-    ? process.env.REACT_APP_COOKIE_NAME 
-    : "siukat_cookie_2026";
+const getEnv = (name, fallback) => {
+    try {
+        if (typeof process !== 'undefined' && process.env && process.env[name]) {
+            return process.env[name];
+        }
+    } catch (e) {}
+    return fallback;
+};
+
+const cookieName = getEnv('REACT_APP_COOKIE_NAME', "siukat_cookie_2026");
 
 // Wrap cookies so .get(cookieName) always falls back to localStorage
+// Wrap cookies so .get(cookieName) always falls back to sessionStorage
 const cookies = new Proxy(_cookies, {
     get(target, prop) {
         if (prop === 'get') {
             return function (name, ...args) {
-                const val = target.get(name, ...args);
-                if (val === undefined && name === cookieName && typeof localStorage !== 'undefined') {
-                    const lsVal = localStorage.getItem('siukat_token');
-                    if (lsVal && lsVal !== 'undefined') {
-                        // Re-sync cookie from localStorage
-                        target.set(name, lsVal, { path: '/' });
-                        return lsVal;
+                // Prioritaskan sessionStorage untuk token login agar otomatis logout saat tab ditutup
+                if (name === cookieName && typeof sessionStorage !== 'undefined') {
+                    const ssVal = sessionStorage.getItem('siukat_token');
+                    // Jika di sessionStorage kosong atau berisi string "undefined", paksa hapus cookie (Logout)
+                    if (!ssVal || ssVal === 'undefined' || ssVal === 'null') {
+                        if (target.get(name)) target.remove(name, { path: '/' });
+                        return undefined;
                     }
+                    // Pastikan cookie tetap sinkron (untuk backend/request)
+                    if (target.get(name) !== ssVal) {
+                        target.set(name, ssVal, { path: '/' });
+                    }
+                    return ssVal;
                 }
-                return val;
+                return target.get(name, ...args);
             };
         }
         const value = target[prop];
@@ -30,10 +43,7 @@ const cookies = new Proxy(_cookies, {
     }
 });
 
-
-const service = (typeof process !== 'undefined' && process.env && process.env.REACT_APP_API_URL) 
-    ? process.env.REACT_APP_API_URL 
-    : 'http://localhost:8080/api/v1';
+const service = getEnv('REACT_APP_API_URL', 'http://localhost:8080/api/v1');
 
 // const service = 'http://192.168.4.174:3001'
 const storage = service;
@@ -96,21 +106,27 @@ const dateConverter = (date) => {
 };
 
 const getToken = () => {
-    return cookies.get(cookieName) || (typeof localStorage !== 'undefined' ? localStorage.getItem('siukat_token') : null);
+    if (typeof sessionStorage !== 'undefined') {
+        const token = sessionStorage.getItem('siukat_token');
+        if (token === 'undefined' || token === 'null' || !token) return undefined;
+        return token;
+    }
+    const cookieToken = cookies.get(cookieName);
+    return (cookieToken === 'undefined' || cookieToken === 'null') ? undefined : cookieToken;
 };
 
 const setToken = (token) => {
-    cookies.set(cookieName, token, { path: '/' });
-    if (typeof localStorage !== 'undefined') {
-        localStorage.setItem('siukat_token', token);
+    if (typeof sessionStorage !== 'undefined') {
+        sessionStorage.setItem('siukat_token', token);
     }
+    cookies.set(cookieName, token, { path: '/' });
 };
 
 const removeToken = () => {
-    cookies.remove(cookieName, { path: '/' });
-    if (typeof localStorage !== 'undefined') {
-        localStorage.removeItem('siukat_token');
+    if (typeof sessionStorage !== 'undefined') {
+        sessionStorage.removeItem('siukat_token');
     }
+    cookies.remove(cookieName, { path: '/' });
 };
 
 export {

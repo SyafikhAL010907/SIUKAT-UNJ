@@ -20,11 +20,18 @@ const open = '2020-08-24 08:00:00';
 class Login extends Component {
     constructor(props) {
         super(props);
+        let is_open = false;
+        try {
+            is_open = momentTz.tz('Asia/Jakarta').format('YYYY-MM-DD HH:mm:ss') > open;
+        } catch (e) {
+            console.error("Error checking open status:", e);
+        }
+
         this.state = {
-            modal: true,
-            stage: this.props.info.stage,
-            stage_detail: this.props.info.stage_detail,
-            open_login: false,
+            modal: false,
+            stage: this.props.info ? this.props.info.stage : null,
+            stage_detail: this.props.info ? this.props.info.stage_detail : null,
+            open_login: is_open,
             // State for post-login validation modal
             showValidationModal: false,
             validationType: 'open', // 'open' | 'closed'
@@ -124,7 +131,7 @@ class Login extends Component {
         return (
             <div className="container-fluid bg-light min-vh-100 p-0">
                 <Row className="m-0 min-vh-100">
-                    {stage !== 'snbp' && (
+                    {stage && stage !== 'snbp' && (
                         <Modal
                             isOpen={this.state.modal}
                             modalTransition={{ timeout: 300 }}

@@ -8,7 +8,9 @@ class TopHeader extends React.Component {
         const studentId = studentData?.no_peserta || '925111008305';
         
         const photoUrl = studentData?.foto_cmahasiswa 
-            ? (studentData.foto_cmahasiswa.startsWith('http') ? studentData.foto_cmahasiswa : storage + '/' + studentData.foto_cmahasiswa)
+            ? (studentData.foto_cmahasiswa.startsWith('http') 
+                ? studentData.foto_cmahasiswa 
+                : `${storage}/${studentData.foto_cmahasiswa}?t=${new Date(studentData.updated_at || Date.now()).getTime()}`)
             : `https://ui-avatars.com/api/?name=${encodeURIComponent(studentName)}&background=0f6d3f&color=fff`;
 
         return (

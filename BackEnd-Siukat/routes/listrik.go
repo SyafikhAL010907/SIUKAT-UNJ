@@ -65,7 +65,7 @@ func ListrikRoutes(r *gin.RouterGroup) {
 		if errScan == nil {
 			utils.DeleteOldFile(existing.ScanListrik)
 			filename := fmt.Sprintf("Listrik_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
-			newPath, err := utils.HandleDynamicUpload(c, fileScan, student.NamaCmahasiswa, np, filename)
+			newPath, err := utils.HandleDynamicUpload(c, fileScan, student.NamaCmahasiswa, np, "original", filename)
 			if err == nil {
 				req.ScanListrik = newPath
 			}
@@ -106,7 +106,7 @@ func ListrikRoutes(r *gin.RouterGroup) {
 		if errScan == nil {
 			utils.DeleteOldFile(existing.ScanListrik)
 			filename := fmt.Sprintf("Listrik_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
-			newPath, err := utils.HandleDynamicUpload(c, fileScan, student.NamaCmahasiswa, np, filename)
+			newPath, err := utils.HandleDynamicUpload(c, fileScan, student.NamaCmahasiswa, np, "sanggah", filename)
 			if err == nil {
 				req.ScanListrik = newPath
 			}

@@ -11,6 +11,7 @@ import {
     ModalHeader,
     ModalBody,
     ModalFooter,
+    Badge,
 } from 'reactstrap';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -161,149 +162,140 @@ class PilihanUktTinggi extends React.Component {
             return <Redirect to="/main/ukt/sanggah" />;
         }
         return (
-            <div className="p-0">
-                <Card className="premium-card p-4 p-md-5">
-                    <div className="text-center mb-5">
-                        <h2 className="font-weight-bold color-emerald mb-2">
+            <div className="p-0 animate-fade-in">
+                <Card className="premium-card p-4 p-md-5 border-0 shadow-lg">
+                    <div className="text-center mb-5 mt-2">
+                        <div className="d-inline-block p-3 rounded-circle bg-emerald-light mb-3">
+                            <i className="fa fa-university fa-2x text-emerald"></i>
+                        </div>
+                        <h2 className="font-weight-bold color-emerald mb-2" style={{ letterSpacing: '-0.5px' }}>
                            Pemilihan Kelompok UKT
                         </h2>
-                        <p className="text-muted lead">
-                            Apakah anda bersedia ditetapkan pada UKT Kelompok VI / VII / VIII?
+                        <p className="text-muted lead mx-auto" style={{ maxWidth: '600px', fontSize: '1.1rem' }}>
+                            Berdasarkan data prodi Anda, silakan pilih apakah Anda bersedia ditetapkan pada <strong>UKT Kelompok Atas</strong> atau melalui <strong>Verifikasi Ekonomi</strong>.
                         </p>
+                        
                         {this.props.cmahasiswa.prodi != null && (
-                            <div className="badge badge-emerald-soft p-2 px-3 rounded-pill mt-2">
-                                <i className="fa fa-university mr-2"></i>
-                                {this.props.cmahasiswa.prodi.nama}
+                            <div className="mt-4">
+                                <Badge color="success" pill className="px-4 py-2 shadow-sm" style={{ fontSize: '0.9rem', backgroundColor: '#0f6d3f' }}>
+                                    <i className="fa fa-graduation-cap mr-2"></i>
+                                    Prodi: {this.props.cmahasiswa.prodi.nama}
+                                </Badge>
                             </div>
                         )}
                     </div>
 
-                    <Alert color="info" className="rounded-lg border-0 shadow-sm mb-4 text-center">
-                        <i className="fa fa-info-circle mr-2"></i>
-                        Silakan pilih salah satu opsi di bawah ini untuk melanjutkan proses:
-                    </Alert>
-
-                    {/* Pembungkus Khusus Kelompok Tinggi dengan Identitas UNJ */}
-                    <div 
-                        className="ukt-high-group-container mb-5 p-4 rounded-lg shadow-sm" 
-                        style={{ 
-                            background: '#ffffff', 
-                            border: '3px solid #008d4c', // Hijau UNJ
-                            position: 'relative',
-                            marginTop: '20px'
-                        }}
-                    >
-                        <div 
-                            className="text-center" 
-                            style={{ 
-                                position: 'absolute', 
-                                top: '-18px', 
-                                left: '0', 
-                                right: '0' 
-                            }}
-                        >
-                            <span 
-                                className="px-4 py-2 font-weight-bold text-uppercase" 
+                    <div className="row justify-content-center mb-5">
+                        <div className="col-md-10">
+                             <div 
+                                className="ukt-high-group-container p-4 rounded-xl shadow-sm" 
                                 style={{ 
-                                    backgroundColor: '#ffcc00', // Kuning UNJ
-                                    color: '#008d4c', // Hijau UNJ
-                                    borderRadius: '50px', 
-                                    fontSize: '0.9rem', 
-                                    letterSpacing: '1.5px',
-                                    border: '2px solid #008d4c',
-                                    boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+                                    background: '#ffffff', 
+                                    border: '2px solid #0f6d3f',
+                                    borderRadius: '24px',
+                                    position: 'relative',
+                                    marginTop: '20px'
                                 }}
                             >
-                                <i className="fa fa-circle mr-2"></i>
-                                UKT Kelompok Tinggi
-                                <i className="fa fa-circle ml-2"></i>
-                            </span>
-                        </div>
+                                <div className="text-center" style={{ position: 'absolute', top: '-15px', left: '0', right: '0' }}>
+                                    <span className="px-4 py-1 font-weight-bold text-white bg-emerald rounded-pill shadow-sm" style={{ fontSize: '0.85rem', letterSpacing: '1px' }}>
+                                        OPSI 1: UKT KELOMPOK TINGGI
+                                    </span>
+                                </div>
 
-                        <div className="mt-3">
-                            <Row className="justify-content-center">
-                                {this.renderUkt()}
-                            </Row>
+                                <div className="mt-4">
+                                    <Row className="justify-content-center">
+                                        {this.renderUkt()}
+                                    </Row>
+                                    <div className="text-center mt-3 text-muted small">
+                                        <i className="fa fa-info-circle mr-1"></i> Tanpa perlu verifikasi berkas ekonomi yang rumit.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="row justify-content-center mb-5">
+                        <div className="col-md-10">
+                            <div className="d-flex align-items-center mb-4">
+                                <hr className="flex-grow-1" style={{ borderColor: '#e2e8f0' }} />
+                                <span className="mx-4 text-muted font-weight-bold text-uppercase small" style={{ letterSpacing: '2px' }}>Atau</span>
+                                <hr className="flex-grow-1" style={{ borderColor: '#e2e8f0' }} />
+                            </div>
+
+                            <div className="row justify-content-center">
+                                <Col md={6} xs={12} className="ukt-selection-tile">
+                                    <input
+                                        type="radio"
+                                        id={'ukt-tinggi-0'}
+                                        name="ukt_tinggi"
+                                        value={'0'}
+                                        checked={this.state.kategori.toString() === '0'}
+                                        onChange={this.batalUktTinggi}
+                                    />
+                                    <label 
+                                        className="label-modern h-100 d-flex flex-column align-items-center justify-content-center" 
+                                        htmlFor={'ukt-tinggi-0'}
+                                        style={{ border: '2px solid #cbd5e1', borderRadius: '20px', padding: '30px' }}
+                                    >
+                                        <div className="icon-box mb-3" style={{ background: '#f1f5f9', color: '#475569', width: '50px', height: '50px' }}>
+                                            <i className="fa fa-calculator" style={{ fontSize: '1.2rem' }}></i>
+                                        </div>
+                                        <span className="group-name font-weight-bold text-dark mb-1">Gunakan Data Ekonomi</span>
+                                        <div className="price-tag text-muted small mb-2">
+                                            (Seleksi Kelompok I s.d. VIII)
+                                        </div>
+                                        <div className="badge badge-light text-primary border p-2" style={{ fontSize: '0.75rem' }}>
+                                            <i className="fa fa-file-text-o mr-1"></i> Wajib Upload Berkas
+                                        </div>
+                                    </label>
+                                </Col>
+                            </div>
                         </div>
                     </div>
 
                     <Row className="mb-5 justify-content-center">
-                        <Col md={12} className="text-center mb-4">
-                            <div className="d-flex align-items-center justify-content-center">
-                                <hr style={{ flex: 1, borderTop: '1px solid #e2e8f0' }} />
-                                <span className="mx-3 text-muted font-italic" style={{ fontSize: '0.9rem' }}>
-                                    Atau jika keberatan, gunakan pilihan di bawah ini:
-                                </span>
-                                <hr style={{ flex: 1, borderTop: '1px solid #e2e8f0' }} />
-                            </div>
-                        </Col>
-                        <Col md={6} xs={12} className="ukt-selection-tile">
-                            <input
-                                type="radio"
-                                id={'ukt-tinggi-0'}
-                                name="ukt_tinggi"
-                                value={'0'}
-                                checked={this.state.kategori.toString() === '0'}
-                                onChange={this.batalUktTinggi}
-                            />
-                            <label 
-                                className="label-modern" 
-                                htmlFor={'ukt-tinggi-0'}
-                                style={{ border: '2px solid #cbd5e1' }}
-                            >
-                                <div className="icon-box" style={{ background: '#f1f5f9', color: '#475569' }}>
-                                    <i className="fa fa-calculator"></i>
-                                </div>
-                                <span className="group-name">Gunakan Data Ekonomi</span>
-                                <div className="price-tag" style={{ fontSize: '0.95rem', color: '#64748b' }}>
-                                    (Seleksi Kelompok I s.d. VIII)
-                                </div>
-                                <div className="mt-2 text-primary" style={{ fontSize: '0.8rem' }}>
-                                    <i className="fa fa-info-circle mr-1"></i> 
-                                    Memerlukan verifikasi berkas pendukung
-                                </div>
-                            </label>
-                        </Col>
-                    </Row>
-
-                    <Row className="mb-5">
-                        <Col md="6" className="mb-3 mb-md-0">
-                            <div className="info-card-premium status-green shadow-sm">
-                                <div className="info-header">
-                                    <div className="info-icon">
-                                        <i className="fa fa-check-circle"></i>
+                        <Col md={10}>
+                            <div className="row">
+                                <Col md="6" className="mb-3 mb-md-0">
+                                    <div className="info-card-premium status-green shadow-sm h-100 p-4 rounded-xl border-0" style={{ background: '#f0fdf4' }}>
+                                        <div className="d-flex align-items-center mb-3">
+                                            <div className="p-2 rounded bg-white shadow-sm mr-3 text-success">
+                                                <i className="fa fa-bolt"></i>
+                                            </div>
+                                            <h6 className="mb-0 font-weight-bold text-success">Keuntungan Jalur Cepat</h6>
+                                        </div>
+                                        <ul className="list-reset pl-0 mb-0 small text-muted">
+                                            <li className="mb-2 d-flex"><i className="fa fa-check text-success mr-2 mt-1"></i> Langsung ditetapkan UKT permanen</li>
+                                            <li className="mb-2 d-flex"><i className="fa fa-check text-success mr-2 mt-1"></i> Tidak perlu upload slip gaji/listrik</li>
+                                            <li className="d-flex"><i className="fa fa-check text-success mr-2 mt-1"></i> Proses registrasi jauh lebih singkat</li>
+                                        </ul>
                                     </div>
-                                    <h5 className="mb-0 font-weight-bold">Jika Bersedia (Kelompok Atas)</h5>
-                                </div>
-                                <ul>
-                                    <li>Anda <strong>tidak perlu</strong> mengunggah data ekonomi yang rumit.</li>
-                                    <li>Hanya perlu mengisi data pribadi dasar mahasiswa dan orang tua.</li>
-                                    <li>Mengunggah Surat Pernyataan bersedia masuk Kelompok Atas.</li>
-                                </ul>
-                            </div>
-                        </Col>
-                        <Col md="6">
-                            <div className="info-card-premium status-blue shadow-sm">
-                                <div className="info-header">
-                                    <div className="info-icon">
-                                        <i className="fa fa-calculator"></i>
+                                </Col>
+                                <Col md="6">
+                                    <div className="info-card-premium status-blue shadow-sm h-100 p-4 rounded-xl border-0" style={{ background: '#f0f7ff' }}>
+                                        <div className="d-flex align-items-center mb-3">
+                                            <div className="p-2 rounded bg-white shadow-sm mr-3 text-primary">
+                                                <i className="fa fa-search"></i>
+                                            </div>
+                                            <h6 className="mb-0 font-weight-bold text-primary">Verifikasi Dokumen</h6>
+                                        </div>
+                                        <ul className="list-reset pl-0 mb-0 small text-muted">
+                                            <li className="mb-2 d-flex"><i className="fa fa-info-circle text-primary mr-2 mt-1"></i> Verifikasi manual oleh tim Universitas</li>
+                                            <li className="mb-2 d-flex"><i className="fa fa-info-circle text-primary mr-2 mt-1"></i> Berpeluang mendapat kelompok UKT I - VIII</li>
+                                            <li className="d-flex"><i className="fa fa-info-circle text-primary mr-2 mt-1"></i> Wajib input detail penghasilan & aset</li>
+                                        </ul>
                                     </div>
-                                    <h5 className="mb-0 font-weight-bold">Jika Tidak Bersedia</h5>
-                                </div>
-                                <ul>
-                                    <li>Penetapan UKT dilakukan melalui perhitungan data kondisi ekonomi.</li>
-                                    <li>Anda wajib mengunggah seluruh dokumen pendukung ekonomi.</li>
-                                    <li>Tetap berpeluang mendapatkan UKT Kelompok I s.d. VIII.</li>
-                                </ul>
+                                </Col>
                             </div>
                         </Col>
                     </Row>
 
-                    <div className="text-center">
+                    <div className="text-center pt-4 border-top">
                         <Button
                             disabled={this.state.nextDisabled}
-                            className={`modern-btn-primary px-5 py-3 ${this.state.nextDisabled ? 'opacity-50' : ''}`}
-                            size="lg"
+                            className={`modern-btn-primary px-5 py-3 shadow-lg ${this.state.nextDisabled ? 'opacity-50' : ''}`}
+                            style={{ borderRadius: '50px', fontSize: '1.1rem' }}
                             onClick={
                                 this.state.kategori !== '0'
                                     ? this.toggleBersedia
@@ -311,8 +303,11 @@ class PilihanUktTinggi extends React.Component {
                             }
                         >
                             {this.state.nextDisabled === false ? <IconCheck /> : ''}{' '}
-                            {this.state.nextButton}
+                            <span className="ml-2">{this.state.nextButton}</span>
                         </Button>
+                        <p className="mt-3 text-muted small font-italic">
+                            Pastikan pilihan Anda sudah benar sebelum menekan tombol konfirmasi.
+                        </p>
                     </div>
                 </Card>
 

@@ -321,6 +321,16 @@ class Ibu extends React.Component{
                                     <td className="p-4 font-mono text-gray-700">{data.nik_ibu || '-'}</td>
                                 </tr>
                                 <tr>
+                                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">KTP</td>
+                                    <td className="p-4">
+                                        { data.scan_ktp_ibu ? (
+                                            <a href={storage+"/"+data.scan_ktp_ibu} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 font-bold text-sm">
+                                                <i className="fa fa-download"></i> Lihat KTP
+                                            </a>
+                                        ) : <span className="text-gray-400 italic text-xs">Belum diunggah</span>}
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Tempat, Tgl Lahir</td>
                                     <td className="p-4 text-gray-700">{data.tempat_lahir_ibu ? `${data.tempat_lahir_ibu}, ${data.tanggal_lahir_ibu}` : '-'}</td>
                                 </tr>
@@ -338,19 +348,26 @@ class Ibu extends React.Component{
                                     <td className="p-4 text-gray-700">{data.pekerjaan?.nama || '-'}</td>
                                 </tr>
                                 <tr>
-                                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Penghasilan Total</td>
-                                    <td className="p-4 font-bold text-emerald-700">{rupiah(parseInt(data.penghasilan_ibu || 0) + parseInt(data.sampingan_ibu || 0))} <span className="text-gray-400 font-normal text-xs">/ bulan</span></td>
+                                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Penghasilan</td>
+                                    <td className="p-4 font-bold text-emerald-700">{rupiah(data.penghasilan_ibu || 0)} <span className="text-gray-400 font-normal text-xs">/ bulan</span></td>
                                 </tr>
                                 <tr>
-                                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Dokumen</td>
-                                    <td className="p-4 space-x-4">
-                                        { data.scan_ktp_ibu && (
-                                            <a href={storage+"/"+data.scan_ktp_ibu} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline font-bold text-xs"><i className="fa fa-id-card mr-1"></i> KTP</a>
-                                        )}
-                                        { data.scan_slip_ibu && (
-                                            <a href={storage+"/"+data.scan_slip_ibu} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline font-bold text-xs"><i className="fa fa-file-text mr-1"></i> Slip Gaji</a>
-                                        )}
+                                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Penghasilan Sampingan</td>
+                                    <td className="p-4 font-bold text-emerald-700">{rupiah(data.sampingan_ibu || 0)} <span className="text-gray-400 font-normal text-xs">/ bulan</span></td>
+                                </tr>
+                                <tr>
+                                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Bukti Penghasilan</td>
+                                    <td className="p-4">
+                                        { data.scan_slip_ibu ? (
+                                            <a href={storage+"/"+data.scan_slip_ibu} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 font-bold text-sm">
+                                                <i className="fa fa-download"></i> Lihat Slip Gaji
+                                            </a>
+                                        ) : <span className="text-gray-400 italic text-xs">Belum diunggah</span>}
                                     </td>
+                                </tr>
+                                <tr>
+                                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Nomor Telepon</td>
+                                    <td className="p-4 font-mono text-gray-700">{data.telepon_ibu || '-'}</td>
                                 </tr>
                             </>)}
                         </tbody>

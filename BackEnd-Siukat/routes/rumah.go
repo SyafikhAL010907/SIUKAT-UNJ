@@ -68,7 +68,7 @@ func RumahRoutes(r *gin.RouterGroup) {
 			if errPbb == nil {
 				utils.DeleteOldFile(oldRumah.ScanPbb)
 				filename := fmt.Sprintf("PBB_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
-				newPath, err := utils.HandleDynamicUpload(c, filePbb, student.NamaCmahasiswa, np, filename)
+				newPath, err := utils.HandleDynamicUpload(c, filePbb, student.NamaCmahasiswa, np, "original", filename)
 				if err == nil {
 					req.ScanPbb = newPath
 				}
@@ -86,7 +86,7 @@ func RumahRoutes(r *gin.RouterGroup) {
 			if errPbb == nil {
 				utils.DeleteOldFile(oldRumah.ScanPbb)
 				filename := fmt.Sprintf("PBB_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
-				newPath, err := utils.HandleDynamicUpload(c, filePbb, student.NamaCmahasiswa, np, filename)
+				newPath, err := utils.HandleDynamicUpload(c, filePbb, student.NamaCmahasiswa, np, "original", filename)
 				if err == nil {
 					req.ScanPbb = newPath
 				}
@@ -99,7 +99,7 @@ func RumahRoutes(r *gin.RouterGroup) {
 			if errKtr == nil {
 				utils.DeleteOldFile(oldRumah.ScanKontrak)
 				filename := fmt.Sprintf("Kontrak_Rumah_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
-				newPath, err := utils.HandleDynamicUpload(c, fileKtr, student.NamaCmahasiswa, np, filename)
+				newPath, err := utils.HandleDynamicUpload(c, fileKtr, student.NamaCmahasiswa, np, "original", filename)
 				if err == nil {
 					req.ScanKontrak = newPath
 				}
@@ -146,7 +146,7 @@ func RumahRoutes(r *gin.RouterGroup) {
 			if errPbb == nil {
 				utils.DeleteOldFile(oldRumah.ScanPbb)
 				filename := fmt.Sprintf("PBB_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
-				newPath, err := utils.HandleDynamicUpload(c, filePbb, student.NamaCmahasiswa, np, filename)
+				newPath, err := utils.HandleDynamicUpload(c, filePbb, student.NamaCmahasiswa, np, "sanggah", filename)
 				if err == nil {
 					req.ScanPbb = newPath
 				}
@@ -164,7 +164,7 @@ func RumahRoutes(r *gin.RouterGroup) {
 			if errPbb == nil {
 				utils.DeleteOldFile(oldRumah.ScanPbb)
 				filename := fmt.Sprintf("PBB_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
-				newPath, err := utils.HandleDynamicUpload(c, filePbb, student.NamaCmahasiswa, np, filename)
+				newPath, err := utils.HandleDynamicUpload(c, filePbb, student.NamaCmahasiswa, np, "sanggah", filename)
 				if err == nil {
 					req.ScanPbb = newPath
 				}
@@ -177,7 +177,7 @@ func RumahRoutes(r *gin.RouterGroup) {
 			if errKtr == nil {
 				utils.DeleteOldFile(oldRumah.ScanKontrak)
 				filename := fmt.Sprintf("Kontrak_Rumah_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
-				newPath, err := utils.HandleDynamicUpload(c, fileKtr, student.NamaCmahasiswa, np, filename)
+				newPath, err := utils.HandleDynamicUpload(c, fileKtr, student.NamaCmahasiswa, np, "sanggah", filename)
 				if err == nil {
 					req.ScanKontrak = newPath
 				}

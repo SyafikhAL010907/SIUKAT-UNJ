@@ -96,7 +96,7 @@ func AyahRoutes(r *gin.RouterGroup) {
 				
 				// Simpan file baru secara dinamis
 				filename := fmt.Sprintf("KTP_Ayah_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
-				newPath, err := utils.HandleDynamicUpload(c, fileKtp, student.NamaCmahasiswa, np, filename)
+				newPath, err := utils.HandleDynamicUpload(c, fileKtp, student.NamaCmahasiswa, np, "original", filename)
 				if err == nil {
 					data["scan_ktp_ayah"] = newPath
 				}
@@ -110,7 +110,7 @@ func AyahRoutes(r *gin.RouterGroup) {
 				
 				// Simpan file baru secara dinamis
 				filename := fmt.Sprintf("Slip_Ayah_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
-				newPath, err := utils.HandleDynamicUpload(c, fileSlip, student.NamaCmahasiswa, np, filename)
+				newPath, err := utils.HandleDynamicUpload(c, fileSlip, student.NamaCmahasiswa, np, "original", filename)
 				if err == nil {
 					data["scan_slip_ayah"] = newPath
 				}
@@ -165,7 +165,7 @@ func AyahRoutes(r *gin.RouterGroup) {
 			if errKtp == nil {
 				utils.DeleteOldFile(oldAyah.ScanKtpAyah)
 				filename := fmt.Sprintf("KTP_Ayah_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
-				newPath, err := utils.HandleDynamicUpload(c, fileKtp, student.NamaCmahasiswa, np, filename)
+				newPath, err := utils.HandleDynamicUpload(c, fileKtp, student.NamaCmahasiswa, np, "sanggah", filename)
 				if err == nil {
 					data["scan_ktp_ayah"] = newPath
 				}
@@ -175,7 +175,7 @@ func AyahRoutes(r *gin.RouterGroup) {
 			if errSlip == nil {
 				utils.DeleteOldFile(oldAyah.ScanSlipAyah)
 				filename := fmt.Sprintf("Slip_Ayah_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
-				newPath, err := utils.HandleDynamicUpload(c, fileSlip, student.NamaCmahasiswa, np, filename)
+				newPath, err := utils.HandleDynamicUpload(c, fileSlip, student.NamaCmahasiswa, np, "sanggah", filename)
 				if err == nil {
 					data["scan_slip_ayah"] = newPath
 				}
