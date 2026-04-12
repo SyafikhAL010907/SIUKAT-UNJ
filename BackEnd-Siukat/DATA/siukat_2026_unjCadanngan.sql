@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 11, 2026 at 03:03 PM
+-- Generation Time: Apr 12, 2026 at 03:44 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -164,35 +164,6 @@ CREATE TABLE `log_ayah` (
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci ROW_FORMAT=COMPACT;
 
---
--- Dumping data for table `log_ayah`
---
-
-INSERT INTO `log_ayah` (`id_log_ayah`, `no_peserta`, `status_ayah`, `nama_ayah`, `nik_ayah`, `telepon_ayah`, `alamat_ayah`, `provinsi_ayah`, `kabkot_ayah`, `kecamatan_ayah`, `pekerjaan_ayah`, `penghasilan_ayah`, `sampingan_ayah`, `scan_ktp_ayah`, `scan_slip_ayah`, `tempat_lahir_ayah`, `tanggal_lahir_ayah`, `atribut`, `executor`, `timestamp`) VALUES
-(16539, '925111008305', 'hidup', '', '', '', '', 0, 0, 0, '', 0, 0, '', '', '', '0000-00-00', 'original', '925111008305', '2025-06-25 23:32:28'),
-(16700, '925111008305', 'hidup', 'Coki Hutajulu ', '3175062912750005', '081285905266', 'Rusun KM 2 Blok A No.514 Kelurahan Cakung Barat, Kecamatan Cakung, Kotamadya Jakarta Timur, Daerah Khusus Jakarta', 31, 3172, 3172080, '8', 4805000, 0, 'file_scan_ktp_ayah-925111008305-19072025200957.pdf', 'file_scan_slip_ayah-925111008305-19072025200958.pdf', 'LBN Bagasan ', '1975-12-29', 'original', '925111008305', '2025-06-25 23:32:28'),
-(16725, '925111008305', 'hidup', 'Coki Hutajulu ', '3175062912750005', '081285905266', 'Rusun KM 2 Blok A No.514 Kelurahan Cakung Barat, Kecamatan Cakung, Kotamadya Jakarta Timur, Daerah Khusus Jakarta', 31, 3172, 3172080, '8', 4805000, 0, 'file_scan_ktp_ayah-925111008305-19072025200957.pdf', 'file_scan_slip_ayah-925111008305-19072025231235.pdf', 'LBN Bagasan ', '0000-00-00', 'original', '925111008305', '2025-06-25 23:32:28'),
-(20720, '925111008305', 'hidup', 'Coki Hutajulu ', '3175062912750005', '081285905266', 'Rusun KM 2 Blok A No.514 Kelurahan Cakung Barat, Kecamatan Cakung, Kotamadya Jakarta Timur, Daerah Khusus Jakarta', 31, 3172, 3172080, '8', 4805000, 0, 'file_scan_ktp_ayah-925111008305-19072025200957.pdf', 'file_scan_slip_ayah-925111008305-19072025235700.pdf', 'LBN Bagasan ', '1975-12-29', 'original', '925111008305', '2025-07-21 03:59:51'),
-(21612, '925111008305', 'hidup', 'Coki Hutajulu ', '3175062912750005', '081285905266', 'Rusun KM 2 Blok A No.514 Kelurahan Cakung Barat, Kecamatan Cakung, Kotamadya Jakarta Timur, Daerah Khusus Jakarta', 31, 3172, 3172080, '8', 4805000, 0, 'file_scan_ktp_ayah-925111008305-23072025233921.pdf', 'file_scan_slip_ayah-925111008305-19072025235700.pdf', 'LBN Bagasan ', '0000-00-00', 'original', '925111008305', '2025-07-21 03:59:51'),
-(21709, '925111008305', 'hidup', 'Coki Hutajulu ', '3175062912750005', '081285905266', 'Rusun KM 2 Blok A No.514 Kelurahan Cakung Barat.', 31, 3172, 3172080, '8', 4805000, 0, 'file_scan_ktp_ayah-925111008305-23072025233921.pdf', 'file_scan_slip_ayah-925111008305-19072025235700.pdf', 'LBN Bagasan ', '0000-00-00', 'original', '925111008305', '2025-07-21 03:59:51'),
-(21719, '925111008305', 'hidup', 'Coki Hutajulu ', '3175062912750005', '081285905266', 'Rusun KM 2 Blok A No.514 Kelurahan Cakung Barat.', 31, 3172, 3172080, '8', 4805000, 0, 'file_scan_ktp_ayah-925111008305-25072025143726.pdf', 'file_scan_slip_ayah-925111008305-19072025235700.pdf', 'LBN Bagasan ', '0000-00-00', 'original', '925111008305', '2025-07-21 03:59:51'),
-(21866, '925111008305', 'hidup', 'Coki Hutajulu ', '3175062912750005', '081285905266', 'Rusun KM 2 Blok A No.514 RT. 009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172080, '8', 4805000, 0, 'file_scan_ktp_ayah-925111008305-25072025143726.pdf', 'file_scan_slip_ayah-925111008305-25072025150450.pdf', 'LBN Bagasan ', '1975-12-29', 'original', '925111008305', '2025-07-21 03:59:51'),
-(21976, '925111008305', 'hidup', '', '3175062912750005', '081285905266', 'Rusun KM 2 Blok A No.514 RT. 009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172080, '8', 4805000, 0, 'file_scan_ktp_ayah-925111008305-25072025143726.pdf', 'file_scan_slip_ayah-925111008305-25072025150450.pdf', 'LBN Bagasan ', '0000-00-00', 'original', '925111008305', '2025-07-21 03:59:51'),
-(24863, '925111008305', 'hidup', 'Coki Hutajulu ', '3175062912750005', '081285905266', 'Rusun KM 2 Blok A No.514 RT. 009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172080, '8', 4805000, 0, 'file_scan_ktp_ayah-925111008305-25072025143726.pdf', 'file_scan_slip_ayah-925111008305-25072025150450.pdf', 'LBN Bagasan ', '1975-12-29', 'original', '925111008305', '2026-04-06 04:10:36'),
-(24864, '925111008305', 'hidup', 'Coki Hutajulu ', '3175062912750005', '081285905266', 'Rusun KM 2 Blok A No.514 RT. 009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172080, '8', 4805000, 0, 'uploads/MaulanaSyafikhAlkhudri_925111008305/SertifikatKetuaOsis.pdf', 'file_scan_slip_ayah-925111008305-25072025150450.pdf', 'LBN Bagasan ', '1975-12-29', 'original', '925111008305', '2026-04-06 04:17:43'),
-(24865, '925111008305', 'hidup', 'Coki Hutajulu ', '3175062912750005', '081285905266', 'Rusun KM 2 Blok A No.514 RT. 009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172080, '8', 4805000, 0, 'uploads/MaulanaSyafikhAlkhudri_925111008305/CuriculumVitaeMaulanaSyafikhAlkhudri.pdf', 'file_scan_slip_ayah-925111008305-25072025150450.pdf', 'LBN Bagasan ', '1975-12-29', 'original', '925111008305', '2026-04-06 04:26:17'),
-(24866, '925111008305', 'hidup', 'Coki Hutajulu ', '3175062912750005', '081285905266', 'Rusun KM 2 Blok A No.514 RT. 009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172080, '8', 4805000, 0, 'uploads/MaulanaSyafikhAlkhudri_925111008305/CuriculumVitaeMaulanaSyafikhAlkhudri.pdf', 'file_scan_slip_ayah-925111008305-25072025150450.pdf', 'LBN Bagasan ', '1975-12-29', 'original', '925111008305', '2026-04-06 05:05:36'),
-(24867, '925111008305', 'hidup', 'Coki Hutajulu ', '3175062912750005', '081285905266', 'Rusun KM 2 Blok A No.514 RT. 009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172080, '8', 4805000, 0, 'uploads/MaulanaSyafikhAlkhudri_925111008305/SertifikatSoloLearn.pdf', 'file_scan_slip_ayah-925111008305-25072025150450.pdf', 'LBN Bagasan ', '1975-12-29', 'original', '925111008305', '2026-04-06 09:13:39'),
-(24868, '925111008305', 'hidup', 'Coki Hutajulu ', '3175062912750005', '081285905266', 'Rusun KM 2 Blok A No.514 RT. 009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172080, '8', 4805000, 0, 'uploads/MaulanaSyafikhAlkhudri_925111008305/SertifikatInternasionalCourseraMaulanaSyafikhAlkhudri.pdf', 'file_scan_slip_ayah-925111008305-25072025150450.pdf', 'LBN Bagasan ', '1975-12-29', 'original', '925111008305', '2026-04-06 14:33:12'),
-(24869, '925111008305', 'hidup', 'Coki Hutajulu ', '3175062912750005', '081285905266', 'Rusun KM 2 Blok A No.514 RT. 009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172080, '8', 4805000, 0, 'uploads/MaulanaSyafikhAlkhudri_925111008305/SertifikatKetuaOsis.pdf', 'file_scan_slip_ayah-925111008305-25072025150450.pdf', 'LBN Bagasan ', '1975-12-29', 'original', '925111008305', '2026-04-06 14:36:47'),
-(24870, '925111008305', 'hidup', 'Coki Hutajulu ', '3175062912750005', '081285905266', 'Rusun KM 2 Blok A No.514 RT. 009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172080, '8', 4805000, 0, 'uploads/MaulanaSyafikhAlkhudri_925111008305/SertifikatInternasionalCourseraMaulanaSyafikhAlkhudri.pdf', 'file_scan_slip_ayah-925111008305-25072025150450.pdf', 'LBN Bagasan ', '1975-12-29', 'original', '925111008305', '2026-04-06 15:45:08'),
-(24871, '925111008305', 'hidup', 'Coki Hutajulu ', '3175062912750005', '081285905266', 'Rusun KM 2 Blok A No.514 RT. 009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172080, '8', 4805000, 0, 'uploads/MaulanaSyafikhAlkhudri_925111008305/SertifikatInternasionalCourseraMaulanaSyafikhAlkhudri.pdf', 'uploads/MaulanaSyafikhAlkhudri_925111008305/SertifikatPKLSMK.pdf', 'LBN Bagasan ', '1975-12-29', 'original', '925111008305', '2026-04-11 00:23:48'),
-(24872, '925111008305', 'hidup', 'Coki Hutajulu ', '3175062912750005', '081285905266', 'Rusun KM 2 Blok A No.514 RT. 009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172080, '8', 4805000, 0, 'uploads/MaulanaSyafikhAlkhudri_925111008305/PPTKelompok4.pdf', 'uploads/MaulanaSyafikhAlkhudri_925111008305/SertifikatPKLSMK.pdf', 'LBN Bagasan ', '1975-12-29', 'original', '925111008305', '2026-04-11 00:24:28'),
-(24873, '925111008305', 'hidup', 'Coki Hutajulu ', '3175062912750005', '081285905266', 'Rusun KM 2 Blok A No.514 RT. 009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172080, '8', 4805000, 0, 'uploads/MaulanaSyafikhAlkhudri_925111008305/PPTKelompok4.pdf', 'uploads/MaulanaSyafikhAlkhudri_925111008305/TutorialBelajarwebDevelopmentMenggunakanNextJS.pdf', 'LBN Bagasan ', '1975-12-29', 'original', '925111008305', '2026-04-11 00:57:02'),
-(24874, '925111008305', 'hidup', 'Coki Hutajulu ', '3175062912750005', '081285905266', 'Rusun KM 2 Blok A No.514 RT. 009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172080, '8', 4805000, 0, 'uploads/MaulanaSyafikhAlkhudri_925111008305/SertifikatSekretarisOSIS.pdf', 'uploads/MaulanaSyafikhAlkhudri_925111008305/SertifikatSekretarisOSIS.pdf', 'LBN Bagasan ', '1975-12-29', 'original', '925111008305', '2026-04-11 00:57:38'),
-(24875, '925111008305', 'hidup', 'Coki Hutajulu ', '3175062912750005', '081285905266', 'Rusun KM 2 Blok A No.514 RT. 009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172080, '8', 4805000, 0, 'uploads/MaulanaSyafikhAlkhudri_925111008305/SertifikatSekretarisOSIS.pdf', 'uploads/MaulanaSyafikhAlkhudri_925111008305/SertifikatKetuaOsis.pdf', 'LBN Bagasan ', '1975-12-29', 'original', '925111008305', '2026-04-11 01:20:35'),
-(24876, '925111008305', 'hidup', 'Coki Hutajulu ', '3175062912750005', '081285905266', 'Rusun KM 2 Blok A No.514 RT. 009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172080, '8', 4805000, 0, 'uploads/MaulanaSyafikhAlkhudri_925111008305/KTPAyahMaulanaSyafikhAlkhudri925111008305.pdf', 'uploads/MaulanaSyafikhAlkhudri_925111008305/SlipAyahMaulanaSyafikhAlkhudri925111008305.pdf', 'LBN Bagasan ', '1975-12-29', 'original', '925111008305', '2026-04-11 01:55:15');
-
 -- --------------------------------------------------------
 
 --
@@ -231,19 +202,6 @@ CREATE TABLE `log_cmahasiswa` (
   `ukt` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci ROW_FORMAT=COMPACT;
 
---
--- Dumping data for table `log_cmahasiswa`
---
-
-INSERT INTO `log_cmahasiswa` (`id_log_cmahasiswa`, `no_peserta`, `nama_cmahasiswa`, `bidik_misi_cmahasiswa`, `fakultas_cmahasiswa`, `prodi_cmahasiswa`, `jalur_cmahasiswa`, `sosmed_cmahasiswa`, `alamat_cmahasiswa`, `provinsi_cmahasiswa`, `kabkot_cmahasiswa`, `kecamatan_cmahasiswa`, `gender_cmahasiswa`, `telepon_cmahasiswa`, `goldar_cmahasiswa`, `tempat_lahir_cmahasiswa`, `tanggal_lahir_cmahasiswa`, `foto_cmahasiswa`, `penghasilan_cmahasiswa`, `golongan_id`, `ukt_tinggi`, `flag`, `waktu_selesai`, `atribut`, `tagihan`, `no_registrasi`, `executor`, `timestamp`, `ukt`) VALUES
-(21762, '925111008305', 'Daniel Valentino Rossi Hutajulu ', 'Tidak', 18, 18016, '2', '', '', 0, 0, 0, 'laki-laki', '', '', '', '2006-09-16', '', 0, '', 'tidak', 'pengisian', '0000-00-00 00:00:00', 'original', '', NULL, '925111008305', '2025-06-25 23:32:28', 0),
-(24461, '925111008305', 'Daniel Valentino Rossi Hutajulu ', 'Tidak', 18, 18016, '2', '', 'Rusun KM 2 Blok A No.514 Kelurahan Cakung Barat, Kecamatan Cakung, Kotamadya Jakarta Timur, Daerah Khusus Jakarta', 31, 3172, 3172080, 'laki-laki', '081290153149', 'A', 'Jakarta ', '2006-09-16', 'file_foto_cmahasiswa-925111008305-19072025201119.jpeg', 0, '', 'tidak', 'pengisian', '2025-06-25 23:32:28', 'original', '', NULL, '925111008305', '2025-07-21 03:59:51', 0),
-(28882, '925111008305', 'Daniel Valentino Rossi Hutajulu ', 'Tidak', 18, 18016, '2', 'valeennnr', 'Rusun KM 2 Blok A No.514 Kelurahan Cakung Barat, Kecamatan Cakung, Kotamadya Jakarta Timur, Daerah Khusus Jakarta', 31, 3172, 3172080, 'laki-laki', '081290153149', 'A', 'Jakarta ', '2006-09-16', 'file_foto_cmahasiswa-925111008305-19072025201119.jpeg', 0, '', 'tidak', 'pengisian', '2025-07-21 03:59:51', 'original', '', NULL, '925111008305', '2025-07-21 03:59:51', 0),
-(29160, '925111008305', 'Daniel Valentino Rossi Hutajulu ', 'Tidak', 18, 18016, '2', 'valeennnr', 'Rusun KM 2 Blok A No.514 Kelurahan Cakung Barat.', 31, 3172, 3172080, 'laki-laki', '081290153149', 'A', 'Jakarta ', '2006-09-16', 'file_foto_cmahasiswa-925111008305-19072025201119.jpeg', 0, '', 'tidak', 'pengisian', '2025-07-21 03:59:51', 'original', '', NULL, '925111008305', '2025-07-21 03:59:51', 0),
-(29429, '925111008305', 'Daniel Valentino Rossi Hutajulu ', 'Tidak', 18, 18016, '2', 'valeennnr', 'Rusun KM 2 Blok A No.514 RT. 009 RW. 001, Kelurahan Cakung Barat.', 31, 3172, 3172080, 'laki-laki', '081290153149', 'A', 'Jakarta ', '2006-09-16', 'file_foto_cmahasiswa-925111008305-19072025201119.jpeg', 0, '', 'tidak', 'pengisian', '2025-07-21 03:59:51', 'original', '', NULL, '925111008305', '2025-07-21 03:59:51', 0),
-(29682, '925111008305', 'Daniel Valentino Rossi Hutajulu ', 'Tidak', 18, 18016, '2', 'valeennnr', '', 31, 3172, 3172080, 'laki-laki', '081290153149', 'A', 'Jakarta ', '2006-09-16', 'file_foto_cmahasiswa-925111008305-19072025201119.jpeg', 0, '', 'tidak', 'pengisian', '2025-07-21 03:59:51', 'original', '', NULL, '925111008305', '2025-07-21 03:59:51', 0),
-(29711, '925111008305', '', '', 0, 0, '', '', '', 0, 0, 0, '', '', '', '', '0000-00-00', '', 0, '', NULL, 'belum_login', '0000-00-00 00:00:00', 'original', '', NULL, '925111008305', '2025-07-21 03:59:51', 0);
-
 -- --------------------------------------------------------
 
 --
@@ -273,44 +231,6 @@ CREATE TABLE `log_ibu` (
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci ROW_FORMAT=COMPACT;
 
---
--- Dumping data for table `log_ibu`
---
-
-INSERT INTO `log_ibu` (`id_log_ibu`, `no_peserta`, `status_ibu`, `nama_ibu`, `nik_ibu`, `telepon_ibu`, `alamat_ibu`, `provinsi_ibu`, `kabkot_ibu`, `kecamatan_ibu`, `pekerjaan_ibu`, `penghasilan_ibu`, `sampingan_ibu`, `scan_ktp_ibu`, `scan_slip_ibu`, `tempat_lahir_ibu`, `tanggal_lahir_ibu`, `atribut`, `executor`, `timestamp`) VALUES
-(18760, '925111008305', 'hidup', '', '', '', '', 0, 0, 0, '', 0, 0, '', '', '', NULL, 'original', '925111008305', '2025-07-21 03:59:51'),
-(20522, '925111008305', 'hidup', 'Rosita Manurung ', '3175065711730007', '081311206097', 'Rusun KM 2 Blok A No.514 Kelurahan Cakung Barat, Kecamatan Cakung, Kotamadya Jakarta Timur, Daerah Khusus Jakarta', 31, 3172, 3172080, '8', 12328904, 0, 'file_scan_ktp_ibu-925111008305-21072025205226.pdf', 'file_scan_slip_ibu-925111008305-21072025205228.pdf', 'G. Sitoli', '1975-11-17', 'original', '925111008305', '2025-07-21 03:59:51'),
-(20523, '925111008305', 'hidup', 'Rosita Manurung ', '3175065711730007', '081311206097', 'Rusun KM 2 Blok A No.514 Kelurahan Cakung Barat, Kecamatan Cakung, Kotamadya Jakarta Timur, Daerah Khusus Jakarta', 31, 3172, 3172080, '8', 12328904, 0, 'file_scan_ktp_ibu-925111008305-21072025205226.pdf', 'file_scan_slip_ibu-925111008305-23072025163607.pdf', 'G. Sitoli', '1975-11-17', 'original', '925111008305', '2025-07-21 03:59:51'),
-(20948, '925111008305', 'hidup', 'Rosita Manurung ', '3175065711730007', '081311206097', 'Rusun KM 2 Blok A No.514 Kelurahan Cakung Barat, Kecamatan Cakung, Kotamadya Jakarta Timur, Daerah Khusus Jakarta', 31, 3172, 3172080, '8', 0, 0, 'file_scan_ktp_ibu-925111008305-21072025205226.pdf', 'file_scan_slip_ibu-925111008305-23072025163607.pdf', 'G. Sitoli', '1975-11-17', 'original', '925111008305', '2025-07-21 03:59:51'),
-(21918, '925111008305', 'hidup', 'Rosita Manurung ', '3175065711730007', '081311206097', 'Rusun KM 2 Blok A No.514 Kelurahan Cakung Barat, Kecamatan Cakung, Kotamadya Jakarta Timur, Daerah Khusus Jakarta', 31, 3172, 3172080, '8', 0, 0, 'file_scan_ktp_ibu-925111008305-21072025205226.pdf', 'file_scan_slip_ibu-925111008305-23072025232956.pdf', 'G. Sitoli', '1975-11-17', 'original', '925111008305', '2025-07-21 03:59:51'),
-(21942, '925111008305', 'hidup', 'Rosita Manurung ', '3175065711730007', '081311206097', 'Rusun KM 2 Blok A No.514 Kelurahan Cakung Barat, Kecamatan Cakung, Kotamadya Jakarta Timur, Daerah Khusus Jakarta', 31, 3172, 3172080, '7', 0, 0, 'file_scan_ktp_ibu-925111008305-21072025205226.pdf', 'file_scan_slip_ibu-925111008305-23072025232956.pdf', 'G. Sitoli', '1975-11-17', 'original', '925111008305', '2025-07-21 03:59:51'),
-(22031, '925111008305', 'hidup', 'Rosita Manurung ', '3175065711730007', '081311206097', 'Rusun KM 2 Blok A No.514 Kelurahan Cakung Barat, Kecamatan Cakung, Kotamadya Jakarta Timur, Daerah Khusus Jakarta', 31, 3172, 3172080, '10', 0, 0, 'file_scan_ktp_ibu-925111008305-21072025205226.pdf', 'file_scan_slip_ibu-925111008305-23072025232956.pdf', 'G. Sitoli', '1975-11-17', 'original', '925111008305', '2025-07-21 03:59:51'),
-(22033, '925111008305', 'hidup', 'Rosita Manurung ', '3175065711730007', '081311206097', 'Rusun KM 2 Blok A No.514 Kelurahan Cakung Barat, Kecamatan Cakung, Kotamadya Jakarta Timur, Daerah Khusus Jakarta', 31, 3172, 3172080, '12', 0, 0, 'file_scan_ktp_ibu-925111008305-21072025205226.pdf', 'file_scan_slip_ibu-925111008305-23072025232956.pdf', 'G. Sitoli', '1975-11-17', 'original', '925111008305', '2025-07-21 03:59:51'),
-(22044, '925111008305', 'hidup', 'Rosita Manurung ', '3175065711730007', '081311206097', 'Rusun KM 2 Blok A No.514 Kelurahan Cakung Barat, Kecamatan Cakung, Kotamadya Jakarta Timur, Daerah Khusus Jakarta', 31, 3172, 3172080, '12', 3000000, 0, 'file_scan_ktp_ibu-925111008305-21072025205226.pdf', 'file_scan_slip_ibu-925111008305-23072025232956.pdf', 'G. Sitoli', '1975-11-17', 'original', '925111008305', '2025-07-21 03:59:51'),
-(22058, '925111008305', 'hidup', 'Rosita Manurung ', '3175065711730007', '081311206097', 'Rusun KM 2 Blok A No.514 Kelurahan Cakung Barat, Kecamatan Cakung, Kotamadya Jakarta Timur, Daerah Khusus Jakarta', 31, 3172, 3172080, '12', 3000000, 0, 'file_scan_ktp_ibu-925111008305-21072025205226.pdf', 'file_scan_slip_ibu-925111008305-25072025191833.pdf', 'G. Sitoli', '1975-11-17', 'original', '925111008305', '2025-07-21 03:59:51'),
-(22064, '925111008305', 'hidup', 'Rosita Manurung ', '3175065711730007', '081311206097', 'Rusun KM 2 Blok A No.514 RT.009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172080, '12', 3000000, 0, 'file_scan_ktp_ibu-925111008305-21072025205226.pdf', 'file_scan_slip_ibu-925111008305-25072025191833.pdf', 'G. Sitoli', '1975-11-17', 'original', '925111008305', '2025-07-21 03:59:51'),
-(22066, '925111008305', 'hidup', 'Rosita Manurung ', '3175065711730007', '081311206097', 'Rusun KM 2 Blok A No.514 RT.009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172080, '12', 3250000, 0, 'file_scan_ktp_ibu-925111008305-21072025205226.pdf', 'file_scan_slip_ibu-925111008305-25072025194831.pdf', 'G. Sitoli', '1975-11-17', 'original', '925111008305', '2025-07-21 03:59:51'),
-(22077, '925111008305', 'hidup', 'Rosita Manurung ', '3175065711730007', '081311206097', 'Rusun KM 2 Blok A No.514 RT.009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172080, '12', 3250000, 0, 'file_scan_ktp_ibu-925111008305-21072025205226.pdf', 'file_scan_slip_ibu-925111008305-25072025194940.pdf', 'G. Sitoli', '1975-11-17', 'original', '925111008305', '2025-07-21 03:59:51'),
-(22159, '925111008305', 'hidup', 'Rosita Manurung ', '3175065711730007', '', 'Rusun KM 2 Blok A No.514 RT.009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172080, '12', 3250000, 0, 'file_scan_ktp_ibu-925111008305-21072025205226.pdf', 'file_scan_slip_ibu-925111008305-25072025194940.pdf', 'G. Sitoli', '1975-11-17', 'original', '925111008305', '2025-07-21 03:59:51'),
-(22160, '925111008305', 'hidup', 'Rosita Manurung ', '3175065711730007', '081311206097', 'Rusun KM 2 Blok A No.514 RT.009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172080, '12', 3190000, 0, 'file_scan_ktp_ibu-925111008305-25072025223702.pdf', 'file_scan_slip_ibu-925111008305-25072025194940.pdf', 'G. Sitoli', '1975-11-17', 'original', '925111008305', '2025-07-21 03:59:51'),
-(22163, '925111008305', 'hidup', 'Rosita Manurung ', '3175065711730007', '081311206097', 'Rusun KM 2 Blok A No.514 RT.009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172080, '12', 3190000, 0, 'file_scan_ktp_ibu-925111008305-25072025223859.pdf', 'file_scan_slip_ibu-925111008305-25072025223858.pdf', 'G. Sitoli', '1975-11-17', 'original', '925111008305', '2025-07-21 03:59:51'),
-(22164, '925111008305', 'hidup', 'Rosita Manurung ', '3175065711730007', '081311206097', 'Rusun KM 2 Blok A No.514 RT.009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172080, '12', 3190000, 0, 'file_scan_ktp_ibu-925111008305-25072025224805.pdf', 'file_scan_slip_ibu-925111008305-25072025223858.pdf', 'G. Sitoli', '1975-11-17', 'original', '925111008305', '2025-07-21 03:59:51'),
-(25055, '925111008305', 'hidup', 'Rosita Manurung ', '3175065711730007', '081311206097', 'Rusun KM 2 Blok A No.514 RT. 009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172080, '12', 3190000, 0, 'file_scan_ktp_ibu-925111008305-25072025224805.pdf', 'file_scan_slip_ibu-925111008305-25072025223858.pdf', 'G. Sitoli', '1975-11-17', 'original', '925111008305', '2026-04-06 04:26:40'),
-(25056, '925111008305', 'hidup', 'Rosita Manurung ', '3175065711730007', '081311206097', 'Rusun KM 2 Blok A No.514 RT. 009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172080, '12', 3190000, 0, 'uploads/MaulanaSyafikhAlkhudri_925111008305/SertifikatKetuaOsis.pdf', '', 'G. Sitoli', NULL, 'original', '925111008305', '2026-04-06 06:26:54'),
-(25057, '925111008305', 'hidup', 'Rosita Manurung ', '3175065711730007', '081311206097', 'Rusun KM 2 Blok A No.514 RT. 009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172080, '12', 3190000, 0, 'uploads/MaulanaSyafikhAlkhudri_925111008305/SertifikatTechnicianSamsungTechInstitude.pdf', '', 'G. Sitoli', NULL, 'original', '925111008305', '2026-04-06 14:33:26'),
-(25058, '925111008305', 'hidup', 'Rosita Manurung ', '3175065711730007', '081311206097', 'Rusun KM 2 Blok A No.514 RT. 009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172080, '12', 3190000, 0, 'uploads/MaulanaSyafikhAlkhudri_925111008305/SertifikatTechnicianSamsungTechInstitude.pdf', '', 'G. Sitoli', NULL, 'original', '925111008305', '2026-04-06 14:35:24'),
-(25059, '925111008305', 'hidup', 'Rosita Manurung ', '3175065711730007', '081311206097', 'Rusun KM 2 Blok A No.514 RT. 009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172080, '12', 3190000, 0, 'uploads/MaulanaSyafikhAlkhudri_925111008305/SertifikatTechnicianSamsungTechInstitude.pdf', '', 'G. Sitoli', NULL, 'original', '925111008305', '2026-04-11 00:20:40'),
-(25060, '925111008305', 'hidup', 'Rosita Manurung ', '3175065711730007', '081311206097', 'Rusun KM 2 Blok A No.514 RT. 009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172080, '12', 3190000, 0, '', 'uploads/MaulanaSyafikhAlkhudri_925111008305/MaulanaSyafikhAlkhudri1512625004PendidikanTeknikInformatikaKomputer.pdf', 'G. Sitoli', NULL, 'original', '925111008305', '2026-04-11 00:21:56'),
-(25061, '925111008305', 'hidup', 'Rosita Manurung ', '3175065711730007', '081311206097', 'Rusun KM 2 Blok A No.514 RT. 009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172080, '12', 3190000, 0, 'uploads/MaulanaSyafikhAlkhudri_925111008305/MaulanaSyafikhAlkhudri1512625004PendidikanTeknikInformatikaKomputer.pdf', '', 'G. Sitoli', NULL, 'original', '925111008305', '2026-04-11 00:26:02'),
-(25062, '925111008305', 'hidup', 'Rosita Manurung ', '3175065711730007', '081311206097', 'Rusun KM 2 Blok A No.514 RT. 009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172080, '12', 3190000, 0, '', 'uploads/MaulanaSyafikhAlkhudri_925111008305/PlanWorkFlowTugasIMKSistemMonitorICU.pdf', 'G. Sitoli', NULL, 'original', '925111008305', '2026-04-11 00:26:27'),
-(25063, '925111008305', 'hidup', 'Rosita Manurung ', '3175065711730007', '081311206097', 'Rusun KM 2 Blok A No.514 RT. 009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172080, '12', 3190000, 0, '', 'uploads/MaulanaSyafikhAlkhudri_925111008305/CuriculumVitaeMaulanaSyafikhAlkhudri.pdf', 'G. Sitoli', NULL, 'original', '925111008305', '2026-04-11 00:30:02'),
-(25064, '925111008305', 'hidup', 'Rosita Manurung ', '3175065711730007', '081311206097', 'Rusun KM 2 Blok A No.514 RT. 009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172080, '12', 3190000, 0, 'uploads/MaulanaSyafikhAlkhudri_925111008305/CuriculumVitaeMaulanaSyafikhAlkhudri.pdf', '', 'G. Sitoli', NULL, 'original', '925111008305', '2026-04-11 00:38:33'),
-(25065, '925111008305', 'hidup', 'Rosita Manurung ', '3175065711730007', '081311206097', 'Rusun KM 2 Blok A No.514 RT. 009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172080, '12', 3190000, 0, '', 'uploads/MaulanaSyafikhAlkhudri_925111008305/CuriculumVitaeMaulanaSyafikhAlkhudri.pdf', 'G. Sitoli', NULL, 'original', '925111008305', '2026-04-11 00:48:24'),
-(25066, '925111008305', 'hidup', 'Rosita Manurung ', '3175065711730007', '081311206097', 'Rusun KM 2 Blok A No.514 RT. 009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172080, '12', 3190000, 0, 'uploads/MaulanaSyafikhAlkhudri_925111008305/SertifikatSekretarisOSIS.pdf', '', 'G. Sitoli', NULL, 'original', '925111008305', '2026-04-11 00:52:40'),
-(25067, '925111008305', 'hidup', 'Rosita Manurung ', '3175065711730007', '081311206097', 'Rusun KM 2 Blok A No.514 RT. 009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172080, '12', 3190000, 0, '', 'uploads/MaulanaSyafikhAlkhudri_925111008305/SertifikatSekretarisOSIS.pdf', 'G. Sitoli', NULL, 'original', '925111008305', '2026-04-11 01:01:14'),
-(25068, '925111008305', 'hidup', 'Rosita Manurung ', '3175065711730007', '081311206097', 'Rusun KM 2 Blok A No.514 RT. 009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172080, '12', 3190000, 0, 'uploads/MaulanaSyafikhAlkhudri_925111008305/SertifikatTechnicianSamsungTechInstitude.pdf', 'uploads/MaulanaSyafikhAlkhudri_925111008305/SertifikatSekretarisOSIS.pdf', 'G. Sitoli', NULL, 'original', '925111008305', '2026-04-11 01:20:59'),
-(25069, '925111008305', 'hidup', 'Rosita Manurung ', '3175065711730007', '081311206097', 'Rusun KM 2 Blok A No.514 RT. 009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172080, '12', 3190000, 0, 'uploads/MaulanaSyafikhAlkhudri_925111008305/KTPIbuMaulanaSyafikhAlkhudri925111008305.pdf', 'uploads/MaulanaSyafikhAlkhudri_925111008305/SlipIbuMaulanaSyafikhAlkhudri925111008305.pdf', 'G. Sitoli', NULL, 'original', '925111008305', '2026-04-11 01:55:24');
-
 -- --------------------------------------------------------
 
 --
@@ -333,24 +253,6 @@ CREATE TABLE `log_kendaraan` (
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci ROW_FORMAT=COMPACT;
 
---
--- Dumping data for table `log_kendaraan`
---
-
-INSERT INTO `log_kendaraan` (`id_log_kendaraan`, `no_peserta`, `status_motor`, `jumlah_motor`, `pajak_motor`, `scan_motor`, `status_mobil`, `jumlah_mobil`, `pajak_mobil`, `scan_mobil`, `atribut`, `executor`, `timestamp`) VALUES
-(7903, '925111008305', '', 0, 0, '', '', 0, 0, '', 'original', '925111008305', '2025-06-25 23:32:28'),
-(10277, '925111008305', '', 2, 308000, 'file_scan_motor-925111008305-19072025201236.pdf', '', 0, 0, '', 'original', '925111008305', '2025-07-21 03:59:51'),
-(10328, '925111008305', '', 2, 308000, 'file_scan_motor-925111008305-25072025151647.pdf', '', 0, 0, '', 'original', '925111008305', '2025-07-21 03:59:51'),
-(11505, '925111008305', '', 2, 308000, 'file_scan_motor-925111008305-25072025194007.pdf', '', 0, 0, '', 'original', '925111008305', '2026-04-06 04:27:18'),
-(11506, '925111008305', '', 2, 308000, 'uploads/MaulanaSyafikhAlkhudri_925111008305/SertifikatSkilvulPythonDasar.pdf', '', 0, 0, '', 'original', '925111008305', '2026-04-06 14:35:55'),
-(11507, '925111008305', '', 2, 308000, 'uploads/MaulanaSyafikhAlkhudri_925111008305/SertifikatSkilvulPythonDasar.pdf', '', 0, 0, '', 'original', '925111008305', '2026-04-11 00:45:35'),
-(11508, '925111008305', '', 2, 308000, 'uploads/MaulanaSyafikhAlkhudri_925111008305/SertifikatLombaKompetensiSiswaTingkatJakartaPusat.pdf', '', 0, 0, '', 'original', '925111008305', '2026-04-11 01:22:11'),
-(11509, '925111008305', '', 2, 308000, 'uploads/MaulanaSyafikhAlkhudri_925111008305/STNKMotorMaulanaSyafikhAlkhudri925111008305.pdf', '', 0, 0, 'uploads/MaulanaSyafikhAlkhudri_925111008305/STNKMobilMaulanaSyafikhAlkhudri925111008305.pdf', 'original', '925111008305', '2026-04-11 01:23:23'),
-(11510, '925111008305', '', 2, 308000, 'uploads/MaulanaSyafikhAlkhudri_925111008305/STNKMotorMaulanaSyafikhAlkhudri925111008305.pdf', '', 1, 500000, 'uploads/MaulanaSyafikhAlkhudri_925111008305/STNKMobilMaulanaSyafikhAlkhudri925111008305.pdf', 'original', '925111008305', '2026-04-11 01:50:44'),
-(11511, '925111008305', '', 2, 308000, 'uploads/MaulanaSyafikhAlkhudri_925111008305/STNKMotorMaulanaSyafikhAlkhudri925111008305.pdf', '', 1, 5000000, 'uploads/MaulanaSyafikhAlkhudri_925111008305/STNKMobilMaulanaSyafikhAlkhudri925111008305.pdf', 'original', '925111008305', '2026-04-11 01:51:07'),
-(11512, '925111008305', '', 2, 3080000, 'uploads/MaulanaSyafikhAlkhudri_925111008305/STNKMotorMaulanaSyafikhAlkhudri925111008305.pdf', '', 1, 5000000, 'uploads/MaulanaSyafikhAlkhudri_925111008305/STNKMobilMaulanaSyafikhAlkhudri925111008305.pdf', 'original', '925111008305', '2026-04-11 02:02:20'),
-(11513, '925111008305', '', 2, 308000, 'uploads/MaulanaSyafikhAlkhudri_925111008305/STNKMotorMaulanaSyafikhAlkhudri925111008305.pdf', '', 1, 5000000, 'uploads/MaulanaSyafikhAlkhudri_925111008305/STNKMobilMaulanaSyafikhAlkhudri925111008305.pdf', 'original', '925111008305', '2026-04-11 02:02:35');
-
 -- --------------------------------------------------------
 
 --
@@ -369,17 +271,6 @@ CREATE TABLE `log_listrik` (
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci ROW_FORMAT=COMPACT;
 
---
--- Dumping data for table `log_listrik`
---
-
-INSERT INTO `log_listrik` (`id_log_listrik`, `no_peserta`, `no_pelanggan`, `jenis_pemakaian`, `pengeluaran`, `scan_listrik`, `atribut`, `executor`, `timestamp`) VALUES
-(11791, '925111008305', '32126574550', 'prabayar', 200665, 'file_scan_listrik-925111008305-19072025201216.pdf', 'original', '925111008305', '2026-04-06 14:35:44'),
-(11792, '925111008305', '32126574550', 'prabayar', 200665, 'uploads/MaulanaSyafikhAlkhudri_925111008305/SertifikatSoloLearn.pdf', 'original', '925111008305', '2026-04-11 00:45:24'),
-(11793, '925111008305', '32126574550', 'prabayar', 200665, 'uploads/MaulanaSyafikhAlkhudri_925111008305/SertifikatTechnicianSamsungTechInstitude.pdf', 'original', '925111008305', '2026-04-11 01:21:31'),
-(11794, '925111008305', '32126574550', 'prabayar', 200665, 'uploads/MaulanaSyafikhAlkhudri_925111008305/ListrikMaulanaSyafikhAlkhudri925111008305.pdf', 'original', '925111008305', '2026-04-11 02:12:22'),
-(11795, '925111008305', '32126574550', 'prabayar', 5000000, 'uploads/MaulanaSyafikhAlkhudri_925111008305/ListrikMaulanaSyafikhAlkhudri925111008305.pdf', 'original', '925111008305', '2026-04-11 02:13:47');
-
 -- --------------------------------------------------------
 
 --
@@ -397,27 +288,6 @@ CREATE TABLE `log_pendukung` (
   `executor` varchar(255) NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci ROW_FORMAT=COMPACT;
-
---
--- Dumping data for table `log_pendukung`
---
-
-INSERT INTO `log_pendukung` (`id_log_pendukung`, `no_peserta`, `tanggungan`, `scan_pernyataan_ukt_tinggi`, `scan_pernyataan_kebenaran`, `scan_kk`, `atribut`, `executor`, `timestamp`) VALUES
-(14387, '925111008305', 1, '', '', '', 'original', '925111008305', '2025-06-25 23:32:28'),
-(19244, '925111008305', 4, '', '', 'file_scan_kk-925111008305-19072025201251.pdf', 'original', '925111008305', '2025-07-21 03:59:51'),
-(19672, '925111008305', 4, '', '', 'file_scan_kk-925111008305-25072025105021.pdf', 'original', '925111008305', '2025-07-21 03:59:51'),
-(19674, '925111008305', 3, '', '', 'file_scan_kk-925111008305-25072025105021.pdf', 'original', '925111008305', '2025-07-21 03:59:51'),
-(19681, '925111008305', 4, '', '', 'file_scan_kk-925111008305-25072025105021.pdf', 'original', '925111008305', '2025-07-21 03:59:51'),
-(19949, '925111008305', 0, '', '', 'file_scan_kk-925111008305-25072025105021.pdf', 'original', '925111008305', '2025-07-21 03:59:51'),
-(19986, '925111008305', 4, '', '', 'file_scan_kk-925111008305-25072025105021.pdf', 'original', '925111008305', '2025-07-21 03:59:51'),
-(22834, '925111008305', 4, '', 'file_scan_pernyataan_kebenaran-925111008305-25072025233842.pdf', 'file_scan_kk-925111008305-25072025105021.pdf', 'original', '925111008305', '2026-04-06 14:36:04'),
-(22835, '925111008305', 4, '', 'file_scan_pernyataan_kebenaran-925111008305-25072025233842.pdf', 'uploads/MaulanaSyafikhAlkhudri_925111008305/SertifikatSkilvulAlgorithmDataSturcturesWithPython.pdf', 'original', '925111008305', '2026-04-11 00:46:02'),
-(22836, '925111008305', 4, '', 'file_scan_pernyataan_kebenaran-925111008305-25072025233842.pdf', 'uploads/MaulanaSyafikhAlkhudri_925111008305/SertifikatSoloLearn.pdf', 'original', '925111008305', '2026-04-11 01:22:33'),
-(22837, '925111008305', 4, '', 'file_scan_pernyataan_kebenaran-925111008305-25072025233842.pdf', 'uploads/MaulanaSyafikhAlkhudri_925111008305/KartuKeluargaMaulanaSyafikhAlkhudri925111008305.pdf', 'original', '925111008305', '2026-04-11 01:23:46'),
-(22838, '925111008305', 4, '', 'uploads/MaulanaSyafikhAlkhudri_925111008305/SuratPernyataanMaulanaSyafikhAlkhudri925111008305.pdf', 'uploads/MaulanaSyafikhAlkhudri_925111008305/KartuKeluargaMaulanaSyafikhAlkhudri925111008305.pdf', 'original', '925111008305', '2026-04-11 02:26:26'),
-(22839, '925111008305', 5, '', 'uploads/MaulanaSyafikhAlkhudri_925111008305/SuratPernyataanMaulanaSyafikhAlkhudri925111008305.pdf', 'uploads/MaulanaSyafikhAlkhudri_925111008305/KartuKeluargaMaulanaSyafikhAlkhudri925111008305.pdf', 'original', '925111008305', '2026-04-11 03:27:19'),
-(22840, '925111008305', 0, '', 'uploads/MaulanaSyafikhAlkhudri_925111008305/SuratPernyataanMaulanaSyafikhAlkhudri925111008305.pdf', 'uploads/MaulanaSyafikhAlkhudri_925111008305/KartuKeluargaMaulanaSyafikhAlkhudri925111008305.pdf', 'original', '925111008305', '2026-04-11 03:28:48'),
-(22841, '925111008305', 0, '', 'uploads/MaulanaSyafikhAlkhudri_925111008305/SuratPernyataanMaulanaSyafikhAlkhudri925111008305.pdf', 'uploads/MaulanaSyafikhAlkhudri_925111008305/KartuKeluargaMaulanaSyafikhAlkhudri925111008305.pdf', 'original', '925111008305', '2026-04-11 03:28:56');
 
 -- --------------------------------------------------------
 
@@ -441,17 +311,6 @@ CREATE TABLE `log_rumah` (
   `executor` varchar(255) NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci ROW_FORMAT=COMPACT;
-
---
--- Dumping data for table `log_rumah`
---
-
-INSERT INTO `log_rumah` (`id_log_rumah`, `no_peserta`, `status_kepemilikan`, `luas_tanah`, `luas_bangunan`, `status_sertifikat`, `biaya_pbb`, `scan_pbb`, `biaya_kontrak`, `scan_kontrak`, `jumlah_kepala_keluarga`, `atribut`, `executor`, `timestamp`) VALUES
-(8008, '925111008305', 'milik_sendiri', '', '', 'hak_milik', 0, '', 0, '', 0, 'original', '925111008305', '2025-06-25 23:32:28'),
-(10091, '925111008305', 'kontrak', '', '', '', 0, '', 5904000, 'file_scan_kontrak-925111008305-19072025201154.pdf', 1, 'original', '925111008305', '2025-07-21 03:59:51'),
-(11887, '925111008305', 'kontrak', '', '', '', 0, '', 5904000, 'file_scan_kontrak-925111008305-24072025065027.pdf', 1, 'original', '925111008305', '2026-04-06 14:33:56'),
-(11888, '925111008305', 'kontrak', '', '', '', 0, '', 5904000, 'uploads/MaulanaSyafikhAlkhudri_925111008305/SertifikatSekretarisOSIS.pdf', 1, 'original', '925111008305', '2026-04-11 00:45:15'),
-(11889, '925111008305', 'kontrak', '', '', '', 0, '', 5904000, 'uploads/MaulanaSyafikhAlkhudri_925111008305/SertifikatKetuaOsis.pdf', 1, 'original', '925111008305', '2026-04-11 01:21:22');
 
 -- --------------------------------------------------------
 
@@ -587,9 +446,9 @@ CREATE TABLE `ref_info` (
 --
 
 INSERT INTO `ref_info` (`kode`, `tanggal_mulai`, `tanggal_selesai`, `pengisian`, `pengumuman`, `klarifikasi_tanggal`, `klarifikasi_lokasi`, `pembayaran`, `lapor_diri`, `kontak`, `stage`, `stage_detail`, `tanggal_akhir`) VALUES
-(1, '2026-04-09', '2026-04-09', 'Periode pengisian data SNMPTN...', 'Pengumuman SNMPTN pada...', 'Klarifikasi berkas SNMPTN...', 'Lokasi di Gedung A...', 'hallo', 'Prosedur lapor diri SNMPTN...', 'http://t.me/snmptn_unj', 'snmptn', 'snmptn', NULL),
-(2, '2026-04-12', '2026-04-12', '1 - 8 Agustus Pukul 23:59 WIB 2026', '12 Agustus 2025 Pukul 21.00 WIB', 'WaktuPengumuman', '', 'hallooo', '28 Juli - 20 Agustus 20226', 'http://t.me/admisiunj', 'sbmptn', 'mandiri', NULL),
-(3, '2025-08-01', '2025-08-08', 'Periode pengisian data MANDIRI...', 'Pengumuman MANDIRI pada...', 'Klarifikasi berkas MANDIRI...', 'Lokasi di Gedung B...', 'Info pembayaran MANDIRI...', 'Prosedur lapor diri MANDIRI...', 'http://t.me/mandiri_unj', 'mandiri', 'mandiri', NULL);
+(1, '2026-04-09', '2026-04-09', 'Periode pengisian data SNMPTN...', 'Pengumuman SNMPTN pada...', 'Klarifikasi berkas SNBP...', 'Lokasi di Gedung A...', 'hallo', 'Prosedur lapor diri SNMPTN...', 'http://t.me/snmptn_unj', 'snmptn', 'snmptn', '2026-04-14'),
+(2, '2026-04-09', '2026-04-12', '1 - 8 Agustus Pukul 23:59 WIB 2026', 'Pengumuman SNBT pada...', 'Klarifikasi berkas SNBT...', '', 'hallooo', '28 Juli - 20 Agustus 20226', 'http://t.me/admisiunj', 'sbmptn', 'mandiri', NULL),
+(3, '2025-08-01', '2025-08-08', 'Periode pengisian data MANDIRI...', 'Pengumuman Mandiri pada...', 'Klarifikasi berkas MANDIRI...', 'Lokasi di Gedung B...', 'Info pembayaran MANDIRI...', 'Prosedur lapor diri MANDIRI...', 'http://t.me/mandiri_unj', 'mandiri', 'mandiri', '2026-04-30');
 
 -- --------------------------------------------------------
 
@@ -12451,7 +12310,8 @@ INSERT INTO `ref_ukt` (`id_ukt`, `major_id`, `entrance`, `semester`, `status`, `
 (87, '17134', 2, 107, 'aktif', 'D4', ' ', 0, 500000, 1000000, 4100000, 4300000, 4600000, 4850000, 5560000, 6400000, 2400000, 3600000, 15000000),
 (88, '17206', 2, 107, 'aktif', 'S1', '', 0, 15000000, 15000000, 150000000, 150000000, 150000000, 150000000, 15000000, 15000000, 15000000, 15000000, 15000000),
 (89, '11156', 2, 107, 'aktif', 'S1', '', 0, 500000, 1000000, 4100000, 4600000, 5200000, 6000000, 7700000, 8303000, 2400000, 3600000, 15000000),
-(90, '14176', 2, 123, 'aktif', 'S1', ' ', 0, 500000, 1000000, 4000000, 6500000, 8500000, 10000000, 11000000, 12000000, 2400000, 3600000, 15000000);
+(90, '14176', 2, 123, 'aktif', 'S1', ' ', 0, 500000, 1000000, 4000000, 6500000, 8500000, 10000000, 11000000, 12000000, 2400000, 3600000, 15000000),
+(91, '11', 1, 1, 'aktif', 'S1', 'Mock Decree', 0, 500000, 1000000, 2000000, 3000000, 4000000, 5000000, 6000000, 7000000, 2400000, 3600000, 15000000);
 
 -- --------------------------------------------------------
 
@@ -12599,53 +12459,21 @@ CREATE TABLE `ref_ukt_old` (
 
 CREATE TABLE `tb_admin` (
   `username` varchar(255) NOT NULL,
-  `nama_lengkap` varchar(100) NOT NULL,
-  `no_telepon` varchar(20) NOT NULL,
-  `role` enum('developer','operator','validator') NOT NULL
+  `nama_lengkap` varchar(255) DEFAULT NULL,
+  `no_telepon` varchar(255) DEFAULT NULL,
+  `role` enum('developer','operator','validator') DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci ROW_FORMAT=COMPACT;
 
 --
 -- Dumping data for table `tb_admin`
 --
 
-INSERT INTO `tb_admin` (`username`, `nama_lengkap`, `no_telepon`, `role`) VALUES
-('adam', 'adam', '1234567', 'operator'),
-('agung', 'agung', '1234567', 'operator'),
-('amin', 'amin', '1234567', 'operator'),
-('bisma', 'bisma', '1234567', 'operator'),
-('dyanza', 'dyanza', '1234567', 'operator'),
-('fiatuzzahro', 'fiatuzzahro', '1234567', 'operator'),
-('fildza', 'fildza', '1234567', 'operator'),
-('makuta', 'makuta', '1234567', 'operator'),
-('nath', 'nath', '1234567', 'developer'),
-('nugroho', 'nugroho', '1234567', 'developer'),
-('nurman', 'nurman', '1234567', 'developer'),
-('oprator 1', 'oprator 1', '1234567', 'operator'),
-('oprator 10', 'oprator 10', '1234567', 'operator'),
-('oprator 11', 'oprator 11', '1234567', 'operator'),
-('oprator 12', 'oprator 12', '1234567', 'operator'),
-('oprator 13', 'oprator 13', '1234567', 'operator'),
-('oprator 14', 'oprator 14', '1234567', 'operator'),
-('oprator 15', 'oprator 15', '1234567', 'operator'),
-('oprator 16', 'oprator 16', '1234567', 'operator'),
-('oprator 17', 'oprator 17', '1234567', 'operator'),
-('oprator 18', 'oprator 18', '1234567', 'operator'),
-('oprator 19', 'oprator 19', '1234567', 'operator'),
-('oprator 2', 'oprator 2', '1234567', 'operator'),
-('oprator 20', 'oprator 20', '1234567', 'operator'),
-('oprator 3', 'oprator 3', '1234567', 'operator'),
-('oprator 4', 'oprator 4', '1234567', 'operator'),
-('oprator 5', 'oprator 5', '1234567', 'operator'),
-('oprator 6', 'oprator 6', '1234567', 'operator'),
-('oprator 7', 'oprator 7', '1234567', 'operator'),
-('oprator 8', 'oprator 8', '1234567', 'operator'),
-('oprator 9', 'oprator 9', '1234567', 'operator'),
-('ramadhian', 'ramadhian', '1234567', 'operator'),
-('Revario', 'RevarioSayidina', '098765432', 'operator'),
-('rizky', 'rizky', '1234567', 'operator'),
-('SyafikhAL', 'SyafikhDev', '08123456789', 'developer'),
-('syifa', 'syifa', '1234567', 'operator'),
-('zhafran', 'zhafran', '1234567', 'operator');
+INSERT INTO `tb_admin` (`username`, `nama_lengkap`, `no_telepon`, `role`, `password`) VALUES
+('CODeveloper', 'CoDeveloper', '', 'developer', '$2a$10$UPK6fWxvTZTDgzA1u1CWGO7.ZDTyk7p3G3uWWZ/1GKNUQAFhXfTui'),
+('DeveloperUtama', 'DeveloperID', '09876543456789', 'developer', '$2a$10$.rLu2rWNWEcGlzBaOZRlAuxukRJDm1u3qK2.VFgKGd3bjZYTkXMv2'),
+('OperatorUtama', 'OperatorUtama', '0987654323456', 'operator', '$2a$10$arN.9cZ6eqb776YLpJfzR.NvrfAAAh1hRUMCjuen2vVkoPjNOtmKm'),
+('ValidatorID', 'ValidatorID', '0812345676543', 'validator', '$2a$10$do40hYouw8x3J5ANWsJHROuuSL3ygUjEcKUINZjIqObRlbBdFIxrG');
 
 -- --------------------------------------------------------
 
@@ -12679,7 +12507,9 @@ CREATE TABLE `tb_ayah` (
 --
 
 INSERT INTO `tb_ayah` (`id_ayah`, `no_peserta`, `status_ayah`, `nama_ayah`, `nik_ayah`, `telepon_ayah`, `alamat_ayah`, `provinsi_ayah`, `kabkot_ayah`, `kecamatan_ayah`, `pekerjaan_ayah`, `penghasilan_ayah`, `sampingan_ayah`, `scan_ktp_ayah`, `scan_slip_ayah`, `tempat_lahir_ayah`, `tanggal_lahir_ayah`, `atribut`) VALUES
-(4813, '925111008305', 'hidup', 'Coki Hutajulur', '3175062912750005', '081285905266', 'Rusun KM 2 Blok A No.514 RT. 009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172080, '8', 4805000, 0, 'uploads/MaulanaSyafikhAlkhudri_925111008305/KTPAyahMaulanaSyafikhAlkhudri925111008305.pdf', 'uploads/MaulanaSyafikhAlkhudri_925111008305/SlipAyahMaulanaSyafikhAlkhudri925111008305.pdf', 'LBN Bagasan ', '1975-12-29', 'original');
+(1, '426000001', 'hidup', '', '', '', '', 0, 0, 0, '', 0, 0, '', '', '', '0000-00-00', 'original'),
+(2, '426000002', 'hidup', '', '', '', '', 0, 0, 0, '', 0, 0, '', '', '', '0000-00-00', 'original'),
+(4813, '925111008305', 'hidup', 'Coki Hutajulur', '3175062912750005', '081285905266', 'Rusun KM 2 Blok A No.514 RT. 009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172080, '8', 4805000, 0, 'uploads/MaulanaSyafikhAlkhudri_925111008305/Original/KTP_Ayah_MaulanaSyafikhAlkhudri_925111008305.pdf', 'uploads/MaulanaSyafikhAlkhudri_925111008305/Original/Slip_Ayah_MaulanaSyafikhAlkhudri_925111008305.pdf', 'LBN Bagasan ', '1975-12-29', 'original');
 
 -- --------------------------------------------------------
 
@@ -12727,7 +12557,9 @@ CREATE TABLE `tb_cmahasiswa` (
 --
 
 INSERT INTO `tb_cmahasiswa` (`id_cmahasiswa`, `no_peserta`, `nama_cmahasiswa`, `bidik_misi_cmahasiswa`, `fakultas_cmahasiswa`, `prodi_cmahasiswa`, `jalur_cmahasiswa`, `sosmed_cmahasiswa`, `alamat_cmahasiswa`, `provinsi_cmahasiswa`, `kabkot_cmahasiswa`, `kecamatan_cmahasiswa`, `gender_cmahasiswa`, `telepon_cmahasiswa`, `goldar_cmahasiswa`, `tempat_lahir_cmahasiswa`, `tanggal_lahir_cmahasiswa`, `foto_cmahasiswa`, `penghasilan_cmahasiswa`, `golongan_id`, `ukt_tinggi`, `flag`, `waktu_mulai`, `waktu_selesai`, `atribut`, `tagihan`, `no_registrasi`, `penalty`, `beasiswa`, `spu`, `keterangan_beasiswa`, `keterangan`) VALUES
-(7396, '925111008305', 'Maulana Syafikh Alkhudri', 'Tidak', 18, '18016', 2, 'valeennnr', 'Rusun KM 2 Blok A No.514 RT. 009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172010, 'laki-laki', '081290153149', 'B', 'Jakarta ', '0000-00-00', 'uploads/MaulanaSyafikhAlkhudri_925111008305/Profile_MaulanaSyafikhAlkhudri_925111008305.jpeg', 0, 'VII', 'ya', 'pengisian', '2026-04-11 12:56:50', '2026-04-06 21:31:35', 'original', '253925111008305', '', '0', 0, 26900000, '0', NULL);
+(1, '426000001', 'Mahasiswa1', 'Tidak', 11, '15206', 1, '', '', 0, 0, 0, 'laki-laki', '', 'A', '', '0000-00-00', 'uploads/Mahasiswa1_426000001/Original/Profile_Mahasiswa1_426000001.jpeg', 1000000, 'VIII', 'tidak', 'pengumuman', '2026-04-12 12:50:42', '0000-00-00 00:00:00', 'original', '', NULL, '0', 0, 0, '0', NULL),
+(2, '426000002', 'Mahasiswa2', 'Tidak', 11, '15196', 2, '', '', 0, 0, 0, '', '', '', '', '2005-02-02', '', 0, 'VIII', NULL, 'belum_isi', '2026-04-11 23:34:01', '0000-00-00 00:00:00', 'original', '', NULL, '0', 0, 0, '0', NULL),
+(7396, '925111008305', 'Maulana Syafikh Alkhudri', 'Tidak', 18, '18016', 2, 'valeennnr', 'Rusun KM 2 Blok A No.514 RT. 009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172010, 'laki-laki', '081290153149', 'AB', 'Jakarta ', '0001-01-01', 'uploads/MaulanaSyafikhAlkhudri_925111008305/Original/Profile_MaulanaSyafikhAlkhudri_925111008305.jpg', 0, 'VI', 'tidak', 'tidak_konfirm', '2026-04-12 12:58:21', '2026-04-12 17:56:44', 'original', '253925111008305', '', '0', 0, 26900000, '0', NULL);
 
 -- --------------------------------------------------------
 
@@ -12852,9 +12684,9 @@ CREATE TABLE `tb_ibu` (
 --
 
 INSERT INTO `tb_ibu` (`id_ibu`, `no_peserta`, `status_ibu`, `nama_ibu`, `nik_ibu`, `telepon_ibu`, `alamat_ibu`, `provinsi_ibu`, `kabkot_ibu`, `kecamatan_ibu`, `pekerjaan_ibu`, `penghasilan_ibu`, `sampingan_ibu`, `scan_ktp_ibu`, `scan_slip_ibu`, `tempat_lahir_ibu`, `tanggal_lahir_ibu`, `atribut`) VALUES
-(4813, '925111008305', 'hidup', 'Rosita Manurungin', '3175065711730007', '081311206097', 'Rusun KM 2 Blok A No.514 RT. 009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172080, '12', 3190000, 0, 'uploads/MaulanaSyafikhAlkhudri_925111008305/KTPIbuMaulanaSyafikhAlkhudri925111008305.pdf', 'uploads/MaulanaSyafikhAlkhudri_925111008305/SlipIbuMaulanaSyafikhAlkhudri925111008305.pdf', 'G. Sitoli', NULL, 'original'),
-(7329, '925111008305', 'hidup', 'Rosita Manurung ', '3175065711730007', '081311206097', 'Rusun KM 2 Blok A No.514 RT. 009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172080, '12', 3190000, 0, 'file_scan_ktp_ibu-925111008305-25072025224805.pdf', 'file_scan_slip_ibu-925111008305-25072025223858.pdf', 'G. Sitoli', '1975-11-17', 'sanggah'),
-(7572, '925111008305', 'hidup', 'Rosita Manurung ', '3175065711730007', '081311206097', 'Rusun KM 2 Blok A No.514 RT. 009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172080, '12', 3190000, 0, 'file_scan_ktp_ibu-925111008305-25072025224805.pdf', 'file_scan_slip_ibu-925111008305-25072025223858.pdf', 'G. Sitoli', '1975-11-17', 'sanggah');
+(1, '426000001', 'hidup', '', '', '', '', 0, 0, 0, '', 0, 0, '', '', '', NULL, 'original'),
+(2, '426000002', 'hidup', '', '', '', '', 0, 0, 0, '', 0, 0, '', '', '', NULL, 'original'),
+(4813, '925111008305', 'hidup', 'Rosita Manurungin', '3175065711730007', '081311206097', 'Rusun KM 2 Blok A No.514 RT. 009 RW.001, Kelurahan Cakung Barat.', 31, 3172, 3172080, '12', 3190000, 0, 'uploads/MaulanaSyafikhAlkhudri_925111008305/KTPIbuMaulanaSyafikhAlkhudri925111008305.pdf', 'uploads/MaulanaSyafikhAlkhudri_925111008305/SlipIbuMaulanaSyafikhAlkhudri925111008305.pdf', 'G. Sitoli', NULL, 'original');
 
 -- --------------------------------------------------------
 
@@ -12881,9 +12713,9 @@ CREATE TABLE `tb_kendaraan` (
 --
 
 INSERT INTO `tb_kendaraan` (`id_kendaraan`, `no_peserta`, `status_motor`, `jumlah_motor`, `pajak_motor`, `scan_motor`, `status_mobil`, `jumlah_mobil`, `pajak_mobil`, `scan_mobil`, `atribut`) VALUES
-(4813, '925111008305', 'ada', 2, 308000, 'uploads/MaulanaSyafikhAlkhudri_925111008305/STNKMotorMaulanaSyafikhAlkhudri925111008305.pdf', 'ada', 1, 500000, 'uploads/MaulanaSyafikhAlkhudri_925111008305/STNKMobilMaulanaSyafikhAlkhudri925111008305.pdf', 'original'),
-(7329, '925111008305', 'ada', 2, 308000, 'file_scan_motor-925111008305-25072025194007.pdf', 'tidak', 0, 0, '', 'sanggah'),
-(7572, '925111008305', 'ada', 2, 308000, 'file_scan_motor-925111008305-25072025194007.pdf', 'tidak', 0, 0, '', 'sanggah');
+(1, '426000001', 'ada', 0, 0, '', 'ada', 0, 0, '', 'original'),
+(2, '426000002', 'ada', 0, 0, '', 'ada', 0, 0, '', 'original'),
+(4813, '925111008305', 'ada', 2, 308000, 'uploads/MaulanaSyafikhAlkhudri_925111008305/STNKMotorMaulanaSyafikhAlkhudri925111008305.pdf', 'ada', 1, 500000, 'uploads/MaulanaSyafikhAlkhudri_925111008305/STNKMobilMaulanaSyafikhAlkhudri925111008305.pdf', 'original');
 
 -- --------------------------------------------------------
 
@@ -12906,9 +12738,9 @@ CREATE TABLE `tb_listrik` (
 --
 
 INSERT INTO `tb_listrik` (`id_listrik`, `no_peserta`, `no_pelanggan`, `jenis_pemakaian`, `pengeluaran`, `scan_listrik`, `atribut`) VALUES
-(4813, '925111008305', '32126574550', 'prabayar', 500000, 'uploads/MaulanaSyafikhAlkhudri_925111008305/ListrikMaulanaSyafikhAlkhudri925111008305.pdf', 'original'),
-(7329, '925111008305', '32126574550', 'prabayar', 200665, 'file_scan_listrik-925111008305-19072025201216.pdf', 'sanggah'),
-(7572, '925111008305', '32126574550', 'prabayar', 200665, 'file_scan_listrik-925111008305-19072025201216.pdf', 'sanggah');
+(1, '426000001', '', 'prabayar', 0, '', 'original'),
+(2, '426000002', '', 'prabayar', 0, '', 'original'),
+(4813, '925111008305', '32126574550', 'prabayar', 500000, 'uploads/MaulanaSyafikhAlkhudri_925111008305/ListrikMaulanaSyafikhAlkhudri925111008305.pdf', 'original');
 
 -- --------------------------------------------------------
 
@@ -12931,9 +12763,9 @@ CREATE TABLE `tb_pendukung` (
 --
 
 INSERT INTO `tb_pendukung` (`id_pendukung`, `no_peserta`, `tanggungan`, `scan_pernyataan_ukt_tinggi`, `scan_pernyataan_kebenaran`, `scan_kk`, `atribut`) VALUES
-(4813, '925111008305', 10, '', 'uploads/MaulanaSyafikhAlkhudri_925111008305/SuratPernyataanMaulanaSyafikhAlkhudri925111008305.pdf', 'uploads/MaulanaSyafikhAlkhudri_925111008305/KartuKeluargaMaulanaSyafikhAlkhudri925111008305.pdf', 'original'),
-(7329, '925111008305', 4, '', 'file_scan_pernyataan_kebenaran-925111008305-25072025233842.pdf', 'file_scan_kk-925111008305-25072025105021.pdf', 'sanggah'),
-(7572, '925111008305', 4, '', 'file_scan_pernyataan_kebenaran-925111008305-25072025233842.pdf', 'file_scan_kk-925111008305-25072025105021.pdf', 'sanggah');
+(1, '426000001', 1, '', '', '', 'original'),
+(2, '426000002', 1, '', '', '', 'original'),
+(4813, '925111008305', 10, '', 'uploads/MaulanaSyafikhAlkhudri_925111008305/SuratPernyataanMaulanaSyafikhAlkhudri925111008305.pdf', 'uploads/MaulanaSyafikhAlkhudri_925111008305/Original/Kartu_Keluarga_MaulanaSyafikhAlkhudri_925111008305.pdf', 'original');
 
 -- --------------------------------------------------------
 
@@ -12961,9 +12793,9 @@ CREATE TABLE `tb_rumah` (
 --
 
 INSERT INTO `tb_rumah` (`id_rumah`, `no_peserta`, `status_kepemilikan`, `luas_tanah`, `luas_bangunan`, `status_sertifikat`, `biaya_pbb`, `scan_pbb`, `biaya_kontrak`, `scan_kontrak`, `jumlah_kepala_keluarga`, `atribut`) VALUES
-(4813, '925111008305', 'kontrak', '', '', '', 0, '', 5904000, 'uploads/MaulanaSyafikhAlkhudri_925111008305/KontrakRumahMaulanaSyafikhAlkhudri925111008305.pdf', 1, 'original'),
-(7329, '925111008305', 'kontrak', '', '', '', 0, '', 5904000, 'file_scan_kontrak-925111008305-24072025065027.pdf', 1, 'sanggah'),
-(7572, '925111008305', 'kontrak', '', '', '', 0, '', 5904000, 'file_scan_kontrak-925111008305-24072025065027.pdf', 1, 'sanggah');
+(1, '426000001', 'milik_sendiri', '', '', 'hak_milik', 0, '', 0, '', 0, 'original'),
+(2, '426000002', 'milik_sendiri', '', '', 'hak_milik', 0, '', 0, '', 0, 'original'),
+(4813, '925111008305', 'kontrak', '', '', '', 0, '', 5904000, 'uploads/MaulanaSyafikhAlkhudri_925111008305/KontrakRumahMaulanaSyafikhAlkhudri925111008305.pdf', 1, 'original');
 
 -- --------------------------------------------------------
 
@@ -12974,7 +12806,7 @@ INSERT INTO `tb_rumah` (`id_rumah`, `no_peserta`, `status_kepemilikan`, `luas_ta
 CREATE TABLE `tb_user` (
   `no_peserta` varchar(20) NOT NULL,
   `password` mediumtext NOT NULL,
-  `role` enum('cmahasiswa','admin','menunggu pengumuman','belum_lengkap') NOT NULL,
+  `role` enum('cmahasiswa','developer','operator','validator','belum_lengkap') NOT NULL DEFAULT 'cmahasiswa',
   `jalur_masuk` varchar(100) DEFAULT NULL,
   `pwsave` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci ROW_FORMAT=COMPACT;
@@ -12984,9 +12816,9 @@ CREATE TABLE `tb_user` (
 --
 
 INSERT INTO `tb_user` (`no_peserta`, `password`, `role`, `jalur_masuk`, `pwsave`) VALUES
-('925111008305', '$2b$10$c0p42Qz3KNwWGYw1EB247O3zgsle9TzAxeTtCsE1qZ.JUqIkKsOVe', 'cmahasiswa', '1', NULL),
-('Revario', '$2a$10$qPIfEh1sX7Lq1307eFw.TexmB6FoZSv42hJpqAsh6YQnjY/Nv261W', 'admin', NULL, NULL),
-('SyafikhAL', '$2a$10$kz.x2qb.Lr7p1k4kf2TpsuvBfkiy3qwNy3gw0McRdV.9dmOScBvQ.', 'admin', NULL, NULL);
+('426000001', '$2a$10$6pQ1RyNzntzQgtnmvMpzQOfiz0VwuJfiBqmO8MDw6L6bwob8NRLrC', 'cmahasiswa', '1', NULL),
+('426000002', '$2a$10$KJLPmLu7yk56GOmRH1trq.mfRPFgAEhRSVLtwRkTeN3kPtfaH8sHu', 'cmahasiswa', '3', NULL),
+('925111008305', '$2b$10$c0p42Qz3KNwWGYw1EB247O3zgsle9TzAxeTtCsE1qZ.JUqIkKsOVe', 'cmahasiswa', '2', NULL);
 
 -- --------------------------------------------------------
 
@@ -13035,6 +12867,14 @@ CREATE TABLE `tb_value` (
   `atribut` enum('original','sanggah') DEFAULT 'original'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci ROW_FORMAT=COMPACT;
 
+--
+-- Dumping data for table `tb_value`
+--
+
+INSERT INTO `tb_value` (`id_value`, `no_peserta`, `v1`, `v2`, `v3`, `v4`, `v5`, `av1`, `bv2`, `cv3`, `dv4`, `ev5`, `ikb`, `atribut`) VALUES
+(1, '426000001', 21804000, 0, 0, 0, 0, 91576800, 0, 0, 0, 0, 91576800, 'original'),
+(2, '426000002', 11, 0, 0, 0, 0, 46, 0, 0, 0, 0, 46, 'original');
+
 -- --------------------------------------------------------
 
 --
@@ -13065,6 +12905,8 @@ CREATE TABLE `tb_verifikasi` (
 --
 
 INSERT INTO `tb_verifikasi` (`id_verifikasi`, `no_peserta`, `ver_akademik`, `ket_akademik`, `ver_keterampilan`, `ket_keterampilan`, `ver_bidik_misi`, `ket_bidik_misi`, `ver_kjmu`, `ket_kjmu`, `ver_kipk`, `ket_kipk`, `ver_beasiswa_japres`, `ket_beasiswa_japres`, `status_beasiswa_kerjasama`, `ket_beasiswa_kerjasama`) VALUES
+(1, '426000001', NULL, '', NULL, '', NULL, '', NULL, '', NULL, '', NULL, '', NULL, ''),
+(2, '426000002', NULL, '', NULL, '', NULL, '', NULL, '', NULL, '', NULL, '', NULL, ''),
 (4813, '925111008305', NULL, '', NULL, '', NULL, '', NULL, '', NULL, '', NULL, '', NULL, '');
 
 -- --------------------------------------------------------
@@ -13094,6 +12936,8 @@ CREATE TABLE `tb_verifikasi_akademik` (
 --
 
 INSERT INTO `tb_verifikasi_akademik` (`id_verifikasi_raport`, `no_peserta`, `semester_1`, `semester_2`, `semester_3`, `semester_4`, `semester_5`, `kartu_peserta`, `jenis_beasiswa`, `bukti_beasiswa`, `surat_sekolah`, `flag`, `waktu_selesai`) VALUES
+(1, '426000001', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'belum_mengisi', '0000-00-00 00:00:00'),
+(2, '426000002', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'belum_mengisi', '0000-00-00 00:00:00'),
 (4813, '925111008305', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'belum_mengisi', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
@@ -13121,9 +12965,9 @@ CREATE TABLE `tb_wali` (
 --
 
 INSERT INTO `tb_wali` (`id_wali`, `no_peserta`, `status_wali`, `nama_wali`, `alamat_wali`, `provinsi_wali`, `kabkot_wali`, `kecamatan_wali`, `kesanggupan_wali`, `scan_wali`, `atribut`) VALUES
-(4813, '925111008305', 'ada', 'werg', 'sdijsjdisj', 32, 3202, 3202041, 10000000, 'uploads/MaulanaSyafikhAlkhudri_925111008305/SuratWaliMaulanaSyafikhAlkhudri925111008305.pdf', 'original'),
-(7329, '925111008305', 'tidak', '', '', 0, 0, 0, 0, '', 'sanggah'),
-(7572, '925111008305', 'tidak', '', '', 0, 0, 0, 0, '', 'sanggah');
+(1, '426000001', 'tidak', '', '', 0, 0, 0, 0, '', 'original'),
+(2, '426000002', 'tidak', '', '', 0, 0, 0, 0, '', 'original'),
+(4813, '925111008305', 'ada', 'werg', 'sdijsjdisj', 32, 3202, 3202041, 10000000, 'uploads/MaulanaSyafikhAlkhudri_925111008305/SuratWaliMaulanaSyafikhAlkhudri925111008305.pdf', 'original');
 
 --
 -- Indexes for dumped tables
@@ -13440,7 +13284,7 @@ ALTER TABLE `captcha`
 -- AUTO_INCREMENT for table `log_ayah`
 --
 ALTER TABLE `log_ayah`
-  MODIFY `id_log_ayah` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24877;
+  MODIFY `id_log_ayah` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24880;
 
 --
 -- AUTO_INCREMENT for table `log_cmahasiswa`
@@ -13452,7 +13296,7 @@ ALTER TABLE `log_cmahasiswa`
 -- AUTO_INCREMENT for table `log_ibu`
 --
 ALTER TABLE `log_ibu`
-  MODIFY `id_log_ibu` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25070;
+  MODIFY `id_log_ibu` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25072;
 
 --
 -- AUTO_INCREMENT for table `log_kendaraan`
@@ -13470,13 +13314,13 @@ ALTER TABLE `log_listrik`
 -- AUTO_INCREMENT for table `log_pendukung`
 --
 ALTER TABLE `log_pendukung`
-  MODIFY `id_log_pendukung` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22842;
+  MODIFY `id_log_pendukung` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22843;
 
 --
 -- AUTO_INCREMENT for table `log_rumah`
 --
 ALTER TABLE `log_rumah`
-  MODIFY `id_log_rumah` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11890;
+  MODIFY `id_log_rumah` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11891;
 
 --
 -- AUTO_INCREMENT for table `log_value`
@@ -13500,7 +13344,7 @@ ALTER TABLE `ref_bobot`
 -- AUTO_INCREMENT for table `ref_info`
 --
 ALTER TABLE `ref_info`
-  MODIFY `kode` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `kode` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `ref_kuota`
@@ -13512,7 +13356,7 @@ ALTER TABLE `ref_kuota`
 -- AUTO_INCREMENT for table `ref_ukt`
 --
 ALTER TABLE `ref_ukt`
-  MODIFY `id_ukt` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
+  MODIFY `id_ukt` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=92;
 
 --
 -- AUTO_INCREMENT for table `ref_ukt_2`
@@ -13530,13 +13374,13 @@ ALTER TABLE `ref_ukt_old`
 -- AUTO_INCREMENT for table `tb_ayah`
 --
 ALTER TABLE `tb_ayah`
-  MODIFY `id_ayah` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7708;
+  MODIFY `id_ayah` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7730;
 
 --
 -- AUTO_INCREMENT for table `tb_cmahasiswa`
 --
 ALTER TABLE `tb_cmahasiswa`
-  MODIFY `id_cmahasiswa` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7826;
+  MODIFY `id_cmahasiswa` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7863;
 
 --
 -- AUTO_INCREMENT for table `tb_cmahasiswa_copy1`
@@ -13554,31 +13398,31 @@ ALTER TABLE `tb_cmahasiswa_sanggah`
 -- AUTO_INCREMENT for table `tb_ibu`
 --
 ALTER TABLE `tb_ibu`
-  MODIFY `id_ibu` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7708;
+  MODIFY `id_ibu` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7730;
 
 --
 -- AUTO_INCREMENT for table `tb_kendaraan`
 --
 ALTER TABLE `tb_kendaraan`
-  MODIFY `id_kendaraan` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7708;
+  MODIFY `id_kendaraan` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7742;
 
 --
 -- AUTO_INCREMENT for table `tb_listrik`
 --
 ALTER TABLE `tb_listrik`
-  MODIFY `id_listrik` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7708;
+  MODIFY `id_listrik` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7742;
 
 --
 -- AUTO_INCREMENT for table `tb_pendukung`
 --
 ALTER TABLE `tb_pendukung`
-  MODIFY `id_pendukung` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7708;
+  MODIFY `id_pendukung` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7742;
 
 --
 -- AUTO_INCREMENT for table `tb_rumah`
 --
 ALTER TABLE `tb_rumah`
-  MODIFY `id_rumah` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7708;
+  MODIFY `id_rumah` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7742;
 
 --
 -- AUTO_INCREMENT for table `tb_value`
@@ -13590,7 +13434,7 @@ ALTER TABLE `tb_value`
 -- AUTO_INCREMENT for table `tb_verifikasi`
 --
 ALTER TABLE `tb_verifikasi`
-  MODIFY `id_verifikasi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7238;
+  MODIFY `id_verifikasi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7239;
 
 --
 -- AUTO_INCREMENT for table `tb_verifikasi_akademik`
@@ -13602,7 +13446,7 @@ ALTER TABLE `tb_verifikasi_akademik`
 -- AUTO_INCREMENT for table `tb_wali`
 --
 ALTER TABLE `tb_wali`
-  MODIFY `id_wali` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7708;
+  MODIFY `id_wali` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7742;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
