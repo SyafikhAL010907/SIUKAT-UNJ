@@ -17,7 +17,8 @@ vendor/
 .idea/
 *.swp
 
-
+# Student Uploads
+uploads/
 
 !*.md
 
