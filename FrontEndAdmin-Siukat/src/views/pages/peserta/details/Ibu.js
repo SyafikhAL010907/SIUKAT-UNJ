@@ -18,7 +18,6 @@ let FormIbu = (props) => {
         const val = e.target.value;
         if (val) {
             dispatch(kabkot.fetchForIbu(val))
-            // Reset kabupaten dan kecamatan di store agar tidak rancu
             dispatch(kecamatan.fetchForIbu({type: "FETCH_KECAMATAN_FULFILLED", payload: []}))
         }
     }
@@ -227,12 +226,36 @@ class Ibu extends React.Component{
         var formData = new FormData()
         
         for(var key in values){
+            // 1. Handle Files
             if(key.startsWith("file_scan") && values[key] && values[key][0] instanceof File){
                 formData.append(key, values[key][0])   
                 if(document.getElementById(key)) document.getElementById(key).value = null;     
-            } else if (!key.startsWith("file_scan") && !key.startsWith("scan_")) {
-                formData.append(key, values[key] === null ? "" : values[key])
+            } 
+            // 2. Handle Data Fields (Menyesuaikan dengan Model Golang)
+            else if (!key.startsWith("file_scan") && !key.startsWith("scan_")) {
+                let val = values[key];
+                
+                // Konversi eksplisit ke Integer untuk field yang di Go bertipe 'int'
+                if (key === 'pekerjaan_ibu' || key === 'penghasilan_ibu' || key === 'sampingan_ibu') {
+                    // Cek jika val adalah object (sering terjadi pada dropdown library tertentu)
+                    if (val && typeof val === 'object') {
+                        val = val.kode || val.id || 0;
+                    }
+                    // Pastikan dikirim sebagai string angka murni (Integer di Backend)
+                    // Jika kosong kirim "0" agar backend tidak error saat parsing int
+                    val = (val === null || val === undefined || val === "") ? "0" : parseInt(val).toString();
+                } else {
+                    // Field String lainnya
+                    val = (val === null || val === undefined) ? "" : val.toString();
+                }
+                
+                formData.append(key, val);
             }
+        }
+
+        // Pastikan atribut ditambahkan agar query update di backend tepat sasaran
+        if (!formData.has('atribut')) {
+            formData.append('atribut', this.props.atribut || 'original');
         }
 
         return this.props.dispatch(ibu.updateData(token, formData, this.props.noPeserta)).then((res) => {
