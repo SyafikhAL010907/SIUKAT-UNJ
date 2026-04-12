@@ -23,13 +23,14 @@ func (s *UsersService) GetUser(noPeserta string) (interface{}, error) {
 	}
 
 	// 3. Handle Admin
-	if user.Role == "admin" {
-		log.Printf("DEBUG [GetUser]: User [%s] is an Admin", cleanNoPeserta)
+	if user.Role == "admin" || user.Role == "developer" || user.Role == "operator" || user.Role == "validator" {
+		log.Printf("DEBUG [GetUser]: User [%s] is an Admin/Staff (Role: %s)", cleanNoPeserta, user.Role)
 		var admin models.Admin
 		if err := config.DB.Where("username = ?", cleanNoPeserta).First(&admin).Error; err == nil {
 			return admin, nil
 		}
-		return admin, nil
+		// Fallback empty admin if not in tb_admin, so frontend at least doesn't crash 500
+		return models.Admin{Username: cleanNoPeserta, Role: user.Role}, nil
 	}
 
 	// 4. Handle Student (CMahasiswa) - ATOMIC ROBUST SEARCH WITH PRELOAD

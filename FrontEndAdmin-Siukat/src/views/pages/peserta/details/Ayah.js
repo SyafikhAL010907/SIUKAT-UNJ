@@ -66,7 +66,7 @@ let FormAyah = (props) => {
                                 <Col md={5}>
                                     <Field component={InputFileBs} type="file" className="form-control" name="file_scan_ktp_ayah" id="file_scan_ktp_ayah" />
                                 </Col>
-                                { props.initialValues.scan_ktp_ayah && (
+                                { props.initialValues && props.initialValues.scan_ktp_ayah && (
                                     <Col md={4}>
                                         <a href={storage+"/"+props.initialValues.scan_ktp_ayah} target="_blank" rel="noopener noreferrer" className="btn btn-success btn-block"><i className="fa fa-file"></i> Lihat KTP Ayah</a>
                                     </Col>
@@ -80,7 +80,7 @@ let FormAyah = (props) => {
                                 <Col md={4} xs={12}>
                                     <Field name="tanggal_lahir_ayah" component={InputDayPicker} startYear={1950} placeholder="Tanggal Lahir"/>
                                 </Col>
-                            </FormGroup>                     
+                            </FormGroup>                       
                             <FormGroup row>
                                 <Label for="alamat_ayah" md={3}>Alamat Lengkap</Label>
                                 <Col md={9}>
@@ -136,7 +136,7 @@ let FormAyah = (props) => {
                             <FormGroup row>
                                 <Label for="penghasilan_ayah" md={3}>Penghasilan</Label>
                                 <Col md={5} xs={12}>
-                                    <Field type="number" component={InputBs} pattern="[0-9]*" title="Hanya isi dengan angka (0-9)" name="penghasilan_ayah" id="penghasilan_ayah" placeholder="Penghasilan Ayah" validate={[ money ]}/>
+                                    <Field type="number" component={InputBs} name="penghasilan_ayah" id="penghasilan_ayah" placeholder="Penghasilan Ayah" validate={[ money ]}/>
                                     <FormText color="muted">
                                         <ul className="list-reset">
                                             <li>Penghasilan <b>per bulan</b>;</li>
@@ -151,7 +151,7 @@ let FormAyah = (props) => {
                             <FormGroup row>
                                 <Label for="sampingan_ayah" md={3}>Sampingan</Label>
                                 <Col md={5} xs={12}>
-                                    <Field type="number" component={InputBs} pattern="[0-9]*" title="Hanya isi dengan angka (0-9)" name="sampingan_ayah" id="sampingan_ayah" placeholder="Penghasilan Sampingan Ayah"/>
+                                    <Field type="number" component={InputBs} name="sampingan_ayah" id="sampingan_ayah" placeholder="Penghasilan Sampingan Ayah"/>
                                     <FormText color="muted">
                                         <ul className="list-reset">
                                             <li>Sampingan <b>per bulan</b>;</li>
@@ -168,7 +168,7 @@ let FormAyah = (props) => {
                                 <Col md={5}>
                                     <Field component={InputFileBs} type="file" name="file_scan_slip_ayah" id="file_scan_slip_ayah" />
                                 </Col>
-                                { props.initialValues.scan_slip_ayah && (
+                                { props.initialValues && props.initialValues.scan_slip_ayah && (
                                     <Col md={4}>
                                         <a href={storage+"/"+props.initialValues.scan_slip_ayah} target="_blank" rel="noopener noreferrer" className="btn btn-success btn-block"><i className="fa fa-file"></i> Lihat Slip Gaji Ayah</a>
                                     </Col>
@@ -183,16 +183,16 @@ let FormAyah = (props) => {
                                     </FormText>
                                 </Col>
                             </FormGroup>
-                        </div>
-                    )}
-                </form>
 
-                <div className="mt-10 flex justify-end space-x-3 border-t pt-6">
+                             <div className="mt-10 flex justify-end space-x-3 border-t pt-6">
                     <button type="button" onClick={handleToggleAyah} className="px-6 py-2.5 font-bold text-gray-500">Batal</button>
                     <button type="submit" disabled={pristine || submitting} className="bg-emerald-600 text-white px-8 py-2.5 rounded-xl font-bold shadow-lg">
                         <i className="fa fa-save mr-2"></i> Simpan Perubahan
                     </button>
                 </div>
+                        </div>
+                    )}
+                </form>
             </div>
         </Modal>
     )
@@ -208,47 +208,66 @@ class Ayah extends React.Component{
         this.modalToggle = this.modalToggle.bind(this)
         this.submitAyah = this.submitAyah.bind(this)
     }
-    componentWillMount(){
-        this.props.dispatch(pekerjaan.fetchPekerjaan(cookies.get(cookieName)))
+
+    componentDidMount(){
+        const token = cookies.get(cookieName);
+        this.props.dispatch(pekerjaan.fetchPekerjaan(token))
         this.props.dispatch(provinsi.fetchProvinsi())
-        this.props.dispatch(ayah.fetchAllData(cookies.get(cookieName), this.props.noPeserta, this.props.atribut))
+        this.props.dispatch(ayah.fetchAllData(token, this.props.noPeserta, this.props.atribut))
     }
 
-    componentDidMount() {
-        // Otomatis buka modal jika navigasi datang dari button "Sanggah" di DataTable
-        const { location } = this.props;
-        if (location.state && location.state.modeEdit) {
-            setTimeout(() => {
-                this.setState({ modalToggle: true });
-            }, 800);
+    componentDidUpdate(prevProps) {
+        if (this.props.ayah && prevProps.ayah !== this.props.ayah) {
+            const data = this.props.ayah;
+            if (data.provinsi_ayah) {
+                this.props.dispatch(kabkot.fetchForAyah(data.provinsi_ayah));
+            }
+            if (data.kabkot_ayah) {
+                this.props.dispatch(kecamatan.fetchForAyah(data.kabkot_ayah));
+            }
         }
     }
+
     modalToggle = () => {
         this.setState({
             modalToggle: !this.state.modalToggle
         })
     }
+
     submitAyah = (values) => {
-        this.setState({
-            modalToggle: !this.state.modalToggle
-        })
         var formData = new FormData()
-        for(var key in values){
-            var file = key.startsWith("file_scan") ? key : null
-            if(file){
-                formData.append(key, values[key][0])   
-                document.getElementById(file).value = null;     
-            }else{
-                formData.append(key, values[key])
+        for (var key in values) {
+            if (key.startsWith("file_scan")) {
+                if (values[key] && values[key][0]) {
+                    formData.append(key, values[key][0])
+                    const fileInput = document.getElementById(key);
+                    if (fileInput) fileInput.value = null;
+                }
+            } else {
+                // PENERAPAN FIX: Pastikan value tidak null/undefined sebelum di append
+                let val = values[key];
+                
+                // Jika value adalah object (biasanya dari store referensi), ambil ID/Kode nya
+                if (val && typeof val === 'object' && !Array.isArray(val)) {
+                    val = val.kode || val.id || val.provinsi_id || val.kab_id || val.kecam_id || val;
+                }
+
+                // Append ke FormData, jika null jadikan string kosong
+                formData.append(key, val === null || val === undefined ? "" : val)
             }
         }
-        this.props.dispatch(ayah.updateData(cookies.get(cookieName), formData, this.props.noPeserta)).then(() => {
-            this.modalToggle();
-            // Refetch data agar tampilan InfoItem langsung terupdate
-            this.props.dispatch(ayah.fetchAllData(cookies.get(cookieName), this.props.noPeserta, this.props.atribut))
-        })
-        this.props.dispatch(reset('DataAyahSeleksi'))        
+
+        this.props.dispatch(ayah.updateData(cookies.get(cookieName), formData, this.props.noPeserta))
+            .then(() => {
+                this.setState({ modalToggle: false });
+                this.props.dispatch(ayah.fetchAllData(cookies.get(cookieName), this.props.noPeserta, this.props.atribut));
+                this.props.dispatch(reset('DataAyahSeleksi'));
+            })
+            .catch((err) => {
+                console.error("Gagal mengupdate data ayah:", err);
+            });
     }
+
     render(){
         const { ayah, location } = this.props;
         const data = ayah || {}
@@ -256,7 +275,6 @@ class Ayah extends React.Component{
 
         return (
             <div className="space-y-4">
-                {/* Banner Notifikasi Mode Sanggah */}
                 {isModeSanggah && (
                     <div className="mb-4 p-4 bg-orange-50 border border-orange-200 rounded-2xl flex items-center text-orange-700 animate-pulse">
                         <i className="fa fa-info-circle mr-3 text-xl"></i>
@@ -264,7 +282,6 @@ class Ayah extends React.Component{
                     </div>
                 )}
 
-                {/* Header */}
                 <div className="flex justify-between items-end border-b border-gray-200 pb-4">
                     <div>
                         <h4 className="text-xl font-black text-gray-800 tracking-tight flex items-center gap-2">
@@ -279,7 +296,6 @@ class Ayah extends React.Component{
                     )}
                 </div>
 
-                {/* Card Tabel */}
                 <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
                     <div className="p-4 border-b bg-emerald-50 flex items-center gap-2 font-bold">
                         <i className="fa fa-user text-emerald-700"></i>
@@ -324,7 +340,7 @@ class Ayah extends React.Component{
                                     <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Alamat</td>
                                     <td className="p-4 text-gray-700">
                                         { data.provinsi != null
-                                            ? `${data.alamat_ayah}, ${data.kecamatan.kecam_nama}, ${data.kabkot.kab_nama}, ${data.provinsi.provinsi_nama}`
+                                            ? `${data.alamat_ayah}, ${data.kecamatan ? data.kecamatan.kecam_nama : ''}, ${data.kabkot ? data.kabkot.kab_nama : ''}, ${data.provinsi.provinsi_nama}`
                                             : (data.alamat_ayah || '-')
                                         }
                                     </td>
@@ -380,12 +396,11 @@ FormAyah = reduxForm({
 const selector = formValueSelector('DataAyahSeleksi')
 
 FormAyah = connect((store) => {
-    let { status_ayah, penghasilan_ayah, sampingan_ayah } = selector(store, 'status_ayah', 'penghasilan_ayah', 'sampingan_ayah', 'provinsi_ayah', 'kabkot_ayah', 'kecamatan_ayah')
+    let { status_ayah, penghasilan_ayah, sampingan_ayah } = selector(store, 'status_ayah', 'penghasilan_ayah', 'sampingan_ayah')
     return {
         status_ayah,
         penghasilan_ayah,
         sampingan_ayah,
-
         ref_provinsi_ayah: store.provinsi.provinsi,
         ref_kabkot_ayah: store.kabkot.kabkot_ayah,
         ref_kecamatan_ayah: store.kecamatan.kecamatan_ayah,

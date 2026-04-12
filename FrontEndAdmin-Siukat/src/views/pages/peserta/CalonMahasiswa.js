@@ -14,9 +14,25 @@ class CalonMahasiswa extends React.Component {
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.props.dispatch(user.getByLoggedIn(cookies.get(cookieName)))
-        this.props.dispatch(cmahasiswa.fetchCmahasiswa(cookies.get(cookieName), { perPage: 10, page: 1, keyword: "" }))
+        this.props.dispatch(cmahasiswa.fetchCmahasiswa(cookies.get(cookieName), { perPage: this.state.perPage, page: 1, keyword: "" }))
+        
+        // Real-time Update: Polling setiap 15 detik untuk tabel master
+        this.pollingMaster = setInterval(() => {
+            // Hanya refresh jika tidak sedang search (biar nggak keganggu ngetiknya)
+            if (!this.state.keyword) {
+                this.props.dispatch(cmahasiswa.fetchCmahasiswa(cookies.get(cookieName), { 
+                    perPage: this.state.perPage, 
+                    page: this.props.currentPage || 1, 
+                    keyword: "" 
+                }))
+            }
+        }, 15000);
+    }
+
+    componentWillUnmount() {
+        if (this.pollingMaster) clearInterval(this.pollingMaster);
     }
 
     // DATATABLE HANDLERS
@@ -104,6 +120,7 @@ class CalonMahasiswa extends React.Component {
                                 data={this.props.cmahasiswa}
                                 columns={{
                                     no_peserta: "Nomor Peserta",
+                                    foto_cmahasiswa: "Foto",
                                     nama_cmahasiswa: "Nama Lengkap",
                                     bidik_misi_cmahasiswa: "BM",
                                     "fakultas.nama": "Fakultas",

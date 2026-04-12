@@ -244,13 +244,13 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 	})
 
 	// PUT /cmahasiswa/flag-klarifikasi-admin/:no_peserta
-	// Endpoint khusus admin — sama persis logic-nya tapi no_peserta dari URL param bukan dari JWT mahasiswa
+	// Endpoint khusus admin — Mendukung "Sanggah Baru" dan "Reset Sanggah"
 	cmahasiswaGroup.PUT("/flag-klarifikasi-admin/:no_peserta", func(c *gin.Context) {
 		np := c.Param("no_peserta")
 
-		// Cleanup logic: If sanggah data exists, delete it first to allow "Reset Sanggah"
+		// 1. CLEANUP: Hapus data sanggah lama jika ada (buat "Reset/Replace")
+		// Ini memastikan dataatribut='sanggah' dibersihkan dulu sebelum di-copy ulang dari master.
 		if err := config.DB.Transaction(func(tx *gorm.DB) error {
-			// Delete from sub-tables first
 			tx.Where("no_peserta = ? AND atribut = ?", np, "sanggah").Unscoped().Delete(&models.Ayah{})
 			tx.Where("no_peserta = ? AND atribut = ?", np, "sanggah").Unscoped().Delete(&models.Ibu{})
 			tx.Where("no_peserta = ? AND atribut = ?", np, "sanggah").Unscoped().Delete(&models.Wali{})
@@ -258,98 +258,71 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 			tx.Where("no_peserta = ? AND atribut = ?", np, "sanggah").Unscoped().Delete(&models.Rumah{})
 			tx.Where("no_peserta = ? AND atribut = ?", np, "sanggah").Unscoped().Delete(&models.Listrik{})
 			tx.Where("no_peserta = ? AND atribut = ?", np, "sanggah").Unscoped().Delete(&models.Pendukung{})
-			
-			// Delete main record
 			return tx.Where("no_peserta = ? AND atribut = ?", np, "sanggah").Unscoped().Delete(&models.CMahasiswa{}).Error
 		}); err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal membersihkan data sanggah lama: " + err.Error()})
 			return
 		}
 
-		originalMhs, err := cmahasiswaService.GetCmahasiswa(np)
-		if err != nil {
-			c.JSON(http.StatusNotFound, gin.H{"error": "Data mahasiswa tidak ditemukan"})
+		// 2. FETCH ORIGINAL: Ambil data MASTER (atribut='original')
+		// PENTING: Jangan pakai service.GetCmahasiswa karena itu memprioritaskan sanggah.
+		var originalMhs models.CMahasiswa
+		if err := config.DB.Preload("Fakultas").Preload("Prodi").Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
+			Where("no_peserta = ? AND atribut = ?", np, "original").First(&originalMhs).Error; err != nil {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Data master mahasiswa tidak ditemukan"})
 			return
 		}
 
-		originalAyah, _ := ayahService.GetByLoggedIn(np)
-		originalIbu, _ := ibuService.GetByLoggedIn(np)
-		originalKendaraan, _ := kendaraanService.GetByLoggedIn(np)
-		originalListrik, _ := listrikService.GetByLoggedIn(np)
-		originalPendukung, _ := pendukungService.GetByLoggedIn(np)
-		originalRumah, _ := rumahService.GetByLoggedIn(np)
-		originalWali, _ := waliService.GetByLoggedIn(np)
+		// Ambil data pendukung murni original
+		var oAyah models.Ayah; config.DB.Where("no_peserta = ? AND atribut = ?", np, "original").First(&oAyah)
+		var oIbu models.Ibu; config.DB.Where("no_peserta = ? AND atribut = ?", np, "original").First(&oIbu)
+		var oKendaraan models.Kendaraan; config.DB.Where("no_peserta = ? AND atribut = ?", np, "original").First(&oKendaraan)
+		var oListrik models.Listrik; config.DB.Where("no_peserta = ? AND atribut = ?", np, "original").First(&oListrik)
+		var oPendukung models.Pendukung; config.DB.Where("no_peserta = ? AND atribut = ?", np, "original").First(&oPendukung)
+		var oRumah models.Rumah; config.DB.Where("no_peserta = ? AND atribut = ?", np, "original").First(&oRumah)
+		var oWali models.Wali; config.DB.Where("no_peserta = ? AND atribut = ?", np, "original").First(&oWali)
 
+		// 3. COPY TO SANGGAH: Simpan sebagai record baru dengan atribut='sanggah'
 		if err := config.DB.Transaction(func(tx *gorm.DB) error {
 			sanggahMhs := originalMhs
 			sanggahMhs.IDCmahasiswa = 0
 			sanggahMhs.Atribut = "sanggah"
 			sanggahMhs.Flag = "sanggah_ukt"
-			sanggahMhs.NoRegistrasi = nil // Fix: Clear to avoid Unique Key conflict
-			sanggahMhs.Fakultas = nil
-			sanggahMhs.Prodi = nil
-			sanggahMhs.Ukt = nil
-			sanggahMhs.Provinsi = nil
-			sanggahMhs.Kabkot = nil
-			sanggahMhs.Kecamatan = nil
+			sanggahMhs.NoRegistrasi = nil 
+			sanggahMhs.Fakultas = nil; sanggahMhs.Prodi = nil; sanggahMhs.Ukt = nil
+			sanggahMhs.Provinsi = nil; sanggahMhs.Kabkot = nil; sanggahMhs.Kecamatan = nil
+			
 			if err := tx.Create(&sanggahMhs).Error; err != nil {
 				return fmt.Errorf("gagal insert copy cmahasiswa: %v", err)
 			}
-			if originalAyah.NoPeserta != "" {
-				sanggahAyah := originalAyah
-				sanggahAyah.IDAyah = 0
-				sanggahAyah.Atribut = "sanggah"
-				if err := tx.Create(&sanggahAyah).Error; err != nil {
-					return fmt.Errorf("gagal insert copy ayah: %v", err)
-				}
+			
+			if oAyah.NoPeserta != "" {
+				sAyah := oAyah; sAyah.IDAyah = 0; sAyah.Atribut = "sanggah"
+				tx.Create(&sAyah)
 			}
-			if originalIbu.NoPeserta != "" {
-				sanggahIbu := originalIbu
-				sanggahIbu.IDIbu = 0
-				sanggahIbu.Atribut = "sanggah"
-				if err := tx.Create(&sanggahIbu).Error; err != nil {
-					return fmt.Errorf("gagal insert copy ibu: %v", err)
-				}
+			if oIbu.NoPeserta != "" {
+				sIbu := oIbu; sIbu.IDIbu = 0; sIbu.Atribut = "sanggah"
+				tx.Create(&sIbu)
 			}
-			if originalKendaraan.NoPeserta != "" {
-				sanggahKendaraan := originalKendaraan
-				sanggahKendaraan.IDKendaraan = 0
-				sanggahKendaraan.Atribut = "sanggah"
-				if err := tx.Create(&sanggahKendaraan).Error; err != nil {
-					return fmt.Errorf("gagal insert copy kendaraan: %v", err)
-				}
+			if oKendaraan.NoPeserta != "" {
+				sKendaraan := oKendaraan; sKendaraan.IDKendaraan = 0; sKendaraan.Atribut = "sanggah"
+				tx.Create(&sKendaraan)
 			}
-			if originalListrik.NoPeserta != "" {
-				sanggahListrik := originalListrik
-				sanggahListrik.IDListrik = 0
-				sanggahListrik.Atribut = "sanggah"
-				if err := tx.Create(&sanggahListrik).Error; err != nil {
-					return fmt.Errorf("gagal insert copy listrik: %v", err)
-				}
+			if oListrik.NoPeserta != "" {
+				sListrik := oListrik; sListrik.IDListrik = 0; sListrik.Atribut = "sanggah"
+				tx.Create(&sListrik)
 			}
-			if originalPendukung.NoPeserta != "" {
-				sanggahPendukung := originalPendukung
-				sanggahPendukung.IDPendukung = 0
-				sanggahPendukung.Atribut = "sanggah"
-				if err := tx.Create(&sanggahPendukung).Error; err != nil {
-					return fmt.Errorf("gagal insert copy pendukung: %v", err)
-				}
+			if oPendukung.NoPeserta != "" {
+				sPendukung := oPendukung; sPendukung.IDPendukung = 0; sPendukung.Atribut = "sanggah"
+				tx.Create(&sPendukung)
 			}
-			if originalRumah.NoPeserta != "" {
-				sanggahRumah := originalRumah
-				sanggahRumah.IDRumah = 0
-				sanggahRumah.Atribut = "sanggah"
-				if err := tx.Create(&sanggahRumah).Error; err != nil {
-					return fmt.Errorf("gagal insert copy rumah: %v", err)
-				}
+			if oRumah.NoPeserta != "" {
+				sRumah := oRumah; sRumah.IDRumah = 0; sRumah.Atribut = "sanggah"
+				tx.Create(&sRumah)
 			}
-			if originalWali.NoPeserta != "" {
-				sanggahWali := originalWali
-				sanggahWali.IDWali = 0
-				sanggahWali.Atribut = "sanggah"
-				if err := tx.Create(&sanggahWali).Error; err != nil {
-					return fmt.Errorf("gagal insert copy wali: %v", err)
-				}
+			if oWali.NoPeserta != "" {
+				sWali := oWali; sWali.IDWali = 0; sWali.Atribut = "sanggah"
+				tx.Create(&sWali)
 			}
 			return nil
 		}); err != nil {
@@ -358,9 +331,10 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 			return
 		}
 
-		fmt.Printf("✅ KLARIFIKASI ADMIN SUCCESS [%s]: Copy row sanggah berhasil\n", np)
-		c.JSON(http.StatusOK, gin.H{"message": "Klarifikasi berhasil diproses oleh admin"})
+		fmt.Printf("✅ KLARIFIKASI ADMIN SUCCESS [%s]: Copy data original ke sanggah berhasil\n", np)
+		c.JSON(http.StatusOK, gin.H{"message": "Klarifikasi berhasil diproses. Data sanggah telah direplace dari master data."})
 	})
+
 
 
 	cmahasiswaGroup.GET("/flag-batal-klarifikasi/:no_peserta", func(c *gin.Context) {

@@ -2,7 +2,10 @@ import React from 'react'
 import { Link, withRouter } from 'react-router-dom'
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap'
 import axios from 'axios'
-import { cookies, cookieName, service } from '../../global'
+import { cookies, cookieName, service, storage } from '../../global'
+import defaultPhoto from '../dist/images/profile.png'
+import { connect } from 'react-redux'
+import { cmahasiswa } from '../../actions'
 
 class DataTable extends React.Component {
     constructor(props) {
@@ -50,6 +53,14 @@ class DataTable extends React.Component {
             )
             this.setState({ isLoading: false })
             this.toggleModal()
+            
+            // Real-time Sync: Langsung trigger refresh statistik dashboard & tabel list
+            this.props.dispatch(cmahasiswa.flagCount(token));
+            if (this.props.renderData) {
+                // Refresh baris tabel yang ada biar statusnya langsung berubah
+                this.props.renderData(new Event('refresh'), this.props.perPage, this.props.currentPage, this.props.keyword);
+            }
+
             this.props.history.push({
                 pathname: `/admin/peserta/${selectedId}`,
                 state: { modeEdit: true }
@@ -85,28 +96,70 @@ class DataTable extends React.Component {
                 const pk = this.props.primaryKey;
                 const id = values[pk] || values[Object.keys(values).find(k => k.toLowerCase() === pk.toLowerCase())] || "undefined";
 
+                // Jika prop update & delete tersedia, gunakan mode Edit/Hapus (Manajemen)
+                if (this.props.update && this.props.delete) {
+                    return (
+                        <td key={key} className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                            <button
+                                onClick={(e) => this.props.update(e, id)}
+                                className="inline-flex items-center px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-black uppercase tracking-wider rounded-lg transition-all shadow-sm active:scale-95"
+                            >
+                                <i className="fa fa-edit mr-1.5"></i> Edit
+                            </button>
+                            <button
+                                onClick={(e) => this.props.delete(e, id)}
+                                className="inline-flex items-center px-3 py-1.5 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white border border-red-200 text-[10px] font-black uppercase tracking-wider rounded-lg transition-all shadow-sm active:scale-95"
+                            >
+                                <i className="fa fa-trash mr-1.5"></i> Hapus
+                            </button>
+                        </td>
+                    )
+                }
+
+                // Default Mode (Calon Mahasiswa): Lihat & Sanggah
                 return (
                     <td key={key} className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
                         {/* Tombol Lihat */}
                         <Link 
                             to={"/admin/peserta/" + id} 
-                            className="inline-flex items-center px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded transition-colors shadow-sm"
+                            className="inline-flex items-center px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-black uppercase tracking-wider rounded-lg transition-all shadow-sm active:scale-95"
                         >
-                            <i className="fa fa-eye mr-1"></i> Lihat
+                            <i className="fa fa-eye mr-1.5"></i> Lihat
                         </Link>
 
-                        {/* Tombol Sanggah */}
-                        <button
-                            onClick={() => this.toggleModal(id)}
-                            className="inline-flex items-center px-3 py-1 bg-orange-50 text-orange-600 hover:bg-orange-600 hover:text-white border border-orange-200 text-xs font-bold rounded transition-all shadow-sm"
-                        >
-                            <i className="fa fa-pencil-square-o mr-1"></i> Sanggah
-                        </button>
+                        {/* Tombol Sanggah - Hidden on original if sanggah exists (Reliable for ALL users via Backend Flag) */}
+                        {(!(values.atribut === 'original' && values.has_sanggah)) && (
+                            <button
+                                onClick={() => this.toggleModal(id)}
+                                className={`inline-flex items-center px-3 py-1.5 ${values.atribut === 'sanggah' ? 'bg-red-50 text-red-600 border-red-200 hover:bg-red-600' : 'bg-orange-50 text-orange-600 border-orange-200 hover:bg-orange-600'} hover:text-white border text-[10px] font-black uppercase tracking-wider rounded-lg transition-all shadow-sm active:scale-95`}
+                            >
+                                <i className={`fa ${values.atribut === 'sanggah' ? 'fa-refresh' : 'fa-pencil-square-o'} mr-1.5`}></i> 
+                                {values.atribut === 'sanggah' ? 'Reset Sanggah' : 'Sanggah'}
+                            </button>
+                        )}
                     </td>
                 )
+
             } else {
                 let keys = columnKey.split(".")
                 let val = (keys.length > 1) ? (values[keys[0]] ? values[keys[0]][keys[1]] : "") : values[columnKey]
+
+                // Jika kolom adalah foto profile mahasiswa
+                if (columnKey === 'foto_cmahasiswa') {
+                    return (
+                        <td key={key} className="px-6 py-4 whitespace-nowrap">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-50 border-2 border-white shadow-sm overflow-hidden ring-1 ring-emerald-100">
+                                <img 
+                                    src={val ? `${storage}/${val}` : defaultPhoto} 
+                                    className="h-full w-full object-cover" 
+                                    alt="Foto Profile" 
+                                    onError={(e) => { e.target.src = defaultPhoto }}
+                                />
+                            </div>
+                        </td>
+                    )
+                }
+
                 return (
                     <td key={key} className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                         {val}
@@ -256,5 +309,5 @@ class DataTable extends React.Component {
     }
 }
 
-// Gunakan withRouter agar this.props.history tersedia
-export default withRouter(DataTable)
+// Gunakan withRouter & connect agar history dan dispatch tersedia
+export default connect((store) => ({}))(withRouter(DataTable))

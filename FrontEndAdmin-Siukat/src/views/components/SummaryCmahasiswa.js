@@ -4,9 +4,19 @@ import { connect } from 'react-redux';
 import { cookies, cookieName } from '../../global';
 
 class SummaryCmahasiswa extends React.Component {
-    componentWillMount() {
-        // Memastikan pengambilan data saat komponen akan dimuat
+    componentDidMount() {
+        // Initial fetch
         this.props.dispatch(cmahasiswa.flagCount(cookies.get(cookieName)));
+
+        // Real-time Update: Polling setiap 10 detik agar data dashboard selalu segar
+        this.pollingStats = setInterval(() => {
+            this.props.dispatch(cmahasiswa.flagCount(cookies.get(cookieName)));
+        }, 10000); 
+    }
+
+    componentWillUnmount() {
+        // Hentikan polling saat pindah halaman biar nggak berat
+        if (this.pollingStats) clearInterval(this.pollingStats);
     }
 
     /**

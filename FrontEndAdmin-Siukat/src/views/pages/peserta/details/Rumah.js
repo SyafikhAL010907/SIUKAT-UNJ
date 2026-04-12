@@ -231,9 +231,9 @@ class Rumah extends React.Component {
         // Otomatis buka modal jika navigasi datang dari button "Sanggah" di DataTable
         const { location } = this.props;
         if (location.state && location.state.modeEdit) {
-            setTimeout(() => {
-                this.setState({ modalToggle: true });
-            }, 800);
+            // setTimeout(() => {
+            //     this.setState({ modalToggle: true });
+            // }, 800);
         }
     }
 

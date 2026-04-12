@@ -2,11 +2,10 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Row, Col, Table, Button, Form, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, Alert, FormText } from 'reactstrap'
 import { Field, reduxForm, reset, formValueSelector } from 'redux-form'
-import { ibu, provinsi, pekerjaan, kabkot, kecamatan } from '../../../../actions' // Pastikan action 'ibu' sudah ada
+import { ibu, provinsi, pekerjaan, kabkot, kecamatan } from '../../../../actions'
 import { InputBs, InputDayPicker, InputFileBs, money } from '../../../components'
 import { cookies, cookieName, rupiah, storage, service } from '../../../../global'
 import { connect } from 'react-redux'
-
 import { withRouter } from 'react-router-dom'
 
 let FormIbu = (props) => {
@@ -16,12 +15,21 @@ let FormIbu = (props) => {
             status_ibu, penghasilan_ibu, sampingan_ibu, } = props
 
     const handleProvinsi = (e) => {
-        dispatch(kabkot.fetchForIbu(e.target.value))
-        dispatch(kecamatan.fetchForIbu({type: "FETCH_KECAMATAN_FULFILLED", payload: []}))
+        const val = e.target.value;
+        if (val) {
+            dispatch(kabkot.fetchForIbu(val))
+            // Reset kabupaten dan kecamatan di store agar tidak rancu
+            dispatch(kecamatan.fetchForIbu({type: "FETCH_KECAMATAN_FULFILLED", payload: []}))
+        }
     }
+    
     const handleKabkot = (e) => {
-        dispatch(kecamatan.fetchForIbu(e.target.value))
+        const val = e.target.value;
+        if (val) {
+            dispatch(kecamatan.fetchForIbu(val))
+        }
     }
+
     return (
         <Modal isOpen={toggleIbu} toggle={handleToggleIbu} size="lg" centered className="border-none">
             <div className="bg-white rounded-3xl overflow-hidden shadow-2xl">
@@ -54,7 +62,7 @@ let FormIbu = (props) => {
                     </FormGroup>
 
                     { status_ibu === "hidup" && (
-                        <div>
+                        <div className="animate-in fade-in duration-300">
                             <FormGroup row>
                                 <Label for="nik_ibu" md={3}>NIK</Label>
                                 <Col md={9}>
@@ -66,9 +74,9 @@ let FormIbu = (props) => {
                                 <Col md={5}>
                                     <Field component={InputFileBs} type="file" className="form-control" name="file_scan_ktp_ibu" id="file_scan_ktp_ibu" />
                                 </Col>
-                                { props.initialValues.scan_ktp_ibu && (
+                                { props.initialValues && props.initialValues.scan_ktp_ibu && (
                                     <Col md={4}>
-                                        <a href={storage+"/"+props.initialValues.scan_ktp_ibu} target="_blank" rel="noopener noreferrer" className="btn btn-success btn-block"><i className="fa fa-file"></i> Lihat KTP Ibu</a>
+                                        <a href={storage+"/"+props.initialValues.scan_ktp_ibu} target="_blank" rel="noopener noreferrer" className="btn btn-success btn-block px-4 py-2 rounded-lg text-sm"><i className="fa fa-file mr-2"></i> Lihat KTP</a>
                                     </Col>
                                 )}
                             </FormGroup>
@@ -80,7 +88,7 @@ let FormIbu = (props) => {
                                 <Col md={4} xs={12}>
                                     <Field name="tanggal_lahir_ibu" component={InputDayPicker} startYear={1950} placeholder="Tanggal Lahir"/>
                                 </Col>
-                            </FormGroup>                     
+                            </FormGroup>                       
                             <FormGroup row>
                                 <Label for="alamat_ibu" md={3}>Alamat Lengkap</Label>
                                 <Col md={9}>
@@ -90,35 +98,33 @@ let FormIbu = (props) => {
                             <FormGroup row>
                                 <Label for="provinsi_ibu" md={3}>Provinsi</Label>
                                 <Col md={9}>
-                                    <Field name="provinsi_ibu" component={InputBs} type="select" 
-                                        onChange={handleProvinsi}>{' '}
+                                    <Field name="provinsi_ibu" component={InputBs} type="select" onChange={handleProvinsi}>
                                         <option value="">-- Pilih Provinsi --</option>
-                                        { Array.isArray(ref_provinsi_ibu) ? ref_provinsi_ibu.map((data, key) => 
+                                        { Array.isArray(ref_provinsi_ibu) && ref_provinsi_ibu.map((data, key) => 
                                             <option value={data.provinsi_id} key={key}>{data.provinsi_nama}</option>
-                                        ) : "" }
+                                        )}
                                     </Field>
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
                                 <Label for="kabkot_ibu" md={3}>Kab/Kota</Label>
                                 <Col md={9}>
-                                    <Field name="kabkot_ibu" component={InputBs} type="select" 
-                                        onChange={handleKabkot}>{' '}        
+                                    <Field name="kabkot_ibu" component={InputBs} type="select" onChange={handleKabkot}>
                                         <option value="">-- Pilih Kabupaten/Kota --</option>
-                                        { Array.isArray(ref_kabkot_ibu) ? ref_kabkot_ibu.map((data, key) => 
+                                        { Array.isArray(ref_kabkot_ibu) && ref_kabkot_ibu.map((data, key) => 
                                             <option value={data.kab_id} key={key}>{data.kab_nama}</option>
-                                        ) : "" }
+                                        )}
                                     </Field>
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
                                 <Label for="kecamatan_ibu" sm={3}>Kecamatan</Label>
                                 <Col sm={9}>
-                                    <Field name="kecamatan_ibu" component={InputBs} type="select">{' '}        
+                                    <Field name="kecamatan_ibu" component={InputBs} type="select">
                                         <option value="">-- Pilih Kecamatan --</option>
-                                        { Array.isArray(ref_kecamatan_ibu) ? ref_kecamatan_ibu.map((data, key) => 
+                                        { Array.isArray(ref_kecamatan_ibu) && ref_kecamatan_ibu.map((data, key) => 
                                             <option value={data.kecam_id} key={key}>{data.kecam_nama}</option>
-                                        ) : "" }
+                                        )}
                                     </Field>
                                 </Col>
                             </FormGroup>
@@ -127,72 +133,58 @@ let FormIbu = (props) => {
                                 <Col md={9}>
                                     <Field type="select" component={InputBs} name="pekerjaan_ibu" id="pekerjaan_ibu">   
                                         <option value="">-- Pilih Pekerjaan --</option>
-                                        { Array.isArray(ref_pekerjaan) ? ref_pekerjaan.map((data, key) => 
+                                        { Array.isArray(ref_pekerjaan) && ref_pekerjaan.map((data, key) => 
                                             <option value={data.kode} key={key}>{data.nama}</option>
-                                        ) : "" }
+                                        )}
                                     </Field>
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
                                 <Label for="penghasilan_ibu" md={3}>Penghasilan</Label>
                                 <Col md={5} xs={12}>
-                                    <Field type="number" component={InputBs} pattern="[0-9]*" title="Hanya isi dengan angka (0-9)" name="penghasilan_ibu" id="penghasilan_ibu" placeholder="Penghasilan Ibu" validate={[ money ]}/>
-                                    <FormText color="muted">
-                                        <ul className="list-reset">
-                                            <li>Penghasilan <b>per bulan</b>;</li>
-                                            <li>Hanya isi dengan angka (0-9).</li>
-                                        </ul>
-                                    </FormText>
+                                    <Field type="number" component={InputBs} name="penghasilan_ibu" id="penghasilan_ibu" placeholder="Penghasilan Ibu" validate={[ money ]}/>
+                                    <FormText color="muted">Penghasilan <b>per bulan</b> (Angka saja).</FormText>
                                 </Col>
                                 <Col md={4} xs={12}>
-                                    <Alert color="success">{ rupiah(penghasilan_ibu) }</Alert>
+                                    <Alert color="success" className="py-2 text-sm">{ rupiah(penghasilan_ibu || 0) }</Alert>
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
                                 <Label for="sampingan_ibu" md={3}>Sampingan</Label>
                                 <Col md={5} xs={12}>
-                                    <Field type="number" component={InputBs} pattern="[0-9]*" title="Hanya isi dengan angka (0-9)" name="sampingan_ibu" id="sampingan_ibu" placeholder="Penghasilan Sampingan Ibu"/>
-                                    <FormText color="muted">
-                                        <ul className="list-reset">
-                                            <li>Sampingan <b>per bulan</b>;</li>
-                                            <li>Hanya isi dengan angka (0-9).</li>
-                                        </ul>
-                                    </FormText>
+                                    <Field type="number" component={InputBs} name="sampingan_ibu" id="sampingan_ibu" placeholder="Penghasilan Sampingan"/>
                                 </Col>
                                 <Col md={4} xs={12}>
-                                    <Alert color="success">{ rupiah(sampingan_ibu) }</Alert>
+                                    <Alert color="success" className="py-2 text-sm">{ rupiah(sampingan_ibu || 0) }</Alert>
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
-                                <Label for="file_scan_slip_ibu" md={3}>Slip Gaji / Bukti Penghasilan</Label>
+                                <Label for="file_scan_slip_ibu" md={3}>Bukti Penghasilan</Label>
                                 <Col md={5}>
                                     <Field component={InputFileBs} type="file" name="file_scan_slip_ibu" id="file_scan_slip_ibu" />
                                 </Col>
-                                { props.initialValues.scan_slip_ibu && (
+                                { props.initialValues && props.initialValues.scan_slip_ibu && (
                                     <Col md={4}>
-                                        <a href={storage+"/"+props.initialValues.scan_slip_ibu} target="_blank" rel="noopener noreferrer" className="btn btn-success btn-block"><i className="fa fa-file"></i> Lihat Slip Gaji Ibu</a>
+                                        <a href={storage+"/"+props.initialValues.scan_slip_ibu} target="_blank" rel="noopener noreferrer" className="btn btn-success btn-block px-4 py-2 rounded-lg text-sm"><i className="fa fa-file mr-2"></i> Lihat Slip Gaji</a>
                                     </Col>
                                 )}
                             </FormGroup>
                             <FormGroup row>
                                 <Label for="telepon_ibu" md={3}>Nomor Telepon</Label>
                                 <Col md={9}>
-                                    <Field name="telepon_ibu" component={InputBs} type="text" placeholder="Nomor Telepon" pattern="[0-9]{0,13}" title="Hanya isi dengan angka 0-9. Maksimal 13 digit."/>                     
-                                    <FormText color="muted">
-                                        Hanya isi dengan angka. Maksimal 13 digit.
-                                    </FormText>
+                                    <Field name="telepon_ibu" component={InputBs} type="text" placeholder="Nomor Telepon"/>                     
                                 </Col>
                             </FormGroup>
                         </div>
                     )}
-                </form>
 
-                <div className="mt-10 flex justify-end space-x-3 border-t pt-6">
-                    <button type="button" onClick={handleToggleIbu} className="px-6 py-2.5 font-bold text-gray-500">Batal</button>
-                    <button type="submit" disabled={pristine || submitting} className="bg-emerald-600 text-white px-8 py-2.5 rounded-xl font-bold shadow-lg">
-                        <i className="fa fa-save mr-2"></i> Simpan Perubahan
-                    </button>
-                </div>
+                    <div className="mt-6 flex justify-end space-x-3">
+                        <button type="button" onClick={handleToggleIbu} className="px-6 py-2.5 font-bold text-gray-500 hover:text-gray-700">Batal</button>
+                        <button type="submit" disabled={pristine || submitting} className="bg-emerald-600 text-white px-8 py-2.5 rounded-xl font-bold shadow-lg disabled:opacity-50">
+                            {submitting ? 'Menyimpan...' : 'Simpan Perubahan'}
+                        </button>
+                    </div>
+                </form>
             </div>
         </Modal>
     )
@@ -201,62 +193,73 @@ let FormIbu = (props) => {
 class Ibu extends React.Component{
     constructor(props){
         super(props)
-
         this.state = {
             modalToggle: false
         }
-        this.modalToggle = this.modalToggle.bind(this)
-        this.submitIbu = this.submitIbu.bind(this)
-    }
-    componentWillMount(){
-        this.props.dispatch(pekerjaan.fetchPekerjaan(cookies.get(cookieName)))
-        this.props.dispatch(provinsi.fetchProvinsi())
-        this.props.dispatch(ibu.fetchAllData(cookies.get(cookieName), this.props.noPeserta, this.props.atribut))
     }
 
-    componentDidMount() {
-        // Otomatis buka modal jika navigasi datang dari button "Sanggah" di DataTable
-        const { location } = this.props;
-        if (location.state && location.state.modeEdit) {
-            setTimeout(() => {
-                this.setState({ modalToggle: true });
-            }, 800);
+    componentWillMount(){
+        this.fetchInitialData();
+    }
+
+    fetchInitialData = () => {
+        const token = cookies.get(cookieName);
+        this.props.dispatch(pekerjaan.fetchPekerjaan(token))
+        this.props.dispatch(provinsi.fetchProvinsi())
+        this.props.dispatch(ibu.fetchAllData(token, this.props.noPeserta, this.props.atribut))
+        
+        // Memastikan data wilayah terambil jika sudah ada value provinsi/kabkot di data awal
+        if (this.props.ibu) {
+            if (this.props.ibu.provinsi_ibu) this.props.dispatch(kabkot.fetchForIbu(this.props.ibu.provinsi_ibu));
+            if (this.props.ibu.kabkot_ibu) this.props.dispatch(kecamatan.fetchForIbu(this.props.ibu.kabkot_ibu));
         }
     }
+
     modalToggle = () => {
-        this.setState({
-            modalToggle: !this.state.modalToggle
-        })
+        // Sebelum buka modal, pastikan dropdown wilayah terisi sesuai data yang ada
+        if (!this.state.modalToggle && this.props.ibu) {
+            const token = cookies.get(cookieName);
+            if (this.props.ibu.provinsi_ibu) this.props.dispatch(kabkot.fetchForIbu(this.props.ibu.provinsi_ibu));
+            if (this.props.ibu.kabkot_ibu) this.props.dispatch(kecamatan.fetchForIbu(this.props.ibu.kabkot_ibu));
+        }
+        this.setState({ modalToggle: !this.state.modalToggle })
     }
+
     submitIbu = (values) => {
-        this.setState({
-            modalToggle: !this.state.modalToggle
-        })
+        const token = cookies.get(cookieName);
         var formData = new FormData()
+        
+        // Loop values untuk memisahkan File dan String
         for(var key in values){
-            var file = key.startsWith("file_scan") ? key : null
-            if(file){
+            if(key.startsWith("file_scan") && values[key] && values[key][0] instanceof File){
                 formData.append(key, values[key][0])   
-                document.getElementById(file).value = null;     
-            }else{
-                formData.append(key, values[key])
+                // Clear input file manual
+                if(document.getElementById(key)) document.getElementById(key).value = null;     
+            } else if (!key.startsWith("file_scan") && !key.startsWith("scan_")) {
+                // Jangan kirim key yang diawali "scan_" karena itu biasanya dari API (path string)
+                // Kirim "" jika null agar tidak terkirim string "null" ke server
+                formData.append(key, values[key] === null ? "" : values[key])
             }
         }
-        this.props.dispatch(ibu.updateData(cookies.get(cookieName), formData, this.props.noPeserta)).then(() => {
-            this.modalToggle();
-            // Refetch data agar tampilan InfoItem langsung terupdate
-            this.props.dispatch(ibu.fetchAllData(cookies.get(cookieName), this.props.noPeserta, this.props.atribut))
-        })
-        this.props.dispatch(reset('DataIbuSeleksi'))        
+
+        return this.props.dispatch(ibu.updateData(token, formData, this.props.noPeserta)).then((res) => {
+            // Tutup modal dan ambil data terbaru
+            this.setState({ modalToggle: false });
+            this.props.dispatch(ibu.fetchAllData(token, this.props.noPeserta, this.props.atribut));
+            this.props.dispatch(reset('DataIbuSeleksi'));
+            return res;
+        }).catch(err => {
+            console.error("Update failed", err);
+        });
     }
+
     render(){
-        const { ibu, location } = this.props;
-        const data = ibu || {}
+        const { ibu: dataIbu, location } = this.props;
+        const data = dataIbu || {}
         const isModeSanggah = location.state && location.state.modeEdit;
 
         return (
             <div className="space-y-4">
-                {/* Banner Notifikasi Mode Sanggah */}
                 {isModeSanggah && (
                     <div className="mb-4 p-4 bg-orange-50 border border-orange-200 rounded-2xl flex items-center text-orange-700 animate-pulse">
                         <i className="fa fa-info-circle mr-3 text-xl"></i>
@@ -303,25 +306,14 @@ class Ibu extends React.Component{
                                     <td className="p-4 font-mono text-gray-700">{data.nik_ibu || '-'}</td>
                                 </tr>
                                 <tr>
-                                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">KTP</td>
-                                    <td className="p-4">
-                                        { (data.scan_ktp_ibu && data.scan_ktp_ibu !== "") ? (
-                                            <a href={storage+"/"+data.scan_ktp_ibu} target="_blank" rel="noopener noreferrer"
-                                               className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 font-bold text-sm">
-                                                <i className="fa fa-download"></i> Lihat KTP
-                                            </a>
-                                        ) : <span className="text-gray-400 italic text-xs">Belum diunggah</span>}
-                                    </td>
-                                </tr>
-                                <tr>
                                     <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Tempat, Tgl Lahir</td>
                                     <td className="p-4 text-gray-700">{data.tempat_lahir_ibu ? `${data.tempat_lahir_ibu}, ${data.tanggal_lahir_ibu}` : '-'}</td>
                                 </tr>
                                 <tr>
                                     <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Alamat</td>
                                     <td className="p-4 text-gray-700">
-                                        { data.provinsi != null
-                                            ? `${data.alamat_ibu}, ${data.kecamatan.kecam_nama}, ${data.kabkot.kab_nama}, ${data.provinsi.provinsi_nama}`
+                                        { data.provinsi 
+                                            ? `${data.alamat_ibu}, ${data.kecamatan?.kecam_nama || ''}, ${data.kabkot?.kab_nama || ''}, ${data.provinsi?.provinsi_nama || ''}`
                                             : (data.alamat_ibu || '-')
                                         }
                                     </td>
@@ -331,27 +323,19 @@ class Ibu extends React.Component{
                                     <td className="p-4 text-gray-700">{data.pekerjaan?.nama || '-'}</td>
                                 </tr>
                                 <tr>
-                                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Penghasilan</td>
-                                    <td className="p-4 font-bold text-emerald-700">{rupiah(data.penghasilan_ibu)} <span className="text-gray-400 font-normal text-xs">/ bulan</span></td>
+                                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Penghasilan Total</td>
+                                    <td className="p-4 font-bold text-emerald-700">{rupiah(parseInt(data.penghasilan_ibu || 0) + parseInt(data.sampingan_ibu || 0))} <span className="text-gray-400 font-normal text-xs">/ bulan</span></td>
                                 </tr>
                                 <tr>
-                                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Penghasilan Sampingan</td>
-                                    <td className="p-4 font-bold text-emerald-700">{rupiah(data.sampingan_ibu)} <span className="text-gray-400 font-normal text-xs">/ bulan</span></td>
-                                </tr>
-                                <tr>
-                                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Bukti Penghasilan</td>
-                                    <td className="p-4">
-                                        { (data.scan_slip_ibu && data.scan_slip_ibu !== "") ? (
-                                            <a href={storage+"/"+data.scan_slip_ibu} target="_blank" rel="noopener noreferrer"
-                                               className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 font-bold text-sm">
-                                                <i className="fa fa-download"></i> Lihat Slip Gaji
-                                            </a>
-                                        ) : <span className="text-gray-400 italic text-xs">Belum diunggah</span>}
+                                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Dokumen</td>
+                                    <td className="p-4 space-x-4">
+                                        { data.scan_ktp_ibu && (
+                                            <a href={storage+"/"+data.scan_ktp_ibu} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline font-bold text-xs"><i className="fa fa-id-card mr-1"></i> KTP</a>
+                                        )}
+                                        { data.scan_slip_ibu && (
+                                            <a href={storage+"/"+data.scan_slip_ibu} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline font-bold text-xs"><i className="fa fa-file-text mr-1"></i> Slip Gaji</a>
+                                        )}
                                     </td>
-                                </tr>
-                                <tr>
-                                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Nomor Telepon</td>
-                                    <td className="p-4 font-mono text-gray-700">{data.telepon_ibu || '-'}</td>
                                 </tr>
                             </>)}
                         </tbody>
@@ -367,7 +351,6 @@ class Ibu extends React.Component{
             </div>
         )
     }
-
 }
 
 FormIbu = reduxForm({
@@ -378,20 +361,17 @@ FormIbu = reduxForm({
 const selector = formValueSelector('DataIbuSeleksi')
 
 FormIbu = connect((store) => {
-    let { status_ibu, penghasilan_ibu, sampingan_ibu } = selector(store, 'status_ibu', 'penghasilan_ibu', 'sampingan_ibu', 'provinsi_ibu', 'kabkot_ibu', 'kecamatan_ibu')
+    let { status_ibu, penghasilan_ibu, sampingan_ibu } = selector(store, 'status_ibu', 'penghasilan_ibu', 'sampingan_ibu')
     return {
         status_ibu,
         penghasilan_ibu,
         sampingan_ibu,
-
         ref_provinsi_ibu: store.provinsi.provinsi,
         ref_kabkot_ibu: store.kabkot.kabkot_ibu,
         ref_kecamatan_ibu: store.kecamatan.kecamatan_ibu,
         ref_pekerjaan: store.pekerjaan.pekerjaan,
     }
-}, {
-    kabkot, kecamatan
-})(FormIbu)
+}, { kabkot, kecamatan })(FormIbu)
 
 export default withRouter(connect(
     (store) => ({

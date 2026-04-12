@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func AdminRoutes(r *gin.RouterGroup) {
@@ -79,9 +80,11 @@ func AdminRoutes(r *gin.RouterGroup) {
 		type ReqSave struct {
 			UsernameLama string `json:"username_lama"`
 			Username     string `json:"username"`
+			Password     string `json:"password"`
 			NamaLengkap  string `json:"nama_lengkap"`
 			NoTelepon    string `json:"no_telepon"`
 			Role         string `json:"role"`
+			Foto         string `json:"foto"`
 		}
 		var req ReqSave
 		if err := c.ShouldBindJSON(&req); err != nil {
@@ -95,47 +98,103 @@ func AdminRoutes(r *gin.RouterGroup) {
 		err := tx.Where("username = ?", req.UsernameLama).First(&existing).Error
 		
 		if err == nil {
-			// update
-			if updateErr := tx.Model(&existing).Where("username = ?", req.UsernameLama).Updates(models.Admin{
-				Username:    req.Username,
-				NamaLengkap: req.NamaLengkap,
-				NoTelepon:   req.NoTelepon,
-				Role:        req.Role,
-			}).Error; updateErr != nil {
+			// Update Profil Admin & Sinkronisasi Password (Reset)
+			updatesAdmin := map[string]interface{}{
+				"username":     req.Username,
+				"nama_lengkap": req.NamaLengkap,
+				"no_telepon":   req.NoTelepon,
+				"role":         req.Role,
+				"foto":         req.Foto,
+			}
+
+			var passwordHash string
+			if req.Password != "" {
+				hash, _ := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
+				passwordHash = string(hash)
+				updatesAdmin["password"] = passwordHash
+			}
+
+			if updateErr := tx.Model(&existing).Where("username = ?", req.UsernameLama).Updates(updatesAdmin).Error; updateErr != nil {
 				tx.Rollback()
-				c.JSON(http.StatusInternalServerError, "Gagal memasukkan data!")
+				c.JSON(http.StatusInternalServerError, "Gagal memperbarui data admin!")
 				return
 			}
+
+			// Sinkronisasi ke tb_user
+			var existingUser models.User
+			if errUser := tx.Where("no_peserta = ?", req.UsernameLama).First(&existingUser).Error; errUser == nil {
+				updatesUser := map[string]interface{}{
+					"no_peserta": req.Username,
+					"role":       "admin",
+				}
+				if passwordHash != "" {
+					updatesUser["password"] = passwordHash
+				}
+				if errSync := tx.Model(&existingUser).Updates(updatesUser).Error; errSync != nil {
+					tx.Rollback()
+					c.JSON(http.StatusInternalServerError, "Gagal sinkronisasi data user!")
+					return
+				}
+			}
 		} else {
-			// create
+			// Hash password untuk admin baru
+			hash, _ := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
+			passwordHash := string(hash)
+
+			// Create Profil Admin
 			if createErr := tx.Create(&models.Admin{
 				Username:    req.Username,
+				Password:    passwordHash,
 				NamaLengkap: req.NamaLengkap,
 				NoTelepon:   req.NoTelepon,
 				Role:        req.Role,
+				Foto:        req.Foto,
 			}).Error; createErr != nil {
 				tx.Rollback()
-				c.JSON(http.StatusInternalServerError, "Gagal memasukkan data!")
+				c.JSON(http.StatusInternalServerError, "Gagal membuat data admin!")
+				return
+			}
+
+			// Create Record di tb_user
+			newUser := models.User{
+				NoPeserta: req.Username,
+				Password:  passwordHash,
+				Role:      "admin",
+			}
+			if errUser := tx.Create(&newUser).Error; errUser != nil {
+				tx.Rollback()
+				c.JSON(http.StatusInternalServerError, "Gagal membuat data user login!")
 				return
 			}
 		}
 
 		tx.Commit()
-		c.JSON(http.StatusOK, "Data telah dimasukkan!")
+		c.JSON(http.StatusOK, "Data telah berhasil disimpan dan disinkronkan!")
 	})
 
 	auth.DELETE("/delete/:username", func(c *gin.Context) {
 		username := c.Param("username")
 		tx := config.DB.Begin()
+
+		// Hapus dari tb_admin
 		if err := tx.Where("username = ?", username).Delete(&models.Admin{}).Error; err != nil {
 			tx.Rollback()
-			c.JSON(http.StatusInternalServerError, err)
+			c.JSON(http.StatusInternalServerError, "Gagal menghapus profil admin!")
 			return
 		}
+
+		// Hapus dari tb_user
+		if err := tx.Where("no_peserta = ? AND role = ?", username, "admin").Delete(&models.User{}).Error; err != nil {
+			tx.Rollback()
+			c.JSON(http.StatusInternalServerError, "Gagal menghapus kredensial login!")
+			return
+		}
+
 		tx.Commit()
-		c.JSON(http.StatusOK, "Data telah dihapus!")
+		c.JSON(http.StatusOK, "Data administrator telah dihapus!")
 	})
 
 	// Route for injecting data from Excel
 	auth.POST("/inject-data", utils.InjectDataExcel)
 }
+

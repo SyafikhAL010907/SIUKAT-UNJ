@@ -32,6 +32,9 @@ type CMahasiswa struct {
 	Spu                    int        `gorm:"column:spu" json:"spu"`
 	Penalty                string     `gorm:"column:penalty;type:enum('1','0')" json:"penalty"`
 
+	// Virtual & Display Fields (Gorm Ignore)
+	HasSanggah             bool       `gorm:"-" json:"has_sanggah"`
+
 	Fakultas *Fakultas `gorm:"foreignKey:FakultasCmahasiswa;references:Kode" json:"fakultas,omitempty"`
 	Prodi    *Prodi    `gorm:"foreignKey:ProdiCmahasiswa;references:Kode" json:"prodi,omitempty"`
 	Ukt      *Ukt      `gorm:"foreignKey:ProdiCmahasiswa;references:MajorID" json:"ukt,omitempty"`

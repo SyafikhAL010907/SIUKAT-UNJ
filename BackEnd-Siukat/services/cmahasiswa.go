@@ -398,6 +398,31 @@ func (s *CMahasiswaService) CountFlag() (map[string]interface{}, error) {
 	return result, nil
 }
 
+// PopulateHasSanggah — Helper massal buat nge-cek status sanggah tiap mahasiswa di list
+// Biar frontend tau baris mana yang tombol Sanggah-nya harus diumpetin (PENTING buat Integritas Data)
+func (s *CMahasiswaService) PopulateHasSanggah(mhs []models.CMahasiswa) {
+	if len(mhs) == 0 {
+		return
+	}
+
+	var pks []string
+	for _, m := range mhs {
+		pks = append(pks, m.NoPeserta)
+	}
+
+	var hasSanggahMap = make(map[string]bool)
+	var sanggahRecords []struct{ NoPeserta string }
+	config.DB.Table("tb_cmahasiswa").Where("no_peserta IN ? AND atribut = ?", pks, "sanggah").Select("no_peserta").Find(&sanggahRecords)
+	
+	for _, r := range sanggahRecords {
+		hasSanggahMap[r.NoPeserta] = true
+	}
+
+	for i := range mhs {
+		mhs[i].HasSanggah = hasSanggahMap[mhs[i].NoPeserta]
+	}
+}
+
 // Datatable — Pagination & Search untuk daftar mahasiswa
 func (s *CMahasiswaService) Datatable(page, perPage int, keyword string) (map[string]interface{}, error) {
 	db := config.DB
@@ -419,8 +444,12 @@ func (s *CMahasiswaService) Datatable(page, perPage int, keyword string) (map[st
 		return nil, err
 	}
 
-	// Hitung Nominal UKT berdasarkan GolonganID untuk tiap baris
+	// 1. Cek Status Sanggah secara massal (Helper-based)
+	s.PopulateHasSanggah(mhs)
+
+	// 2. Hitung Nominal UKT berdasarkan GolonganID untuk tiap baris
 	for i := range mhs {
+
 		var ukt models.Ukt
 		// Find correct UKT record for this specific student's prodi and entrance path
 		if err := db.Where("major_id = ? AND entrance = ?", mhs[i].ProdiCmahasiswa, mhs[i].JalurCmahasiswa).First(&ukt).Error; err == nil {
@@ -476,7 +505,12 @@ func (s *CMahasiswaService) DatatableSanggah(page, perPage int, keyword string) 
 		return nil, err
 	}
 
-	// Hitung Nominal UKT berdasarkan GolonganID untuk tiap baris
+	// 1. Cek Status Sanggah secara massal (Helper-based)
+	// Penting: Meskipun ini DatatableSanggah, kita tetap cek has_sanggah 
+	// biar row original yang kebetulan nyempung di sini statusnya akurat.
+	s.PopulateHasSanggah(mhs)
+
+	// 2. Hitung Nominal UKT berdasarkan GolonganID untuk tiap baris
 	for i := range mhs {
 		var ukt models.Ukt
 		// Find correct UKT record for this specific student's prodi and entrance path

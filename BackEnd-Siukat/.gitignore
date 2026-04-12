@@ -17,9 +17,7 @@ vendor/
 .idea/
 *.swp
 
-# Database
-*.sql
-DATA/
+
 
 !*.md
 

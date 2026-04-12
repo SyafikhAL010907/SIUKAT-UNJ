@@ -28,9 +28,7 @@ export function emptyAdmin(){
 export function save(token, input){
     return {
         type: "FETCH_ADMIN",
-        payload: admin.save(token, input).then((response) => {
-            return user.saveUser(token, input)
-        }).then((res) => {
+        payload: admin.save(token, input).then((res) => {
             return admin.fetchAdmin(token, {perPage: 10, page: 1, keyword: ""})
         })
     }
@@ -38,9 +36,7 @@ export function save(token, input){
 export function deleteById(token, username){
     return {
         type: "FETCH_ADMIN",
-        payload: admin.deleteById(token, username).then((response) => {
-            user.deleteById(token, username)
-        }).then((res) => {
+        payload: admin.deleteById(token, username).then((res) => {
             return admin.fetchAdmin(token, {perPage: 10, page: 1, keyword: ""})
         })
     }

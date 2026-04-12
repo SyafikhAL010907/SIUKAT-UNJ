@@ -7,7 +7,8 @@ import { InputBs, DataTable } from '../../components'
 
 // Komponen Modal Form Admin Modern
 let FormAdmin = (props) => {
-    const { pristine, submitting, handleSubmit, handleToggleAdministrator, toggleAdministrator } = props
+    const { pristine, submitting, handleSubmit, handleToggleAdministrator, toggleAdministrator, initialValues } = props
+    const isEdit = initialValues && initialValues.username;
     
     if (!toggleAdministrator) return null;
 
@@ -21,7 +22,8 @@ let FormAdmin = (props) => {
                     {/* Header */}
                     <div className="flex items-center justify-between p-5 border-b border-gray-100 rounded-t-2xl bg-emerald-600 text-white">
                         <h3 className="text-lg font-bold">
-                            <i className="fa fa-user-plus mr-2"></i> Form Administrator
+                            <i className={isEdit ? "fa fa-edit mr-2" : "fa fa-user-plus mr-2"}></i> 
+                            {isEdit ? 'Reset Password Admin' : 'Form Administrator'}
                         </h3>
                         <button onClick={handleToggleAdministrator} className="text-white hover:text-yellow-400 transition-colors">
                             <i className="fa fa-times text-xl"></i>
@@ -38,9 +40,13 @@ let FormAdmin = (props) => {
                                     className="w-full px-4 py-2 rounded-xl border border-gray-200 focus:ring-2 focus:ring-emerald-500 outline-none transition-all"/>
                             </div>
                             <div>
-                                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Kata Sandi</label>
-                                <Field component={InputBs} type="password" name="password" placeholder="••••••••"
+                                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">
+                                    {isEdit ? 'Reset Kata Sandi' : 'Kata Sandi'}
+                                </label>
+                                <Field component={InputBs} type="password" name="password" 
+                                    placeholder={isEdit ? "Kosongkan jika tidak ingin mengubah" : "••••••••"}
                                     className="w-full px-4 py-2 rounded-xl border border-gray-200 focus:ring-2 focus:ring-emerald-500 outline-none transition-all"/>
+                                {isEdit && <p className="text-[10px] text-emerald-600 mt-1">* Kosongkan password jika tidak ingin mengganti password lama.</p>}
                             </div>
                             <div>
                                 <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Nama Lengkap</label>
@@ -179,7 +185,14 @@ class Administrator extends React.Component{
                     <div className="p-6">
                         <DataTable 
                             data={this.props.admin}
-                            columns={{username: 'Username', nama_lengkap: 'Nama Lengkap', no_telepon:'Nomor Telepon', role:'Role', aksi:'Aksi'}}
+                            columns={{
+                                foto_cmahasiswa: 'Foto', // Menggunakan key yang sama agar render otomatis di DataTable.js
+                                username: 'Username', 
+                                nama_lengkap: 'Nama Lengkap', 
+                                no_telepon:'Nomor Telepon', 
+                                role:'Role', 
+                                aksi:'Aksi'
+                            }}
                             primaryKey="username"
                             total={this.props.count}
                             currentPage={this.props.currentPage}

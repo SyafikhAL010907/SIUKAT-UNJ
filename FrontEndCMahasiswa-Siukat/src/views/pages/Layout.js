@@ -20,7 +20,7 @@ class Layout extends React.Component {
         };
     }
 
-    UNSAFE_componentWillMount() {
+    componentDidMount() {
         const token = getToken();
         this.setState({
             isLogin: token,
@@ -29,7 +29,17 @@ class Layout extends React.Component {
         // Fetch student data on mount
         if (token) {
             this.props.dispatch(cmahasiswa.getByLoggedIn(token));
+
+            // Real-time Update: Polling setiap 15 detik agar status mahasiswa selalu sinkron
+            this.pollingStudent = setInterval(() => {
+                this.props.dispatch(cmahasiswa.getByLoggedIn(token));
+            }, 15000);
         }
+    }
+
+    componentWillUnmount() {
+        // Hentikan polling saat logout atau pindah halaman
+        if (this.pollingStudent) clearInterval(this.pollingStudent);
     }
 
     toggleCollapse = () => {
