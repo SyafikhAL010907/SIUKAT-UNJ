@@ -266,7 +266,7 @@ class Ibu extends React.Component{
                         </h4>
                         <p className="text-gray-500 text-sm">Informasi orang tua kandung / ibu.</p>
                     </div>
-                    { isModeSanggah && (
+                    { this.props.editable && (
                         <button onClick={this.modalToggle} className="bg-amber-600 text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-amber-700 transition-all shadow-md">
                             <i className="fa fa-pencil mr-2"></i> Perbarui Data
                         </button>

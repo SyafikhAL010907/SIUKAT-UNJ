@@ -235,9 +235,11 @@ class Pribadi extends React.Component {
                                 <h2 className="text-2xl font-bold text-gray-800 uppercase">{data.nama_cmahasiswa}</h2>
                                 <p className="text-emerald-600 font-semibold">{data.no_peserta}</p>
                             </div>
-                            <button onClick={this.modalToggle} className="bg-amber-600 text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-amber-700 shadow-md">
-                                <i className="fa fa-edit mr-2"></i> Perbarui Data
-                            </button>
+                            {this.props.editable && (
+                                <button onClick={this.modalToggle} className="bg-amber-600 text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-amber-700 shadow-md">
+                                    <i className="fa fa-edit mr-2"></i> Perbarui Data
+                                </button>
+                            )}
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">

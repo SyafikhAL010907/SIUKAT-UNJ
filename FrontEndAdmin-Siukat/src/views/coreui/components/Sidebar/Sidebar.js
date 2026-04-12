@@ -3,6 +3,8 @@ import {NavLink} from 'react-router-dom';
 import {Badge, Nav, NavItem} from 'reactstrap';
 import classNames from 'classnames';
 import nav from './_nav'
+import { connect } from 'react-redux';
+import { filterNavigation } from '../../../../utils/rbac';
 
 class Sidebar extends Component {
 
@@ -85,11 +87,13 @@ class Sidebar extends Component {
     };
 
     // sidebar-nav root
+    const filteredNavItems = filterNavigation(nav.items, props.user?.role);
+
     return (
       <div className="sidebar">
         <nav className="sidebar-nav">
           <Nav>
-            {navList(nav.items)}
+            {navList(filteredNavItems)}
           </Nav>
         </nav>
       </div>
@@ -97,4 +101,6 @@ class Sidebar extends Component {
   }
 }
 
-export default Sidebar;
+export default connect((store) => ({
+  user: store.user.user
+}))(Sidebar);

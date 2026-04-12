@@ -89,18 +89,26 @@ class DataTable extends React.Component {
                 if (this.props.update && this.props.delete) {
                     return (
                         <td key={key} className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                            <button
-                                onClick={(e) => this.props.update(e, id)}
-                                className="inline-flex items-center px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-black uppercase tracking-wider rounded-lg transition-all shadow-sm active:scale-95"
-                            >
-                                <i className="fa fa-edit mr-1.5"></i> Edit
-                            </button>
-                            <button
-                                onClick={(e) => this.props.delete(e, id)}
-                                className="inline-flex items-center px-3 py-1.5 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white border border-red-200 text-[10px] font-black uppercase tracking-wider rounded-lg transition-all shadow-sm active:scale-95"
-                            >
-                                <i className="fa fa-trash mr-1.5"></i> Hapus
-                            </button>
+                            {this.props.user?.role !== 'validator' && (
+                                <button
+                                    onClick={(e) => this.props.update(e, id)}
+                                    className="inline-flex items-center px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-black uppercase tracking-wider rounded-lg transition-all shadow-sm active:scale-95"
+                                >
+                                    <i className="fa fa-edit mr-1.5"></i> Edit
+                                </button>
+                            )}
+                            {this.props.user?.role !== 'validator' && (
+                                <button
+                                    onClick={(e) => {
+                                        if (window.confirm("Apakah Anda yakin ingin menghapus data ini?")) {
+                                            this.props.handleHapus(e, id)
+                                        }
+                                    }}
+                                    className="inline-flex items-center px-3 py-1.5 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white border border-red-200 text-[10px] font-black uppercase tracking-wider rounded-lg transition-all shadow-sm active:scale-95"
+                                >
+                                    <i className="fa fa-trash mr-1.5"></i> Hapus
+                                </button>
+                            )}
                         </td>
                     )
                 }
@@ -117,7 +125,7 @@ class DataTable extends React.Component {
                         </Link>
 
                         {/* Tombol Sanggah - Hidden on original if sanggah exists (Reliable for ALL users via Backend Flag) */}
-                        {(!(values.atribut === 'original' && values.has_sanggah)) && (
+                        {(!(values.atribut === 'original' && values.has_sanggah)) && (this.props.user?.role !== 'validator') && (
                             <button
                                 onClick={() => this.toggleModal(id)}
                                 className={`inline-flex items-center px-3 py-1.5 ${values.atribut === 'sanggah' ? 'bg-red-50 text-red-600 border-red-200 hover:bg-red-600' : 'bg-orange-50 text-orange-600 border-orange-200 hover:bg-orange-600'} hover:text-white border text-[10px] font-black uppercase tracking-wider rounded-lg transition-all shadow-sm active:scale-95`}
@@ -299,4 +307,6 @@ class DataTable extends React.Component {
 }
 
 // Gunakan withRouter & connect agar history dan dispatch tersedia
-export default connect((store) => ({}))(withRouter(DataTable))
+export default connect((store) => ({
+    user: store.user.user
+}))(withRouter(DataTable))

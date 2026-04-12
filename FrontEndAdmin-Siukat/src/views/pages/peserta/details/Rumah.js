@@ -282,7 +282,7 @@ class Rumah extends React.Component {
                         <div className="w-2 h-6 bg-yellow-400 rounded-full"></div>
                         <h4 className="text-xl font-bold text-gray-800 tracking-tight text-uppercase italic">Informasi Rumah</h4>
                     </div>
-                    {isModeSanggah && (
+                    {this.props.editable && (
                         <button
                             onClick={this.modalToggle}
                             className="bg-amber-600 text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-amber-700 transition-all shadow-md"
