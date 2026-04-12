@@ -1,27 +1,36 @@
 import React from 'react'
 import defaultPhoto from '../../../dist/images/profile.png'
 import { connect } from 'react-redux'
-import { Field, reduxForm, reset, formValueSelector } from 'redux-form'
+import { Field, reduxForm, formValueSelector } from 'redux-form'
 import { Modal } from 'reactstrap' 
 import { cmahasiswa, provinsi, kabkot, kecamatan } from '../../../../actions'
-import { InputBs, InputDayPicker, InputFileBs, money } from '../../../components'
+import { InputBs, InputDayPicker, InputFileBs } from '../../../components'
 import { cookies, cookieName, rupiah, storage } from '../../../../global'
 import { withRouter } from 'react-router-dom'
 
 // --- KOMPONEN MODAL FORM ---
 let FormMahasiswa = (props) => {
-    const { handleSubmit, handleToggleMahasiswa, toggleMahasiswa,
-            pristine, submitting, dispatch,
-            ref_provinsi, ref_kabkot, ref_kecamatan,
-            penghasilan_cmahasiswa } = props
+    const { 
+        handleSubmit, handleToggleMahasiswa, toggleMahasiswa,
+        submitting, dispatch,
+        ref_provinsi, ref_kabkot, ref_kecamatan,
+        penghasilan_cmahasiswa 
+    } = props
 
+    // Handler Wilayah
     const handleProvinsi = (e) => {
-        dispatch(kabkot.fetchForCmahasiswa(e.target.value))
-        dispatch(kecamatan.fetchForCmahasiswa({type: "FETCH_KECAMATAN_MHS_FULFILLED", payload: []}))
+        const id = e.target.value;
+        if (id) {
+            dispatch(kabkot.fetchForCmahasiswa(id));
+            dispatch({ type: "FETCH_KECAMATAN_MHS_FULFILLED", payload: { data: [] } });
+        }
     }
 
     const handleKabkot = (e) => {
-        dispatch(kecamatan.fetchForCmahasiswa(e.target.value))
+        const id = e.target.value;
+        if (id) {
+            dispatch(kecamatan.fetchForCmahasiswa(id));
+        }
     }
 
     return (
@@ -29,7 +38,7 @@ let FormMahasiswa = (props) => {
             <div className="bg-white rounded-3xl overflow-hidden shadow-2xl">
                 <div className="bg-emerald-600 p-6 flex justify-between items-center text-white">
                     <h3 className="text-xl font-bold">Perbarui Data Profil</h3>
-                    <button onClick={handleToggleMahasiswa} className="hover:rotate-90 transition-transform text-2xl">&times;</button>
+                    <button onClick={handleToggleMahasiswa} type="button" className="hover:rotate-90 transition-transform text-2xl">&times;</button>
                 </div>
                 
                 <form onSubmit={handleSubmit} className="p-8">
@@ -41,7 +50,7 @@ let FormMahasiswa = (props) => {
 
                         <div>
                             <label className="block text-xs font-bold text-gray-500 uppercase mb-2 ml-1">Jenis Kelamin</label>
-                            <Field name="gender_cmahasiswa" component={InputBs} type="select" className="w-full px-4 py-3 rounded-xl border border-gray-200">
+                            <Field name="gender_cmahasiswa" component={InputBs} type="select">
                                 <option value="">Pilih</option>
                                 <option value="laki-laki">Laki-Laki</option>
                                 <option value="perempuan">Perempuan</option>
@@ -50,18 +59,16 @@ let FormMahasiswa = (props) => {
 
                         <div>
                             <label className="block text-xs font-bold text-gray-500 uppercase mb-2 ml-1">Golongan Darah</label>
-                            <Field name="goldar_cmahasiswa" component={InputBs} type="select" className="w-full px-4 py-3 rounded-xl border border-gray-200">
+                            <Field name="goldar_cmahasiswa" component={InputBs} type="select">
                                 <option value="">Pilih</option>
-                                <option value="A">A</option>
-                                <option value="B">B</option>
-                                <option value="AB">AB</option>
-                                <option value="O">O</option>
+                                <option value="A">A</option><option value="B">B</option>
+                                <option value="AB">AB</option><option value="O">O</option>
                             </Field>
                         </div>
 
                         <div>
                             <label className="block text-xs font-bold text-gray-500 uppercase mb-2 ml-1">Tempat Lahir</label>
-                            <Field name="tempat_lahir_cmahasiswa" component={InputBs} type="text" className="w-full px-4 py-3 rounded-xl border border-gray-200" />
+                            <Field name="tempat_lahir_cmahasiswa" component={InputBs} type="text" />
                         </div>
 
                         <div>
@@ -69,27 +76,48 @@ let FormMahasiswa = (props) => {
                             <Field name="tanggal_lahir_cmahasiswa" component={InputDayPicker} startYear={1990} />
                         </div>
 
+                        {/* --- DROPDOWN WILAYAH DENGAN PROTEKSI .MAP --- */}
                         <div>
-                            <label className="block text-xs font-bold text-gray-500 uppercase mb-2 ml-1">Nomor Telepon</label>
-                            <Field name="telepon_cmahasiswa" component={InputBs} type="text" className="w-full px-4 py-3 rounded-xl border border-gray-200" />
+                            <label className="block text-xs font-bold text-gray-500 uppercase mb-2 ml-1">Provinsi</label>
+                            <Field name="provinsi_id" component={InputBs} type="select" onChange={handleProvinsi}>
+                                <option value="">Pilih Provinsi</option>
+                                {Array.isArray(ref_provinsi) && ref_provinsi.map((v, i) => (
+                                    <option key={i} value={v.id}>{v.nama}</option>
+                                ))}
+                            </Field>
                         </div>
 
                         <div>
-                            <label className="block text-xs font-bold text-gray-500 uppercase mb-2 ml-1">Sosial Media (Instagram/X)</label>
-                            <Field name="sosmed_cmahasiswa" component={InputBs} type="text" className="w-full px-4 py-3 rounded-xl border border-gray-200" />
+                            <label className="block text-xs font-bold text-gray-500 uppercase mb-2 ml-1">Kabupaten/Kota</label>
+                            <Field name="kabkot_id" component={InputBs} type="select" onChange={handleKabkot}>
+                                <option value="">Pilih Kab/Kot</option>
+                                {Array.isArray(ref_kabkot) && ref_kabkot.map((v, i) => (
+                                    <option key={i} value={v.id}>{v.nama}</option>
+                                ))}
+                            </Field>
+                        </div>
+
+                        <div className="md:col-span-2">
+                            <label className="block text-xs font-bold text-gray-500 uppercase mb-2 ml-1">Kecamatan</label>
+                            <Field name="kecamatan_id" component={InputBs} type="select">
+                                <option value="">Pilih Kecamatan</option>
+                                {Array.isArray(ref_kecamatan) && ref_kecamatan.map((v, i) => (
+                                    <option key={i} value={v.id}>{v.nama}</option>
+                                ))}
+                            </Field>
                         </div>
 
                         <div className="md:col-span-2">
                             <label className="block text-xs font-bold text-gray-500 uppercase mb-2 ml-1">Alamat Lengkap</label>
-                            <Field name="alamat_cmahasiswa" component={InputBs} type="textarea" className="w-full px-4 py-3 rounded-xl border border-gray-200" />
+                            <Field name="alamat_cmahasiswa" component={InputBs} type="textarea" />
                         </div>
 
                         <div className="md:col-span-2 p-4 bg-emerald-50 rounded-2xl border border-emerald-100">
                             <label className="block text-xs font-bold text-emerald-700 uppercase mb-2">Penghasilan Per Bulan</label>
                             <div className="flex flex-col md:flex-row gap-4 items-center">
-                                <Field name="penghasilan_cmahasiswa" component={InputBs} type="number" validate={[money]} className="flex-1" />
-                                <div className="text-lg font-bold text-emerald-800 bg-white px-6 py-2 rounded-full border border-emerald-200 shadow-sm">
-                                    { rupiah(penghasilan_cmahasiswa) }
+                                <Field name="penghasilan_cmahasiswa" component={InputBs} type="number" className="flex-1" />
+                                <div className="text-lg font-bold text-emerald-800 bg-white px-6 py-2 rounded-full border border-emerald-200">
+                                    { rupiah(penghasilan_cmahasiswa || 0) }
                                 </div>
                             </div>
                         </div>
@@ -102,8 +130,8 @@ let FormMahasiswa = (props) => {
 
                     <div className="mt-10 flex justify-end space-x-3 border-t pt-6">
                         <button type="button" onClick={handleToggleMahasiswa} className="px-6 py-2.5 font-bold text-gray-500">Batal</button>
-                        <button type="submit" disabled={pristine || submitting} className="bg-emerald-600 text-white px-8 py-2.5 rounded-xl font-bold shadow-lg">
-                            <i className="fa fa-save mr-2"></i> Simpan Perubahan
+                        <button type="submit" disabled={submitting} className="bg-emerald-600 text-white px-8 py-2.5 rounded-xl font-bold shadow-lg">
+                            {submitting ? 'Menyimpan...' : 'Simpan Perubahan'}
                         </button>
                     </div>
                 </form>
@@ -119,52 +147,71 @@ class Pribadi extends React.Component {
         this.state = { modalToggle: false }
     }
 
-    componentWillMount(){
-        // Fetch data awal berdasarkan No Peserta dari props
-        const token = cookies.get(cookieName);
-        this.props.dispatch(provinsi.fetchProvinsi())
-        this.props.dispatch(cmahasiswa.fetchAllData(token, this.props.noPeserta))
+    async componentDidMount(){
+        await this.initLoad();
     }
 
-    componentDidMount() {
-        // Modal auto-open removed as per user request
+    initLoad = async () => {
+        const token = cookies.get(cookieName);
+        const { noPeserta, dispatch } = this.props;
+        
+        // Load Provinsi
+        dispatch(provinsi.fetchProvinsi());
+        
+        // Load Data Mahasiswa
+        try {
+            const res = await dispatch(cmahasiswa.fetchAllData(token, noPeserta));
+            const val = res?.value?.data || res?.payload?.data;
+            
+            // Auto-load dropdown jika data sudah ada
+            if (val) {
+                if (val.provinsi_id) dispatch(kabkot.fetchForCmahasiswa(val.provinsi_id));
+                if (val.kabkot_id) dispatch(kecamatan.fetchForCmahasiswa(val.kabkot_id));
+            }
+        } catch (e) {
+            console.error("Error loading data", e);
+        }
     }
 
     modalToggle = () => {
         this.setState({ modalToggle: !this.state.modalToggle })
     }
 
-    submitMahasiswa = (values) => {
+    submitMahasiswa = async (values) => {
         const token = cookies.get(cookieName);
-        var formData = new FormData()
+        const formData = new FormData();
         
-        for(var key in values){
-            if(key === "file_foto_cmahasiswa"){
-                if(values[key] && values[key][0]) {
-                    formData.append(key, values[key][0])
-                }
-            } else if (values[key] !== null) {
-                formData.append(key, values[key])
+        Object.keys(values).forEach(key => {
+            if (key === "file_foto_cmahasiswa") {
+                if (values[key] && values[key][0]) formData.append(key, values[key][0]);
+            } else if (values[key] !== null && values[key] !== undefined) {
+                formData.append(key, values[key]);
             }
-        }
+        });
 
-        // Jalankan Update
-        this.props.dispatch(cmahasiswa.updateData(token, formData, this.props.noPeserta)).then(() => {
+        try {
+            // Logic Update dengan Await
+            await this.props.dispatch(cmahasiswa.updateData(token, formData, this.props.noPeserta));
+            
+            // Refresh Data di UI
+            await this.props.dispatch(cmahasiswa.fetchAllData(token, this.props.noPeserta));
+            
             this.modalToggle();
-            // Refetch data agar tampilan InfoItem langsung terupdate
-            this.props.dispatch(cmahasiswa.fetchAllData(token, this.props.noPeserta))
-        })
+            alert("Data Berhasil Diperbarui!");
+        } catch (error) {
+            console.error("Update Error", error);
+            alert("Gagal menyimpan perubahan.");
+        }
     }
 
     render(){
         const { cmahasiswa: data, location } = this.props;
-        if(!data) return <div className="p-10 text-center">Memuat Data...</div>;
+        if(!data) return <div className="p-10 text-center font-bold text-emerald-600">Memuat Profil...</div>;
 
         const isModeSanggah = location.state && location.state.modeEdit;
 
         return (
             <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100">
-                {/* Banner Notifikasi Mode Sanggah */}
                 {isModeSanggah && (
                     <div className="mb-6 p-4 bg-orange-50 border border-orange-200 rounded-2xl flex items-center text-orange-700 animate-pulse">
                         <i className="fa fa-info-circle mr-3 text-xl"></i>
@@ -173,24 +220,22 @@ class Pribadi extends React.Component {
                 )}
 
                 <div className="flex flex-col md:flex-row gap-10">
-                    {/* Foto Profil */}
                     <div className="flex flex-col items-center md:w-1/4">
                         <img 
                             src={data.foto_cmahasiswa ? `${storage}/${data.foto_cmahasiswa}` : defaultPhoto} 
                             className="w-48 h-60 object-cover rounded-2xl shadow-lg border-4 border-white" 
                             alt="profil"
+                            onError={(e) => {e.target.src = defaultPhoto}}
                         />
                     </div>
 
-                    {/* Detail Informasi */}
                     <div className="flex-1 space-y-6">
                         <div className="flex justify-between items-start border-b border-gray-100 pb-4">
                             <div>
                                 <h2 className="text-2xl font-bold text-gray-800 uppercase">{data.nama_cmahasiswa}</h2>
                                 <p className="text-emerald-600 font-semibold">{data.no_peserta}</p>
                             </div>
-                            
-                            <button onClick={this.modalToggle} className="bg-amber-600 text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-amber-700 transition-all shadow-md">
+                            <button onClick={this.modalToggle} className="bg-amber-600 text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-amber-700 shadow-md">
                                 <i className="fa fa-edit mr-2"></i> Perbarui Data
                             </button>
                         </div>
@@ -233,20 +278,25 @@ const InfoItem = ({ label, value }) => (
     </div>
 )
 
-// --- REDUX WRAPPERS ---
+// --- REDUX WRAPPERS DENGAN FIX PROTEKSI ARRAY ---
 FormMahasiswa = reduxForm({
-    form: 'DataMahasiswa',
+    form: 'FormProfileMahasiswa',
     enableReinitialize: true,
 })(FormMahasiswa)
 
-const selector = formValueSelector('DataMahasiswa')
+const selector = formValueSelector('FormProfileMahasiswa')
 
-FormMahasiswa = connect((store) => ({
-    penghasilan_cmahasiswa: selector(store, 'penghasilan_cmahasiswa'),
-    ref_provinsi: store.provinsi.provinsi,
-    ref_kabkot: store.kabkot.kabkot_cmahasiswa,
-    ref_kecamatan: store.kecamatan.kecamatan_cmahasiswa,
-}))(FormMahasiswa)
+FormMahasiswa = connect((store) => {
+    // Pastikan data yang diambil dari store selalu berupa array
+    const getArray = (data) => Array.isArray(data) ? data : [];
+    
+    return {
+        penghasilan_cmahasiswa: selector(store, 'penghasilan_cmahasiswa'),
+        ref_provinsi: getArray(store.provinsi.provinsi),
+        ref_kabkot: getArray(store.kabkot.kabkot_cmahasiswa),
+        ref_kecamatan: getArray(store.kecamatan.kecamatan_cmahasiswa),
+    }
+})(FormMahasiswa)
 
 export default withRouter(connect((store) => ({
     cmahasiswa: store.cmahasiswa.singleCmahasiswa,

@@ -208,7 +208,6 @@ class Ibu extends React.Component{
         this.props.dispatch(provinsi.fetchProvinsi())
         this.props.dispatch(ibu.fetchAllData(token, this.props.noPeserta, this.props.atribut))
         
-        // Memastikan data wilayah terambil jika sudah ada value provinsi/kabkot di data awal
         if (this.props.ibu) {
             if (this.props.ibu.provinsi_ibu) this.props.dispatch(kabkot.fetchForIbu(this.props.ibu.provinsi_ibu));
             if (this.props.ibu.kabkot_ibu) this.props.dispatch(kecamatan.fetchForIbu(this.props.ibu.kabkot_ibu));
@@ -216,9 +215,7 @@ class Ibu extends React.Component{
     }
 
     modalToggle = () => {
-        // Sebelum buka modal, pastikan dropdown wilayah terisi sesuai data yang ada
         if (!this.state.modalToggle && this.props.ibu) {
-            const token = cookies.get(cookieName);
             if (this.props.ibu.provinsi_ibu) this.props.dispatch(kabkot.fetchForIbu(this.props.ibu.provinsi_ibu));
             if (this.props.ibu.kabkot_ibu) this.props.dispatch(kecamatan.fetchForIbu(this.props.ibu.kabkot_ibu));
         }
@@ -229,21 +226,16 @@ class Ibu extends React.Component{
         const token = cookies.get(cookieName);
         var formData = new FormData()
         
-        // Loop values untuk memisahkan File dan String
         for(var key in values){
             if(key.startsWith("file_scan") && values[key] && values[key][0] instanceof File){
                 formData.append(key, values[key][0])   
-                // Clear input file manual
                 if(document.getElementById(key)) document.getElementById(key).value = null;     
             } else if (!key.startsWith("file_scan") && !key.startsWith("scan_")) {
-                // Jangan kirim key yang diawali "scan_" karena itu biasanya dari API (path string)
-                // Kirim "" jika null agar tidak terkirim string "null" ke server
                 formData.append(key, values[key] === null ? "" : values[key])
             }
         }
 
         return this.props.dispatch(ibu.updateData(token, formData, this.props.noPeserta)).then((res) => {
-            // Tutup modal dan ambil data terbaru
             this.setState({ modalToggle: false });
             this.props.dispatch(ibu.fetchAllData(token, this.props.noPeserta, this.props.atribut));
             this.props.dispatch(reset('DataIbuSeleksi'));

@@ -6,22 +6,25 @@ import { ayah, provinsi, pekerjaan, kabkot, kecamatan } from '../../../../action
 import { InputBs, InputDayPicker, InputFileBs, money } from '../../../components'
 import { cookies, cookieName, rupiah, storage, service } from '../../../../global'
 import { connect } from 'react-redux'
-
 import { withRouter } from 'react-router-dom'
 
 let FormAyah = (props) => {
-    const { handleSubmit, handleToggleAyah, toggleAyah,
-            pristine, submitting, dispatch,
-            ref_pekerjaan, ref_provinsi_ayah, ref_kabkot_ayah, ref_kecamatan_ayah,
-            status_ayah, penghasilan_ayah, sampingan_ayah, } = props
+    const { 
+        handleSubmit, handleToggleAyah, toggleAyah,
+        pristine, submitting, dispatch,
+        ref_pekerjaan, ref_provinsi_ayah, ref_kabkot_ayah, ref_kecamatan_ayah,
+        status_ayah, penghasilan_ayah, sampingan_ayah, 
+    } = props
 
     const handleProvinsi = (e) => {
         dispatch(kabkot.fetchForAyah(e.target.value))
         dispatch(kecamatan.fetchForAyah({type: "FETCH_KECAMATAN_FULFILLED", payload: []}))
     }
+
     const handleKabkot = (e) => {
         dispatch(kecamatan.fetchForAyah(e.target.value))
     }
+
     return (
         <Modal isOpen={toggleAyah} toggle={handleToggleAyah} size="lg" centered className="border-none">
             <div className="bg-white rounded-3xl overflow-hidden shadow-2xl">
@@ -90,35 +93,33 @@ let FormAyah = (props) => {
                             <FormGroup row>
                                 <Label for="provinsi_ayah" md={3}>Provinsi</Label>
                                 <Col md={9}>
-                                    <Field name="provinsi_ayah" component={InputBs} type="select" 
-                                        onChange={handleProvinsi}>{' '}
+                                    <Field name="provinsi_ayah" component={InputBs} type="select" onChange={handleProvinsi}>
                                         <option value="">-- Pilih Provinsi --</option>
-                                        { Array.isArray(ref_provinsi_ayah) ? ref_provinsi_ayah.map((data, key) => 
+                                        { Array.isArray(ref_provinsi_ayah) && ref_provinsi_ayah.map((data, key) => 
                                             <option value={data.provinsi_id} key={key}>{data.provinsi_nama}</option>
-                                        ) : "" }
+                                        )}
                                     </Field>
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
                                 <Label for="kabkot_ayah" md={3}>Kab/Kota</Label>
                                 <Col md={9}>
-                                    <Field name="kabkot_ayah" component={InputBs} type="select" 
-                                        onChange={handleKabkot}>{' '}        
+                                    <Field name="kabkot_ayah" component={InputBs} type="select" onChange={handleKabkot}>
                                         <option value="">-- Pilih Kabupaten/Kota --</option>
-                                        { Array.isArray(ref_kabkot_ayah) ? ref_kabkot_ayah.map((data, key) => 
+                                        { Array.isArray(ref_kabkot_ayah) && ref_kabkot_ayah.map((data, key) => 
                                             <option value={data.kab_id} key={key}>{data.kab_nama}</option>
-                                        ) : "" }
+                                        )}
                                     </Field>
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
                                 <Label for="kecamatan_ayah" sm={3}>Kecamatan</Label>
                                 <Col sm={9}>
-                                    <Field name="kecamatan_ayah" component={InputBs} type="select">{' '}        
+                                    <Field name="kecamatan_ayah" component={InputBs} type="select">
                                         <option value="">-- Pilih Kecamatan --</option>
-                                        { Array.isArray(ref_kecamatan_ayah) ? ref_kecamatan_ayah.map((data, key) => 
+                                        { Array.isArray(ref_kecamatan_ayah) && ref_kecamatan_ayah.map((data, key) => 
                                             <option value={data.kecam_id} key={key}>{data.kecam_nama}</option>
-                                        ) : "" }
+                                        )}
                                     </Field>
                                 </Col>
                             </FormGroup>
@@ -127,9 +128,9 @@ let FormAyah = (props) => {
                                 <Col md={9}>
                                     <Field type="select" component={InputBs} name="pekerjaan_ayah" id="pekerjaan_ayah">   
                                         <option value="">-- Pilih Pekerjaan --</option>
-                                        { Array.isArray(ref_pekerjaan) ? ref_pekerjaan.map((data, key) => 
+                                        { Array.isArray(ref_pekerjaan) && ref_pekerjaan.map((data, key) => 
                                             <option value={data.kode} key={key}>{data.nama}</option>
-                                        ) : "" }
+                                        )}
                                     </Field>
                                 </Col>
                             </FormGroup>
@@ -184,12 +185,12 @@ let FormAyah = (props) => {
                                 </Col>
                             </FormGroup>
 
-                             <div className="mt-10 flex justify-end space-x-3 border-t pt-6">
-                    <button type="button" onClick={handleToggleAyah} className="px-6 py-2.5 font-bold text-gray-500">Batal</button>
-                    <button type="submit" disabled={pristine || submitting} className="bg-emerald-600 text-white px-8 py-2.5 rounded-xl font-bold shadow-lg">
-                        <i className="fa fa-save mr-2"></i> Simpan Perubahan
-                    </button>
-                </div>
+                            <div className="mt-10 flex justify-end space-x-3 border-t pt-6">
+                                <button type="button" onClick={handleToggleAyah} className="px-6 py-2.5 font-bold text-gray-500">Batal</button>
+                                <button type="submit" disabled={pristine || submitting} className="bg-emerald-600 text-white px-8 py-2.5 rounded-xl font-bold shadow-lg">
+                                    <i className="fa fa-save mr-2"></i> Simpan Perubahan
+                                </button>
+                            </div>
                         </div>
                     )}
                 </form>
@@ -198,18 +199,15 @@ let FormAyah = (props) => {
     )
 }
 
-class Ayah extends React.Component{
-    constructor(props){
+class Ayah extends React.Component {
+    constructor(props) {
         super(props)
-
         this.state = {
             modalToggle: false
         }
-        this.modalToggle = this.modalToggle.bind(this)
-        this.submitAyah = this.submitAyah.bind(this)
     }
 
-    componentDidMount(){
+    componentDidMount() {
         const token = cookies.get(cookieName);
         this.props.dispatch(pekerjaan.fetchPekerjaan(token))
         this.props.dispatch(provinsi.fetchProvinsi())
@@ -235,8 +233,8 @@ class Ayah extends React.Component{
     }
 
     submitAyah = (values) => {
-        var formData = new FormData()
-        for (var key in values) {
+        const formData = new FormData()
+        for (const key in values) {
             if (key.startsWith("file_scan")) {
                 if (values[key] && values[key][0]) {
                     formData.append(key, values[key][0])
@@ -244,16 +242,12 @@ class Ayah extends React.Component{
                     if (fileInput) fileInput.value = null;
                 }
             } else {
-                // PENERAPAN FIX: Pastikan value tidak null/undefined sebelum di append
                 let val = values[key];
-                
-                // Jika value adalah object (biasanya dari store referensi), ambil ID/Kode nya
+                // Ekstraksi value jika berupa object dari store referensi
                 if (val && typeof val === 'object' && !Array.isArray(val)) {
                     val = val.kode || val.id || val.provinsi_id || val.kab_id || val.kecam_id || val;
                 }
-
-                // Append ke FormData, jika null jadikan string kosong
-                formData.append(key, val === null || val === undefined ? "" : val)
+                formData.append(key, (val === null || val === undefined) ? "" : val)
             }
         }
 
@@ -268,7 +262,7 @@ class Ayah extends React.Component{
             });
     }
 
-    render(){
+    render() {
         const { ayah, location } = this.props;
         const data = ayah || {}
         const isModeSanggah = location.state && location.state.modeEdit;
@@ -316,63 +310,63 @@ class Ayah extends React.Component{
                                 </td>
                             </tr>
 
-                            { data.status_ayah === "hidup" && (<>
-                                <tr>
-                                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">NIK</td>
-                                    <td className="p-4 font-mono text-gray-700">{data.nik_ayah || '-'}</td>
-                                </tr>
-                                <tr>
-                                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">KTP</td>
-                                    <td className="p-4">
-                                        { (data.scan_ktp_ayah && data.scan_ktp_ayah !== "") ? (
-                                            <a href={storage+"/"+data.scan_ktp_ayah} target="_blank" rel="noopener noreferrer"
-                                               className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 font-bold text-sm">
-                                                <i className="fa fa-download"></i> Lihat KTP
-                                            </a>
-                                        ) : <span className="text-gray-400 italic text-xs">Belum diunggah</span>}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Tempat, Tgl Lahir</td>
-                                    <td className="p-4 text-gray-700">{data.tempat_lahir_ayah ? `${data.tempat_lahir_ayah}, ${data.tanggal_lahir_ayah}` : '-'}</td>
-                                </tr>
-                                <tr>
-                                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Alamat</td>
-                                    <td className="p-4 text-gray-700">
-                                        { data.provinsi != null
-                                            ? `${data.alamat_ayah}, ${data.kecamatan ? data.kecamatan.kecam_nama : ''}, ${data.kabkot ? data.kabkot.kab_nama : ''}, ${data.provinsi.provinsi_nama}`
-                                            : (data.alamat_ayah || '-')
-                                        }
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Pekerjaan</td>
-                                    <td className="p-4 text-gray-700">{data.pekerjaan?.nama || '-'}</td>
-                                </tr>
-                                <tr>
-                                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Penghasilan</td>
-                                    <td className="p-4 font-bold text-emerald-700">{rupiah(data.penghasilan_ayah)} <span className="text-gray-400 font-normal text-xs">/ bulan</span></td>
-                                </tr>
-                                <tr>
-                                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Penghasilan Sampingan</td>
-                                    <td className="p-4 font-bold text-emerald-700">{rupiah(data.sampingan_ayah)} <span className="text-gray-400 font-normal text-xs">/ bulan</span></td>
-                                </tr>
-                                <tr>
-                                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Bukti Penghasilan</td>
-                                    <td className="p-4">
-                                        { (data.scan_slip_ayah && data.scan_slip_ayah !== "") ? (
-                                            <a href={storage+"/"+data.scan_slip_ayah} target="_blank" rel="noopener noreferrer"
-                                               className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 font-bold text-sm">
-                                                <i className="fa fa-download"></i> Lihat Slip Gaji
-                                            </a>
-                                        ) : <span className="text-gray-400 italic text-xs">Belum diunggah</span>}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Nomor Telepon</td>
-                                    <td className="p-4 font-mono text-gray-700">{data.telepon_ayah || '-'}</td>
-                                </tr>
-                            </>)}
+                            { data.status_ayah === "hidup" && (
+                                <>
+                                    <tr>
+                                        <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">NIK</td>
+                                        <td className="p-4 font-mono text-gray-700">{data.nik_ayah || '-'}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">KTP</td>
+                                        <td className="p-4">
+                                            { data.scan_ktp_ayah ? (
+                                                <a href={storage+"/"+data.scan_ktp_ayah} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 font-bold text-sm">
+                                                    <i className="fa fa-download"></i> Lihat KTP
+                                                </a>
+                                            ) : <span className="text-gray-400 italic text-xs">Belum diunggah</span>}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Tempat, Tgl Lahir</td>
+                                        <td className="p-4 text-gray-700">{data.tempat_lahir_ayah ? `${data.tempat_lahir_ayah}, ${data.tanggal_lahir_ayah}` : '-'}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Alamat</td>
+                                        <td className="p-4 text-gray-700">
+                                            { data.provinsi 
+                                                ? `${data.alamat_ayah || ''}, ${data.kecamatan ? data.kecamatan.kecam_nama : ''}, ${data.kabkot ? data.kabkot.kab_nama : ''}, ${data.provinsi.provinsi_nama}`
+                                                : (data.alamat_ayah || '-')
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Pekerjaan</td>
+                                        <td className="p-4 text-gray-700">{data.pekerjaan?.nama || '-'}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Penghasilan</td>
+                                        <td className="p-4 font-bold text-emerald-700">{rupiah(data.penghasilan_ayah)} <span className="text-gray-400 font-normal text-xs">/ bulan</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Penghasilan Sampingan</td>
+                                        <td className="p-4 font-bold text-emerald-700">{rupiah(data.sampingan_ayah)} <span className="text-gray-400 font-normal text-xs">/ bulan</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Bukti Penghasilan</td>
+                                        <td className="p-4">
+                                            { data.scan_slip_ayah ? (
+                                                <a href={storage+"/"+data.scan_slip_ayah} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 font-bold text-sm">
+                                                    <i className="fa fa-download"></i> Lihat Slip Gaji
+                                                </a>
+                                            ) : <span className="text-gray-400 italic text-xs">Belum diunggah</span>}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Nomor Telepon</td>
+                                        <td className="p-4 font-mono text-gray-700">{data.telepon_ayah || '-'}</td>
+                                    </tr>
+                                </>
+                            )}
                         </tbody>
                     </table>
                 </div>
@@ -396,7 +390,7 @@ FormAyah = reduxForm({
 const selector = formValueSelector('DataAyahSeleksi')
 
 FormAyah = connect((store) => {
-    let { status_ayah, penghasilan_ayah, sampingan_ayah } = selector(store, 'status_ayah', 'penghasilan_ayah', 'sampingan_ayah')
+    const { status_ayah, penghasilan_ayah, sampingan_ayah } = selector(store, 'status_ayah', 'penghasilan_ayah', 'sampingan_ayah')
     return {
         status_ayah,
         penghasilan_ayah,
