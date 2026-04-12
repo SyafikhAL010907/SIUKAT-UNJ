@@ -25,5 +25,10 @@ login Admin
 Username: SyafikhAL
 Password: 09012007
 
+-- Gunakan IN untuk mencari beberapa nilai sekaligus
+SELECT * FROM `tb_cmahasiswa` 
+WHERE `no_peserta` IN ('925111008305', '426000001', '426000002');
 
-
+go run scripts/utils/rollback_full/main.go > Hapus DB Masal
+go run scripts/utils/dynamic_injector/main.go > Inject Data Masal
+go run scripts/utils/generate_master_excel/main.go > Generate Excel Masal

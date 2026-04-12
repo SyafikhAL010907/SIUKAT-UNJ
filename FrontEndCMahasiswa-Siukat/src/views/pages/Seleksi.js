@@ -77,7 +77,7 @@ class Seleksi extends React.Component {
 
     render() {
         console.log(this.props.verifikasi);
-        if (this.props.cmahasiswa.flag !== 'pengisian' && this.props.cmahasiswa.ukt_tinggi === 'tidak') {
+        if (this.props.cmahasiswa.flag !== 'pengisian' || this.props.cmahasiswa.ukt_tinggi === 'ya') {
             return <Redirect to="/main/ukt" />;
         }
 

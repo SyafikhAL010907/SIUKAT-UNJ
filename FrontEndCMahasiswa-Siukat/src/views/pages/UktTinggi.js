@@ -71,7 +71,7 @@ class UktTinggi extends React.Component {
     }
 
     render() {
-        if (this.props.cmahasiswa.flag !== 'pengisian' && this.props.cmahasiswa.ukt_tinggi === 'ya') {
+        if (this.props.cmahasiswa.flag !== 'pengisian' || this.props.cmahasiswa.ukt_tinggi === 'tidak') {
             return <Redirect to="/main/ukt" />;
         }
 

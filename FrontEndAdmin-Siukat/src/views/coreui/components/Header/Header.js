@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { user } from '../../../../actions';
-import { notif, cookies, cookieName } from '../../../../global';
+import { notif, cookies, cookieName, removeToken } from '../../../../global';
 
 
 class Header extends Component {
@@ -30,13 +30,16 @@ class Header extends Component {
 
   logout = (e) => {
     if (e) e.preventDefault();
-    cookies.remove(cookieName, { path: "/" });
-    if (this.props.history) {
-      this.props.history.push('/');
-    } else {
-      window.location.href = "/";
-    }
+    
+    // Gunakan helper removeToken agar menghapus di Cookie & SessionStorage
+    removeToken();
+    
     notif("Berhasil!", "Anda berhasil keluar", "success");
+    
+    // Paksa redirect ke halaman login utama
+    setTimeout(() => {
+        window.location.href = "/";
+    }, 500); // Kasih jeda dikit biar notif kelihatan
   };
 
   render() {

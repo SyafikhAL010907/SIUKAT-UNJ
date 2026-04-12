@@ -30,18 +30,7 @@ class DataTable extends React.Component {
         const { data: allData } = this.props
         
         // Cek apakah siswa ini sudah punya row sanggah (buat validasi alert reset)
-        const hasSanggah = Array.isArray(allData) && allData.some(m => m.no_peserta === selectedId && m.atribut === 'sanggah');
-
-        if (hasSanggah) {
-            const confirmReset = window.confirm(
-                "⚠️ PERHATIAN: Mahasiswa ini sudah memiliki data Sanggah/Klarifikasi.\n\n" +
-                "Jika Anda melanjutkan, data sanggah yang lama (termasuk foto & detail) akan DIHAPUS dan " +
-                "digantikan dengan salinan baru dari Master Data.\n\n" +
-                "Apakah Anda yakin ingin melakukan RESET DATA SANGGAH?"
-            );
-            
-            if (!confirmReset) return; // Batal
-        }
+        // hasSanggah check removed per user request to disable alert
 
         this.setState({ isLoading: true, errorMsg: null })
         try {
@@ -134,7 +123,7 @@ class DataTable extends React.Component {
                                 className={`inline-flex items-center px-3 py-1.5 ${values.atribut === 'sanggah' ? 'bg-red-50 text-red-600 border-red-200 hover:bg-red-600' : 'bg-orange-50 text-orange-600 border-orange-200 hover:bg-orange-600'} hover:text-white border text-[10px] font-black uppercase tracking-wider rounded-lg transition-all shadow-sm active:scale-95`}
                             >
                                 <i className={`fa ${values.atribut === 'sanggah' ? 'fa-refresh' : 'fa-pencil-square-o'} mr-1.5`}></i> 
-                                {values.atribut === 'sanggah' ? 'Reset Sanggah' : 'Sanggah'}
+                                {values.atribut === 'sanggah' ? 'Perbarui' : 'Sanggah'}
                             </button>
                         )}
                     </td>
