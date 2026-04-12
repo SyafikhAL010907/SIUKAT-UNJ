@@ -30,7 +30,7 @@ func main() {
 
 	for _, sheetName := range sheets {
 		rows, _ := f.GetRows(sheetName)
-		if len(rows) <= 1 { continue }
+		if len(rows) <= 0 { continue }
 
 		fmt.Printf(">> Memproses Sheet [%s]...\n", sheetName)
 		headers := rows[0]
