@@ -193,6 +193,15 @@ let FormAyah = (props) => {
                             </div>
                         </div>
                     )}
+
+                    { status_ayah === "wafat" && (
+                        <div className="mt-10 flex justify-end space-x-3 border-t pt-6">
+                            <button type="button" onClick={handleToggleAyah} className="px-6 py-2.5 font-bold text-gray-500">Batal</button>
+                            <button type="submit" disabled={pristine || submitting} className="bg-emerald-600 text-white px-8 py-2.5 rounded-xl font-bold shadow-lg">
+                                <i className="fa fa-save mr-2"></i> Simpan Perubahan
+                            </button>
+                        </div>
+                    )}
                 </form>
             </div>
         </Modal>
