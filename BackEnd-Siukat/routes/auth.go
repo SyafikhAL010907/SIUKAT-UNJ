@@ -69,22 +69,43 @@ func AuthRoutes(r *gin.RouterGroup) {
 		}
 
 		var user models.User
-		if err := config.DB.Preload("CMahasiswa").Where("no_peserta = ?", noPeserta).First(&user).Error; err != nil {
-			log.Printf("DEBUG LOGIN: User %s tidak ditemukan di database", noPeserta)
-			c.JSON(http.StatusUnauthorized, gin.H{"message": "no such user found"})
-			return
+		var admin models.Admin
+		var role, finalPassword, finalID string
+		var cmahasiswa *models.CMahasiswa
+		var jalurMasuk string
+		isStudent := false
+
+		// 1. Coba cari di tb_user (Mahasiswa)
+		if err := config.DB.Preload("CMahasiswa").Where("no_peserta = ?", noPeserta).First(&user).Error; err == nil {
+			isStudent = true
+			role = user.Role
+			finalPassword = user.Password
+			finalID = user.NoPeserta
+			cmahasiswa = user.CMahasiswa
+			jalurMasuk = user.JalurMasuk
+		} else {
+			// 2. Jika tidak ada di tb_user, coba cari di tb_admin
+			if err := config.DB.Where("username = ?", noPeserta).First(&admin).Error; err != nil {
+				log.Printf("DEBUG LOGIN: User/Admin %s tidak ditemukan di database manapun", noPeserta)
+				c.JSON(http.StatusUnauthorized, gin.H{"message": "no such user found"})
+				return
+			}
+			role = admin.Role
+			finalPassword = admin.Password
+			finalID = admin.Username
+			jalurMasuk = "0" // Admin tidak punya jalur masuk
 		}
 
-		if user.Role == "belum_lengkap" {
+		if role == "belum_lengkap" {
 			log.Printf("DEBUG LOGIN: User %s statusnya belum_lengkap", noPeserta)
 			c.JSON(http.StatusForbidden, gin.H{"message": "Anda belum menyelesaikan verifikasi akademik"})
 			return
 		}
 
 		// Passport BCrypt Compare
-		err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
+		err := bcrypt.CompareHashAndPassword([]byte(finalPassword), []byte(password))
 		if err != nil {
-			log.Printf("DEBUG LOGIN: Password untuk user %s SALAH (Input: %s, Hash di DB: %s)", noPeserta, password, user.Password)
+			log.Printf("DEBUG LOGIN: Password untuk %s SALAH", noPeserta)
 			c.JSON(http.StatusUnauthorized, gin.H{"message": "passwords did not match"})
 			return
 		}
@@ -92,13 +113,13 @@ func AuthRoutes(r *gin.RouterGroup) {
 		// Captcha Verification Logic Parity
 		var captcha models.Captcha
 		if err := config.DB.Where("kode = ?", kodeInt).First(&captcha).Error; err != nil {
-			log.Printf("DEBUG LOGIN: Captcha ID %d TIDAK DITEMUKAN di database", kodeInt)
+			log.Printf("DEBUG LOGIN: Captcha ID %d TIDAK DITEMUKAN", kodeInt)
 			c.JSON(http.StatusUnauthorized, gin.H{"message": "pertanyaan keamanan tidak valid"})
 			return
 		}
 
 		if strconv.Itoa(captcha.Jawaban) != jawabanStr {
-			log.Printf("DEBUG LOGIN: Jawaban Captcha SALAH (Kode: %d, Jawaban Seharusnya: %d, Input: %s)", kodeInt, captcha.Jawaban, jawabanStr)
+			log.Printf("DEBUG LOGIN: Jawaban Captcha SALAH")
 			c.JSON(http.StatusUnauthorized, gin.H{"message": "pertanyaan keamanan salah"})
 			return
 		}
@@ -110,7 +131,7 @@ func AuthRoutes(r *gin.RouterGroup) {
 		}
 
 		token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-			"id":  user.NoPeserta,
+			"id":  finalID,
 			"exp": time.Now().Add(time.Hour * 24 * 7).Unix(), // 7 Days
 		})
 
@@ -121,21 +142,21 @@ func AuthRoutes(r *gin.RouterGroup) {
 		}
 
 		flagStr := ""
-		if user.CMahasiswa != nil {
-			flagStr = user.CMahasiswa.Flag
+		if cmahasiswa != nil {
+			flagStr = cmahasiswa.Flag
 		}
 
 		// LOG "CCTV" SEBELUM FILTER
-		log.Printf("DEBUG CCTV - Login Attempt: NoPeserta=%s, Role=%s, JalurMasuk=%s", user.NoPeserta, user.Role, user.JalurMasuk)
+		log.Printf("DEBUG CCTV - Login Attempt: ID=%s, Role=%s, JalurMasuk=%s", finalID, role, jalurMasuk)
 
 		// Ambil data info berdasarkan jalur_masuk (kode)
 		var information models.Info
-		if user.JalurMasuk != "" && user.JalurMasuk != "0" {
-			config.DB.Where("kode = ?", user.JalurMasuk).First(&information)
+		if jalurMasuk != "" && jalurMasuk != "0" {
+			config.DB.Where("kode = ?", jalurMasuk).First(&information)
 		}
 
 		// LOGIK AKSES JADWAL (Hanya untuk cmahasiswa)
-		if user.Role == "cmahasiswa" && user.JalurMasuk != "" && user.JalurMasuk != "0" {
+		if isStudent && role == "cmahasiswa" && jalurMasuk != "" && jalurMasuk != "0" {
 			wib := time.FixedZone("WIB", 7*3600) // GMT+7
 			now := time.Now().In(wib)
 			

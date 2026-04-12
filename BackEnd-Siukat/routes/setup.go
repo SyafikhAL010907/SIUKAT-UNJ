@@ -38,6 +38,29 @@ func SetupRoutes(r *gin.Engine) {
 			return
 		}
 
+		// 1.1 TRY SUBFOLDER FALLBACK (Standard Smart Resolver)
+		// Jika request adalah "uploads/Folder/File", coba "uploads/Folder/Original/File" atau "uploads/Folder/Sanggah/File"
+		parts := strings.Split(filepath.ToSlash(path), "/")
+		if len(parts) >= 2 {
+			// Misal: parts = ["Maulana_ID", "Profile.jpg"]
+			folder := parts[0]
+			file := parts[1]
+			
+			// Coba Original
+			origPath := filepath.Join("uploads", folder, "Original", file)
+			if _, err := os.Stat(origPath); err == nil {
+				c.File(origPath)
+				return
+			}
+			
+			// Coba Sanggah
+			sangPath := filepath.Join("uploads", folder, "Sanggah", file)
+			if _, err := os.Stat(sangPath); err == nil {
+				c.File(sangPath)
+				return
+			}
+		}
+
 		// 2. Smart Fallback for Legacy/Admin Links
 		// If exact match fails, try to find a file in any student folder that matches keywords
 		filename := filepath.Base(path)

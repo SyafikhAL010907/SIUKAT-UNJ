@@ -58,7 +58,7 @@ func KeringananRoutes(r *gin.RouterGroup) {
 		if errScan == nil {
 			utils.DeleteOldFile(existing.ScanKeringanan)
 			filename := fmt.Sprintf("Keringanan_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
-			newPath, err := utils.HandleDynamicUpload(c, fileScan, student.NamaCmahasiswa, np, filename)
+			newPath, err := utils.HandleDynamicUpload(c, fileScan, student.NamaCmahasiswa, np, "original", filename)
 			if err == nil {
 				req.ScanKeringanan = newPath
 			}

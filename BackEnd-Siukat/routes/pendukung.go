@@ -61,8 +61,8 @@ func PendukungRoutes(r *gin.RouterGroup) {
 		fileUkt, errUkt := c.FormFile("file_scan_pernyataan_ukt_tinggi")
 		if errUkt == nil {
 			utils.DeleteOldFile(existing.ScanPernyataanUktTinggi)
-			filename := fmt.Sprintf("Pernyataan_UKT_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
-			newPath, err := utils.HandleDynamicUpload(c, fileUkt, student.NamaCmahasiswa, np, filename)
+				filename := fmt.Sprintf("Pernyataan_UKT_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
+				newPath, err := utils.HandleDynamicUpload(c, fileUkt, student.NamaCmahasiswa, np, "original", filename)
 			if err == nil {
 				req.ScanPernyataanUktTinggi = newPath
 			}
@@ -72,8 +72,8 @@ func PendukungRoutes(r *gin.RouterGroup) {
 		fileKeb, errKeb := c.FormFile("file_scan_pernyataan_kebenaran")
 		if errKeb == nil {
 			utils.DeleteOldFile(existing.ScanPernyataanKebenaran)
-			filename := fmt.Sprintf("Surat_Pernyataan_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
-			newPath, err := utils.HandleDynamicUpload(c, fileKeb, student.NamaCmahasiswa, np, filename)
+				filename := fmt.Sprintf("Surat_Pernyataan_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
+				newPath, err := utils.HandleDynamicUpload(c, fileKeb, student.NamaCmahasiswa, np, "original", filename)
 			if err == nil {
 				req.ScanPernyataanKebenaran = newPath
 			}
@@ -83,8 +83,8 @@ func PendukungRoutes(r *gin.RouterGroup) {
 		fileKk, errKk := c.FormFile("file_scan_kk")
 		if errKk == nil {
 			utils.DeleteOldFile(existing.ScanKk)
-			filename := fmt.Sprintf("Kartu_Keluarga_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
-			newPath, err := utils.HandleDynamicUpload(c, fileKk, student.NamaCmahasiswa, np, filename)
+				filename := fmt.Sprintf("Kartu_Keluarga_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
+				newPath, err := utils.HandleDynamicUpload(c, fileKk, student.NamaCmahasiswa, np, "original", filename)
 			if err == nil {
 				req.ScanKk = newPath
 			}
@@ -120,8 +120,8 @@ func PendukungRoutes(r *gin.RouterGroup) {
 		fileUkt, errUkt := c.FormFile("file_scan_pernyataan_ukt_tinggi")
 		if errUkt == nil {
 			utils.DeleteOldFile(existing.ScanPernyataanUktTinggi)
-			filename := fmt.Sprintf("Pernyataan_UKT_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
-			newPath, err := utils.HandleDynamicUpload(c, fileUkt, student.NamaCmahasiswa, np, filename)
+				filename := fmt.Sprintf("Pernyataan_UKT_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
+				newPath, err := utils.HandleDynamicUpload(c, fileUkt, student.NamaCmahasiswa, np, "sanggah", filename)
 			if err == nil {
 				req.ScanPernyataanUktTinggi = newPath
 			}
@@ -130,8 +130,8 @@ func PendukungRoutes(r *gin.RouterGroup) {
 		fileKeb, errKeb := c.FormFile("file_scan_pernyataan_kebenaran")
 		if errKeb == nil {
 			utils.DeleteOldFile(existing.ScanPernyataanKebenaran)
-			filename := fmt.Sprintf("Surat_Pernyataan_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
-			newPath, err := utils.HandleDynamicUpload(c, fileKeb, student.NamaCmahasiswa, np, filename)
+				filename := fmt.Sprintf("Surat_Pernyataan_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
+				newPath, err := utils.HandleDynamicUpload(c, fileKeb, student.NamaCmahasiswa, np, "sanggah", filename)
 			if err == nil {
 				req.ScanPernyataanKebenaran = newPath
 			}
@@ -140,8 +140,8 @@ func PendukungRoutes(r *gin.RouterGroup) {
 		fileKk, errKk := c.FormFile("file_scan_kk")
 		if errKk == nil {
 			utils.DeleteOldFile(existing.ScanKk)
-			filename := fmt.Sprintf("Kartu_Keluarga_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
-			newPath, err := utils.HandleDynamicUpload(c, fileKk, student.NamaCmahasiswa, np, filename)
+				filename := fmt.Sprintf("Kartu_Keluarga_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
+				newPath, err := utils.HandleDynamicUpload(c, fileKk, student.NamaCmahasiswa, np, "sanggah", filename)
 			if err == nil {
 				req.ScanKk = newPath
 			}

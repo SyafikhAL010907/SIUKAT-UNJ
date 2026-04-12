@@ -15,22 +15,32 @@ func (s *UsersService) GetUser(noPeserta string) (interface{}, error) {
 	cleanNoPeserta := strings.TrimSpace(noPeserta)
 	log.Printf("DEBUG [GetUser]: Attempting to fetch data for [%s]", cleanNoPeserta)
 
-	// 2. Resolve User Role
+	// 2. Resolve User Role (Check tb_user for Students/Old Admins first)
 	var user models.User
-	if err := config.DB.Where("no_peserta = ?", cleanNoPeserta).First(&user).Error; err != nil {
-		log.Printf("ERROR [GetUser]: User not found in tb_user for [%s]: %v", cleanNoPeserta, err)
-		return nil, err
+	userFound := false
+	if err := config.DB.Where("no_peserta = ?", cleanNoPeserta).First(&user).Error; err == nil {
+		userFound = true
 	}
 
-	// 3. Handle Admin
-	if user.Role == "admin" || user.Role == "developer" || user.Role == "operator" || user.Role == "validator" {
-		log.Printf("DEBUG [GetUser]: User [%s] is an Admin/Staff (Role: %s)", cleanNoPeserta, user.Role)
+	// 3. Handle Admin (Check tb_admin as primary source if not a student role or not found in tb_user)
+	if !userFound || (user.Role != "cmahasiswa" && user.Role != "belum_lengkap") {
+		log.Printf("DEBUG [GetUser]: Checking tb_admin for [%s]", cleanNoPeserta)
 		var admin models.Admin
 		if err := config.DB.Where("username = ?", cleanNoPeserta).First(&admin).Error; err == nil {
+			log.Printf("DEBUG [GetUser]: Admin [%s] found in tb_admin", cleanNoPeserta)
 			return admin, nil
 		}
-		// Fallback empty admin if not in tb_admin, so frontend at least doesn't crash 500
-		return models.Admin{Username: cleanNoPeserta, Role: user.Role}, nil
+		
+		// If it was found in tb_user with an admin role but not in tb_admin, return fallback
+		if userFound && (user.Role == "admin" || user.Role == "developer" || user.Role == "operator" || user.Role == "validator") {
+			return models.Admin{Username: cleanNoPeserta, Role: user.Role}, nil
+		}
+	}
+
+	// If it reached here and not found in tb_user, it's a dead end
+	if !userFound {
+		log.Printf("ERROR [GetUser]: User/Admin [%s] not found in any table", cleanNoPeserta)
+		return nil, errors.New("User tidak ditemukan")
 	}
 
 	// 4. Handle Student (CMahasiswa) - ATOMIC ROBUST SEARCH WITH PRELOAD
