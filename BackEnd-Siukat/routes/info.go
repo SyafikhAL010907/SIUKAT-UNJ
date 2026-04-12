@@ -30,10 +30,19 @@ func InfoRoutes(r *gin.RouterGroup) {
 	group.PUT("/save", func(c *gin.Context) {
 		// Use a clean struct to avoid conflict between string and pointer types
 		var req struct {
-			Kode              int    `json:"kode"`
-			TanggalMulaiStr   string `json:"tanggal_mulai"`
-			TanggalSelesaiStr string `json:"tanggal_selesai"`
-			TanggalAkhirStr   string `json:"tanggal_akhir"`
+			Kode               int    `json:"kode"`
+			TanggalMulaiStr    string `json:"tanggal_mulai"`
+			TanggalSelesaiStr  string `json:"tanggal_selesai"`
+			TanggalAkhirStr    string `json:"tanggal_akhir"`
+			Pengisian          string `json:"pengisian"`
+			Pengumuman         string `json:"pengumuman"`
+			KlarifikasiTanggal string `json:"klarifikasi_tanggal"`
+			KlarifikasiLokasi  string `json:"klarifikasi_lokasi"`
+			Pembayaran         string `json:"pembayaran"`
+			LaporDiri          string `json:"lapor_diri"`
+			Kontak             string `json:"kontak"`
+			Stage              string `json:"stage"`
+			StageDetail        string `json:"stage_detail"`
 		}
 
 		if err := c.ShouldBindJSON(&req); err != nil {
@@ -48,12 +57,23 @@ func InfoRoutes(r *gin.RouterGroup) {
 		// Explicitly handle mapping to support NULL (nil) values
 		updateData := make(map[string]interface{})
 		
+		// Map strings that are present in the form
+		updateData["pengisian"] = req.Pengisian
+		updateData["pengumuman"] = req.Pengumuman
+		updateData["pembayaran"] = req.Pembayaran
+		updateData["lapor_diri"] = req.LaporDiri
+		
+		// Only update fields that are actually in the UI to avoid overwriting unrelated columns
+		if req.Kontak != "" { updateData["kontak"] = req.Kontak }
+		if req.KlarifikasiTanggal != "" { updateData["klarifikasi_tanggal"] = req.KlarifikasiTanggal }
+		if req.KlarifikasiLokasi != "" { updateData["klarifikasi_lokasi"] = req.KlarifikasiLokasi }
+		if req.Stage != "" { updateData["stage"] = req.Stage }
+
+		// Handle Dates
 		if req.TanggalMulaiStr != "" {
 			t, err := time.ParseInLocation(layout, req.TanggalMulaiStr, wib)
 			if err == nil {
 				updateData["tanggal_mulai"] = &t
-			} else {
-				updateData["tanggal_mulai"] = nil
 			}
 		} else {
 			updateData["tanggal_mulai"] = nil
@@ -63,8 +83,6 @@ func InfoRoutes(r *gin.RouterGroup) {
 			t, err := time.ParseInLocation(layout, req.TanggalSelesaiStr, wib)
 			if err == nil {
 				updateData["tanggal_selesai"] = &t
-			} else {
-				updateData["tanggal_selesai"] = nil
 			}
 		} else {
 			updateData["tanggal_selesai"] = nil
@@ -74,15 +92,12 @@ func InfoRoutes(r *gin.RouterGroup) {
 			t, err := time.ParseInLocation(layout, req.TanggalAkhirStr, wib)
 			if err == nil {
 				updateData["tanggal_akhir"] = &t
-			} else {
-				updateData["tanggal_akhir"] = nil
 			}
 		} else {
 			updateData["tanggal_akhir"] = nil
 		}
 
 		// Update explicitly using map
-
 		if err := config.DB.Model(&models.Info{}).Where("kode = ?", req.Kode).Updates(updateData).Error; err != nil {
 			c.JSON(http.StatusInternalServerError, err)
 			return

@@ -4,7 +4,7 @@ import './dist/libraries/font-awesome-4.7.0/css/font-awesome.min.css';
 import 'react-day-picker/lib/style.css';
 import './dist/css/loader.css';
 import './coreui/index.styles.css';
-import './dist/css/styles.css';
+import './dist/css/modern-admin.css';
 import Login from './coreui/views/Pages/Login'
 import Full from './coreui/containers/Full'
 import Page404 from './coreui/views/Pages/Page404';

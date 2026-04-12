@@ -123,6 +123,7 @@ class DetailCmahasiswa extends React.Component {
               <Pribadi 
                 noPeserta={this.props.match.params.no_peserta}
                 editable={isSanggah || (this.props.user && this.props.user.role === "admin")}
+                atribut={fetchAtribut}
               />
             </div>
           )}

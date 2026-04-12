@@ -22,7 +22,7 @@ let FormMahasiswa = (props) => {
         const id = e.target.value;
         if (id) {
             dispatch(kabkot.fetchForCmahasiswa(id));
-            dispatch({ type: "FETCH_KECAMATAN_MHS_FULFILLED", payload: { data: [] } });
+            dispatch({ type: "FETCH_KECAMATAN_MHS_FULFILLED", payload: [] });
         }
     }
 
@@ -45,12 +45,12 @@ let FormMahasiswa = (props) => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="md:col-span-2">
                             <label className="block text-xs font-bold text-gray-500 uppercase mb-2 ml-1">Nama Lengkap</label>
-                            <Field name="nama_cmahasiswa" component={InputBs} type="text" className="w-full px-4 py-3 rounded-xl border border-gray-200" />
+                            <Field name="nama_cmahasiswa" component={InputBs} type="text" className="w-full px-4 py-3 rounded-xl border border-gray-200 text-black" />
                         </div>
 
                         <div>
                             <label className="block text-xs font-bold text-gray-500 uppercase mb-2 ml-1">Jenis Kelamin</label>
-                            <Field name="gender_cmahasiswa" component={InputBs} type="select">
+                            <Field name="gender_cmahasiswa" component={InputBs} type="select" className="text-black">
                                 <option value="">Pilih</option>
                                 <option value="laki-laki">Laki-Laki</option>
                                 <option value="perempuan">Perempuan</option>
@@ -59,7 +59,7 @@ let FormMahasiswa = (props) => {
 
                         <div>
                             <label className="block text-xs font-bold text-gray-500 uppercase mb-2 ml-1">Golongan Darah</label>
-                            <Field name="goldar_cmahasiswa" component={InputBs} type="select">
+                            <Field name="goldar_cmahasiswa" component={InputBs} type="select" className="text-black">
                                 <option value="">Pilih</option>
                                 <option value="A">A</option><option value="B">B</option>
                                 <option value="AB">AB</option><option value="O">O</option>
@@ -68,54 +68,54 @@ let FormMahasiswa = (props) => {
 
                         <div>
                             <label className="block text-xs font-bold text-gray-500 uppercase mb-2 ml-1">Tempat Lahir</label>
-                            <Field name="tempat_lahir_cmahasiswa" component={InputBs} type="text" />
+                            <Field name="tempat_lahir_cmahasiswa" component={InputBs} type="text" className="text-black" />
                         </div>
 
                         <div>
                             <label className="block text-xs font-bold text-gray-500 uppercase mb-2 ml-1">Tanggal Lahir</label>
-                            <Field name="tanggal_lahir_cmahasiswa" component={InputDayPicker} startYear={1990} />
+                            <Field name="tanggal_lahir_cmahasiswa" component={InputDayPicker} startYear={1990} className="text-black" />
                         </div>
 
-                        {/* --- DROPDOWN WILAYAH DENGAN PROTEKSI .MAP --- */}
+                        {/* --- DROPDOWN WILAYAH DENGAN FIX MAPPING & KEYS --- */}
                         <div>
                             <label className="block text-xs font-bold text-gray-500 uppercase mb-2 ml-1">Provinsi</label>
-                            <Field name="provinsi_id" component={InputBs} type="select" onChange={handleProvinsi}>
+                            <Field name="provinsi_cmahasiswa" component={InputBs} type="select" className="text-black" onChange={handleProvinsi}>
                                 <option value="">Pilih Provinsi</option>
-                                {Array.isArray(ref_provinsi) && ref_provinsi.map((v, i) => (
-                                    <option key={i} value={v.id}>{v.nama}</option>
+                                {ref_provinsi.map((v, i) => (
+                                    <option key={i} value={v.provinsi_id}>{v.provinsi_nama}</option>
                                 ))}
                             </Field>
                         </div>
 
                         <div>
                             <label className="block text-xs font-bold text-gray-500 uppercase mb-2 ml-1">Kabupaten/Kota</label>
-                            <Field name="kabkot_id" component={InputBs} type="select" onChange={handleKabkot}>
+                            <Field name="kabkot_cmahasiswa" component={InputBs} type="select" className="text-black" onChange={handleKabkot}>
                                 <option value="">Pilih Kab/Kot</option>
-                                {Array.isArray(ref_kabkot) && ref_kabkot.map((v, i) => (
-                                    <option key={i} value={v.id}>{v.nama}</option>
+                                {ref_kabkot.map((v, i) => (
+                                    <option key={i} value={v.id || v.kab_id}>{v.nama || v.kab_nama}</option>
                                 ))}
                             </Field>
                         </div>
 
                         <div className="md:col-span-2">
                             <label className="block text-xs font-bold text-gray-500 uppercase mb-2 ml-1">Kecamatan</label>
-                            <Field name="kecamatan_id" component={InputBs} type="select">
+                            <Field name="kecamatan_cmahasiswa" component={InputBs} type="select" className="text-black">
                                 <option value="">Pilih Kecamatan</option>
-                                {Array.isArray(ref_kecamatan) && ref_kecamatan.map((v, i) => (
-                                    <option key={i} value={v.id}>{v.nama}</option>
+                                {ref_kecamatan.map((v, i) => (
+                                    <option key={i} value={v.id || v.kecam_id}>{v.nama || v.kecam_nama}</option>
                                 ))}
                             </Field>
                         </div>
 
                         <div className="md:col-span-2">
                             <label className="block text-xs font-bold text-gray-500 uppercase mb-2 ml-1">Alamat Lengkap</label>
-                            <Field name="alamat_cmahasiswa" component={InputBs} type="textarea" />
+                            <Field name="alamat_cmahasiswa" component={InputBs} type="textarea" className="text-black font-bold" />
                         </div>
 
                         <div className="md:col-span-2 p-4 bg-emerald-50 rounded-2xl border border-emerald-100">
                             <label className="block text-xs font-bold text-emerald-700 uppercase mb-2">Penghasilan Per Bulan</label>
                             <div className="flex flex-col md:flex-row gap-4 items-center">
-                                <Field name="penghasilan_cmahasiswa" component={InputBs} type="number" className="flex-1" />
+                                <Field name="penghasilan_cmahasiswa" component={InputBs} type="number" className="flex-1 text-black" />
                                 <div className="text-lg font-bold text-emerald-800 bg-white px-6 py-2 rounded-full border border-emerald-200">
                                     { rupiah(penghasilan_cmahasiswa || 0) }
                                 </div>
@@ -124,7 +124,7 @@ let FormMahasiswa = (props) => {
 
                         <div className="md:col-span-2">
                             <label className="block text-xs font-bold text-gray-500 uppercase mb-2 ml-1">Ganti Pas Foto</label>
-                            <Field component={InputFileBs} name="file_foto_cmahasiswa" id="file_foto_cmahasiswa" type="file" accept="image/*" />
+                            <Field component={InputFileBs} name="file_foto_cmahasiswa" id="file_foto_cmahasiswa" type="file" accept="image/*" className="text-black" />
                         </div>
                     </div>
 
@@ -160,13 +160,13 @@ class Pribadi extends React.Component {
         
         // Load Data Mahasiswa
         try {
-            const res = await dispatch(cmahasiswa.fetchAllData(token, noPeserta));
+            const res = await dispatch(cmahasiswa.fetchAllData(token, noPeserta, this.props.atribut));
             const val = res?.value?.data || res?.payload?.data;
             
             // Auto-load dropdown jika data sudah ada
             if (val) {
-                if (val.provinsi_id) dispatch(kabkot.fetchForCmahasiswa(val.provinsi_id));
-                if (val.kabkot_id) dispatch(kecamatan.fetchForCmahasiswa(val.kabkot_id));
+                if (val.provinsi_cmahasiswa) dispatch(kabkot.fetchForCmahasiswa(val.provinsi_cmahasiswa));
+                if (val.kabkot_cmahasiswa) dispatch(kecamatan.fetchForCmahasiswa(val.kabkot_cmahasiswa));
             }
         } catch (e) {
             console.error("Error loading data", e);
@@ -193,8 +193,8 @@ class Pribadi extends React.Component {
             // Logic Update dengan Await
             await this.props.dispatch(cmahasiswa.updateData(token, formData, this.props.noPeserta));
             
-            // Refresh Data di UI
-            await this.props.dispatch(cmahasiswa.fetchAllData(token, this.props.noPeserta));
+            // Refresh Data di UI (Gunakan Atribut agar dapet yang terbaru)
+            await this.props.dispatch(cmahasiswa.fetchAllData(token, this.props.noPeserta, this.props.atribut));
             
             this.modalToggle();
             alert("Data Berhasil Diperbarui!");
@@ -287,7 +287,7 @@ FormMahasiswa = reduxForm({
 const selector = formValueSelector('FormProfileMahasiswa')
 
 FormMahasiswa = connect((store) => {
-    // Pastikan data yang diambil dari store selalu berupa array
+    // Pastikan data yang diambil dari store selalu berupa array (handle raw array from backend)
     const getArray = (data) => Array.isArray(data) ? data : [];
     
     return {

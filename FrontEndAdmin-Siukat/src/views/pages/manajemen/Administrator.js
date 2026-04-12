@@ -160,29 +160,28 @@ class Administrator extends React.Component{
 
     render(){
         return(
-            <div className="p-4 md:p-8 space-y-6">
-                {/* Header Page */}
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+            <div className="p-4 md:p-8 space-y-10">
+                {/* Header Page Premium */}
+                <div className="glass-header flex flex-col md:flex-row md:items-center justify-between gap-6">
                     <div>
-                        <h2 className="text-2xl font-bold text-emerald-900 flex items-center">
-                            <span className="w-2 h-8 bg-yellow-400 rounded-full mr-3"></span>
+                        <h2 className="text-3xl font-extrabold text-emerald-900 tracking-tight">
                             Manajemen Administrator
                         </h2>
-                        <p className="text-gray-500 text-sm ml-5 mt-1">Kelola hak akses dan data petugas sistem SIUKAT.</p>
+                        <p className="text-emerald-700/70 text-sm font-medium mt-1">Kelola hak akses dan data petugas sistem SIUKAT.</p>
                     </div>
                     <button 
                         onClick={this.toggleAdministrator}
-                        className="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2.5 rounded-xl font-bold shadow-lg shadow-emerald-100 transition-all flex items-center justify-center space-x-2 active:scale-95"
+                        className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-2xl font-bold shadow-xl shadow-emerald-200 transition-all flex items-center justify-center space-x-2 active:scale-95 group"
                     >
-                        <i className="fa fa-plus"></i>
-                        <span>Tambah Admin</span>
+                        <i className="fa fa-plus group-hover:rotate-90 transition-transform"></i>
+                        <span>Tambah Admin Baru</span>
                     </button>
                 </div>
 
-                {/* Main Table Card */}
-                <div className="bg-white rounded-2xl shadow-sm border border-emerald-50 overflow-hidden">
-                    <div className="p-1 bg-gradient-to-r from-emerald-600 to-emerald-800"></div>
-                    <div className="p-6">
+                {/* Main Table Card Modern */}
+                <div className="modern-card">
+                    <div className="p-1 bg-gradient-to-r from-emerald-400 via-emerald-600 to-yellow-400"></div>
+                    <div className="p-8">
                         <DataTable 
                             data={this.props.admin}
                             columns={{
