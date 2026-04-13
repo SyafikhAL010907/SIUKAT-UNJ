@@ -4,7 +4,7 @@ class Footer extends React.Component{
     render(){
         return (
             <div className="footer">
-                &copy; Sistem Informasi Uang Kuliah Tunggal. Dikembangkan oleh UPT TIK Universitas Negeri Jakarta.
+                &copy; Sistem Informasi Uang Kuliah Tunggal. Dikembangkan oleh Universitas Negeri Jakarta.
             </div>
         );
     }

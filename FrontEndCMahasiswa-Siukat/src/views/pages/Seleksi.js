@@ -38,6 +38,9 @@ class Seleksi extends React.Component {
             activeTab: '1'
         };
 
+        // Ref untuk scroll smooth ke form
+        this.formContainerRef = React.createRef();
+
         this.toggle = this.toggle.bind(this);
         this.updateVerifikasi = this.updateVerifikasi.bind(this);
         this.handleClickTab = this.handleClickTab.bind(this);
@@ -65,6 +68,14 @@ class Seleksi extends React.Component {
         if (this.state.activeTab !== tab) {
             this.setState({
                 activeTab: tab,
+            }, () => {
+                // Scroll smooth ke area form setelah pindah tab
+                if (this.formContainerRef.current) {
+                    this.formContainerRef.current.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
             });
         }
     }
@@ -77,6 +88,8 @@ class Seleksi extends React.Component {
 
     render() {
         console.log(this.props.verifikasi);
+        
+        // --- 1. PALING ATAS: UKT TINGGI (Logic Redirect) ---
         if (this.props.cmahasiswa.flag !== 'pengisian' || this.props.cmahasiswa.ukt_tinggi === 'ya') {
             return <Redirect to="/main/ukt" />;
         }
@@ -96,7 +109,8 @@ class Seleksi extends React.Component {
         return (
             <div className="mt-4">
                 <Row className="h-100">
-                    <Col md="3" xs="12">
+                    {/* --- 2. TAB MENU (Sidebar di Desktop, di atas Form pada Mobile) --- */}
+                    <Col md="3" xs="12" className="order-1 order-md-1">
                         <ListGroup className="modern-sidebar-menu shadow-sm mb-3">
                             <ListGroupItem
                                 className={classnames({ active: this.state.activeTab === '1' })}
@@ -187,11 +201,13 @@ class Seleksi extends React.Component {
                                 <span><i className="fa fa-check-square mr-2"></i> Verifikasi Hasil</span>
                             </ListGroupItem>
                         </ListGroup>
+                        
+                        {/* Tombol Batal dipindah ke bawah menu sidebar */}
                         <BatalUktRendah />
-                        <Bantuan />
                     </Col>
                     
-                    <Col md="9" xs="12" className="d-flex flex-column">
+                    {/* --- 3. FORM CARD (Di bawah Menu pada Mobile) --- */}
+                    <Col md="9" xs="12" className="d-flex flex-column order-2 order-md-2" innerRef={this.formContainerRef}>
                         <TabContent activeTab={this.state.activeTab} className="h-100">
                             <TabPane tabId="1" className="h-100">
                                 <Card className="premium-card">
@@ -253,6 +269,11 @@ class Seleksi extends React.Component {
                                 </Card>
                             </TabPane>
                         </TabContent>
+                    </Col>
+
+                    {/* --- 4. PALING BAWAH: CARD BANTUAN --- */}
+                    <Col xs="12" className="order-3 mt-3">
+                        <Bantuan />
                     </Col>
                 </Row>
             </div>

@@ -1,5 +1,5 @@
 /* ============================================================
-   MODERN SIDEBAR & LAYOUT STYLES
+   MODERN SIDEBAR & LAYOUT STYLES - RESPONSIVE OPTIMIZED
    Environment: React Class Components, Reactstrap
    Theme: Emerald Green #0f6d3f
    ============================================================ */
@@ -25,22 +25,41 @@
     flex-direction: column;
     box-shadow: 4px 0 10px rgba(0, 0, 0, 0.08);
     width: 260px;
-    overflow: visible !important; /* Allow floating toggle to be visible */
+    overflow: visible !important; 
 }
 
 .sidebar-container.collapsed {
     width: 80px;
 }
 
-/* MOBILE RESPONSIVENESS */
+/* --- PERUBAHAN UNTUK RESPONSIVE HANDPHONE --- */
 @media (max-width: 768px) {
     .sidebar-container {
-        transform: translateX(-100%);
-        width: 280px;
-    }
-    .sidebar-container.open-mobile {
+        width: 80px;
         transform: translateX(0);
     }
+
+    .sidebar-container.open-mobile {
+        width: 280px;
+    }
+
+    .sidebar-container:not(.open-mobile) .sidebar-brand-text,
+    .sidebar-container:not(.open-mobile) .terminal-info,
+    .sidebar-container:not(.open-mobile) .terminal-header,
+    .sidebar-container:not(.open-mobile) .nav-item-custom span:not(.nav-icon-wrapper),
+    .sidebar-container:not(.open-mobile) .sidebar-brand-subtitle,
+    .sidebar-container:not(.open-mobile) .profile-info {
+        display: none;
+    }
+
+    .sidebar-container:not(.open-mobile) .terminal-body {
+        padding: 15px 5px;
+    }
+    .sidebar-container:not(.open-mobile) .terminal-avatar-container {
+        width: 50px;
+        height: 50px;
+    }
+
     .sidebar-overlay {
         position: fixed;
         inset: 0;
@@ -63,7 +82,7 @@
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     display: flex;
     align-items: center;
-    overflow: visible; /* Ensure toggle button is visible */
+    overflow: visible; 
     min-height: 90px;
     position: relative;
     transition: all 0.3s;
@@ -77,14 +96,14 @@
 
 .sidebar-toggle-btn {
     position: absolute;
-    right: -16px; /* Float halfway on the edge */
+    right: -16px; 
     top: calc(50% - 16px);
     background: #0f6d3f;
     border: 2px solid #ffffff;
     color: #ffffff;
     width: 32px;
     height: 32px;
-    border-radius: 10px; /* Rounded Square Toggle */
+    border-radius: 10px; 
     display: flex;
     align-items: center;
     justify-content: center;
@@ -123,7 +142,7 @@
 .sidebar-brand-title {
     margin: 0;
     font-size: 1.25rem;
-    font-family: 'Playfair Display', serif; /* Or fallback */
+    font-family: 'Playfair Display', serif; 
     font-weight: 700;
     letter-spacing: 0.5px;
 }
@@ -174,6 +193,7 @@
     display: flex;
     justify-content: center;
     font-size: 1.2rem;
+    flex-shrink: 0;
 }
 
 /* MAIN AREA */
@@ -192,7 +212,7 @@
 
 @media (max-width: 768px) {
     .main-area, .main-area.collapsed {
-        margin-left: 0;
+        margin-left: 80px; 
     }
 }
 
@@ -248,6 +268,12 @@
     gap: 16px;
 }
 
+@media (max-width: 576px) {
+    .profile-info {
+        display: none; 
+    }
+}
+
 .profile-section {
     display: flex;
     align-items: center;
@@ -292,28 +318,80 @@
     object-fit: cover;
 }
 
-/* SIDEBAR FOOTER */
+/* --- SIDEBAR FOOTER CONTAINER --- */
 .sidebar-footer {
     padding: 16px 12px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center; 
 }
 
+/* --- LOGOUT LINK BASE STYLES --- */
 .logout-link-sidebar {
     display: flex;
     align-items: center;
+    justify-content: flex-start;
     padding: 12px 16px;
     border-radius: 12px;
-    color: #ffdce0 !important;
+    background-color: #ff3b30; /* Latar belakang merah */
+    color: #ffffff !important; /* Teks putih */
     text-decoration: none !important;
-    transition: all 0.2s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     gap: 12px;
+    width: 100%;
+    box-sizing: border-box;
+    font-weight: 600;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .logout-link-sidebar:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: #e03127; /* Merah sedikit lebih gelap saat hover */
     color: #ffffff !important;
+    box-shadow: 0 4px 15px rgba(255, 59, 48, 0.5);
+    transform: translateY(-2px);
 }
 
+/* --- RESPONSIVE LOGIC (HP / MOBILE) --- */
+@media (max-width: 768px) {
+    /* Saat sidebar tertutup (not open-mobile) di HP - Hanya Ikon */
+    .sidebar-container:not(.open-mobile) .logout-link-sidebar {
+        padding: 12px 0;
+        justify-content: center;
+        background-color: transparent; /* Transparan agar tidak kaku di bar tipis */
+        color: #fffff !important; /* Ikon merah menyala saat tertutup */
+    }
+
+    .sidebar-container:not(.open-mobile) .logout-link-sidebar span:not(.nav-icon-wrapper) {
+        display: none !important;
+    }
+
+    .sidebar-container:not(.open-mobile) .logout-link-sidebar .nav-icon-wrapper {
+        margin: 0;
+        font-size: 1.4rem;
+    }
+
+    /* --- SAAT SIDEBAR DIBUKA (OPEN-MOBILE) DI HP --- */
+    .sidebar-container.open-mobile .logout-link-sidebar {
+        padding: 12px 16px;
+        justify-content: flex-start;
+        /* Fokus Perubahan: BG Merah, Teks Putih */
+        background-color: #ff3b30 !important; 
+        color: #ffffff !important; 
+        box-shadow: 0 4px 12px rgba(255, 59, 48, 0.3);
+    }
+    
+    .sidebar-container.open-mobile .logout-link-sidebar span {
+        display: inline-block !important;
+    }
+
+    /* Pastikan ikon di dalamnya juga berwarna putih saat dibuka */
+    .sidebar-container.open-mobile .logout-link-sidebar .nav-icon-wrapper {
+        color: #ffffff !important;
+    }
+}
 /* CONTENT PANEL */
 .content-panel {
     padding: 32px;
@@ -414,10 +492,6 @@
     display: flex;
     gap: 10px;
     margin-bottom: 4px;
-}
-
-.terminal-row:last-child {
-    margin-bottom: 0;
 }
 
 .terminal-prompt {

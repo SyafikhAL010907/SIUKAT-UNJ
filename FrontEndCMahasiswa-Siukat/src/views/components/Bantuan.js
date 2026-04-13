@@ -45,7 +45,7 @@ class Bantuan extends React.Component {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>  
         );
     }
 }

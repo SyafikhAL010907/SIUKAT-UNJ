@@ -32,29 +32,38 @@ class Petunjuk extends React.Component{
                 <div>
                     <div className="mt-4">
                         <Row>
-                            <Col md="3" xs="12">
-                                <ListGroup className="modern-sidebar-menu shadow-sm mb-3">
-                                    <ListGroupItem 
-                                        className={classnames({ active: this.state.activeTab === '1' })} 
-                                        onClick={(e) => { this.toggle(e, '1'); }}
-                                    >
-                                        <i className="fa fa-flash"></i> Memeriksa Tagihan Listrik
-                                    </ListGroupItem>
-                                    <ListGroupItem 
-                                        className={classnames({ active: this.state.activeTab === '2' })} 
-                                        onClick={(e) => { this.toggle(e, '2'); }}
-                                    >
-                                        <i className="fa fa-file"></i> Menggabungkan Hasil Scan
-                                    </ListGroupItem>
-                                    <ListGroupItem 
-                                        className={classnames({ active: this.state.activeTab === '3' })} 
-                                        onClick={(e) => { this.toggle(e, '3'); }}
-                                    >
-                                        <i className="fa fa-image"></i> Mengubah Ukuran Berkas
-                                    </ListGroupItem>
-                                </ListGroup>
-                                <Bantuan />
-                            </Col>
+                           <Col md="3" xs="12" className="d-flex flex-column">
+    
+    {/* MENU */}
+    <div className="order-1 order-md-1">
+        <ListGroup className="modern-sidebar-menu shadow-sm mb-3">
+            <ListGroupItem 
+                className={classnames({ active: this.state.activeTab === '1' })} 
+                onClick={(e) => { this.toggle(e, '1'); }}
+            >
+                <i className="fa fa-flash"></i> Memeriksa Tagihan Listrik
+            </ListGroupItem>
+            <ListGroupItem 
+                className={classnames({ active: this.state.activeTab === '2' })} 
+                onClick={(e) => { this.toggle(e, '2'); }}
+            >
+                <i className="fa fa-file"></i> Menggabungkan Hasil Scan
+            </ListGroupItem>
+            <ListGroupItem 
+                className={classnames({ active: this.state.activeTab === '3' })} 
+                onClick={(e) => { this.toggle(e, '3'); }}
+            >
+                <i className="fa fa-image"></i> Mengubah Ukuran Berkas
+            </ListGroupItem>
+        </ListGroup>
+    </div>
+
+    {/* BANTUAN */}
+    <div className="order-3 order-md-2 mt-3 mt-md-0">
+        <Bantuan />
+    </div>
+
+</Col>
                             <Col md="9" xs="12" className="d-flex flex-column">
                                 <TabContent activeTab={this.state.activeTab} className="h-100">
                                     <TabPane tabId="1" className="h-100">
