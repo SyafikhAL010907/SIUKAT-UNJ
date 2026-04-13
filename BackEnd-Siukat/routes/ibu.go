@@ -88,10 +88,10 @@ func IbuRoutes(r *gin.RouterGroup) {
 			data["nik_ibu"] = ""
 			data["telepon_ibu"] = ""
 			data["alamat_ibu"] = ""
-			data["provinsi_ibu"] = nil
-			data["kabkot_ibu"] = nil
-			data["kecamatan_ibu"] = nil
-			data["pekerjaan_ibu"] = ""
+			data["provinsi_ibu"] = ""
+			data["kabkot_ibu"] = ""
+			data["kecamatan_ibu"] = ""
+			data["pekerjaan_ibu"] = 0
 			data["penghasilan_ibu"] = 0
 			data["sampingan_ibu"] = 0
 			data["scan_ktp_ibu"] = ""
@@ -151,18 +151,25 @@ func IbuRoutes(r *gin.RouterGroup) {
 			}
 		}
 
-		// STEP 1: Ambil data lama untuk di-log (sebelum update)
-		var existing models.Ibu
-		config.DB.Where("no_peserta = ? AND atribut = ?", np, "original").First(&existing)
-		now := time.Now()
-		ibuService.AddLog(existing, "original", np, &now)
-
-		// STEP 2: Update data
+		// 1. Ambil data lama SEBELUM update untuk Log
+		var existingIbu models.Ibu
+		config.DB.Where("no_peserta = ? AND atribut = ?", np, "original").First(&existingIbu)
+		
+		// 2. Jalankan Update/Upsert
 		res, err := ibuService.Edit(data, np, "original")
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal simpan data: " + err.Error()})
 			return
 		}
+
+		// 3. Simpan Log
+		now := time.Now()
+		if existingIbu.NoPeserta != "" {
+			ibuService.AddLog(existingIbu, "original", np, &now)
+		} else {
+			ibuService.AddLog(res, "original", np, &now)
+		}
+		
 		c.JSON(http.StatusOK, res)
 	})
 
@@ -176,7 +183,21 @@ func IbuRoutes(r *gin.RouterGroup) {
 			"status_ibu": statusIbu,
 		}
 
-		if statusIbu != "wafat" {
+		if statusIbu == "wafat" {
+			data["nik_ibu"] = ""
+			data["telepon_ibu"] = ""
+			data["alamat_ibu"] = ""
+			data["provinsi_ibu"] = ""
+			data["kabkot_ibu"] = ""
+			data["kecamatan_ibu"] = ""
+			data["pekerjaan_ibu"] = 0
+			data["penghasilan_ibu"] = 0
+			data["sampingan_ibu"] = 0
+			data["scan_ktp_ibu"] = ""
+			data["scan_slip_ibu"] = ""
+			data["tempat_lahir_ibu"] = ""
+			data["tanggal_lahir_ibu"] = nil
+		} else {
 			data["nik_ibu"] = c.PostForm("nik_ibu")
 			data["telepon_ibu"] = c.PostForm("telepon_ibu")
 			data["alamat_ibu"] = c.PostForm("alamat_ibu")
@@ -227,16 +248,25 @@ func IbuRoutes(r *gin.RouterGroup) {
 			}
 		}
 
-		var existing models.Ibu
-		config.DB.Where("no_peserta = ? AND atribut = ?", np, "sanggah").First(&existing)
-		now := time.Now()
-		ibuService.AddLog(existing, "sanggah", np, &now)
+		// 1. Ambil data lama untuk Log
+		var existingIbu models.Ibu
+		config.DB.Where("no_peserta = ? AND atribut = ?", np, "sanggah").First(&existingIbu)
 
+		// 2. Jalankan Update/Upsert
 		res, err := ibuService.Edit(data, np, "sanggah")
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal simpan sanggah: " + err.Error()})
 			return
 		}
+
+		// 3. Simpan Log
+		now := time.Now()
+		if existingIbu.NoPeserta != "" {
+			ibuService.AddLog(existingIbu, "sanggah", np, &now)
+		} else {
+			ibuService.AddLog(res, "sanggah", np, &now)
+		}
+		
 		c.JSON(http.StatusOK, res)
 	})
 

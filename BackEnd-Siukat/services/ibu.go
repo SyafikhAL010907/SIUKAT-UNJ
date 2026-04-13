@@ -3,6 +3,8 @@ package services
 import (
 	"BackEnd-Siukat/config"
 	"BackEnd-Siukat/models"
+	"errors"
+	"gorm.io/gorm"
 	"time"
 )
 
@@ -18,12 +20,30 @@ func (s *IbuService) Add(req models.Ibu, atribut string) (models.Ibu, error) {
 
 func (s *IbuService) Edit(data map[string]interface{}, noPeserta string, atribut string) (models.Ibu, error) {
 	db := config.DB
+	var ibu models.Ibu
 
-	if err := db.Model(&models.Ibu{}).Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).Updates(data).Error; err != nil {
-		return models.Ibu{}, err
+	// 1. Cek apakah record sudah ada
+	err := db.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&ibu).Error
+
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			// 2. Jika BELUM ADA, maka Create (UPSERT)
+			data["no_peserta"] = noPeserta
+			data["atribut"] = atribut
+			if errCreate := db.Model(&models.Ibu{}).Create(data).Error; errCreate != nil {
+				return models.Ibu{}, errCreate
+			}
+		} else {
+			return models.Ibu{}, err
+		}
+	} else {
+		// 3. Jika SUDAH ADA, maka Update
+		if errUpdate := db.Model(&ibu).Updates(data).Error; errUpdate != nil {
+			return models.Ibu{}, errUpdate
+		}
 	}
 
-	var ibu models.Ibu
+	// 4. Ambil data terbaru untuk return
 	db.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
 		Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&ibu)
 	return ibu, nil

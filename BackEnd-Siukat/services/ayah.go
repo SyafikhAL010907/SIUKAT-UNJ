@@ -3,6 +3,8 @@ package services
 import (
 	"BackEnd-Siukat/config"
 	"BackEnd-Siukat/models"
+	"errors"
+	"gorm.io/gorm"
 	"time"
 )
 
@@ -17,10 +19,30 @@ func (s *AyahService) Add(req models.Ayah, atribut string) (models.Ayah, error) 
 
 func (s *AyahService) Edit(data map[string]interface{}, noPeserta string, atribut string) (models.Ayah, error) {
 	db := config.DB
-	if err := db.Model(&models.Ayah{}).Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).Updates(data).Error; err != nil {
-		return models.Ayah{}, err
-	}
 	var ayah models.Ayah
+
+	// 1. Cek apakah record sudah ada
+	err := db.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&ayah).Error
+
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			// 2. Jika BELUM ADA, maka Create (UPSERT)
+			data["no_peserta"] = noPeserta
+			data["atribut"] = atribut
+			if errCreate := db.Model(&models.Ayah{}).Create(data).Error; errCreate != nil {
+				return models.Ayah{}, errCreate
+			}
+		} else {
+			return models.Ayah{}, err
+		}
+	} else {
+		// 3. Jika SUDAH ADA, maka Update
+		if errUpdate := db.Model(&ayah).Updates(data).Error; errUpdate != nil {
+			return models.Ayah{}, errUpdate
+		}
+	}
+
+	// 4. Ambil data terbaru untuk return
 	db.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&ayah)
 	return ayah, nil
 }

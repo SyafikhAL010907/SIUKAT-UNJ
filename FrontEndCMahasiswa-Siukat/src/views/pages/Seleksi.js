@@ -89,6 +89,11 @@ class Seleksi extends React.Component {
     render() {
         console.log(this.props.verifikasi);
         
+        // --- 0. CEK DATA LOADING (Pencegahan Redirect saat Refresh) ---
+        if (Object.keys(this.props.cmahasiswa).length === 0) {
+            return null; 
+        }
+
         // --- 1. PALING ATAS: UKT TINGGI (Logic Redirect) ---
         if (this.props.cmahasiswa.flag !== 'pengisian' || this.props.cmahasiswa.ukt_tinggi === 'ya') {
             return <Redirect to="/main/ukt" />;
@@ -204,10 +209,13 @@ class Seleksi extends React.Component {
                         
                         {/* Tombol Batal dipindah ke bawah menu sidebar */}
                         <BatalUktRendah />
+                        <div className="mt-4">
+                            <Bantuan />
+                        </div>
                     </Col>
                     
                     {/* --- 3. FORM CARD (Di bawah Menu pada Mobile) --- */}
-                    <Col md="9" xs="12" className="d-flex flex-column order-2 order-md-2" innerRef={this.formContainerRef}>
+                    <div className="col-md-9 col-12 d-flex flex-column order-2 order-md-2" ref={this.formContainerRef}>
                         <TabContent activeTab={this.state.activeTab} className="h-100">
                             <TabPane tabId="1" className="h-100">
                                 <Card className="premium-card">
@@ -269,12 +277,9 @@ class Seleksi extends React.Component {
                                 </Card>
                             </TabPane>
                         </TabContent>
-                    </Col>
+                    </div>
 
-                    {/* --- 4. PALING BAWAH: CARD BANTUAN --- */}
-                    <Col xs="12" className="order-3 mt-3">
-                        <Bantuan />
-                    </Col>
+
                 </Row>
             </div>
         );

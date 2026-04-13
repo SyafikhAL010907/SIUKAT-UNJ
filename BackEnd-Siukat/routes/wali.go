@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"strconv"
 	"fmt"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -39,9 +40,14 @@ func WaliRoutes(r *gin.RouterGroup) {
 		np := noPeserta.(string)
 
 		// Parity with other routes: handle multipart form
+		statusWali := c.PostForm("status_wali")
+		namaWali := c.PostForm("nama_wali")
+		if statusWali == "tidak" {
+			namaWali = "-"
+		}
 		data := map[string]interface{}{
-			"status_wali":    c.PostForm("status_wali"),
-			"nama_wali":      c.PostForm("nama_wali"),
+			"status_wali":    statusWali,
+			"nama_wali":      namaWali,
 			"alamat_wali":    c.PostForm("alamat_wali"),
 			"provinsi_wali":  c.PostForm("provinsi_wali"),
 			"kabkot_wali":    c.PostForm("kabkot_wali"),
@@ -69,11 +75,25 @@ func WaliRoutes(r *gin.RouterGroup) {
 			}
 		}
 
+		// 1. Ambil data lama SEBELUM update untuk Log
+		var existingWali models.Wali
+		config.DB.Where("no_peserta = ? AND atribut = ?", np, "original").First(&existingWali)
+		
+		// 2. Jalankan Update/Upsert
 		res, err := srv.Edit(data, np, "original")
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal simpan data: " + err.Error()})
 			return
 		}
+
+		// 3. Simpan Log
+		now := time.Now()
+		if existingWali.NoPeserta != "" {
+			srv.AddLog(existingWali, "original", np, &now)
+		} else {
+			srv.AddLog(res, "original", np, &now)
+		}
+		
 		c.JSON(http.StatusOK, res)
 	})
 
@@ -81,9 +101,14 @@ func WaliRoutes(r *gin.RouterGroup) {
 		noPeserta := c.Param("no_peserta")
 		np := noPeserta
 
+		statusWali := c.PostForm("status_wali")
+		namaWali := c.PostForm("nama_wali")
+		if statusWali == "tidak" {
+			namaWali = "-"
+		}
 		data := map[string]interface{}{
-			"status_wali":    c.PostForm("status_wali"),
-			"nama_wali":      c.PostForm("nama_wali"),
+			"status_wali":    statusWali,
+			"nama_wali":      namaWali,
 			"alamat_wali":    c.PostForm("alamat_wali"),
 			"provinsi_wali":  c.PostForm("provinsi_wali"),
 			"kabkot_wali":    c.PostForm("kabkot_wali"),
@@ -111,11 +136,25 @@ func WaliRoutes(r *gin.RouterGroup) {
 			}
 		}
 
+		// 1. Ambil data lama untuk Log
+		var existingWali models.Wali
+		config.DB.Where("no_peserta = ? AND atribut = ?", np, "sanggah").First(&existingWali)
+
+		// 2. Jalankan Update/Upsert
 		res, err := srv.Edit(data, np, "sanggah")
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal simpan sanggah: " + err.Error()})
 			return
 		}
+
+		// 3. Simpan Log
+		now := time.Now()
+		if existingWali.NoPeserta != "" {
+			srv.AddLog(existingWali, "sanggah", np, &now)
+		} else {
+			srv.AddLog(res, "sanggah", np, &now)
+		}
+		
 		c.JSON(http.StatusOK, res)
 	})
 

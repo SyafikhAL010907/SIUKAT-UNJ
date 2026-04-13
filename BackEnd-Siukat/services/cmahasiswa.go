@@ -174,13 +174,10 @@ func (s *CMahasiswaService) CheckData(noPeserta string) (bool, error) {
 		"penghasilan_cmahasiswa":  mhs.PenghasilanCmahasiswa,
 		"golongan_id":             mhs.GolonganID,
 		"ukt_tinggi":              mhs.UktTinggi,
-		"flag":                   mhs.Flag,
-		"waktu_selesai":           mhs.WaktuSelesai,
-		"atribut":                mhs.Atribut,
-		"tagihan":                mhs.Tagihan,
-		"no_registrasi":          mhs.NoRegistrasi,
-		"spu":                    mhs.Spu,
-		"penalty":                mhs.Penalty,
+		// Field di bawah ini ditiadakan dari checklist awal biar centang muncul pas data siap
+		// "flag":                   mhs.Flag,
+		// "waktu_selesai":           mhs.WaktuSelesai,
+		// "atribut":                mhs.Atribut,
 	}
 
 	delete(data, "tagihan")

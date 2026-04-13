@@ -60,14 +60,31 @@ func AyahRoutes(r *gin.RouterGroup) {
 			"tempat_lahir_ayah": c.PostForm("tempat_lahir_ayah"),
 		}
 
-		if statusAyah != "wafat" {
+		if statusAyah == "wafat" {
+			data["nik_ayah"] = ""
+			data["telepon_ayah"] = ""
+			data["alamat_ayah"] = ""
+			data["provinsi_ayah"] = ""
+			data["kabkot_ayah"] = ""
+			data["kecamatan_ayah"] = ""
+			data["pekerjaan_ayah"] = 0
+			data["penghasilan_ayah"] = 0
+			data["sampingan_ayah"] = 0
+			data["scan_ktp_ayah"] = ""
+			data["scan_slip_ayah"] = ""
+			data["tempat_lahir_ayah"] = ""
+			data["tanggal_lahir_ayah"] = nil
+		} else {
 			data["nik_ayah"] = c.PostForm("nik_ayah")
 			data["telepon_ayah"] = c.PostForm("telepon_ayah")
 			data["alamat_ayah"] = c.PostForm("alamat_ayah")
 			data["provinsi_ayah"] = c.PostForm("provinsi_ayah")
 			data["kabkot_ayah"] = c.PostForm("kabkot_ayah")
 			data["kecamatan_ayah"] = c.PostForm("kecamatan_ayah")
-			data["pekerjaan_ayah"] = c.PostForm("pekerjaan_ayah")
+			
+			if pkj, errPkj := strconv.Atoi(c.PostForm("pekerjaan_ayah")); errPkj == nil {
+				data["pekerjaan_ayah"] = pkj
+			}
 			
 			if pen, errPen := strconv.Atoi(c.PostForm("penghasilan_ayah")); errPen == nil {
 				data["penghasilan_ayah"] = pen
@@ -117,18 +134,25 @@ func AyahRoutes(r *gin.RouterGroup) {
 			}
 		}
 
-		// LOGGING
-		var ayah models.Ayah
-		config.DB.Where("no_peserta = ?", np).First(&ayah)
-		now := time.Now()
-		ayahService.AddLog(ayah, "original", np, &now)
-
-		// UPDATE
+		// 1. Ambil data lama SEBELUM update untuk Log (Hanya jika ada)
+		var existingAyah models.Ayah
+		config.DB.Where("no_peserta = ? AND atribut = ?", np, "original").First(&existingAyah)
+		
+		// 2. Jalankan Update/Upsert
 		res, err := ayahService.Edit(data, np, "original")
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal simpan data: " + err.Error()})
 			return
 		}
+
+		// 3. Simpan Log
+		now := time.Now()
+		if existingAyah.NoPeserta != "" {
+			ayahService.AddLog(existingAyah, "original", np, &now)
+		} else {
+			ayahService.AddLog(res, "original", np, &now)
+		}
+		
 		c.JSON(http.StatusOK, res)
 	})
 
@@ -143,16 +167,36 @@ func AyahRoutes(r *gin.RouterGroup) {
 			"tempat_lahir_ayah": c.PostForm("tempat_lahir_ayah"),
 		}
 
-		if statusAyah != "wafat" {
+		if statusAyah == "wafat" {
+			data["nik_ayah"] = ""
+			data["telepon_ayah"] = ""
+			data["alamat_ayah"] = ""
+			data["provinsi_ayah"] = ""
+			data["kabkot_ayah"] = ""
+			data["kecamatan_ayah"] = ""
+			data["pekerjaan_ayah"] = 0
+			data["penghasilan_ayah"] = 0
+			data["sampingan_ayah"] = 0
+			data["scan_ktp_ayah"] = ""
+			data["scan_slip_ayah"] = ""
+			data["tempat_lahir_ayah"] = ""
+			data["tanggal_lahir_ayah"] = nil
+		} else {
 			data["nik_ayah"] = c.PostForm("nik_ayah")
 			data["telepon_ayah"] = c.PostForm("telepon_ayah")
 			data["alamat_ayah"] = c.PostForm("alamat_ayah")
 			data["provinsi_ayah"] = c.PostForm("provinsi_ayah")
 			data["kabkot_ayah"] = c.PostForm("kabkot_ayah")
 			data["kecamatan_ayah"] = c.PostForm("kecamatan_ayah")
-			data["pekerjaan_ayah"] = c.PostForm("pekerjaan_ayah")
-			data["penghasilan_ayah"] = c.PostForm("penghasilan_ayah")
-			data["sampingan_ayah"] = c.PostForm("sampingan_ayah")
+			if pkj, errPkj := strconv.Atoi(c.PostForm("pekerjaan_ayah")); errPkj == nil {
+				data["pekerjaan_ayah"] = pkj
+			}
+			if pen, errPen := strconv.Atoi(c.PostForm("penghasilan_ayah")); errPen == nil {
+				data["penghasilan_ayah"] = pen
+			}
+			if sam, errSam := strconv.Atoi(c.PostForm("sampingan_ayah")); errSam == nil {
+				data["sampingan_ayah"] = sam
+			}
 
 			// --- LOGIKA DINAMIS & EFISIENSI (CLEANUP) - SANGGAH ---
 			var student models.CMahasiswa
@@ -182,16 +226,25 @@ func AyahRoutes(r *gin.RouterGroup) {
 			}
 		}
 
-		var ayah models.Ayah
-		config.DB.Where("no_peserta = ? AND atribut = ?", np, "sanggah").First(&ayah)
-		now := time.Now()
-		ayahService.AddLog(ayah, "sanggah", np, &now)
+		// 1. Ambil data lama untuk Log
+		var existingAyah models.Ayah
+		config.DB.Where("no_peserta = ? AND atribut = ?", np, "sanggah").First(&existingAyah)
 
+		// 2. Jalankan Update/Upsert
 		res, err := ayahService.Edit(data, np, "sanggah")
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal simgah data: " + err.Error()})
 			return
 		}
+
+		// 3. Simpan Log
+		now := time.Now()
+		if existingAyah.NoPeserta != "" {
+			ayahService.AddLog(existingAyah, "sanggah", np, &now)
+		} else {
+			ayahService.AddLog(res, "sanggah", np, &now)
+		}
+		
 		c.JSON(http.StatusOK, res)
 	})
 

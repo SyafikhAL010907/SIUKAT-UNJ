@@ -3,6 +3,8 @@ package services
 import (
 	"BackEnd-Siukat/config"
 	"BackEnd-Siukat/models"
+	"errors"
+	"gorm.io/gorm"
 	"time"
 )
 
@@ -15,12 +17,33 @@ func (s *WaliService) Add(req models.Wali, atribut string) (models.Wali, error) 
 }
 
 func (s *WaliService) Edit(data map[string]interface{}, noPeserta string, atribut string) (models.Wali, error) {
-	if err := config.DB.Model(&models.Wali{}).Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).Updates(data).Error; err != nil {
-		return models.Wali{}, err
+	db := config.DB
+	var wali models.Wali
+
+	// 1. Cek apakah record sudah ada
+	err := db.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&wali).Error
+
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			// 2. Jika BELUM ADA, maka Create (UPSERT)
+			data["no_peserta"] = noPeserta
+			data["atribut"] = atribut
+			if errCreate := db.Model(&models.Wali{}).Create(data).Error; errCreate != nil {
+				return models.Wali{}, errCreate
+			}
+		} else {
+			return models.Wali{}, err
+		}
+	} else {
+		// 3. Jika SUDAH ADA, maka Update
+		if errUpdate := db.Model(&wali).Updates(data).Error; errUpdate != nil {
+			return models.Wali{}, errUpdate
+		}
 	}
-	var res models.Wali
-	config.DB.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&res)
-	return res, nil
+
+	// 4. Ambil data terbaru untuk return
+	db.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&wali)
+	return wali, nil
 }
 
 func (s *WaliService) GetByLoggedIn(noPeserta string) (models.Wali, error) {
@@ -77,7 +100,7 @@ func (s *WaliService) CheckData(noPeserta string, uktTinggi string) (bool, error
 	}
 
 	if wali.StatusWali == "tidak" {
-		delete(data, "nama_wali")
+		// Tetap butuh 'nama_wali' (diisi otomatis '-' oleh Backend) biar centang gak muncul di awal
 		delete(data, "alamat_wali")
 		delete(data, "kesanggupan_wali")
 		delete(data, "scan_wali")
