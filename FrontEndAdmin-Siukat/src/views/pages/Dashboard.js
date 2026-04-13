@@ -231,55 +231,59 @@ class Dashboards extends React.Component {
                                 {/* Tombol Inject Data - Hanya untuk Developer */}
                                 { isAllowed(this.props.user?.role, 'INJECT_DATA') && <ButtonInject /> }
 
-                                {/* Grouped Trigger: Tahun & Jalur (Premium Layered UI - Clean Mode) */}
-                                <div className="trigger-pill-container">
-                                    {/* Wrapper Tahun */}
-                                    <div className="relative">
-                                        <select 
-                                            value={this.state.selectedYear}
-                                            onChange={(e) => this.handleTriggerChange('selectedYear', e.target.value)}
-                                            className="select-year-custom"
-                                        >
-                                            <option value="" disabled>Tahun</option>
-                                            <option value="2026">2026</option>
-                                            <option value="2027">2027</option>
-                                            <option value="2028">2028</option>
-                                            <option value="2029">2029</option>
-                                            <option value="2030">2030</option>
-                                        </select>
-                                    </div>
+                                { /* Grouped Trigger: Tahun & Jalur (Premium Layered UI - Clean Mode) - DIPROTEKSI RBAC */ }
+                                { isAllowed(this.props.user?.role, 'GLOBAL_TRIGGER') && (
+                                    <>
+                                        <div className="trigger-pill-container">
+                                            {/* Wrapper Tahun */}
+                                            <div className="relative">
+                                                <select 
+                                                    value={this.state.selectedYear}
+                                                    onChange={(e) => this.handleTriggerChange('selectedYear', e.target.value)}
+                                                    className="select-year-custom"
+                                                >
+                                                    <option value="" disabled>Tahun</option>
+                                                    <option value="2026">2026</option>
+                                                    <option value="2027">2027</option>
+                                                    <option value="2028">2028</option>
+                                                    <option value="2029">2029</option>
+                                                    <option value="2030">2030</option>
+                                                </select>
+                                            </div>
 
-                                    {/* Wrapper Jalur */}
-                                    <div className="relative">
-                                        <select 
-                                            value={this.state.selectedJalur}
-                                            onChange={(e) => this.handleTriggerChange('selectedJalur', e.target.value)}
-                                            className="select-jalur-custom"
-                                            disabled={!this.state.selectedYear}
-                                        >
-                                            <option value="" disabled>Pilih Jalur</option>
-                                            <option value="SNBP" className="text-gray-800 bg-white">SNBP</option>
-                                            <option value="SNBT" className="text-gray-800 bg-white">SNBT</option>
-                                            <option value="MANDIRI" className="text-gray-800 bg-white">MANDIRI</option>
-                                        </select>
-                                    </div>
+                                            {/* Wrapper Jalur */}
+                                            <div className="relative">
+                                                <select 
+                                                    value={this.state.selectedJalur}
+                                                    onChange={(e) => this.handleTriggerChange('selectedJalur', e.target.value)}
+                                                    className="select-jalur-custom"
+                                                    disabled={!this.state.selectedYear}
+                                                >
+                                                    <option value="" disabled>Pilih Jalur</option>
+                                                    <option value="SNBP" className="text-gray-800 bg-white">SNBP</option>
+                                                    <option value="SNBT" className="text-gray-800 bg-white">SNBT</option>
+                                                    <option value="MANDIRI" className="text-gray-800 bg-white">MANDIRI</option>
+                                                </select>
+                                            </div>
 
-                                    {/* Wrapper Flag (Pilihan Status) */}
-                                    <div className="relative">
-                                        <select 
-                                            value={this.state.selectedFlag}
-                                            onChange={(e) => this.handleTriggerChange('selectedFlag', e.target.value)}
-                                            className="select-flag-custom"
-                                            disabled={!this.state.selectedYear || !this.state.selectedJalur}
-                                        >
-                                            <option value="" disabled>Pilih Flag</option>
-                                            <option value="terima_ukt" className="text-gray-800 bg-white italic">TERIMA UKT</option>
-                                            <option value="pengumuman" className="text-gray-800 bg-white italic">PENGUMUMAN</option>
-                                        </select>
-                                    </div>
-                                </div>
+                                            {/* Wrapper Flag (Pilihan Status) */}
+                                            <div className="relative">
+                                                <select 
+                                                    value={this.state.selectedFlag}
+                                                    onChange={(e) => this.handleTriggerChange('selectedFlag', e.target.value)}
+                                                    className="select-flag-custom"
+                                                    disabled={!this.state.selectedYear || !this.state.selectedJalur}
+                                                >
+                                                    <option value="" disabled>Pilih Flag</option>
+                                                    <option value="terima_ukt" className="text-gray-800 bg-white italic">TERIMA UKT</option>
+                                                    <option value="pengumuman" className="text-gray-800 bg-white italic">PENGUMUMAN</option>
+                                                </select>
+                                            </div>
+                                        </div>
 
-                                <div className="h-8 w-[1px] bg-gray-200 hidden lg:block"></div>
+                                        <div className="h-8 w-[1px] bg-gray-200 hidden lg:block"></div>
+                                    </>
+                                )}
 
                                 <div className="flex items-center space-x-3">
                                     <div className="flex items-center px-4 py-2 bg-emerald-50 rounded-2xl border border-emerald-100 shadow-sm">

@@ -263,8 +263,8 @@ class Rumah extends React.Component {
     }
 
     render() {
-        const { rumah, location } = this.props;
-        const isModeSanggah = location.state && location.state.modeEdit;
+        const { rumah, location, editable } = this.props;
+        const isModeSanggah = editable;
 
         return (
             <div className="w-full bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
@@ -282,7 +282,7 @@ class Rumah extends React.Component {
                         <div className="w-2 h-6 bg-yellow-400 rounded-full"></div>
                         <h4 className="text-xl font-bold text-gray-800 tracking-tight text-uppercase italic">Informasi Rumah</h4>
                     </div>
-                    {this.props.editable && (
+                    {isModeSanggah&& (
                         <button
                             onClick={this.modalToggle}
                             className="bg-amber-600 text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-amber-700 transition-all shadow-md"

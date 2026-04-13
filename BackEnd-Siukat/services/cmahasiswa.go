@@ -47,15 +47,22 @@ func GenerateTagihan(info models.Info, noPeserta string) (string, error) {
 func (s *CMahasiswaService) All() ([]models.CMahasiswa, error) {
 	db := config.DB
 	var result []models.CMahasiswa
-	err := db.Preload("Fakultas").Preload("Prodi").Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").Find(&result).Error
+	err := db.Model(&models.CMahasiswa{}).
+		Preload("Fakultas").Preload("Prodi").Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
+		Joins("LEFT JOIN tb_cmahasiswa AS t2 ON tb_cmahasiswa.no_peserta = t2.no_peserta AND t2.atribut = 'sanggah'").
+		Where("tb_cmahasiswa.atribut = 'sanggah' OR (tb_cmahasiswa.atribut = 'original' AND t2.id_cmahasiswa IS NULL)").
+		Find(&result).Error
 	return result, err
 }
 
 func (s *CMahasiswaService) AllSelesai() ([]models.CMahasiswa, error) {
 	db := config.DB
 	var result []models.CMahasiswa
-	err := db.Preload("Fakultas").Preload("Prodi").Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
-		Where("flag = ? AND ukt_tinggi = ?", "selesai_isi", "tidak").
+	err := db.Model(&models.CMahasiswa{}).
+		Preload("Fakultas").Preload("Prodi").Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
+		Joins("LEFT JOIN tb_cmahasiswa AS t2 ON tb_cmahasiswa.no_peserta = t2.no_peserta AND t2.atribut = 'sanggah'").
+		Where("tb_cmahasiswa.flag = ? AND tb_cmahasiswa.ukt_tinggi = ?", "selesai_isi", "tidak").
+		Where("tb_cmahasiswa.atribut = 'sanggah' OR (tb_cmahasiswa.atribut = 'original' AND t2.id_cmahasiswa IS NULL)").
 		Find(&result).Error
 	return result, err
 }
@@ -359,11 +366,6 @@ func (s *CMahasiswaService) UpdateIdentity(oldName, oldNP, newName, newNP string
 func (s *CMahasiswaService) CountFlag() (map[string]interface{}, error) {
 	db := config.DB
 	
-	type CountResult struct {
-		Name  string
-		Count int64
-	}
-
 	result := make(map[string]interface{})
 	
 	// List of categories to count
@@ -385,7 +387,14 @@ func (s *CMahasiswaService) CountFlag() (map[string]interface{}, error) {
 
 	for _, cat := range categories {
 		var count int64
-		if err := db.Model(&models.CMahasiswa{}).Where(fmt.Sprintf("%s = ?", cat.Field), cat.Value).Count(&count).Error; err != nil {
+		// Gunakan logic "Pintar" (Priority Sanggah > Original) untuk menghindari double count di statistik
+		err := db.Table("tb_cmahasiswa").
+			Joins("LEFT JOIN tb_cmahasiswa AS t2 ON tb_cmahasiswa.no_peserta = t2.no_peserta AND t2.atribut = 'sanggah'").
+			Where(fmt.Sprintf("tb_cmahasiswa.%s = ?", cat.Field), cat.Value).
+			Where("tb_cmahasiswa.atribut = 'sanggah' OR (tb_cmahasiswa.atribut = 'original' AND t2.id_cmahasiswa IS NULL)").
+			Count(&count).Error
+			
+		if err != nil {
 			return nil, err
 		}
 		// Format: kategori: [{kategori: count}]

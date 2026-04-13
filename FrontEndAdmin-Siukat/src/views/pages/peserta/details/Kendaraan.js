@@ -276,8 +276,8 @@ class Kendaraan extends React.Component {
     }
 
     render() {
-        const { kendaraan: data, location } = this.props;
-        const isModeSanggah = location.state?.modeEdit;
+        const { kendaraan: data, location, editable } = this.props;
+        const isModeSanggah = editable;
 
         return (
             <div className="space-y-8">
@@ -293,7 +293,7 @@ class Kendaraan extends React.Component {
                         <h4 className="text-2xl font-black text-gray-800 tracking-tighter uppercase italic">Data Kendaraan</h4>
                         <p className="text-gray-400 text-xs font-medium">Informasi kepemilikan kendaraan operasional keluarga.</p>
                     </div>
-                    {this.props.editable && (
+                    {isModeSanggah && (
                        <button onClick={this.modalToggle} className="bg-amber-600 text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-amber-700 transition-all shadow-md">
                             <i className="fa fa-pencil mr-2"></i> Perbarui Data
                         </button>

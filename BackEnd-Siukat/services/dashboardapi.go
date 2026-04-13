@@ -20,7 +20,7 @@ type DashboardSummaryResponse struct {
 }
 
 func (s *DashboardService) DashboardSummary() (DashboardSummaryResponse, error) {
-	query := `SELECT
+    query := `SELECT
                 cast(a.waktu_selesai as date) as date,
                 case
                     when b.count_mulai is null then 0
@@ -32,28 +32,34 @@ func (s *DashboardService) DashboardSummary() (DashboardSummaryResponse, error) 
                 end as count_selesai
             from
                 tb_cmahasiswa a
+            left join tb_cmahasiswa t2 ON a.no_peserta = t2.no_peserta AND t2.atribut = 'sanggah'
             left join (
                 SELECT
-                    count(id_cmahasiswa) as count_mulai,
-                    cast(waktu_mulai as date) as waktu_mulai
+                    count(t1.id_cmahasiswa) as count_mulai,
+                    cast(t1.waktu_mulai as date) as waktu_mulai
                 FROM
-                    tb_cmahasiswa
-                where no_peserta not like '%fulan%'
+                    tb_cmahasiswa t1
+                LEFT JOIN tb_cmahasiswa t2 ON t1.no_peserta = t2.no_peserta AND t2.atribut = 'sanggah'
+                where t1.no_peserta not like '%fulan%'
+                AND (t1.atribut = 'sanggah' OR (t1.atribut = 'original' AND t2.id_cmahasiswa IS NULL))
                 GROUP BY
-                    cast(waktu_mulai as date) ) as b on
+                    cast(t1.waktu_mulai as date) ) as b on
                 cast(a.waktu_selesai as date) = b.waktu_mulai
             left join (
                 SELECT
-                    count(id_cmahasiswa) as count_selesai,
-                    cast(waktu_selesai as date) as waktu_selesai
+                    count(t1.id_cmahasiswa) as count_selesai,
+                    cast(t1.waktu_selesai as date) as waktu_selesai
                 FROM
-                    tb_cmahasiswa
-                where no_peserta not like '%fulan%'
+                    tb_cmahasiswa t1
+                LEFT JOIN tb_cmahasiswa t2 ON t1.no_peserta = t2.no_peserta AND t2.atribut = 'sanggah'
+                where t1.no_peserta not like '%fulan%'
+                AND (t1.atribut = 'sanggah' OR (t1.atribut = 'original' AND t2.id_cmahasiswa IS NULL))
                 GROUP BY
-                    cast(waktu_selesai as date) ) as c on
+                    cast(t1.waktu_selesai as date) ) as c on
                 cast(a.waktu_selesai as date) = c.waktu_selesai
+            where (a.atribut = 'sanggah' OR (a.atribut = 'original' AND t2.id_cmahasiswa IS NULL))
             group by
-                cast(waktu_selesai as date)`
+                cast(a.waktu_selesai as date)`
 
 	var rows []DashboardSummaryRow
 	err := config.DB.Raw(query).Scan(&rows).Error
@@ -91,48 +97,58 @@ func (s *DashboardService) DashboardMeta() ([]DashboardMetaRow, error) {
                 d.nama
             from
                 tb_cmahasiswa a
+            left join tb_cmahasiswa t2main ON a.no_peserta = t2main.no_peserta AND t2main.atribut = 'sanggah'
             left join (
                 select
-                    fakultas_cmahasiswa,
-                    sum(case when flag <> 'pengisian' then 0 else 1 end) as count_pengisian
+                    t1.fakultas_cmahasiswa,
+                    sum(case when t1.flag <> 'pengisian' then 0 else 1 end) as count_pengisian
                 from
-                    tb_cmahasiswa
-                where no_peserta not like '%fulan%'
+                    tb_cmahasiswa t1
+                left join tb_cmahasiswa t2 ON t1.no_peserta = t2.no_peserta AND t2.atribut = 'sanggah'
+                where t1.no_peserta not like '%fulan%'
+                AND (t1.atribut = 'sanggah' OR (t1.atribut = 'original' AND t2.id_cmahasiswa IS NULL))
                 group by
-                    fakultas_cmahasiswa ) as b on
+                    t1.fakultas_cmahasiswa ) as b on
                 a.fakultas_cmahasiswa = b.fakultas_cmahasiswa
             left join (
                 select
-                    fakultas_cmahasiswa,
-                    sum(case when (flag <> 'selesai_isi' and flag <> 'terima_ukt') then 0 else 1 end) as count_selesai
+                    t1.fakultas_cmahasiswa,
+                    sum(case when (t1.flag <> 'selesai_isi' and t1.flag <> 'terima_ukt') then 0 else 1 end) as count_selesai
                 from
-                    tb_cmahasiswa
-                where no_peserta not like '%fulan%'
+                    tb_cmahasiswa t1
+                left join tb_cmahasiswa t2 ON t1.no_peserta = t2.no_peserta AND t2.atribut = 'sanggah'
+                where t1.no_peserta not like '%fulan%'
+                AND (t1.atribut = 'sanggah' OR (t1.atribut = 'original' AND t2.id_cmahasiswa IS NULL))
                 group by
-                    fakultas_cmahasiswa ) as c on
+                    t1.fakultas_cmahasiswa ) as c on
                 a.fakultas_cmahasiswa = c.fakultas_cmahasiswa
             left join ref_fakultas d on
                 a.fakultas_cmahasiswa = d.kode
             left join (
                 select
-                    count(id_cmahasiswa) as count_all,
-                    fakultas_cmahasiswa
+                    count(t1.id_cmahasiswa) as count_all,
+                    t1.fakultas_cmahasiswa
                 from
-                    tb_cmahasiswa
-                where no_peserta not like '%fulan%'
+                    tb_cmahasiswa t1
+                left join tb_cmahasiswa t2 ON t1.no_peserta = t2.no_peserta AND t2.atribut = 'sanggah'
+                where t1.no_peserta not like '%fulan%'
+                AND (t1.atribut = 'sanggah' OR (t1.atribut = 'original' AND t2.id_cmahasiswa IS NULL))
                 group by
-                    fakultas_cmahasiswa) as e on
+                    t1.fakultas_cmahasiswa) as e on
                 a.fakultas_cmahasiswa = e.fakultas_cmahasiswa
             left join (
                 select
-                    fakultas_cmahasiswa,
-                    sum(case when waktu_mulai = 0 then 0 else 1 end) as count_mulai
+                    t1.fakultas_cmahasiswa,
+                    sum(case when t1.waktu_mulai = 0 then 0 else 1 end) as count_mulai
                 from
-                    tb_cmahasiswa
-                where no_peserta not like '%fulan%'
+                    tb_cmahasiswa t1
+                left join tb_cmahasiswa t2 ON t1.no_peserta = t2.no_peserta AND t2.atribut = 'sanggah'
+                where t1.no_peserta not like '%fulan%'
+                AND (t1.atribut = 'sanggah' OR (t1.atribut = 'original' AND t2.id_cmahasiswa IS NULL))
                 group by
-                    fakultas_cmahasiswa ) as f on
+                    t1.fakultas_cmahasiswa ) as f on
                 a.fakultas_cmahasiswa = f.fakultas_cmahasiswa
+            where (a.atribut = 'sanggah' OR (a.atribut = 'original' AND t2main.id_cmahasiswa IS NULL))
             group by
                 a.fakultas_cmahasiswa`
 

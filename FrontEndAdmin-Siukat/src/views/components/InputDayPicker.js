@@ -1,5 +1,6 @@
 import React from 'react'
 import DayPickerInput from 'react-day-picker/DayPickerInput';
+import moment from 'moment';
   
 const currentYear = new Date().getFullYear();
 // const fromMonth = new Date(1900, 0);
@@ -48,18 +49,40 @@ class InputDayPicker extends React.Component{
     this.setState({ month });
   }
 
-  render(){    
+    render(){    
+    const { value } = this.props.input;
+    const formattedValue = value ? moment(value).format('YYYY-MM-DD') : '';
+
     return (
-      <div className="relative">
+      <div className={`relative ${this.props.disabled ? 'cursor-not-allowed text-gray-400' : ''}`}>
         <DayPickerInput
-            {...this.props.input}
+            value={formattedValue}
+            onBlur={this.props.input.onBlur}
+            onFocus={this.props.input.onFocus}
+            onDayChange={(day) => {
+              if (!this.props.disabled) {
+                // Kirim balik dalam format string YYYY-MM-DD biar konsisten dengan initialValues
+                this.props.input.onChange(day ? moment(day).format('YYYY-MM-DD') : '');
+              }
+            }}
             placeholder={this.props.placeholder}
             autoComplete="off"
-            className={this.props.className || "form-control"}
             format={"YYYY-MM-DD"}
-
+            component={React.forwardRef((props, ref) => (
+              <input
+                {...props}
+                ref={ref}
+                disabled={this.props.disabled}
+                readOnly={this.props.disabled}
+                className={`${props.className} ${this.props.disabled ? 'bg-gray-100 cursor-not-allowed opacity-75' : ''}`}
+              />
+            ))}
+            className={this.props.className || "form-control"}
             dayPickerProps={
               {
+                onDayClick: (day, modifiers) => {
+                  if (this.props.disabled || modifiers.disabled) return;
+                },
                 weekdaysShort: this.state.weekdaysShortID,
                 firstDayOfWeek: 1,
                 months: months,
@@ -67,14 +90,12 @@ class InputDayPicker extends React.Component{
                 fromMonth: this.state.fromMonth,
                 toMonth: toMonth,
                 captionElement: <YearMonthForm onChange={this.handleYearMonthChange} fromMonth={this.state.fromMonth}/>,
-                footer: (
+                footer: !this.props.disabled && (
                   <div className="p-3 border-t border-gray-100 flex justify-center">
                     <button
                       type="button"
                       onClick={() => {
                         this.props.input.onChange("");
-                        // Use a little hack to close the overlay by triggering a click elsewhere or using internal ref if available
-                        // But simple onChange("") usually works for clearing
                       }}
                       className="text-[10px] font-black uppercase tracking-widest text-red-500 hover:text-red-700 transition-colors py-1 px-3 border border-red-100 rounded-lg hover:bg-red-50"
                     >

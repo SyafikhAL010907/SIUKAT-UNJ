@@ -202,11 +202,11 @@ class Pribadi extends React.Component {
     }
 
     render(){
-        const { cmahasiswa: data, location } = this.props;
+        const { cmahasiswa: data, location, editable } = this.props;
         if(!data) return <div className="p-10 text-center font-bold text-emerald-600">Memuat Profil...</div>;
 
         // PENGUBAHAN: Tombol hanya tampil jika isModeSanggah bernilai true
-        const isModeSanggah = location.state && location.state.modeEdit;
+        const isModeSanggah = editable;
 
         return (
             <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100">

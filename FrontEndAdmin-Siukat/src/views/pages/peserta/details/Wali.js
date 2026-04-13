@@ -216,9 +216,9 @@ class Wali extends React.Component {
     }
 
     render() {
-        const { wali: w_raw, location } = this.props
+        const { wali: w_raw, location, editable } = this.props
         const w = w_raw || {}
-        const isModeSanggah = location.state?.modeEdit
+        const isModeSanggah = editable
 
         return (
             <div className="space-y-4">
@@ -236,7 +236,7 @@ class Wali extends React.Component {
                         </h4>
                         <p className="text-gray-500 text-sm">Informasi orang tua / wali mahasiswa.</p>
                     </div>
-                    {this.props.editable && (
+                    {isModeSanggah && (
                         <button onClick={this.modalToggle} className="bg-amber-600 text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-amber-700 shadow-md">
                             <i className="fa fa-pencil mr-2"></i> Perbarui Data
                         </button>

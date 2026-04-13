@@ -172,8 +172,8 @@ class Listrik extends React.Component {
     }
 
     render() {
-        const { listrik, location } = this.props;
-        const isModeSanggah = location.state && location.state.modeEdit;
+        const { listrik, location, editable } = this.props;
+        const isModeSanggah = editable;
 
         return (
             <div className="w-full bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-6">
@@ -190,7 +190,7 @@ class Listrik extends React.Component {
                         <div className="p-2 bg-yellow-400 rounded-lg"><i className="fa fa-bolt text-white"></i></div>
                         <h4 className="text-lg font-bold text-gray-800 tracking-tight italic uppercase">Data Listrik</h4>
                     </div>
-                    {this.props.editable && (
+                    {isModeSanggah && (
                         <button onClick={this.modalToggle} className="bg-amber-600 text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-amber-700 transition-all shadow-md">
                             <i className="fa fa-pencil mr-2"></i> Perbarui Data
                         </button>

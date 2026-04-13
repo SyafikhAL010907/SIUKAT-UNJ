@@ -28,6 +28,11 @@ export const isAllowed = (role, action) => {
             // Validator murni Read-Only. Developer & Operator bisa edit.
             return role !== ROLES.VALIDATOR;
 
+        case 'GLOBAL_TRIGGER':
+            // Tombol Trigger (Tahun, Jalur, Flag) di Dashboard hanya untuk Developer.
+            // Operator & Validator dilarang.
+            return role === ROLES.DEVELOPER;
+
         default:
             return true;
     }

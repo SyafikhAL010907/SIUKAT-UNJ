@@ -10,16 +10,16 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
 let FormAyah = (props) => {
-    const { 
+    const {
         handleSubmit, handleToggleAyah, toggleAyah,
         pristine, submitting, dispatch,
         ref_pekerjaan, ref_provinsi_ayah, ref_kabkot_ayah, ref_kecamatan_ayah,
-        status_ayah, penghasilan_ayah, sampingan_ayah, 
+        status_ayah, penghasilan_ayah, sampingan_ayah,
     } = props
 
     const handleProvinsi = (e) => {
         dispatch(kabkot.fetchForAyah(e.target.value))
-        dispatch(kecamatan.fetchForAyah({type: "FETCH_KECAMATAN_FULFILLED", payload: []}))
+        dispatch(kecamatan.fetchForAyah({ type: "FETCH_KECAMATAN_FULFILLED", payload: [] }))
     }
 
     const handleKabkot = (e) => {
@@ -33,16 +33,16 @@ let FormAyah = (props) => {
                     <h3 className="text-xl font-bold">Perbarui Data Ayah</h3>
                     <button onClick={handleToggleAyah} className="hover:rotate-90 transition-transform text-2xl">&times;</button>
                 </div>
-                
+
                 <form onSubmit={handleSubmit} className="p-8 max-h-[70vh] overflow-y-auto">
                     <FormGroup row>
                         <Label for="nama_ayah" md={3}>Nama Lengkap</Label>
                         <Col md={9}>
-                            <Field name="nama_ayah" component={InputBs} type="text" placeholder="Nama Lengkap"/>
+                            <Field name="nama_ayah" component={InputBs} type="text" placeholder="Nama Lengkap" />
                         </Col>
                     </FormGroup>
                     <FormGroup row>
-                        <Label for="status_ayah" md={3}></Label>                                            
+                        <Label for="status_ayah" md={3}></Label>
                         <Col md={4}>
                             <Label check>
                                 <Field name="status_ayah" component={InputBs} type="radio" value="hidup" />{' '}
@@ -57,12 +57,12 @@ let FormAyah = (props) => {
                         </Col>
                     </FormGroup>
 
-                    { status_ayah === "hidup" && (
+                    {status_ayah === "hidup" && (
                         <div>
                             <FormGroup row>
                                 <Label for="nik_ayah" md={3}>NIK</Label>
                                 <Col md={9}>
-                                    <Field name="nik_ayah" component={InputBs} type="text" placeholder="NIK Ayah"/>
+                                    <Field name="nik_ayah" component={InputBs} type="text" placeholder="NIK Ayah" />
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
@@ -70,25 +70,25 @@ let FormAyah = (props) => {
                                 <Col md={5}>
                                     <Field component={InputFileBs} type="file" className="form-control" name="file_scan_ktp_ayah" id="file_scan_ktp_ayah" />
                                 </Col>
-                                { props.initialValues && props.initialValues.scan_ktp_ayah && (
+                                {props.initialValues && props.initialValues.scan_ktp_ayah && (
                                     <Col md={4}>
-                                        <a href={storage+"/"+props.initialValues.scan_ktp_ayah} target="_blank" rel="noopener noreferrer" className="btn btn-success btn-block"><i className="fa fa-file"></i> Lihat KTP Ayah</a>
+                                        <a href={storage + "/" + props.initialValues.scan_ktp_ayah} target="_blank" rel="noopener noreferrer" className="btn btn-success btn-block"><i className="fa fa-file"></i> Lihat KTP Ayah</a>
                                     </Col>
                                 )}
                             </FormGroup>
                             <FormGroup row>
-                                <Label md={3} xs={12}>Tempat & <br/>Tanggal Lahir</Label>
+                                <Label md={3} xs={12}>Tempat & <br />Tanggal Lahir</Label>
                                 <Col md={5}>
-                                    <Field name="tempat_lahir_ayah" component={InputBs} type="text" placeholder="Tempat Lahir"/>{' '}     
+                                    <Field name="tempat_lahir_ayah" component={InputBs} type="text" placeholder="Tempat Lahir" />{' '}
                                 </Col>
                                 <Col md={4} xs={12}>
-                                    <Field name="tanggal_lahir_ayah" component={InputDayPicker} startYear={1950} placeholder="Tanggal Lahir"/>
+                                    <Field name="tanggal_lahir_ayah" component={InputDayPicker} startYear={1950} placeholder="Tanggal Lahir" />
                                 </Col>
-                            </FormGroup>                       
+                            </FormGroup>
                             <FormGroup row>
                                 <Label for="alamat_ayah" md={3}>Alamat Lengkap</Label>
                                 <Col md={9}>
-                                    <Field name="alamat_ayah" component={InputBs} type="textarea" rows="3" placeholder="Alamat Lengkap"/>{' '}
+                                    <Field name="alamat_ayah" component={InputBs} type="textarea" rows="3" placeholder="Alamat Lengkap" />{' '}
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
@@ -96,7 +96,7 @@ let FormAyah = (props) => {
                                 <Col md={9}>
                                     <Field name="provinsi_ayah" component={InputBs} type="select" onChange={handleProvinsi}>
                                         <option value="">-- Pilih Provinsi --</option>
-                                        { Array.isArray(ref_provinsi_ayah) && ref_provinsi_ayah.map((data, key) => 
+                                        {Array.isArray(ref_provinsi_ayah) && ref_provinsi_ayah.map((data, key) =>
                                             <option value={data.provinsi_id} key={key}>{data.provinsi_nama}</option>
                                         )}
                                     </Field>
@@ -107,7 +107,7 @@ let FormAyah = (props) => {
                                 <Col md={9}>
                                     <Field name="kabkot_ayah" component={InputBs} type="select" onChange={handleKabkot}>
                                         <option value="">-- Pilih Kabupaten/Kota --</option>
-                                        { Array.isArray(ref_kabkot_ayah) && ref_kabkot_ayah.map((data, key) => 
+                                        {Array.isArray(ref_kabkot_ayah) && ref_kabkot_ayah.map((data, key) =>
                                             <option value={data.kab_id} key={key}>{data.kab_nama}</option>
                                         )}
                                     </Field>
@@ -118,7 +118,7 @@ let FormAyah = (props) => {
                                 <Col sm={9}>
                                     <Field name="kecamatan_ayah" component={InputBs} type="select">
                                         <option value="">-- Pilih Kecamatan --</option>
-                                        { Array.isArray(ref_kecamatan_ayah) && ref_kecamatan_ayah.map((data, key) => 
+                                        {Array.isArray(ref_kecamatan_ayah) && ref_kecamatan_ayah.map((data, key) =>
                                             <option value={data.kecam_id} key={key}>{data.kecam_nama}</option>
                                         )}
                                     </Field>
@@ -127,9 +127,9 @@ let FormAyah = (props) => {
                             <FormGroup row>
                                 <Label for="pekerjaan_ayah" md={3}>Pekerjaan</Label>
                                 <Col md={9}>
-                                    <Field type="select" component={InputBs} name="pekerjaan_ayah" id="pekerjaan_ayah">   
+                                    <Field type="select" component={InputBs} name="pekerjaan_ayah" id="pekerjaan_ayah">
                                         <option value="">-- Pilih Pekerjaan --</option>
-                                        { Array.isArray(ref_pekerjaan) && ref_pekerjaan.map((data, key) => 
+                                        {Array.isArray(ref_pekerjaan) && ref_pekerjaan.map((data, key) =>
                                             <option value={data.kode} key={key}>{data.nama}</option>
                                         )}
                                     </Field>
@@ -138,7 +138,7 @@ let FormAyah = (props) => {
                             <FormGroup row>
                                 <Label for="penghasilan_ayah" md={3}>Penghasilan</Label>
                                 <Col md={5} xs={12}>
-                                    <Field type="number" component={InputBs} name="penghasilan_ayah" id="penghasilan_ayah" placeholder="Penghasilan Ayah" validate={[ money ]}/>
+                                    <Field type="number" component={InputBs} name="penghasilan_ayah" id="penghasilan_ayah" placeholder="Penghasilan Ayah" validate={[money]} />
                                     <FormText color="muted">
                                         <ul className="list-reset">
                                             <li>Penghasilan <b>per bulan</b>;</li>
@@ -147,13 +147,13 @@ let FormAyah = (props) => {
                                     </FormText>
                                 </Col>
                                 <Col md={4} xs={12}>
-                                    <Alert color="success">{ rupiah(penghasilan_ayah) }</Alert>
+                                    <Alert color="success">{rupiah(penghasilan_ayah)}</Alert>
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
                                 <Label for="sampingan_ayah" md={3}>Sampingan</Label>
                                 <Col md={5} xs={12}>
-                                    <Field type="number" component={InputBs} name="sampingan_ayah" id="sampingan_ayah" placeholder="Penghasilan Sampingan Ayah"/>
+                                    <Field type="number" component={InputBs} name="sampingan_ayah" id="sampingan_ayah" placeholder="Penghasilan Sampingan Ayah" />
                                     <FormText color="muted">
                                         <ul className="list-reset">
                                             <li>Sampingan <b>per bulan</b>;</li>
@@ -162,7 +162,7 @@ let FormAyah = (props) => {
                                     </FormText>
                                 </Col>
                                 <Col md={4} xs={12}>
-                                    <Alert color="success">{ rupiah(sampingan_ayah) }</Alert>
+                                    <Alert color="success">{rupiah(sampingan_ayah)}</Alert>
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
@@ -170,16 +170,16 @@ let FormAyah = (props) => {
                                 <Col md={5}>
                                     <Field component={InputFileBs} type="file" name="file_scan_slip_ayah" id="file_scan_slip_ayah" />
                                 </Col>
-                                { props.initialValues && props.initialValues.scan_slip_ayah && (
+                                {props.initialValues && props.initialValues.scan_slip_ayah && (
                                     <Col md={4}>
-                                        <a href={storage+"/"+props.initialValues.scan_slip_ayah} target="_blank" rel="noopener noreferrer" className="btn btn-success btn-block"><i className="fa fa-file"></i> Lihat Slip Gaji Ayah</a>
+                                        <a href={storage + "/" + props.initialValues.scan_slip_ayah} target="_blank" rel="noopener noreferrer" className="btn btn-success btn-block"><i className="fa fa-file"></i> Lihat Slip Gaji Ayah</a>
                                     </Col>
                                 )}
                             </FormGroup>
                             <FormGroup row>
                                 <Label for="telepon_ayah" md={3}>Nomor Telepon</Label>
                                 <Col md={9}>
-                                    <Field name="telepon_ayah" component={InputBs} type="text" placeholder="Nomor Telepon" pattern="[0-9]{0,13}" title="Hanya isi dengan angka 0-9. Maksimal 13 digit."/>                    
+                                    <Field name="telepon_ayah" component={InputBs} type="text" placeholder="Nomor Telepon" pattern="[0-9]{0,13}" title="Hanya isi dengan angka 0-9. Maksimal 13 digit." />
                                     <FormText color="muted">
                                         Hanya isi dengan angka. Maksimal 13 digit.
                                     </FormText>
@@ -195,7 +195,7 @@ let FormAyah = (props) => {
                         </div>
                     )}
 
-                    { status_ayah === "wafat" && (
+                    {status_ayah === "wafat" && (
                         <div className="mt-10 flex justify-end space-x-3 border-t pt-6">
                             <button type="button" onClick={handleToggleAyah} className="px-6 py-2.5 font-bold text-gray-500">Batal</button>
                             <button type="submit" disabled={pristine || submitting} className="bg-emerald-600 text-white px-8 py-2.5 rounded-xl font-bold shadow-lg">
@@ -276,9 +276,9 @@ class Ayah extends React.Component {
     }
 
     render() {
-        const { ayah, location } = this.props;
+        const { ayah, location, editable } = this.props;
         const data = ayah || {}
-        const isModeSanggah = location.state && location.state.modeEdit;
+        const isModeSanggah = editable;
 
         return (
             <div className="space-y-4">
@@ -296,7 +296,7 @@ class Ayah extends React.Component {
                         </h4>
                         <p className="text-gray-500 text-sm">Informasi orang tua kandung / ayah.</p>
                     </div>
-                    { this.props.editable && (
+                    {isModeSanggah && (
                         <button onClick={this.modalToggle} className="bg-amber-600 text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-amber-700 transition-all shadow-md">
                             <i className="fa fa-pencil mr-2"></i> Perbarui Data
                         </button>
@@ -323,7 +323,7 @@ class Ayah extends React.Component {
                                 </td>
                             </tr>
 
-                            { data.status_ayah === "hidup" && (
+                            {data.status_ayah === "hidup" && (
                                 <>
                                     <tr>
                                         <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">NIK</td>
@@ -332,8 +332,8 @@ class Ayah extends React.Component {
                                     <tr>
                                         <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">KTP</td>
                                         <td className="p-4">
-                                            { data.scan_ktp_ayah ? (
-                                                <a href={storage+"/"+data.scan_ktp_ayah} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 font-bold text-sm">
+                                            {data.scan_ktp_ayah ? (
+                                                <a href={storage + "/" + data.scan_ktp_ayah} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 font-bold text-sm">
                                                     <i className="fa fa-download"></i> Lihat KTP
                                                 </a>
                                             ) : <span className="text-gray-400 italic text-xs">Belum diunggah</span>}
@@ -342,7 +342,7 @@ class Ayah extends React.Component {
                                     <tr>
                                         <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Tempat, Tgl Lahir</td>
                                         <td className="p-4 text-gray-700">
-                                            { (data.tempat_lahir_ayah || data.tanggal_lahir_ayah) ? (
+                                            {(data.tempat_lahir_ayah || data.tanggal_lahir_ayah) ? (
                                                 <>
                                                     {data.tempat_lahir_ayah || '-'}, {data.tanggal_lahir_ayah ? moment(data.tanggal_lahir_ayah).format("DD MMMM YYYY") : '-'}
                                                 </>
@@ -352,7 +352,7 @@ class Ayah extends React.Component {
                                     <tr>
                                         <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Alamat</td>
                                         <td className="p-4 text-gray-700">
-                                            { data.provinsi 
+                                            {data.provinsi
                                                 ? `${data.alamat_ayah || ''}, ${data.kecamatan ? data.kecamatan.kecam_nama : ''}, ${data.kabkot ? data.kabkot.kab_nama : ''}, ${data.provinsi.provinsi_nama}`
                                                 : (data.alamat_ayah || '-')
                                             }
@@ -373,8 +373,8 @@ class Ayah extends React.Component {
                                     <tr>
                                         <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Bukti Penghasilan</td>
                                         <td className="p-4">
-                                            { data.scan_slip_ayah ? (
-                                                <a href={storage+"/"+data.scan_slip_ayah} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 font-bold text-sm">
+                                            {data.scan_slip_ayah ? (
+                                                <a href={storage + "/" + data.scan_slip_ayah} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 font-bold text-sm">
                                                     <i className="fa fa-download"></i> Lihat Slip Gaji
                                                 </a>
                                             ) : <span className="text-gray-400 italic text-xs">Belum diunggah</span>}

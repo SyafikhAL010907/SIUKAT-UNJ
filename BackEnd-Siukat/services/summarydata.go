@@ -19,12 +19,14 @@ func (s *SummaryService) GetSummary() (SummaryResult, error) {
 
 	err := config.DB.Raw(`SELECT
 		COUNT(*) as total,
-		SUM(CASE WHEN waktu_mulai > 0 THEN 1 ELSE 0 END) as total_mulai,
-		SUM(CASE WHEN flag = 'pengisian' THEN 1 ELSE 0 END) as total_pengisian,
-		SUM(CASE WHEN flag IN ('selesai_isi','terima_ukt') THEN 1 ELSE 0 END) as total_selesai,
-		SUM(CASE WHEN flag = 'terima_ukt' THEN 1 ELSE 0 END) as total_terima_ukt
-		FROM tb_cmahasiswa
-		WHERE no_peserta NOT LIKE '%fulan%'
+		SUM(CASE WHEN a.waktu_mulai > 0 THEN 1 ELSE 0 END) as total_mulai,
+		SUM(CASE WHEN a.flag = 'pengisian' THEN 1 ELSE 0 END) as total_pengisian,
+		SUM(CASE WHEN a.flag IN ('selesai_isi','terima_ukt') THEN 1 ELSE 0 END) as total_selesai,
+		SUM(CASE WHEN a.flag = 'terima_ukt' THEN 1 ELSE 0 END) as total_terima_ukt
+		FROM tb_cmahasiswa a
+		LEFT JOIN tb_cmahasiswa t2 ON a.no_peserta = t2.no_peserta AND t2.atribut = 'sanggah'
+		WHERE a.no_peserta NOT LIKE '%fulan%'
+		AND (a.atribut = 'sanggah' OR (a.atribut = 'original' AND t2.id_cmahasiswa IS NULL))
 	`).Scan(&result).Error
 
 	return result, err

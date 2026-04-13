@@ -59,13 +59,15 @@ class DetailCmahasiswa extends React.Component {
   render() {
     const { activeTab } = this.state;
     // Safety Check: Jika data cmahasiswa belom ada, jangan paksa render atribut
-    // Prioritaskan state dari router (dari klik tombol Sanggah), fallback ke atribut DB
-    const isSanggah = this.props.location.state?.isSanggah || this.props.location.state?.modeEdit || (this.props.cmahasiswa && this.props.cmahasiswa.atribut === "sanggah");
-    const fetchAtribut = isSanggah ? "sanggah" : "original";
+    const isSanggahDB = (this.props.cmahasiswa && this.props.cmahasiswa.atribut === "sanggah");
+    const isActionEdit = !!(this.props.location.state?.isSanggah || this.props.location.state?.modeEdit);
     
-    // Protokol RBAC: Validator murni Read-Only. Developer & Operator bisa edit (Hanya dalam mode Sanggah).
+    // fetchAtribut: Munculkan data sanggah jika memang record-nya ada di DB, atau jika baru saja di-flag klarifikasi
+    const fetchAtribut = (isSanggahDB || isActionEdit) ? "sanggah" : "original";
+    
+    // canEdit: Hanya boleh edit jika admin datang dari aksi "Klarifikasi" atau "Perbarui" (isActionEdit)
     const userRole = this.props.user?.role;
-    const canEdit = isSanggah && (userRole === 'admin' || userRole === 'operator' || userRole === 'developer') && userRole !== 'validator';
+    const canEdit = isActionEdit && (userRole === 'admin' || userRole === 'operator' || userRole === 'developer') && userRole !== 'validator';
 
     return (
       <div className="space-y-6">
@@ -86,7 +88,7 @@ class DetailCmahasiswa extends React.Component {
               </div>
             </div>
 
-            {isSanggah && userRole !== 'validator' && this.props.cmahasiswa.flag === 'sanggah_ukt' && (
+            {isActionEdit && userRole !== 'validator' && this.props.cmahasiswa.flag === 'sanggah_ukt' && (
               <div className="flex space-x-3">
                 <button 
                   onClick={this.selesaiKlarifikasi}
@@ -178,14 +180,16 @@ class DetailCmahasiswa extends React.Component {
                 <p className="text-sm text-gray-500 mt-2">Hitung ulang potensi UKT berdasarkan data terbaru mahasiswa.</p>
               </div>
               
-              <button 
-                type="button"
-                onClick={(e) => this.selesaiHitung(e, fetchAtribut)}
-                className="w-full py-3 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl font-bold shadow-lg shadow-emerald-100 transition-all mb-8 flex items-center justify-center space-x-2"
-              >
-                <i className="fa fa-refresh"></i>
-                <span>Coba Menghitung Ulang</span>
-              </button>
+              { canEdit && (
+                <button 
+                  type="button"
+                  onClick={(e) => this.selesaiHitung(e, fetchAtribut)}
+                  className="w-full py-3 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl font-bold shadow-lg shadow-emerald-100 transition-all mb-8 flex items-center justify-center space-x-2"
+                >
+                  <i className="fa fa-refresh"></i>
+                  <span>Coba Menghitung Ulang</span>
+                </button>
+              )}
 
               <div className="bg-gray-50 rounded-2xl overflow-hidden border border-gray-100">
                 <table className="w-full text-left text-sm">
