@@ -83,8 +83,8 @@ class CalonMahasiswa extends React.Component {
                         <div className="flex items-center space-x-4">
                             <div className="w-2 h-10 bg-gradient-to-b from-emerald-600 to-teal-400 rounded-full shadow-lg shadow-emerald-200"></div>
                             <div>
-                                <h2 className="text-2xl font-black text-slate-800 tracking-tight">Data Master</h2>
-                                <p className="text-[10px] text-emerald-600 font-black uppercase tracking-[0.2em] opacity-70">CALON MAHASISWA BARU</p>
+                                <h2 className="text-2xl font-black text-white tracking-tight">Data Master</h2>
+                                <p className="text-[10px] text-white font-black uppercase tracking-[0.2em] opacity-70">CALON MAHASISWA BARU</p>
                             </div>
                         </div>
 
