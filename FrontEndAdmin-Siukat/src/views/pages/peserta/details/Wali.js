@@ -195,8 +195,8 @@ class Wali extends React.Component {
         });
 
         try {
-            // 1. Jalankan Update
-            await this.props.dispatch(wali.updateData(token, formData, this.props.noPeserta));
+            // 1. Jalankan Update (Kirim atribut agar refresh datanya bener)
+            await this.props.dispatch(wali.updateData(token, formData, this.props.noPeserta, this.props.atribut));
             
             // 2. Jika Berhasil, Refresh Data Utama
             await this.props.dispatch(wali.fetchAllData(token, this.props.noPeserta, this.props.atribut));
@@ -259,20 +259,6 @@ class Wali extends React.Component {
                                     <tr>
                                         <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Nama Lengkap</td>
                                         <td className="p-4 font-medium text-gray-800">{w.nama_wali || '-'}</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Tempat, Tgl Lahir</td>
-                                        <td className="p-4 text-gray-700">
-                                            { (w.tempat_lahir_wali || w.tanggal_lahir_wali) ? (
-                                                <>
-                                                    {w.tempat_lahir_wali || '-'}, {w.tanggal_lahir_wali ? moment(w.tanggal_lahir_wali).format("DD MMMM YYYY") : '-'}
-                                                </>
-                                            ) : '-'}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Pekerjaan</td>
-                                        <td className="p-4 text-gray-700">{w.pekerjaan?.nama || '-'}</td>
                                     </tr>
                                     <tr>
                                         <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Alamat</td>

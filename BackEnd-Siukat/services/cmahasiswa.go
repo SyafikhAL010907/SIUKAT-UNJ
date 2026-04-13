@@ -278,6 +278,21 @@ func (s *CMahasiswaService) GetCmahasiswa(noPeserta string) (models.CMahasiswa, 
 	return mhs, err
 }
 
+// GetCmahasiswaByAtribut — Ambil data mahasiswa dengan atribut spesifik (original/sanggah)
+func (s *CMahasiswaService) GetCmahasiswaByAtribut(noPeserta string, atribut string) (models.CMahasiswa, error) {
+	db := config.DB
+	var mhs models.CMahasiswa
+
+	err := db.Preload("Fakultas").Preload("Prodi").Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
+		Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&mhs).Error
+	if err != nil {
+		// Try without preload if failed
+		err = db.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&mhs).Error
+	}
+
+	return mhs, err
+}
+
 // GetSanggah — Ambil mahasiswa yang dalam status sanggah UKT
 func (s *CMahasiswaService) GetSanggah() ([]models.CMahasiswa, error) {
 	var data []models.CMahasiswa

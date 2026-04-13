@@ -4,6 +4,7 @@ import (
 	"BackEnd-Siukat/config"
 	"BackEnd-Siukat/models"
 	"errors"
+	"strings"
 	"gorm.io/gorm"
 	"time"
 )
@@ -20,14 +21,14 @@ func (s *WaliService) Edit(data map[string]interface{}, noPeserta string, atribu
 	db := config.DB
 	var wali models.Wali
 
-	// 1. Cek apakah record sudah ada
-	err := db.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&wali).Error
+	// 1. Cek apakah record sudah ada - CASE-INSENSITIVE
+	err := db.Where("no_peserta = ? AND LOWER(atribut) = ?", noPeserta, strings.ToLower(atribut)).First(&wali).Error
 
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			// 2. Jika BELUM ADA, maka Create (UPSERT)
 			data["no_peserta"] = noPeserta
-			data["atribut"] = atribut
+			data["atribut"] = strings.ToLower(atribut) // Simpan dalam lowercase untuk konsistensi kedepannya
 			if errCreate := db.Model(&models.Wali{}).Create(data).Error; errCreate != nil {
 				return models.Wali{}, errCreate
 			}
@@ -42,8 +43,8 @@ func (s *WaliService) Edit(data map[string]interface{}, noPeserta string, atribu
 	}
 
 	// 4. Ambil data terbaru untuk return
-	db.Preload("Pekerjaan").Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
-		Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&wali)
+	db.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
+		Where("no_peserta = ? AND LOWER(atribut) = ?", noPeserta, strings.ToLower(atribut)).First(&wali)
 	return wali, nil
 }
 
@@ -51,20 +52,20 @@ func (s *WaliService) GetByLoggedIn(noPeserta string) (models.Wali, error) {
 	db := config.DB
 	var res models.Wali
 	
-	// 1. PRIORITAS: Cek data 'sanggah' dulu
-	err := db.Preload("Pekerjaan").Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
-		Where("no_peserta = ? AND atribut = ?", noPeserta, "sanggah").First(&res).Error
+	// 1. PRIORITAS: Cek data 'sanggah' dulu - CASE-INSENSITIVE
+	err := db.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
+		Where("no_peserta = ? AND (atribut = ? OR atribut = ?)", noPeserta, "sanggah", "Sanggah").First(&res).Error
 	
 	if err == nil {
 		return res, nil
 	}
 
-	// 2. FALLBACK: Jika tidak ada sanggah, ambil data 'original'
-	err = db.Preload("Pekerjaan").Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
-		Where("no_peserta = ? AND atribut = ?", noPeserta, "original").First(&res).Error
+	// 2. FALLBACK: Jika tidak ada sanggah, ambil data 'original' - CASE-INSENSITIVE
+	err = db.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
+		Where("no_peserta = ? AND (atribut = ? OR atribut = ?)", noPeserta, "original", "Original").First(&res).Error
 	
 	if err != nil {
-		return models.Wali{NoPeserta: noPeserta}, nil
+		return models.Wali{NoPeserta: noPeserta, StatusWali: "tidak"}, nil // Kembalikan status 'tidak' agar UI konsisten
 	}
 
 	return res, nil
@@ -79,7 +80,6 @@ func (s *WaliService) AddLog(user models.Wali, atribut string, executor string, 
 		ProvinsiWali:    user.ProvinsiWali,
 		KabkotWali:      user.KabkotWali,
 		KecamatanWali:   user.KecamatanWali,
-		PekerjaanWali:   user.PekerjaanWali,
 		KesanggupanWali: user.KesanggupanWali,
 		ScanWali:        user.ScanWali,
 		Atribut:         atribut,

@@ -10,6 +10,7 @@ import (
 	"strconv"
 	"fmt"
 	"time"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -58,31 +59,25 @@ func WaliRoutes(r *gin.RouterGroup) {
 			data["kesanggupan_wali"] = k
 		}
 
-		data["tempat_lahir_wali"] = c.PostForm("tempat_lahir_wali")
-		data["pekerjaan_wali"] = c.PostForm("pekerjaan_wali")
-
-		// Parse Tanggal Lahir
-		if tglStr := c.PostForm("tanggal_lahir_wali"); tglStr != "" {
-			if tgl, err := time.Parse("2006-01-02", tglStr); err == nil {
-				data["tanggal_lahir_wali"] = &tgl
-				fmt.Printf("[DEBUG] Parsed tanggal_lahir_wali: %v\n", tgl)
-			} else {
-				fmt.Printf("[WARNING] FAILED to parse tanggal_lahir_wali: '%s'. Error: %v\n", tglStr, err)
-			}
-		}
 
 		// --- LOGIKA DINAMIS & EFISIENSI (CLEANUP) ---
 		var student models.CMahasiswa
 		config.DB.Where("no_peserta = ?", np).First(&student)
+		
+		// Gunakan atribut dari student (bisa original atau sanggah)
+		currentAtribut := student.Atribut
+		if currentAtribut == "" {
+			currentAtribut = "original"
+		}
 
 		var existing models.Wali
-		config.DB.Where("no_peserta = ? AND atribut = ?", np, "original").First(&existing)
+		config.DB.Where("no_peserta = ? AND atribut = ?", np, currentAtribut).First(&existing)
 
 		fileScan, errScan := c.FormFile("file_scan_wali")
 		if errScan == nil {
 			utils.DeleteOldFile(existing.ScanWali)
 			filename := fmt.Sprintf("Surat_Wali_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
-			newPath, err := utils.HandleDynamicUpload(c, fileScan, student.NamaCmahasiswa, np, "original", filename)
+			newPath, err := utils.HandleDynamicUpload(c, fileScan, student.NamaCmahasiswa, np, currentAtribut, filename)
 			if err == nil {
 				data["scan_wali"] = newPath
 			}
@@ -90,10 +85,10 @@ func WaliRoutes(r *gin.RouterGroup) {
 
 		// 1. Ambil data lama SEBELUM update untuk Log
 		var existingWali models.Wali
-		config.DB.Where("no_peserta = ? AND atribut = ?", np, "original").First(&existingWali)
+		config.DB.Where("no_peserta = ? AND atribut = ?", np, currentAtribut).First(&existingWali)
 		
 		// 2. Jalankan Update/Upsert
-		res, err := srv.Edit(data, np, "original")
+		res, err := srv.Edit(data, np, currentAtribut)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal simpan data: " + err.Error()})
 			return
@@ -102,9 +97,9 @@ func WaliRoutes(r *gin.RouterGroup) {
 		// 3. Simpan Log
 		now := time.Now()
 		if existingWali.NoPeserta != "" {
-			srv.AddLog(existingWali, "original", np, &now)
+			srv.AddLog(existingWali, currentAtribut, np, &now)
 		} else {
-			srv.AddLog(res, "original", np, &now)
+			srv.AddLog(res, currentAtribut, np, &now)
 		}
 		
 		c.JSON(http.StatusOK, res)
@@ -126,19 +121,6 @@ func WaliRoutes(r *gin.RouterGroup) {
 			"provinsi_wali":     c.PostForm("provinsi_wali"),
 			"kabkot_wali":       c.PostForm("kabkot_wali"),
 			"kecamatan_wali":    c.PostForm("kecamatan_wali"),
-			"tempat_lahir_wali": c.PostForm("tempat_lahir_wali"),
-		}
-
-		data["pekerjaan_wali"] = c.PostForm("pekerjaan_wali")
-
-		// Parse Tanggal Lahir
-		if tglStr := c.PostForm("tanggal_lahir_wali"); tglStr != "" {
-			if tgl, err := time.Parse("2006-01-02", tglStr); err == nil {
-				data["tanggal_lahir_wali"] = &tgl
-				fmt.Printf("[DEBUG] Admin Parsed tanggal_lahir_wali: %v\n", tgl)
-			} else {
-				fmt.Printf("[WARNING] Admin FAILED to parse tanggal_lahir_wali: '%s'. Error: %v\n", tglStr, err)
-			}
 		}
 
 		if k, err := strconv.Atoi(c.PostForm("kesanggupan_wali")); err == nil {
@@ -146,7 +128,6 @@ func WaliRoutes(r *gin.RouterGroup) {
 		}
 
 		// --- LOGIKA DINAMIS & EFISIENSI (CLEANUP) - SANGGAH ---
-		// Fetch student with priority to 'sanggah' record (via Service)
 		cMhsService := services.CMahasiswaService{}
 		student, _ := cMhsService.GetCmahasiswa(np)
 
@@ -163,7 +144,7 @@ func WaliRoutes(r *gin.RouterGroup) {
 			}
 		}
 
-		// 1. Ambil data lama untuk Log (Gunakan atribut sanggah karena ini route khusus Admin/Sanggah)
+		// 1. Ambil data lama untuk Log
 		var existingWali models.Wali
 		config.DB.Where("no_peserta = ? AND atribut = ?", np, "sanggah").First(&existingWali)
 
@@ -196,27 +177,35 @@ func WaliRoutes(r *gin.RouterGroup) {
 	})
 
 	group.GET("/get-wali/:no_peserta", func(c *gin.Context) {
-		noPeserta := c.Param("no_peserta")
-		atribut := c.Query("atribut")
+		noPeserta := strings.TrimSpace(c.Param("no_peserta"))
+		atribut := strings.TrimSpace(c.Query("atribut"))
 		var model models.Wali
 		var err error
 
+		fmt.Printf("\n[DEBUG] Admin GET Wali - NoPeserta: '%s', Requested Atribut: '%s'\n", noPeserta, atribut)
+
 		if atribut != "" {
-			err = config.DB.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").Preload("Pekerjaan").
-				Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&model).Error
+			err = config.DB.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
+				Where("no_peserta = ? AND LOWER(atribut) = ?", noPeserta, strings.ToLower(atribut)).First(&model).Error
 		} else {
-			err = config.DB.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").Preload("Pekerjaan").
-				Where("no_peserta = ? AND atribut = ?", noPeserta, "sanggah").First(&model).Error
-			if err != nil {
-				err = config.DB.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").Preload("Pekerjaan").
-					Where("no_peserta = ? AND atribut = ?", noPeserta, "original").First(&model).Error
-			}
+			// Prioritaskan sanggah dulu, fallback ke original — Sifat CASE-INSENSITIVE (LOWER)
+			err = config.DB.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
+				Where("no_peserta = ? AND (LOWER(atribut) = ? OR LOWER(atribut) = ?)", noPeserta, "sanggah", "original").First(&model).Error
 		}
 
 		if err != nil {
-			c.JSON(http.StatusOK, gin.H{"msg": "data tidak ditemukan"})
+			fmt.Printf("[DEBUG] Admin GET Wali - Final Result: Data NOT found for %s\n", noPeserta)
+			c.JSON(http.StatusOK, models.Wali{
+				NoPeserta:  noPeserta,
+				StatusWali: "tidak",
+				Atribut:    "original",
+			})
 			return
 		}
+
+		fmt.Printf("[DEBUG] Admin GET Wali RAW DATA - ID:%d, NoPeserta:%s, Nama:%s, Status:%s, Atribut:%s\n", 
+			model.IDWali, model.NoPeserta, model.NamaWali, model.StatusWali, model.Atribut)
+		
 		c.JSON(http.StatusOK, model)
 	})
 }

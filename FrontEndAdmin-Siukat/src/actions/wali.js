@@ -44,11 +44,11 @@ export function fetchAllData(token, id, atribut = ""){
     }
 }
 
-export function updateData(token, input, id){
+export function updateData(token, input, id, atribut = ""){
     return {
         type: "FETCH_WALI",
         payload: wali.updateData(token, input, id).then((response) => {
-            return wali.getById(token, id)
+            return wali.getById(token, id, atribut)
         })
     }
 }
