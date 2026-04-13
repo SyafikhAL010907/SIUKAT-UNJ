@@ -126,8 +126,10 @@ class CalonMahasiswa extends React.Component {
                                     bidik_misi_cmahasiswa: "BM",
                                     "fakultas.nama": "Fakultas",
                                     "prodi.nama": "Program Studi",
-                                    golongan_id: "Kelompok UKT",
-                                    "ukt.nominal": "Nominal UKT",
+                                    original_golongan_id: "Kelompok Original",
+                                    original_nominal: "Nominal Original",
+                                    golongan_id: "Kelompok Sanggah",
+                                    "ukt.nominal": "Nominal Sanggah",
                                     flag: "Status",
                                     ukt_tinggi: "UKT Tinggi",
                                     aksi: 'Aksi'

@@ -469,44 +469,75 @@ func (s *CMahasiswaService) Datatable(page, perPage int, keyword string) (map[st
 		return nil, err
 	}
 
-	// 1. Cek Status Sanggah secara massal (Helper-based)
-	s.PopulateHasSanggah(mhs)
+	// 2. Tarik Data Original secara massal buat perbandingan
+	var pks []string
+	for _, m := range mhs {
+		pks = append(pks, m.NoPeserta)
+	}
+	var originalRecords []models.CMahasiswa
+	db.Where("no_peserta IN ? AND atribut = ?", pks, "original").Find(&originalRecords)
+	origMap := make(map[string]models.CMahasiswa)
+	for _, om := range originalRecords {
+		origMap[om.NoPeserta] = om
+	}
 
-	// 2. Hitung Nominal UKT berdasarkan GolonganID untuk tiap baris
+	// 3. Hitung Nominal UKT (Lama vs Baru) untuk tiap baris
 	for i := range mhs {
-
+		// A. Luangkan space buat UKT aktif sekarang
 		var ukt models.Ukt
-		// Find correct UKT record for this specific student's prodi and entrance path
 		if err := db.Where("major_id = ? AND entrance = ?", mhs[i].ProdiCmahasiswa, mhs[i].JalurCmahasiswa).First(&ukt).Error; err == nil {
 			mhs[i].Ukt = &ukt
-			switch mhs[i].GolonganID {
-			case "I":
-				mhs[i].Ukt.Nominal = mhs[i].Ukt.I
-			case "II":
-				mhs[i].Ukt.Nominal = mhs[i].Ukt.II
-			case "III":
-				mhs[i].Ukt.Nominal = mhs[i].Ukt.III
-			case "IV":
-				mhs[i].Ukt.Nominal = mhs[i].Ukt.IV
-			case "V":
-				mhs[i].Ukt.Nominal = mhs[i].Ukt.V
-			case "VI":
-				mhs[i].Ukt.Nominal = mhs[i].Ukt.VI
-			case "VII":
-				mhs[i].Ukt.Nominal = mhs[i].Ukt.VII
-			case "VIII":
-				mhs[i].Ukt.Nominal = mhs[i].Ukt.VIII
+			// Pake helper buat nentuin nominal berdasarkan golongan
+			mhs[i].Ukt.Nominal = s.CalculateNominalValue(ukt, mhs[i].GolonganID)
+		}
+
+		// B. Isi Data Original (Lama) buat perbandingan
+		if om, found := origMap[mhs[i].NoPeserta]; found {
+			mhs[i].OriginalGolonganID = om.GolonganID
+			// Nominal Original ttp pake ukt major & entrance yang sama (biasanya gak berubah)
+			if mhs[i].Ukt != nil {
+				mhs[i].OriginalNominal = s.CalculateNominalValue(*mhs[i].Ukt, om.GolonganID)
+			}
+		} else {
+			// Jika gak ada record sanggah (atribut='original' is the main one)
+			mhs[i].OriginalGolonganID = mhs[i].GolonganID
+			if mhs[i].Ukt != nil {
+				mhs[i].OriginalNominal = mhs[i].Ukt.Nominal
 			}
 		}
 	}
 
 	return map[string]interface{}{
 		"count":       count,
-		"rows": mhs,
+		"rows":        mhs,
 		"currentPage": page,
 		"perPage":     perPage,
 		"keyword":     keyword,
 	}, nil
+}
+
+// Helper untuk menghitung nominal berdasarkan GolonganID
+func (s *CMahasiswaService) CalculateNominalValue(ukt models.Ukt, golonganID string) int {
+	switch golonganID {
+	case "I":
+		return ukt.I
+	case "II":
+		return ukt.II
+	case "III":
+		return ukt.III
+	case "IV":
+		return ukt.IV
+	case "V":
+		return ukt.V
+	case "VI":
+		return ukt.VI
+	case "VII":
+		return ukt.VII
+	case "VIII":
+		return ukt.VIII
+	default:
+		return 0
+	}
 }
 
 // DatatableSanggah — Pagination & Search untuk daftar mahasiswa sanggah
@@ -530,41 +561,43 @@ func (s *CMahasiswaService) DatatableSanggah(page, perPage int, keyword string) 
 		return nil, err
 	}
 
-	// 1. Cek Status Sanggah secara massal (Helper-based)
-	// Penting: Meskipun ini DatatableSanggah, kita tetap cek has_sanggah 
-	// biar row original yang kebetulan nyempung di sini statusnya akurat.
-	s.PopulateHasSanggah(mhs)
+	// 2. Tarik Data Original secara massal buat perbandingan
+	var pks []string
+	for _, m := range mhs {
+		pks = append(pks, m.NoPeserta)
+	}
+	var originalRecords []models.CMahasiswa
+	db.Where("no_peserta IN ? AND atribut = ?", pks, "original").Find(&originalRecords)
+	origMap := make(map[string]models.CMahasiswa)
+	for _, om := range originalRecords {
+		origMap[om.NoPeserta] = om
+	}
 
-	// 2. Hitung Nominal UKT berdasarkan GolonganID untuk tiap baris
+	// 3. Hitung Nominal UKT berdasarkan GolonganID untuk tiap baris
 	for i := range mhs {
 		var ukt models.Ukt
-		// Find correct UKT record for this specific student's prodi and entrance path
 		if err := db.Where("major_id = ? AND entrance = ?", mhs[i].ProdiCmahasiswa, mhs[i].JalurCmahasiswa).First(&ukt).Error; err == nil {
 			mhs[i].Ukt = &ukt
-			switch mhs[i].GolonganID {
-			case "I":
-				mhs[i].Ukt.Nominal = mhs[i].Ukt.I
-			case "II":
-				mhs[i].Ukt.Nominal = mhs[i].Ukt.II
-			case "III":
-				mhs[i].Ukt.Nominal = mhs[i].Ukt.III
-			case "IV":
-				mhs[i].Ukt.Nominal = mhs[i].Ukt.IV
-			case "V":
-				mhs[i].Ukt.Nominal = mhs[i].Ukt.V
-			case "VI":
-				mhs[i].Ukt.Nominal = mhs[i].Ukt.VI
-			case "VII":
-				mhs[i].Ukt.Nominal = mhs[i].Ukt.VII
-			case "VIII":
-				mhs[i].Ukt.Nominal = mhs[i].Ukt.VIII
+			mhs[i].Ukt.Nominal = s.CalculateNominalValue(ukt, mhs[i].GolonganID)
+		}
+
+		// Isi Data Original (Lama)
+		if om, found := origMap[mhs[i].NoPeserta]; found {
+			mhs[i].OriginalGolonganID = om.GolonganID
+			if mhs[i].Ukt != nil {
+				mhs[i].OriginalNominal = s.CalculateNominalValue(*mhs[i].Ukt, om.GolonganID)
+			}
+		} else {
+			mhs[i].OriginalGolonganID = mhs[i].GolonganID
+			if mhs[i].Ukt != nil {
+				mhs[i].OriginalNominal = mhs[i].Ukt.Nominal
 			}
 		}
 	}
 
 	return map[string]interface{}{
 		"count":       count,
-		"rows": mhs,
+		"rows":        mhs,
 		"currentPage": page,
 		"perPage":     perPage,
 		"keyword":     keyword,

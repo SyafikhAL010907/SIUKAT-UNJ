@@ -34,6 +34,8 @@ type CMahasiswa struct {
 
 	// Virtual & Display Fields (Gorm Ignore)
 	HasSanggah             bool       `gorm:"-" json:"has_sanggah"`
+	OriginalGolonganID     string     `gorm:"-" json:"original_golongan_id"`
+	OriginalNominal        int        `gorm:"-" json:"original_nominal"`
 
 	Fakultas *Fakultas `gorm:"foreignKey:FakultasCmahasiswa;references:Kode" json:"fakultas,omitempty"`
 	Prodi    *Prodi    `gorm:"foreignKey:ProdiCmahasiswa;references:Kode" json:"prodi,omitempty"`

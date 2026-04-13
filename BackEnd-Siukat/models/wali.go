@@ -1,19 +1,20 @@
 package models
 
 type Wali struct {
-	IDWali          int    `gorm:"primaryKey;column:id_wali" json:"id_wali"`
-	NoPeserta       string `gorm:"column:no_peserta;type:varchar(255)" json:"no_peserta"`
-	StatusWali      string `gorm:"column:status_wali;type:enum('ada','tidak')" json:"status_wali"`
-	NamaWali        string `gorm:"column:nama_wali;type:varchar(255)" json:"nama_wali"`
-	AlamatWali      string `gorm:"column:alamat_wali;type:text" json:"alamat_wali"`
-	ProvinsiWali    string `gorm:"column:provinsi_wali;type:varchar(255)" json:"provinsi_wali"`
-	KabkotWali      string `gorm:"column:kabkot_wali;type:varchar(255)" json:"kabkot_wali"`
-	KecamatanWali   string     `gorm:"column:kecamatan_wali;type:varchar(255)" json:"kecamatan_wali"`
-	KesanggupanWali int        `gorm:"column:kesanggupan_wali" json:"kesanggupan_wali"`
-	ScanWali        string     `gorm:"column:scan_wali;type:varchar(255)" json:"scan_wali"`
-	Atribut         string     `gorm:"column:atribut;type:enum('original','sanggah')" json:"atribut"`
+	IDWali          int       `gorm:"primaryKey;column:id_wali" json:"id_wali"`
+	NoPeserta       string    `gorm:"column:no_peserta;type:varchar(255)" json:"no_peserta"`
+	StatusWali      string    `gorm:"column:status_wali;type:enum('ada','tidak')" json:"status_wali"`
+	NamaWali        string    `gorm:"column:nama_wali;type:varchar(255)" json:"nama_wali"`
+	AlamatWali      string    `gorm:"column:alamat_wali;type:text" json:"alamat_wali"`
+	ProvinsiWali    string    `gorm:"column:provinsi_wali;type:varchar(255)" json:"provinsi_wali"`
+	KabkotWali      string    `gorm:"column:kabkot_wali;type:varchar(255)" json:"kabkot_wali"`
+	KecamatanWali   string    `gorm:"column:kecamatan_wali;type:varchar(255)" json:"kecamatan_wali"`
+	KesanggupanWali int       `gorm:"column:kesanggupan_wali" json:"kesanggupan_wali"`
+	ScanWali        string    `gorm:"column:scan_wali;type:varchar(255)" json:"scan_wali"`
+	Atribut         string    `gorm:"column:atribut;type:enum('original','sanggah')" json:"atribut"`
 
-	// Relational associations (using pragmatic types to match PKs)
+	// Relational associations
+	// Pastikan nama struct Provinsi, Kabkot, dan Kecamatan sesuai dengan yang ada di project Anda
 	Provinsi  *Provinsi  `gorm:"foreignKey:ProvinsiWali;references:ProvinsiID" json:"provinsi,omitempty"`
 	Kabkot    *Kabkot    `gorm:"foreignKey:KabkotWali;references:KabID" json:"kabkot,omitempty"`
 	Kecamatan *Kecamatan `gorm:"foreignKey:KecamatanWali;references:KecamID" json:"kecamatan,omitempty"`

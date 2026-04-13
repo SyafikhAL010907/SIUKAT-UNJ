@@ -1,3 +1,4 @@
+
 import React from 'react';
 import moment from 'moment';
 import {
@@ -238,7 +239,7 @@ let FormWaliSeleksi = (props) => {
                                     }
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="btn btn-success btn-block btn-sm"
+                                    className="btn btn-success btn-block btn-sm mt-2"
                                 >
                                     <i className="fa fa-file"></i> Lihat Surat Komitmen Wali
                                 </a>
@@ -255,7 +256,7 @@ let FormWaliSeleksi = (props) => {
                     <Button
                         type="submit"
                         className="modern-btn-primary w-100 py-3 shadow-sm font-weight-bold"
-                        disabled={pristine || submitting}
+                        disabled={submitting}
                     >
                         <i className="fa fa-save mr-2"></i> Simpan Data Wali
                     </Button>
@@ -264,68 +265,85 @@ let FormWaliSeleksi = (props) => {
         </Form>
     );
 };
+
 class DataWaliSeleksi extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            textUnduhWali: 'Unduh Contoh Surat Komitmen Wali',
+        };
+    }
+
     UNSAFE_componentWillMount() {
         this.props.dispatch(provinsi.fetchProvinsi());
         this.props.dispatch(wali.fetchAllData(cookies.get(cookieName)));
-        this.setState({
-            textUnduhWali: 'Unduh Contoh Surat Komitmen Wali',
-        });
     }
+
     unduhWali = () => {
-        this.setState({
-            textUnduhWali: 'Sedang mengunduh...',
-        });
-        files
-            .unduhWali()
+        this.setState({ textUnduhWali: 'Sedang mengunduh...' });
+        files.unduhWali()
             .then(() => {
-                this.setState({
-                    textUnduhWali: 'Unduh Contoh Surat Komitmen Wali',
-                });
+                this.setState({ textUnduhWali: 'Unduh Contoh Surat Komitmen Wali' });
             })
             .catch(() => {
-                this.setState({
-                    textUnduhWali: 'Unduh Contoh Surat Komitmen Wali',
-                });
+                this.setState({ textUnduhWali: 'Unduh Contoh Surat Komitmen Wali' });
             });
     }
+
     submitForm = (values) => {
         var formData = new FormData();
-        for (var key in values) {
+        let processedValues = { ...values };
+
+        // LOGIKA PENYESUAIAN DENGAN BACKEND (GOLANG SERVICE)
+        if (values.status_wali === 'tidak') {
+            // Kita kirim string kosong ("") agar Backend tidak melakukan Preload pada tabel wilayah (mencegah error 500)
+            processedValues['nama_wali'] = "-";
+            processedValues['alamat_wali'] = "-";
+            processedValues['provinsi_wali'] = "";
+            processedValues['kabkot_wali'] = "";
+            processedValues['kecamatan_wali'] = "";
+            processedValues['kesanggupan_wali'] = "0";
+        }
+
+        for (var key in processedValues) {
             var fileField = key.startsWith('file_scan') ? key : null;
             if (fileField) {
-                // Pastikan file didefinisikan sebelum append (mencegah error saat edit tanpa re-upload)
-                if (values[key] && values[key].length > 0) {
-                    formData.append(key, values[key][0]);
+                // Hanya append jika ada file baru yang diunggah
+                if (processedValues[key] && processedValues[key].length > 0) {
+                    formData.append(key, processedValues[key][0]);
                     const el = document.getElementById(fileField);
                     if (el) el.value = null;
                 }
             } else {
-                let val = values[key];
+                let val = processedValues[key];
+                
+                // Format tanggal jika ada
                 if (val instanceof Date || moment.isMoment(val)) {
                     val = moment(val).format("YYYY-MM-DD");
                 }
-                // Ekstraksi value jika berupa object
+                // Handle object value dari dropdown/select
                 else if (val && typeof val === 'object' && !Array.isArray(val)) {
-                    // Cek apakah ini Redux Form Field object
-                    if (val.input || val.meta || (val.name && val.onChange)) {
-                        val = "";
-                    } else {
-                        val = val.kode || val.id || val.provinsi_id || val.kab_id || val.kecam_id || "";
-                    }
+                    val = val.provinsi_id || val.kab_id || val.kecam_id || val.id || "";
                 }
-                formData.append(key, val || "");
+                
+                formData.append(key, val === undefined || val === null ? "" : val);
             }
         }
-        this.props.dispatch(wali.updateData(cookies.get(cookieName), formData)).then(() => {
-            this.props.dispatch(reset('DataWaliSeleksi'));
-            if (this.props.updateVerifikasi) {
-                this.props.updateVerifikasi();
-            }
-        }).catch(err => {
-            console.error("Gagal simpan data wali:", err);
-        });
+        
+        // Panggil Action Update
+        return this.props.dispatch(wali.updateData(cookies.get(cookieName), formData))
+            .then(() => {
+                if (this.props.updateVerifikasi) {
+                    this.props.updateVerifikasi();
+                }
+                // Refresh data setelah simpan
+                this.props.dispatch(wali.fetchAllData(cookies.get(cookieName)));
+            })
+            .catch(err => {
+                console.error("Gagal simpan data wali:", err);
+            });
     }
+
     render() {
         return (
             <Card className="premium-card p-4 p-md-5">
@@ -334,13 +352,13 @@ class DataWaliSeleksi extends React.Component {
                     <i className="fa fa-info-circle mr-2"></i>
                     <strong>Seluruh kolom pada Data Wali Wajib Diisi</strong>
                     <br />
-                    <small className="ml-4">Isi dengan tanda strip (-) jika tidak memiliki wali.</small>
+                    <small className="ml-4">Pilih opsi "Tidak Ada" jika Anda tidak memiliki wali.</small>
                 </Alert>
                 <FormWaliSeleksi
                     onSubmit={this.submitForm}
                     initialValues={this.props.wali}
                     allow={this.props.allow}
-                    unduhWali={this.unduhWali.bind(this)}
+                    unduhWali={this.unduhWali}
                     textUnduhWali={this.state.textUnduhWali}
                 />
             </Card>
@@ -365,7 +383,6 @@ FormWaliSeleksi = connect(
         return {
             status_wali,
             kesanggupan_wali,
-
             ref_provinsi_wali: store.provinsi.provinsi,
             ref_kabkot_wali: store.kabkot.kabkot_wali,
             ref_kecamatan_wali: store.kecamatan.kecamatan_wali,
