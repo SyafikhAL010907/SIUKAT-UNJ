@@ -426,10 +426,13 @@ func (s *CMahasiswaService) Datatable(page, perPage int, keyword string) (map[st
 	var mhs []models.CMahasiswa
 	var count int64
 
-	query := db.Model(&models.CMahasiswa{}).Preload("Fakultas").Preload("Prodi")
+	// Smart Prioritas: Jika ada Sanggah, tampilkan Sanggah. Jika tidak ada Sanggah, tampilkan Original.
+	// Ini mencegah munculnya double data untuk mahasiswa yang sama di list Admin.
+	query := db.Model(&models.CMahasiswa{}).Preload("Fakultas").Preload("Prodi").
+		Where("atribut = 'sanggah' OR (atribut = 'original' AND NOT EXISTS (SELECT 1 FROM tb_cmahasiswa t2 WHERE t2.no_peserta = tb_cmahasiswa.no_peserta AND t2.atribut = 'sanggah'))")
 	
 	if keyword != "" {
-		query = query.Where("no_peserta LIKE ? OR nama_cmahasiswa LIKE ?", "%"+keyword+"%", "%"+keyword+"%")
+		query = query.Where("(no_peserta LIKE ? OR nama_cmahasiswa LIKE ?)", "%"+keyword+"%", "%"+keyword+"%")
 	}
 
 	if err := query.Count(&count).Error; err != nil {
