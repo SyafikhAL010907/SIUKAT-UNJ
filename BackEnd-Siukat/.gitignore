@@ -3,7 +3,7 @@ main
 main.exe
 
 # Environment
-# .env
+.env
 
 # Go build cache
 *.test

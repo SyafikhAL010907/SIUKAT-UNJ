@@ -12,6 +12,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"html/template"
+	"strings"
 	"time"
 )
 
@@ -33,11 +34,23 @@ func main() {
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 
-	// Implementasi CORS seperti pada app.js Node.js
+	// Implementasi CORS dinamis dari .env
+	// allowedOrigins := os.Getenv("ALLOWED_ORIGINS")
+	// origins := []string{"http://localhost:3000"} // Default
+	allowedOrigins := os.Getenv("ALLOWED_ORIGINS")
+	origins := []string{"*"}
+	if allowedOrigins != "" {
+		origins = strings.Split(allowedOrigins, ",")
+	}
+
 	configCors := cors.DefaultConfig()
-configCors.AllowOrigins = []string{"http://10.255.1.149:3000", "http://10.255.1.149:3001", "http://localhost:3000"} // Hapus koma di sini
-configCors.AllowMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"} // Hapus koma di sini
-configCors.AllowHeaders = []string{"Origin", "Content-Type", "Accept", "Authorization"} // Hapus koma di sini)
+	configCors.AllowOrigins = origins
+	configCors.AllowMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"}
+	configCors.AllowHeaders = []string{"Origin", "Content-Type", "Accept", "Authorization"}
+	configCors.AllowCredentials = true
+
+	// Aktifkan Middleware CORS
+	r.Use(cors.New(configCors))
 
 	// Serve file statis (img, pdf pengumuman, foto upload mahasiswa)
 	// Path relatif terhadap root project eksekusi
