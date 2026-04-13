@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import {
     Card,
     Button,
@@ -428,14 +429,35 @@ class DataAyahSeleksi extends React.Component {
                     if (el) el.value = null;
                 }
             } else {
-                formData.append(key, values[key]);
+                let val = values[key];
+                if (val instanceof Date) {
+                    val = moment(val).format("YYYY-MM-DD");
+                }
+                // Ekstraksi value jika berupa object (sering terjadi pada field referensi/dropdown)
+                else if (val && typeof val === 'object' && !Array.isArray(val)) {
+                    // Cek apakah ini Redux Form Field object (punya input/meta)
+                    if (val.input || val.meta || (val.name && val.onChange)) {
+                        val = ""; // Abaikan object internal Redux Form
+                    }
+                }
+                // Default ke "0" untuk field numerik jika kosong
+                const numericFields = ['pekerjaan_ayah', 'penghasilan_ayah', 'sampingan_ayah'];
+                if (numericFields.includes(key) && !val) {
+                    val = "0";
+                }
+
+                formData.append(key, val || "");
             }
         }
 
-        this.props.dispatch(ayah.updateData(cookies.get(cookieName), formData));
-        this.props.dispatch(reset('DataAyahSeleksi'));
-
-        this.props.updateVerifikasi();
+        this.props.dispatch(ayah.updateData(cookies.get(cookieName), formData)).then(() => {
+            this.props.dispatch(reset('DataAyahSeleksi'));
+            if (this.props.updateVerifikasi) {
+                this.props.updateVerifikasi();
+            }
+        }).catch(err => {
+            console.error("Gagal simpan data ayah:", err);
+        });
     }
     render() {
         return (

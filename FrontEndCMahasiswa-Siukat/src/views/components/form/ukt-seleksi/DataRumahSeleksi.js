@@ -373,12 +373,27 @@ class DataRumahSeleksi extends React.Component {
                 formData.append(key, values[key][0]);
                 document.getElementById(file).value = null;
             } else {
-                formData.append(key, values[key]);
+                let val = values[key];
+                // Ekstraksi value jika berupa object
+                if (val && typeof val === 'object' && !Array.isArray(val)) {
+                    // Cek apakah ini Redux Form Field object
+                    if (val.input || val.meta || (val.name && val.onChange)) {
+                        val = "";
+                    } else {
+                        val = val.kode || val.id || val.provinsi_id || val.kab_id || val.kecam_id || "";
+                    }
+                }
+                formData.append(key, val || "");
             }
         }
-        this.props.dispatch(rumah.updateData(cookies.get(cookieName), formData));
-        this.props.dispatch(reset('DataRumahSeleksi'));
-        this.props.updateVerifikasi();
+        this.props.dispatch(rumah.updateData(cookies.get(cookieName), formData)).then(() => {
+            this.props.dispatch(reset('DataRumahSeleksi'));
+            if (this.props.updateVerifikasi) {
+                this.props.updateVerifikasi();
+            }
+        }).catch(err => {
+            console.error("Gagal simpan data rumah:", err);
+        });
     }
 
     render() {

@@ -10,26 +10,28 @@ class Pendukung extends React.Component {
     }
     render() {
         return (
-            <Row>
+            <Row className="align-items-center">
                 <Col md={12}>
-                    <Table responsive striped bordered>
-                        <tbody>
-                            <tr>
-                                <td width="30%">Jumlah Tanggungan</td>
-                                <td width="5%">:</td>
-                                <td>{this.props.pendukung.tanggungan}</td>
-                            </tr>
-                            <tr>
-                                <td>Kartu Keluarga</td>
-                                <td>:</td>
-                                <td>
-                                    <a href={storage + '/' + this.props.pendukung.scan_kk} target="_blank" rel="noopener noreferrer">
-                                        <Button color="primary" size="sm"><i className="fa fa-download"></i> Lihat Kartu Keluarga</Button>
+                    <div className="modern-details-list">
+                        <div className="details-row">
+                            <div className="details-label">
+                                <i className="fa fa-users"></i> Jumlah Tanggungan
+                            </div>
+                            <div className="details-value">{this.props.pendukung.tanggungan || '-'} <small className="text-muted">orang</small></div>
+                        </div>
+                        <div className="details-row">
+                            <div className="details-label">
+                                <i className="fa fa-file-image-o"></i> Kartu Keluarga
+                            </div>
+                            <div className="details-value">
+                                {this.props.pendukung.scan_kk ? (
+                                    <a href={storage + '/' + this.props.pendukung.scan_kk} target="_blank" rel="noopener noreferrer" className="btn details-btn-view">
+                                        <i className="fa fa-eye mr-2"></i> Lihat Kartu Keluarga
                                     </a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </Table>
+                                ) : '-'}
+                            </div>
+                        </div>
+                    </div>
                 </Col>
             </Row>
         );

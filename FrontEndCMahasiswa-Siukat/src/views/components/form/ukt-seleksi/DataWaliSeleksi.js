@@ -14,12 +14,13 @@ import {
 import { Field, reduxForm, reset, formValueSelector } from 'redux-form';
 import {
     InputBs,
+    InputDayPicker,
     InputFileBs,
     money,
     AlertFormLengkap,
     AlertFormBelumLengkap,
 } from '../';
-import { wali, kabkot, kecamatan, provinsi } from '../../../../actions';
+import { wali, kabkot, kecamatan, provinsi, pekerjaan } from '../../../../actions';
 import { files } from '../../../../api';
 import { connect } from 'react-redux';
 import { cookies, cookieName, rupiah, storage } from '../../../../global';
@@ -299,13 +300,27 @@ class DataWaliSeleksi extends React.Component {
                     if (el) el.value = null;
                 }
             } else {
-                formData.append(key, values[key]);
+                let val = values[key];
+                // Ekstraksi value jika berupa object
+                if (val && typeof val === 'object' && !Array.isArray(val)) {
+                    // Cek apakah ini Redux Form Field object
+                    if (val.input || val.meta || (val.name && val.onChange)) {
+                        val = "";
+                    } else {
+                        val = val.kode || val.id || val.provinsi_id || val.kab_id || val.kecam_id || "";
+                    }
+                }
+                formData.append(key, val || "");
             }
         }
-        this.props.dispatch(wali.updateData(cookies.get(cookieName), formData));
-        this.props.dispatch(reset('DataWaliSeleksi'));
-
-        this.props.updateVerifikasi();
+        this.props.dispatch(wali.updateData(cookies.get(cookieName), formData)).then(() => {
+            this.props.dispatch(reset('DataWaliSeleksi'));
+            if (this.props.updateVerifikasi) {
+                this.props.updateVerifikasi();
+            }
+        }).catch(err => {
+            console.error("Gagal simpan data wali:", err);
+        });
     }
     render() {
         return (

@@ -13,7 +13,7 @@ type LogAyah struct {
 	ProvinsiAyah     string     `gorm:"column:provinsi_ayah;type:varchar(255)" json:"provinsi_ayah"`
 	KabkotAyah       string     `gorm:"column:kabkot_ayah;type:varchar(255)" json:"kabkot_ayah"`
 	KecamatanAyah    string     `gorm:"column:kecamatan_ayah;type:varchar(255)" json:"kecamatan_ayah"`
-	PekerjaanAyah    int        `gorm:"column:pekerjaan_ayah" json:"pekerjaan_ayah"`
+	PekerjaanAyah    string     `gorm:"column:pekerjaan_ayah" json:"pekerjaan_ayah"`
 	PenghasilanAyah  int        `gorm:"column:penghasilan_ayah" json:"penghasilan_ayah"`
 	SampinganAyah    int        `gorm:"column:sampingan_ayah" json:"sampingan_ayah"`
 	ScanKtpAyah      string     `gorm:"column:scan_ktp_ayah;type:varchar(255)" json:"scan_ktp_ayah"`

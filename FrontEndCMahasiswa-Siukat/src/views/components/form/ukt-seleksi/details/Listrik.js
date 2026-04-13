@@ -10,36 +10,46 @@ class Listrik extends React.Component {
     }
     render() {
         return (
-            <Row>
+            <Row className="align-items-center">
                 <Col md={12}>
-                    <Table responsive striped bordered>
-                        <tbody>
-                            <tr>
-                                <td width="30%">Nomor Pelanggan</td>
-                                <td width="5%">:</td>
-                                <td>{this.props.listrik.no_pelanggan}</td>
-                            </tr>
-                            <tr>
-                                <td>Jenis Pemakaian</td>
-                                <td>:</td>
-                                <td>{this.props.listrik.jenis_pemakaian}</td>
-                            </tr>
-                            <tr>
-                                <td>Biaya Listrik</td>
-                                <td>:</td>
-                                <td>{rupiah(this.props.listrik.pengeluaran)} <b>/ 3 bulan terakhir</b></td>
-                            </tr>
-                            <tr>
-                                <td>Bukti Tagihan Listrik</td>
-                                <td>:</td>
-                                <td>
-                                    <a href={storage + '/' + this.props.listrik.scan_listrik} target="_blank" rel="noopener noreferrer">
-                                        <Button color="primary" size="sm"><i className="fa fa-download"></i> Lihat Bukti Tagihan Listrik</Button>
+                    <div className="modern-details-list">
+                        <div className="details-row">
+                            <div className="details-label">
+                                <i className="fa fa-id-card"></i> Nomor Pelanggan
+                            </div>
+                            <div className="details-value">{this.props.listrik.no_pelanggan || '-'}</div>
+                        </div>
+                        <div className="details-row">
+                            <div className="details-label">
+                                <i className="fa fa-info-circle"></i> Jenis Pemakaian
+                            </div>
+                            <div className="details-value">
+                                <span className={`badge badge-pill ${this.props.listrik.jenis_pemakaian === 'Pra Bayar' ? 'badge-info' : 'badge-primary'} px-3 py-2`}>
+                                    {this.props.listrik.jenis_pemakaian}
+                                </span>
+                            </div>
+                        </div>
+                        <div className="details-row">
+                            <div className="details-label">
+                                <i className="fa fa-money"></i> Biaya Listrik
+                            </div>
+                            <div className="details-value text-emerald">
+                                {rupiah(this.props.listrik.pengeluaran)} <small className="text-muted">/ 3 bln terakhir</small>
+                            </div>
+                        </div>
+                        <div className="details-row">
+                            <div className="details-label">
+                                <i className="fa fa-file-text-o"></i> Bukti Tagihan
+                            </div>
+                            <div className="details-value">
+                                {this.props.listrik.scan_listrik ? (
+                                    <a href={storage + '/' + this.props.listrik.scan_listrik} target="_blank" rel="noopener noreferrer" className="btn details-btn-view">
+                                        <i className="fa fa-eye mr-2"></i> Lihat Bukti Listrik
                                     </a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </Table>
+                                ) : '-'}
+                            </div>
+                        </div>
+                    </div>
                 </Col>
             </Row>
         );

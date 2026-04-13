@@ -3,8 +3,6 @@ package services
 import (
 	"BackEnd-Siukat/config"
 	"BackEnd-Siukat/models"
-	"errors"
-	"gorm.io/gorm"
 	"time"
 )
 
@@ -22,31 +20,28 @@ func (s *IbuService) Edit(data map[string]interface{}, noPeserta string, atribut
 	db := config.DB
 	var ibu models.Ibu
 
-	// 1. Cek apakah record sudah ada
-	err := db.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&ibu).Error
+	// SURGICAL FIX: Use Count instead of First to avoid "Scan error" on corrupted existing data
+	var count int64
+	db.Model(&models.Ibu{}).Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).Count(&count)
 
-	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			// 2. Jika BELUM ADA, maka Create (UPSERT)
-			data["no_peserta"] = noPeserta
-			data["atribut"] = atribut
-			if errCreate := db.Model(&models.Ibu{}).Create(data).Error; errCreate != nil {
-				return models.Ibu{}, errCreate
-			}
-		} else {
-			return models.Ibu{}, err
+	if count == 0 {
+		// 1. Jika BELUM ADA, maka Create
+		data["no_peserta"] = noPeserta
+		data["atribut"] = atribut
+		if errCreate := db.Model(&models.Ibu{}).Create(data).Error; errCreate != nil {
+			return models.Ibu{}, errCreate
 		}
 	} else {
-		// 3. Jika SUDAH ADA, maka Update
-		if errUpdate := db.Model(&ibu).Updates(data).Error; errUpdate != nil {
+		// 2. Jika SUDAH ADA, maka Update menggunakan Table/Where (aman dari Scan error)
+		if errUpdate := db.Table("tb_ibu").Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).Updates(data).Error; errUpdate != nil {
 			return models.Ibu{}, errUpdate
 		}
 	}
 
-	// 4. Ambil data terbaru untuk return
-	db.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
-		Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&ibu)
-	return ibu, nil
+	// 3. Ambil data terbaru untuk return
+	err := db.Preload("Pekerjaan").Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
+		Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&ibu).Error
+	return ibu, err
 }
 
 // AddLog — Fix #4: Implementasi fungsi AddLog yang hilang
@@ -82,14 +77,22 @@ func (s *IbuService) GetByLoggedIn(noPeserta string) (models.Ibu, error) {
 	db := config.DB
 	var ibu models.Ibu
 
-	// 1. Fetch main record without preloads first
-	if err := db.Where("no_peserta = ?", noPeserta).First(&ibu).Error; err != nil {
-		// Return empty object if not found to prevent 500 error in route
-		return models.Ibu{NoPeserta: noPeserta}, nil
+	// ROBUST FETCH: Use the same strategy as AyahService
+	// 1. PRIORITAS: Cek data 'sanggah' dulu dengan relasi lengkap
+	err := db.Preload("Pekerjaan").Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
+		Where("no_peserta = ? AND atribut = ?", noPeserta, "sanggah").First(&ibu).Error
+	
+	if err == nil {
+		return ibu, nil
 	}
 
-	// 2. Separately try to load associations
-	_ = db.Model(&ibu).Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").First(&ibu).Error
+	// 2. FALLBACK: Jika tidak ada sanggah, ambil data 'original' dengan relasi lengkap
+	err = db.Preload("Pekerjaan").Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
+		Where("no_peserta = ? AND atribut = ?", noPeserta, "original").First(&ibu).Error
+	
+	if err != nil {
+		return models.Ibu{NoPeserta: noPeserta}, nil
+	}
 
 	return ibu, nil
 }
@@ -136,7 +139,7 @@ func (s *IbuService) CheckData(noPeserta string, uktTinggi string) (bool, error)
 		delete(data, "scan_slip_ibu")
 	}
 
-	if ibu.PekerjaanIbu == 11 { // Tidak bekerja
+	if ibu.PekerjaanIbu == "11" { // Tidak bekerja
 		delete(data, "penghasilan_ibu")
 	}
 

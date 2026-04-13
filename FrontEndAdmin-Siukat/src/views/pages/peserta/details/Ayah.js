@@ -1,4 +1,5 @@
 import React from 'react'
+import moment from 'moment'
 import { Link } from 'react-router-dom'
 import { Row, Col, Table, Button, Form, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, Alert, FormText } from 'reactstrap'
 import { Field, reduxForm, reset, formValueSelector } from 'redux-form'
@@ -252,8 +253,11 @@ class Ayah extends React.Component {
                 }
             } else {
                 let val = values[key];
+                if (val instanceof Date) {
+                    val = moment(val).format("YYYY-MM-DD");
+                }
                 // Ekstraksi value jika berupa object dari store referensi
-                if (val && typeof val === 'object' && !Array.isArray(val)) {
+                else if (val && typeof val === 'object' && !Array.isArray(val)) {
                     val = val.kode || val.id || val.provinsi_id || val.kab_id || val.kecam_id || val;
                 }
                 formData.append(key, (val === null || val === undefined) ? "" : val)
@@ -337,7 +341,13 @@ class Ayah extends React.Component {
                                     </tr>
                                     <tr>
                                         <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Tempat, Tgl Lahir</td>
-                                        <td className="p-4 text-gray-700">{data.tempat_lahir_ayah ? `${data.tempat_lahir_ayah}, ${data.tanggal_lahir_ayah}` : '-'}</td>
+                                        <td className="p-4 text-gray-700">
+                                            { (data.tempat_lahir_ayah || data.tanggal_lahir_ayah) ? (
+                                                <>
+                                                    {data.tempat_lahir_ayah || '-'}, {data.tanggal_lahir_ayah ? moment(data.tanggal_lahir_ayah).format("DD MMMM YYYY") : '-'}
+                                                </>
+                                            ) : '-'}
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Alamat</td>

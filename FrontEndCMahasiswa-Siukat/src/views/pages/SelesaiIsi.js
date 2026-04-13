@@ -60,14 +60,14 @@ class SelesaiIsi extends React.Component {
                             </CardTitle>
 
                             <div className="content-text">
-                                <p>
+                                <div className="mt-3">
                                     Anda dapat mengunduh bukti penyelesaian data UKT.<br />
                                     Kami akan memproses data yang Anda masukkan.<br />
                                     Jangan lupa untuk <b>MASUK</b> kembali untuk melihat <b>HASIL UKT</b> pada tanggal<br />
-                                    <div className="date-highlight">
+                                    <div className="date-highlight mt-2">
                                         📅 {this.props.info?.pengumuman || "-"}
                                     </div>
-                                </p>
+                                </div>
                             </div>
 
                             <div className="btn-container">

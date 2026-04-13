@@ -11,6 +11,7 @@ type LogWali struct {
 	ProvinsiWali    string     `gorm:"column:provinsi_wali;type:varchar(255)" json:"provinsi_wali"`
 	KabkotWali      string     `gorm:"column:kabkot_wali;type:varchar(255)" json:"kabkot_wali"`
 	KecamatanWali   string     `gorm:"column:kecamatan_wali;type:varchar(255)" json:"kecamatan_wali"`
+	PekerjaanWali   string     `gorm:"column:pekerjaan_wali" json:"pekerjaan_wali"`
 	KesanggupanWali int        `gorm:"column:kesanggupan_wali" json:"kesanggupan_wali"`
 	ScanWali        string     `gorm:"column:scan_wali;type:varchar(255)" json:"scan_wali"`
 	Atribut         string     `gorm:"column:atribut;type:enum('original','sanggah')" json:"atribut"`

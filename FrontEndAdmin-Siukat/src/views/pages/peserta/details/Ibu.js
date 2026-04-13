@@ -1,4 +1,5 @@
 import React from 'react'
+import moment from 'moment'
 import { Link } from 'react-router-dom'
 import { Row, Col, Table, Button, Form, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, Alert, FormText } from 'reactstrap'
 import { Field, reduxForm, reset, formValueSelector } from 'redux-form'
@@ -235,8 +236,11 @@ class Ibu extends React.Component{
             else if (!key.startsWith("file_scan") && !key.startsWith("scan_")) {
                 let val = values[key];
                 
+                if (val instanceof Date) {
+                    val = moment(val).format("YYYY-MM-DD");
+                }
                 // Konversi eksplisit ke Integer untuk field yang di Go bertipe 'int'
-                if (key === 'pekerjaan_ibu' || key === 'penghasilan_ibu' || key === 'sampingan_ibu') {
+                else if (key === 'pekerjaan_ibu' || key === 'penghasilan_ibu' || key === 'sampingan_ibu') {
                     // Cek jika val adalah object (sering terjadi pada dropdown library tertentu)
                     if (val && typeof val === 'object') {
                         val = val.kode || val.id || 0;
@@ -332,7 +336,13 @@ class Ibu extends React.Component{
                                 </tr>
                                 <tr>
                                     <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Tempat, Tgl Lahir</td>
-                                    <td className="p-4 text-gray-700">{data.tempat_lahir_ibu ? `${data.tempat_lahir_ibu}, ${data.tanggal_lahir_ibu}` : '-'}</td>
+                                    <td className="p-4 text-gray-700">
+                                        { (data.tempat_lahir_ibu || data.tanggal_lahir_ibu) ? (
+                                            <>
+                                                {data.tempat_lahir_ibu || '-'}, {data.tanggal_lahir_ibu ? moment(data.tanggal_lahir_ibu).format("DD MMMM YYYY") : '-'}
+                                            </>
+                                        ) : '-'}
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Alamat</td>

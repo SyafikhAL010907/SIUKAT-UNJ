@@ -1,5 +1,4 @@
 import React from 'react';
-import { Table, Alert } from 'reactstrap';
 import { connect } from 'react-redux';
 import { withCookies } from 'react-cookie';
 import { ukt } from '../../../actions';

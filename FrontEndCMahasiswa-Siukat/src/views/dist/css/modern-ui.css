@@ -1093,125 +1093,279 @@ input::-ms-clear {
     transform: translateX(4px);
 }
 
-/* Container Utama */
-.finish-page-container {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    padding: 120px 0 60px 0;
-    background: transparent;
+/* ==========================================
+   MEDIA QUERIES (RESPONSIVE HP)
+   ========================================== */
+
+@media (max-width: 768px) {
+    .finish-page-container {
+        padding: 40px 10px; /* Padding luar sangat tipis agar card bisa lebar */
+        border-radius: 0 !important; /* Menghapus border radius container utama */
+    }
+
+    .image-wrapper {
+        max-width: 95%; /* Lebarkan wrapper gambar di HP */
+    }
+
+    .modern-card {
+        max-width: 95%; /* Card mengisi 95% lebar layar HP */
+        padding: 40px 20px !important; /* Padding dalam dikurangi agar teks punya ruang luas */
+        border-radius: 0 0 20px 20px !important;
+    }
+
+    .image-wrapper img {
+        border-radius: 20px 20px 0 0;
+    }
+
+    .card-title-custom {
+        font-size: 26px !important; /* Judul tetap tegas (tidak terlalu kecil) */
+        margin-bottom: 20px;
+        line-height: 1.3;
+    }
+
+    .content-text {
+        font-size: 17px; /* Ukuran font teks isi dijaga agar nyaman dibaca */
+        line-height: 1.8;
+        text-align: left; /* Menghindari justify yang berantakan di layar sempit */
+    }
+
+    .date-highlight {
+        font-size: 22px; /* Tanggal tetap besar sebagai info utama */
+        padding: 10px 20px;
+        width: 100%;
+        box-sizing: border-box;
+        text-align: center;
+    }
+
+    .btn-container {
+        flex-direction: column; /* Tombol tumpuk vertikal */
+        gap: 12px;
+        margin-top: 35px;
+    }
+
+    .btn-custom {
+        width: 100%;
+        height: 60px; /* Tombol tetap tinggi agar mudah ditekan jari */
+        font-size: 15px !important;
+    }
 }
 
-/* Kartu Modern */
-.modern-card {
-    border: none !important;
-    border-radius: 0 0 35px 35px !important;
-    box-shadow: 0 30px 60px rgba(0,0,0,0.12) !important;
-    background: #ffffff !important;
-    padding: 60px !important;
+/* Penyesuaian khusus untuk layar sangat sempit */
+@media (max-width: 480px) {
+    .modern-card {
+        max-width: 98%; /* Hampir full screen untuk maksimalisasi teks */
+        padding: 30px 15px !important;
+    }
+
+    .content-text {
+        font-size: 16px; /* Batas minimum keterbacaan */
+    }
+}
+
+/* ============================================================
+   MODERN DETAIL LIST (REPLACING OLD TABLES)
+   ============================================================ */
+.modern-details-list {
     width: 100%;
-    max-width: 850px;
-    margin: 0 auto;
+}
+
+.details-row {
+    display: flex;
+    padding: 14px 18px;
+    border-bottom: 1px solid #f1f5f9;
+    align-items: center;
+    transition: background 0.2s;
+}
+
+.details-row:hover {
+    background: #f8fafc;
+}
+
+.details-row:last-child {
+    border-bottom: none;
+}
+
+.details-label {
+    width: 35%;
+    font-weight: 700;
+    color: #64748b;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.details-label i {
+    color: var(--unj-green) !important;
+    font-size: 1rem;
+    width: 20px;
+    text-align: center;
+}
+
+.details-value {
+    width: 65%;
+    color: #0f172a;
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.details-image-preview {
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+    border: 4px solid #fff;
+    max-width: 100%;
+    height: auto;
+    background: #f1f5f9;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.details-image-preview:hover {
+    transform: scale(1.02);
+}
+
+.details-btn-view {
+    background: var(--unj-green) !important;
+    border: 1px solid var(--unj-green) !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    border-radius: 10px !important;
+    padding: 6px 14px !important;
+    font-size: 0.85rem !important;
+    transition: all 0.2s !important;
+    box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
+}
+
+.details-btn-view:hover {
+    background: var(--unj-green) !important;
+    color: #ffffff !important;
+    border-color: var(--unj-green) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(16, 185, 129, 0.3);
+}
+
+/* Responsive Adjustments */
+@media (min-width: 1200px) {
+    .modern-details-list {
+        padding: 5px;
+    }
+    .details-row {
+        padding: 18px 25px;
+    }
+}
+
+@media (max-width: 992px) {
+    .details-label {
+        width: 40%;
+    }
+    .details-value {
+        width: 60%;
+    }
+}
+
+@media (max-width: 768px) {
+    .details-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+        padding: 15px;
+    }
+    .details-label, .details-value {
+        width: 100%;
+    }
+    .details-label {
+        font-size: 0.75rem;
+        color: #94a3b8;
+    }
+    .details-value {
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .details-row {
+        padding: 12px 10px;
+    }
+    .details-label i {
+        font-size: 0.9rem;
+    }
+    .details-btn-view {
+        width: 100%;
+        text-align: center;
+        margin-top: 5px;
+    }
+}
+
+/* Timeline Modern for Steps */
+.timeline-modern {
     position: relative;
+    padding-left: 30px;
+}
+
+.timeline-item-modern {
+    position: relative;
+    padding-bottom: 20px;
+}
+
+.timeline-marker-modern {
+    position: absolute;
+    left: -30px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--unj-green);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
     z-index: 1;
 }
 
-/* Wrapper Gambar Hero */
-.image-wrapper {
-    max-width: 850px;
-    margin: 0 auto -10px auto;
-    position: relative;
-    z-index: 10;
+.timeline-item-modern::before {
+    content: '';
+    position: absolute;
+    left: -19px;
+    top: 24px;
+    width: 2px;
+    height: calc(100% - 24px);
+    background: #e2e8f0;
 }
 
-.image-wrapper img {
-    border-radius: 35px 35px 0 0;
-    width: 100%;
-    height: auto;
-    display: block;
-    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.1));
-    border: none;
+.timeline-item-modern:last-child::before {
+    display: none;
 }
 
-/* Typography */
-.card-title-custom {
-    font-weight: 800 !important;
-    font-size: 32px !important;
-    color: #1e272e;
-    margin-bottom: 30px;
-    letter-spacing: -1px;
+.timeline-content-modern {
+    font-size: 0.95rem;
+    color: #334155;
+    line-height: 1.6;
 }
 
-.content-text {
-    color: #57606f;
-    line-height: 2.2;
-    font-size: 18px;
-}
-
-/* Highlight Tanggal */
-.date-highlight {
-    background: #fff9db;
-    color: #f0932b;
-    padding: 10px 35px;
-    border-radius: 100px;
-    font-size: 26px;
-    display: inline-block;
-    margin-top: 20px;
-    font-weight: 800;
-    border: 2px dashed #f0932b;
-}
-
-/* Tombol Simetris */
-.btn-container {
-    display: flex;
-    gap: 25px;
-    justify-content: center;
-    margin-top: 50px;
-}
-
-.btn-custom {
-    flex: 1;
-    height: 65px;
-    border-radius: 18px !important;
-    font-weight: 700 !important;
-    font-size: 16px !important;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-    border: none !important;
+.avatar-sm {
+    width: 38px;
+    height: 38px;
     display: flex;
     align-items: center;
     justify-content: center;
-    outline: none !important;
-    color: #fff !important;
+    border-radius: 10px;
 }
 
-/* Hover States - Anti White Polos */
-.btn-download {
-    background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%) !important;
+.bg-emerald-light {
+    background: #ecfdf5;
 }
 
-.btn-download:hover, .btn-download:focus, .btn-download:active {
-    background: linear-gradient(135deg, #ff9800 0%, #e67e22 100%) !important;
-    transform: translateY(-5px);
-    box-shadow: 0 12px 24px rgba(243, 156, 18, 0.3) !important;
-    color: #fff !important;
+.border-dashed {
+    border: 2px dashed #e2e8f0;
 }
 
-.btn-logout {
-    background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%) !important;
+.cursor-pointer {
+    cursor: pointer;
 }
 
-.btn-logout:hover, .btn-logout:focus, .btn-logout:active {
-    background: linear-gradient(135deg, #27ae60 0%, #219150 100%) !important;
-    transform: translateY(-5px);
-    box-shadow: 0 12px 24px rgba(39, 174, 96, 0.3) !important;
-    color: #fff !important;
-}
-
-/* Mobile Responsiveness */
-@media (max-width: 768px) {
-    .btn-container { flex-direction: column; }
-    .btn-custom { width: 100%; max-width: 100%; }
-    .card-title-custom { font-size: 24px !important; }
+.bg-light-yellow {
+    background: #fffbeb;
 }

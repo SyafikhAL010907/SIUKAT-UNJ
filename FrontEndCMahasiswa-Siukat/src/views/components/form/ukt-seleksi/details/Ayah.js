@@ -12,124 +12,122 @@ class Ayah extends React.Component {
         return (
             <Row>
                 <Col md={12}>
-                    <Table responsive striped bordered>
-                        <tbody>
-                            <tr>
-                                <td width="30%">Nama</td>
-                                <td width="5%">:</td>
-                                <td>{this.props.ayah.nama_ayah}</td>
-                            </tr>
-                            <tr>
-                                <td>Status Ayah</td>
-                                <td>:</td>
-                                <td>{this.props.ayah.status_ayah}</td>
-                            </tr>
-                        </tbody>
+                    <div className="modern-details-list">
+                        <div className="details-row">
+                            <div className="details-label">
+                                <i className="fa fa-user"></i> Nama Ayah
+                            </div>
+                            <div className="details-value">{this.props.ayah.nama_ayah || '-'}</div>
+                        </div>
+                        <div className="details-row">
+                            <div className="details-label">
+                                <i className="fa fa-info-circle"></i> Status Ayah
+                            </div>
+                            <div className="details-value">
+                                <span className={`badge badge-pill ${this.props.ayah.status_ayah === 'hidup' ? 'badge-success' : 'badge-secondary'} px-3 py-2`}>
+                                    {this.props.ayah.status_ayah}
+                                </span>
+                            </div>
+                        </div>
 
                         {this.props.ayah.status_ayah === 'hidup' && (
-                            <tbody>
-                                <tr>
-                                    <td>NIK</td>
-                                    <td>:</td>
-                                    <td>{this.props.ayah.nik_ayah}</td>
-                                </tr>
-                                <tr>
-                                    <td>KTP</td>
-                                    <td>:</td>
-                                    <td>
-                                        <a
-                                            href={
-                                                storage +
-                                                '/' +
-                                                this.props.ayah.scan_ktp_ayah
-                                            }
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                        >
-                                            <Button color="primary" size="sm">
-                                                <i className="fa fa-download"></i> Lihat KTP
-                                            </Button>
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Tempat, Tanggal Lahir</td>
-                                    <td>:</td>
-                                    <td>
-                                        {this.props.ayah.tempat_lahir_ayah +
-                                            ', ' +
-                                            this.props.ayah.tanggal_lahir_ayah}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Alamat</td>
-                                    <td>:</td>
-                                    {this.props.ayah.provinsi != null && (
-                                        <td>
-                                            {this.props.ayah.alamat_ayah +
-                                                ', ' +
-                                                this.props.ayah.kecamatan?.kecam_nama +
-                                                ', ' +
-                                                this.props.ayah.kabkot?.kab_nama +
-                                                ', ' +
-                                                this.props.ayah.provinsi?.provinsi_nama}
-                                        </td>
-                                    )}
-                                </tr>
-                                <tr>
-                                    <td>Pekerjaan</td>
-                                    <td>:</td>
-                                    {this.props.ayah.pekerjaan !== undefined && (
-                                        <td>{this.props.ayah.pekerjaan?.nama}</td>
-                                    )}
-                                </tr>
-                                <tr>
-                                    <td>Penghasilan</td>
-                                    <td>:</td>
-                                    <td>
-                                        {rupiah(this.props.ayah.penghasilan_ayah)} <b>/ bulan</b>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Sampingan</td>
-                                    <td>:</td>
-                                    <td>
-                                        {rupiah(this.props.ayah.sampingan_ayah)} <b>/ bulan</b>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        {this.props.ayah.pekerjaan_ayah !== '11' &&
-                                            'Bukti Penghasilan'}
-                                        {this.props.ayah.pekerjaan_ayah === '11' &&
-                                            'Surat Keterangan'}
-                                    </td>
-                                    <td>:</td>
-                                    <td>
-                                        <a
-                                            href={
-                                                storage +
-                                                '/' +
-                                                this.props.ayah.scan_slip_ayah
-                                            }
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                        >
-                                            <Button color="primary" size="sm">
-                                                <i className="fa fa-download"></i> Lihat Bukti
-                        Penghasilan
-                                            </Button>
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Nomor Telepon</td>
-                                    <td>:</td>
-                                    <td>{this.props.ayah.telepon_ayah} </td>
-                                </tr>
-                            </tbody>
+                            <React.Fragment>
+                                <div className="details-row">
+                                    <div className="details-label">
+                                        <i className="fa fa-credit-card"></i> NIK Ayah
+                                    </div>
+                                    <div className="details-value">{this.props.ayah.nik_ayah || '-'}</div>
+                                </div>
+                                <div className="details-row">
+                                    <div className="details-label">
+                                        <i className="fa fa-file-image-o"></i> Scan KTP
+                                    </div>
+                                    <div className="details-value">
+                                        {this.props.ayah.scan_ktp_ayah ? (
+                                            <a
+                                                href={storage + '/' + this.props.ayah.scan_ktp_ayah}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="btn details-btn-view"
+                                            >
+                                                <i className="fa fa-eye mr-2"></i> Lihat KTP
+                                            </a>
+                                        ) : '-'}
+                                    </div>
+                                </div>
+                                <div className="details-row">
+                                    <div className="details-label">
+                                        <i className="fa fa-map-marker"></i> Tempat, Tgl Lahir
+                                    </div>
+                                    <div className="details-value">
+                                        {this.props.ayah.tempat_lahir_ayah && this.props.ayah.tempat_lahir_ayah + ', '}
+                                        {this.props.ayah.tanggal_lahir_ayah && !this.props.ayah.tanggal_lahir_ayah.includes('0001') ? 
+                                            this.props.ayah.tanggal_lahir_ayah : '-'}
+                                    </div>
+                                </div>
+                                <div className="details-row">
+                                    <div className="details-label">
+                                        <i className="fa fa-home"></i> Alamat Ayah
+                                    </div>
+                                    <div className="details-value">
+                                        {this.props.ayah.alamat_ayah || '-'}
+                                        {this.props.ayah.kecamatan && this.props.ayah.kabkot && this.props.ayah.provinsi && (
+                                            <span className="text-muted d-block mt-1" style={{fontSize: '0.9rem'}}>
+                                                <i className="fa fa-map-signs mr-1"></i>
+                                                {this.props.ayah.kecamatan.kecam_nama + ', ' + this.props.ayah.kabkot.kab_nama + ', ' + this.props.ayah.provinsi.provinsi_nama}
+                                            </span>
+                                        )}
+                                    </div>
+                                </div>
+                                <div className="details-row">
+                                    <div className="details-label">
+                                        <i className="fa fa-briefcase"></i> Pekerjaan
+                                    </div>
+                                    <div className="details-value">{this.props.ayah.pekerjaan?.nama || '-'}</div>
+                                </div>
+                                <div className="details-row">
+                                    <div className="details-label">
+                                        <i className="fa fa-money"></i> Penghasilan
+                                    </div>
+                                    <div className="details-value text-emerald">
+                                        {rupiah(this.props.ayah.penghasilan_ayah)} <small className="text-muted">/ bulan</small>
+                                    </div>
+                                </div>
+                                <div className="details-row">
+                                    <div className="details-label">
+                                        <i className="fa fa-plus-circle"></i> Sampingan
+                                    </div>
+                                    <div className="details-value text-secondary">
+                                        {rupiah(this.props.ayah.sampingan_ayah)} <small className="text-muted">/ bulan</small>
+                                    </div>
+                                </div>
+                                <div className="details-row">
+                                    <div className="details-label">
+                                        <i className="fa fa-file-text-o"></i>
+                                        {this.props.ayah.pekerjaan_ayah !== '11' ? ' Bukti Penghasilan' : ' Surat Keterangan'}
+                                    </div>
+                                    <div className="details-value">
+                                        {this.props.ayah.scan_slip_ayah ? (
+                                            <a
+                                                href={storage + '/' + this.props.ayah.scan_slip_ayah}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="btn details-btn-view"
+                                            >
+                                                <i className="fa fa-eye mr-2"></i> Lihat Bukti
+                                            </a>
+                                        ) : '-'}
+                                    </div>
+                                </div>
+                                <div className="details-row">
+                                    <div className="details-label">
+                                        <i className="fa fa-phone"></i> Nomor Telepon
+                                    </div>
+                                    <div className="details-value text-emerald">{this.props.ayah.telepon_ayah || '-'}</div>
+                                </div>
+                            </React.Fragment>
                         )}
-                    </Table>
+                    </div>
                 </Col>
             </Row>
         );

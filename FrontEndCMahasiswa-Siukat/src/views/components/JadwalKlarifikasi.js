@@ -1,5 +1,4 @@
 import React from 'react';
-import { Table } from 'reactstrap';
 import { connect } from 'react-redux';
 import { info } from '../../actions';
 

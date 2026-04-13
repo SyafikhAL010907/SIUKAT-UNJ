@@ -107,12 +107,20 @@ func WaliRoutes(r *gin.RouterGroup) {
 			namaWali = "-"
 		}
 		data := map[string]interface{}{
-			"status_wali":    statusWali,
-			"nama_wali":      namaWali,
-			"alamat_wali":    c.PostForm("alamat_wali"),
-			"provinsi_wali":  c.PostForm("provinsi_wali"),
-			"kabkot_wali":    c.PostForm("kabkot_wali"),
-			"kecamatan_wali": c.PostForm("kecamatan_wali"),
+			"status_wali":       statusWali,
+			"nama_wali":         namaWali,
+			"alamat_wali":       c.PostForm("alamat_wali"),
+			"provinsi_wali":     c.PostForm("provinsi_wali"),
+			"kabkot_wali":       c.PostForm("kabkot_wali"),
+			"kecamatan_wali":    c.PostForm("kecamatan_wali"),
+			"tempat_lahir_wali": c.PostForm("tempat_lahir_wali"),
+		}
+
+		data["pekerjaan_wali"] = c.PostForm("pekerjaan_wali")
+
+		// Parse Tanggal Lahir
+		if tgl, err := time.Parse("2006-01-02", c.PostForm("tanggal_lahir_wali")); err == nil {
+			data["tanggal_lahir_wali"] = &tgl
 		}
 
 		if k, err := strconv.Atoi(c.PostForm("kesanggupan_wali")); err == nil {
@@ -120,8 +128,9 @@ func WaliRoutes(r *gin.RouterGroup) {
 		}
 
 		// --- LOGIKA DINAMIS & EFISIENSI (CLEANUP) - SANGGAH ---
-		var student models.CMahasiswa
-		config.DB.Where("no_peserta = ?", np).First(&student)
+		// Fetch student with priority to 'sanggah' record (via Service)
+		cMhsService := services.CMahasiswaService{}
+		student, _ := cMhsService.GetCmahasiswa(np)
 
 		var existing models.Wali
 		config.DB.Where("no_peserta = ? AND atribut = ?", np, "sanggah").First(&existing)
@@ -136,7 +145,7 @@ func WaliRoutes(r *gin.RouterGroup) {
 			}
 		}
 
-		// 1. Ambil data lama untuk Log
+		// 1. Ambil data lama untuk Log (Gunakan atribut sanggah karena ini route khusus Admin/Sanggah)
 		var existingWali models.Wali
 		config.DB.Where("no_peserta = ? AND atribut = ?", np, "sanggah").First(&existingWali)
 
@@ -175,13 +184,13 @@ func WaliRoutes(r *gin.RouterGroup) {
 		var err error
 
 		if atribut != "" {
-			err = config.DB.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
+			err = config.DB.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").Preload("Pekerjaan").
 				Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&model).Error
 		} else {
-			err = config.DB.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
+			err = config.DB.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").Preload("Pekerjaan").
 				Where("no_peserta = ? AND atribut = ?", noPeserta, "sanggah").First(&model).Error
 			if err != nil {
-				err = config.DB.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
+				err = config.DB.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").Preload("Pekerjaan").
 					Where("no_peserta = ? AND atribut = ?", noPeserta, "original").First(&model).Error
 			}
 		}

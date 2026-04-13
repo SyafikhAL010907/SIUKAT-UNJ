@@ -10,73 +10,97 @@ class Kendaraan extends React.Component {
     }
     render() {
         return (
-            <Row>
+            <Row className="align-items-center">
                 <Col md={12}>
-                    <Table responsive striped bordered>
-                        <tbody>
-                            <tr>
-                                <td width="30%">Status Motor</td>
-                                <td width="5%">:</td>
-                                <td>{this.props.kendaraan.status_motor}</td>
-                            </tr>
-                        </tbody>
+                    <div className="modern-details-list">
+                        {/* Motor Section */}
+                        <div className="details-row">
+                            <div className="details-label">
+                                <i className="fa fa-motorcycle"></i> Status Motor
+                            </div>
+                            <div className="details-value">
+                                <span className={`badge badge-pill ${this.props.kendaraan.status_motor === 'ada' ? 'badge-success' : 'badge-secondary'} px-3 py-2`}>
+                                    {this.props.kendaraan.status_motor}
+                                </span>
+                            </div>
+                        </div>
 
                         {this.props.kendaraan.status_motor === 'ada' && (
-                            <tbody>
-                                <tr>
-                                    <td>Jumlah Motor</td>
-                                    <td>:</td>
-                                    <td>{this.props.kendaraan.jumlah_motor} <b>dalam 1 Kartu Keluarga</b></td>
-                                </tr>
-                                <tr>
-                                    <td>Pajak Motor</td>
-                                    <td>:</td>
-                                    <td>{rupiah(this.props.kendaraan.pajak_motor)} <b>/ tahun</b></td>
-                                </tr>
-                                <tr>
-                                    <td>STNK Motor</td>
-                                    <td>:</td>
-                                    <td>
-                                        <a href={storage + '/' + this.props.kendaraan.scan_motor} target="_blank" rel="noopener noreferrer">
-                                            <Button color="primary" size="sm"><i className="fa fa-download"></i> Lihat STNK Motor</Button>
-                                        </a>
-                                    </td>
-                                </tr>
-                            </tbody>
+                            <React.Fragment>
+                                <div className="details-row">
+                                    <div className="details-label">
+                                        <i className="fa fa-plus-circle"></i> Jumlah Motor
+                                    </div>
+                                    <div className="details-value">{this.props.kendaraan.jumlah_motor} <small className="text-muted">unit dalam 1 KK</small></div>
+                                </div>
+                                <div className="details-row">
+                                    <div className="details-label">
+                                        <i className="fa fa-money"></i> Pajak Motor
+                                    </div>
+                                    <div className="details-value text-emerald">
+                                        {rupiah(this.props.kendaraan.pajak_motor)} <small className="text-muted">/ tahun</small>
+                                    </div>
+                                </div>
+                                <div className="details-row">
+                                    <div className="details-label">
+                                        <i className="fa fa-file-text-o"></i> Bukti STNK Motor
+                                    </div>
+                                    <div className="details-value">
+                                        {this.props.kendaraan.scan_motor ? (
+                                            <a href={storage + '/' + this.props.kendaraan.scan_motor} target="_blank" rel="noopener noreferrer" className="btn details-btn-view">
+                                                <i className="fa fa-eye mr-2"></i> Lihat STNK Motor
+                                            </a>
+                                        ) : '-'}
+                                    </div>
+                                </div>
+                            </React.Fragment>
                         )}
 
-                        <tbody>
-                            <tr>
-                                <td width="30%">Status Mobil</td>
-                                <td width="5%">:</td>
-                                <td>{this.props.kendaraan.status_mobil}</td>
-                            </tr>
-                        </tbody>
+                        <hr className="my-4" style={{borderColor: '#e2e8f0'}} />
+
+                        {/* Mobil Section */}
+                        <div className="details-row">
+                            <div className="details-label">
+                                <i className="fa fa-car"></i> Status Mobil
+                            </div>
+                            <div className="details-value">
+                                <span className={`badge badge-pill ${this.props.kendaraan.status_mobil === 'ada' ? 'badge-success' : 'badge-secondary'} px-3 py-2`}>
+                                    {this.props.kendaraan.status_mobil}
+                                </span>
+                            </div>
+                        </div>
 
                         {this.props.kendaraan.status_mobil === 'ada' && (
-                            <tbody>
-                                <tr>
-                                    <td>Jumlah Mobil</td>
-                                    <td>:</td>
-                                    <td>{this.props.kendaraan.jumlah_mobil} <b>dalam 1 Kartu Keluarga</b></td>
-                                </tr>
-                                <tr>
-                                    <td>Pajak Mobil</td>
-                                    <td>:</td>
-                                    <td>{rupiah(this.props.kendaraan.pajak_mobil)} <b>/ tahun</b></td>
-                                </tr>
-                                <tr>
-                                    <td>STNK Mobil</td>
-                                    <td>:</td>
-                                    <td>
-                                        <a href={storage + '/' + this.props.kendaraan.scan_mobil} target="_blank" rel="noopener noreferrer">
-                                            <Button color="primary" size="sm"><i className="fa fa-download"></i> Lihat STNK Mobil</Button>
-                                        </a>
-                                    </td>
-                                </tr>
-                            </tbody>
+                            <React.Fragment>
+                                <div className="details-row">
+                                    <div className="details-label">
+                                        <i className="fa fa-plus-circle"></i> Jumlah Mobil
+                                    </div>
+                                    <div className="details-value">{this.props.kendaraan.jumlah_mobil} <small className="text-muted">unit dalam 1 KK</small></div>
+                                </div>
+                                <div className="details-row">
+                                    <div className="details-label">
+                                        <i className="fa fa-money"></i> Pajak Mobil
+                                    </div>
+                                    <div className="details-value text-emerald">
+                                        {rupiah(this.props.kendaraan.pajak_mobil)} <small className="text-muted">/ tahun</small>
+                                    </div>
+                                </div>
+                                <div className="details-row">
+                                    <div className="details-label">
+                                        <i className="fa fa-file-text-o"></i> Bukti STNK Mobil
+                                    </div>
+                                    <div className="details-value">
+                                        {this.props.kendaraan.scan_mobil ? (
+                                            <a href={storage + '/' + this.props.kendaraan.scan_mobil} target="_blank" rel="noopener noreferrer" className="btn details-btn-view">
+                                                <i className="fa fa-eye mr-2"></i> Lihat STNK Mobil
+                                            </a>
+                                        ) : '-'}
+                                    </div>
+                                </div>
+                            </React.Fragment>
                         )}
-                    </Table>
+                    </div>
                 </Col>
             </Row>
         );

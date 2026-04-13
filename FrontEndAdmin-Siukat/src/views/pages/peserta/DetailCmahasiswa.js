@@ -50,12 +50,12 @@ class DetailCmahasiswa extends React.Component {
     const { activeTab } = this.state;
     // Safety Check: Jika data cmahasiswa belom ada, jangan paksa render atribut
     // Prioritaskan state dari router (dari klik tombol Sanggah), fallback ke atribut DB
-    const isSanggah = this.props.location.state?.isSanggah || (this.props.cmahasiswa && this.props.cmahasiswa.atribut === "sanggah");
+    const isSanggah = this.props.location.state?.isSanggah || this.props.location.state?.modeEdit || (this.props.cmahasiswa && this.props.cmahasiswa.atribut === "sanggah");
     const fetchAtribut = isSanggah ? "sanggah" : "original";
     
-    // Protokol RBAC: Validator murni Read-Only. Developer & Operator bisa edit.
+    // Protokol RBAC: Validator murni Read-Only. Developer & Operator bisa edit (Hanya dalam mode Sanggah).
     const userRole = this.props.user?.role;
-    const canEdit = (isSanggah || userRole === 'admin' || userRole === 'operator' || userRole === 'developer') && userRole !== 'validator';
+    const canEdit = isSanggah && (userRole === 'admin' || userRole === 'operator' || userRole === 'developer') && userRole !== 'validator';
 
     return (
       <div className="space-y-6">

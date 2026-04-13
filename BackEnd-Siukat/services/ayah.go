@@ -3,8 +3,6 @@ package services
 import (
 	"BackEnd-Siukat/config"
 	"BackEnd-Siukat/models"
-	"errors"
-	"gorm.io/gorm"
 	"time"
 )
 
@@ -21,30 +19,27 @@ func (s *AyahService) Edit(data map[string]interface{}, noPeserta string, atribu
 	db := config.DB
 	var ayah models.Ayah
 
-	// 1. Cek apakah record sudah ada
-	err := db.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&ayah).Error
+	// SURGICAL FIX: Use Count instead of First to avoid "Scan error" on corrupted existing data
+	var count int64
+	db.Model(&models.Ayah{}).Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).Count(&count)
 
-	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			// 2. Jika BELUM ADA, maka Create (UPSERT)
-			data["no_peserta"] = noPeserta
-			data["atribut"] = atribut
-			if errCreate := db.Model(&models.Ayah{}).Create(data).Error; errCreate != nil {
-				return models.Ayah{}, errCreate
-			}
-		} else {
-			return models.Ayah{}, err
+	if count == 0 {
+		// 1. Jika BELUM ADA, maka Create
+		data["no_peserta"] = noPeserta
+		data["atribut"] = atribut
+		if errCreate := db.Model(&models.Ayah{}).Create(data).Error; errCreate != nil {
+			return models.Ayah{}, errCreate
 		}
 	} else {
-		// 3. Jika SUDAH ADA, maka Update
-		if errUpdate := db.Model(&ayah).Updates(data).Error; errUpdate != nil {
+		// 2. Jika SUDAH ADA, maka Update menggunakan Table/Where (aman dari Scan error)
+		if errUpdate := db.Table("tb_ayah").Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).Updates(data).Error; errUpdate != nil {
 			return models.Ayah{}, errUpdate
 		}
 	}
 
-	// 4. Ambil data terbaru untuk return
-	db.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&ayah)
-	return ayah, nil
+	// 3. Ambil data terbaru untuk return (Sekarang Scan error harusnya hilang karena data sudah diperbaiki oleh Updates)
+	err := db.Preload("Pekerjaan").Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&ayah).Error
+	return ayah, err
 }
 
 func (s *AyahService) AddLog(user models.Ayah, atribut string, executor string, timestamp *time.Time) error {
@@ -77,18 +72,27 @@ func (s *AyahService) GetByLoggedIn(noPeserta string) (models.Ayah, error) {
 	db := config.DB
 	var ayah models.Ayah
 	
-	// 1. Fetch main record without preloads first to avoid crash on broken relations
-	if err := db.Where("no_peserta = ?", noPeserta).First(&ayah).Error; err != nil {
-		// If not found, return empty Ayah object instead of error to avoid 500 in controller
+	// 1. PRIORITAS: Cek data 'sanggah' dulu dengan relasi lengkap
+	err := db.Preload("Pekerjaan").Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
+		Where("no_peserta = ? AND atribut = ?", noPeserta, "sanggah").First(&ayah).Error
+	
+	if err == nil {
+		return ayah, nil
+	}
+
+	// 2. FALLBACK: Jika tidak ada sanggah, ambil data 'original' dengan relasi lengkap
+	err = db.Preload("Pekerjaan").Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
+		Where("no_peserta = ? AND atribut = ?", noPeserta, "original").First(&ayah).Error
+	
+	if err != nil {
+		// Jika beneran nggak ada data sama sekali atau Error scanning
 		return models.Ayah{NoPeserta: noPeserta}, nil
 	}
 
-	// 2. Separately try to load associations
-	_ = db.Model(&ayah).Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").First(&ayah).Error
-	
 	return ayah, nil
 }
 
+// CheckData — parity dengan ayah.prototype.checkData di Node.js
 func (s *AyahService) CheckData(noPeserta string, uktTinggi string) (bool, error) {
 	db := config.DB
 	var ayah models.Ayah
@@ -96,9 +100,8 @@ func (s *AyahService) CheckData(noPeserta string, uktTinggi string) (bool, error
 		return false, err
 	}
 
-	// Replicating Node.js "delete and check" logic using a map
 	data := map[string]interface{}{
-		"no_peserta":         ayah.NoPeserta,
+		"no_peserta":        ayah.NoPeserta,
 		"status_ayah":       ayah.StatusAyah,
 		"nama_ayah":         ayah.NamaAyah,
 		"nik_ayah":          ayah.NikAyah,
@@ -118,7 +121,6 @@ func (s *AyahService) CheckData(noPeserta string, uktTinggi string) (bool, error
 	}
 
 	if ayah.StatusAyah == "wafat" {
-		// Only name is required
 		return ayah.NamaAyah != "", nil
 	}
 
@@ -130,9 +132,8 @@ func (s *AyahService) CheckData(noPeserta string, uktTinggi string) (bool, error
 		delete(data, "scan_slip_ayah")
 	}
 
-	if ayah.PekerjaanAyah == 11 { // Tidak bekerja
+	if ayah.PekerjaanAyah == "11" { // Tidak bekerja
 		delete(data, "penghasilan_ayah")
-		delete(data, "scan_slip_ayah")
 	}
 
 	delete(data, "sampingan_ayah")

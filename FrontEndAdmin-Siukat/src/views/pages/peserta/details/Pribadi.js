@@ -1,4 +1,5 @@
 import React from 'react'
+import moment from 'moment'
 import defaultPhoto from '../../../dist/images/profile.png'
 import { connect } from 'react-redux'
 import { Field, reduxForm, formValueSelector } from 'redux-form'
@@ -185,7 +186,11 @@ class Pribadi extends React.Component {
             if (key === "file_foto_cmahasiswa") {
                 if (values[key] && values[key][0]) formData.append(key, values[key][0]);
             } else if (values[key] !== null && values[key] !== undefined) {
-                formData.append(key, values[key]);
+                let val = values[key];
+                if (val instanceof Date) {
+                    val = moment(val).format("YYYY-MM-DD");
+                }
+                formData.append(key, val);
             }
         });
 

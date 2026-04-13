@@ -13,7 +13,7 @@ type LogIbu struct {
 	ProvinsiIbu      string     `gorm:"column:provinsi_ibu;type:varchar(255)" json:"provinsi_ibu"`
 	KabkotIbu        string     `gorm:"column:kabkot_ibu;type:varchar(255)" json:"kabkot_ibu"`
 	KecamatanIbu     string     `gorm:"column:kecamatan_ibu;type:varchar(255)" json:"kecamatan_ibu"`
-	PekerjaanIbu     int        `gorm:"column:pekerjaan_ibu" json:"pekerjaan_ibu"`
+	PekerjaanIbu     string     `gorm:"column:pekerjaan_ibu" json:"pekerjaan_ibu"`
 	PenghasilanIbu   int        `gorm:"column:penghasilan_ibu" json:"penghasilan_ibu"`
 	SampinganIbu     int        `gorm:"column:sampingan_ibu" json:"sampingan_ibu"`
 	ScanKtpIbu       string     `gorm:"column:scan_ktp_ibu;type:varchar(255)" json:"scan_ktp_ibu"`

@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import {
     Card,
     Button,
@@ -430,13 +431,30 @@ class DataIbuSeleksi extends React.Component {
                     if (el) el.value = null;
                 }
             } else {
-                formData.append(key, values[key]);
+                let val = values[key];
+                if (val instanceof Date) {
+                    val = moment(val).format("YYYY-MM-DD");
+                }
+                // Ekstraksi value jika berupa object
+                else if (val && typeof val === 'object' && !Array.isArray(val)) {
+                    // Cek apakah ini Redux Form Field object (punya input/meta)
+                    if (val.input || val.meta || (val.name && val.onChange)) {
+                        val = ""; // Abaikan object internal Redux Form
+                    } else {
+                        val = val.kode || val.id || val.provinsi_id || val.kab_id || val.kecam_id || "";
+                    }
+                }
+                formData.append(key, val || "");
             }
         }
-        this.props.dispatch(ibu.updateData(cookies.get(cookieName), formData));
-        this.props.dispatch(reset('DataIbuSeleksi'));
-
-        this.props.updateVerifikasi();
+        this.props.dispatch(ibu.updateData(cookies.get(cookieName), formData)).then(() => {
+            this.props.dispatch(reset('DataIbuSeleksi'));
+            if (this.props.updateVerifikasi) {
+                this.props.updateVerifikasi();
+            }
+        }).catch(err => {
+            console.error("Gagal simpan data ibu:", err);
+        });
     }
     render() {
         return (

@@ -6,10 +6,10 @@ import (
 	"BackEnd-Siukat/models"
 	"BackEnd-Siukat/services"
 	"BackEnd-Siukat/utils"
+	"fmt"
 	"net/http"
 	"strconv"
 	"time"
-	"fmt"
 
 	"github.com/gin-gonic/gin"
 )
@@ -53,6 +53,9 @@ func AyahRoutes(r *gin.RouterGroup) {
 		// In Gin, handling MultipartForm involves c.MultipartForm()
 		// We extract the basic fields similarly to req.body in JS
 		statusAyah := c.PostForm("status_ayah")
+		fmt.Printf("\n[DEBUG] PUT /ayah/edit - NoPeserta: %s\n", np)
+		fmt.Printf("[DEBUG] Raw status_ayah: '%s'\n", statusAyah)
+		fmt.Printf("[DEBUG] Raw nama_ayah: '%s'\n", c.PostForm("nama_ayah"))
 		
 		data := map[string]interface{}{
 			"nama_ayah":        c.PostForm("nama_ayah"),
@@ -82,19 +85,24 @@ func AyahRoutes(r *gin.RouterGroup) {
 			data["kabkot_ayah"] = c.PostForm("kabkot_ayah")
 			data["kecamatan_ayah"] = c.PostForm("kecamatan_ayah")
 			
-			if pkj, errPkj := strconv.Atoi(c.PostForm("pekerjaan_ayah")); errPkj == nil {
-				data["pekerjaan_ayah"] = pkj
-			}
+			// SURGICAL FIX: Ensure 0 instead of skipping if empty string provided
+			pkj, _ := strconv.Atoi(c.PostForm("pekerjaan_ayah"))
+			data["pekerjaan_ayah"] = pkj
 			
-			if pen, errPen := strconv.Atoi(c.PostForm("penghasilan_ayah")); errPen == nil {
-				data["penghasilan_ayah"] = pen
-			}
-			if sam, errSam := strconv.Atoi(c.PostForm("sampingan_ayah")); errSam == nil {
-				data["sampingan_ayah"] = sam
-			}
+			pen, _ := strconv.Atoi(c.PostForm("penghasilan_ayah"))
+			data["penghasilan_ayah"] = pen
+
+			sam, _ := strconv.Atoi(c.PostForm("sampingan_ayah"))
+			data["sampingan_ayah"] = sam
+
 			if tgl, errTgl := time.Parse("2006-01-02", c.PostForm("tanggal_lahir_ayah")); errTgl == nil {
 				data["tanggal_lahir_ayah"] = &tgl
+				fmt.Printf("[DEBUG] Parsed tanggal_lahir_ayah: %v\n", tgl)
+			} else {
+				fmt.Printf("[DEBUG] FAILED to parse tanggal_lahir_ayah: '%s' (Error: %v)\n", c.PostForm("tanggal_lahir_ayah"), errTgl)
 			}
+
+			fmt.Printf("[DEBUG] Final Data Map to Save (Ayah): %+v\n", data)
 
 			// --- LOGIKA DINAMIS & EFISIENSI (CLEANUP) ---
 			// 1. Ambil data CMahasiswa untuk folder name
@@ -141,9 +149,11 @@ func AyahRoutes(r *gin.RouterGroup) {
 		// 2. Jalankan Update/Upsert
 		res, err := ayahService.Edit(data, np, "original")
 		if err != nil {
+			fmt.Printf("[DEBUG] ERROR updating DB: %v\n", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal simpan data: " + err.Error()})
 			return
 		}
+		fmt.Printf("[DEBUG] SUCCESS updating DB for %s\n", np)
 
 		// 3. Simpan Log
 		now := time.Now()
@@ -188,20 +198,22 @@ func AyahRoutes(r *gin.RouterGroup) {
 			data["provinsi_ayah"] = c.PostForm("provinsi_ayah")
 			data["kabkot_ayah"] = c.PostForm("kabkot_ayah")
 			data["kecamatan_ayah"] = c.PostForm("kecamatan_ayah")
-			if pkj, errPkj := strconv.Atoi(c.PostForm("pekerjaan_ayah")); errPkj == nil {
-				data["pekerjaan_ayah"] = pkj
-			}
-			if pen, errPen := strconv.Atoi(c.PostForm("penghasilan_ayah")); errPen == nil {
-				data["penghasilan_ayah"] = pen
-			}
-			if sam, errSam := strconv.Atoi(c.PostForm("sampingan_ayah")); errSam == nil {
-				data["sampingan_ayah"] = sam
-			}
+			
+			// SURGICAL FIX: Ensure 0 instead of skipping if empty string provided
+			pkj, _ := strconv.Atoi(c.PostForm("pekerjaan_ayah"))
+			data["pekerjaan_ayah"] = pkj
+			
+			pen, _ := strconv.Atoi(c.PostForm("penghasilan_ayah"))
+			data["penghasilan_ayah"] = pen
+
+			sam, _ := strconv.Atoi(c.PostForm("sampingan_ayah"))
+			data["sampingan_ayah"] = sam
 
 			// --- LOGIKA DINAMIS & EFISIENSI (CLEANUP) - SANGGAH ---
 			var student models.CMahasiswa
 			config.DB.Where("no_peserta = ?", np).First(&student)
 
+			// --- FIX: Ambil data lama Ayah Sanggah ---
 			var oldAyah models.Ayah
 			config.DB.Where("no_peserta = ? AND atribut = ?", np, "sanggah").First(&oldAyah)
 
@@ -221,7 +233,7 @@ func AyahRoutes(r *gin.RouterGroup) {
 				filename := fmt.Sprintf("Slip_Ayah_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
 				newPath, err := utils.HandleDynamicUpload(c, fileSlip, student.NamaCmahasiswa, np, "sanggah", filename)
 				if err == nil {
-					data["scan_slip_ayah"] = newPath
+					data["scan_slip_ibu"] = newPath
 				}
 			}
 		}
@@ -250,12 +262,28 @@ func AyahRoutes(r *gin.RouterGroup) {
 
 	// GET /ayah/get-ayah
 	authGroup.GET("/get-ayah", func(c *gin.Context) {
-		noPeserta, _ := c.Get("no_peserta")
-		res, err := ayahService.GetByLoggedIn(noPeserta.(string))
+		val, exists := c.Get("no_peserta")
+		if !exists {
+			fmt.Printf("[DEBUG] GET /ayah/get-ayah - FAILED: context no_peserta exists: %v\n", exists)
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized: No Peserta missing"})
+			return
+		}
+
+		np, ok := val.(string)
+		if !ok {
+			fmt.Printf("[DEBUG] GET /ayah/get-ayah - FAILED: context no_peserta is NOT string! Value: %v\n", val)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Error: Type mismatch"})
+			return
+		}
+
+		fmt.Printf("[DEBUG] GET /ayah/get-ayah - START for: %s\n", np)
+		res, err := ayahService.GetByLoggedIn(np)
 		if err != nil {
+			fmt.Printf("[DEBUG] GET /ayah/get-ayah - ERROR from service: %v\n", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
+		fmt.Printf("[DEBUG] GET /ayah/get-ayah - SUCCESS for: %s\n", np)
 		c.JSON(http.StatusOK, res)
 	})
 
@@ -267,13 +295,13 @@ func AyahRoutes(r *gin.RouterGroup) {
 		var err error
 
 		if atribut != "" {
-			err = config.DB.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
+			err = config.DB.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").Preload("Pekerjaan").
 				Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&ayah).Error
 		} else {
-			err = config.DB.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
+			err = config.DB.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").Preload("Pekerjaan").
 				Where("no_peserta = ? AND atribut = ?", noPeserta, "sanggah").First(&ayah).Error
 			if err != nil {
-				err = config.DB.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
+				err = config.DB.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").Preload("Pekerjaan").
 					Where("no_peserta = ? AND atribut = ?", noPeserta, "original").First(&ayah).Error
 			}
 		}
@@ -282,6 +310,8 @@ func AyahRoutes(r *gin.RouterGroup) {
 			c.JSON(http.StatusOK, gin.H{"msg": "data tidak ditemukan"})
 			return
 		}
+
+		fmt.Printf("[DEBUG] Admin GET Ayah - NoPeserta: %s, PekerjaanID: %s, PekerjaanObj: %+v\n", noPeserta, ayah.PekerjaanAyah, ayah.Pekerjaan)
 		c.JSON(http.StatusOK, ayah)
 	})
 }

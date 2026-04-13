@@ -33,14 +33,14 @@ func IbuRoutes(r *gin.RouterGroup) {
 		var err error
 
 		if atribut != "" {
-			err = config.DB.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
+			err = config.DB.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").Preload("Pekerjaan").
 				Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&ibu).Error
 		} else {
 			// Prioritaskan sanggah dulu, fallback ke original — Parity dengan Node.js
-			err = config.DB.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
+			err = config.DB.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").Preload("Pekerjaan").
 				Where("no_peserta = ? AND atribut = ?", noPeserta, "sanggah").First(&ibu).Error
 			if err != nil {
-				err = config.DB.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
+				err = config.DB.Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").Preload("Pekerjaan").
 					Where("no_peserta = ? AND atribut = ?", noPeserta, "original").First(&ibu).Error
 			}
 		}
@@ -49,6 +49,8 @@ func IbuRoutes(r *gin.RouterGroup) {
 			c.JSON(http.StatusOK, gin.H{"msg": "data tidak ditemukan"})
 			return
 		}
+
+		fmt.Printf("[DEBUG] Admin GET Ibu - NoPeserta: %s, PekerjaanID: %s, PekerjaanObj: %+v\n", noPeserta, ibu.PekerjaanIbu, ibu.Pekerjaan)
 		c.JSON(http.StatusOK, ibu)
 	})
 
@@ -78,6 +80,9 @@ func IbuRoutes(r *gin.RouterGroup) {
 		np := noPeserta.(string)
 
 		statusIbu := c.PostForm("status_ibu")
+		fmt.Printf("\n[DEBUG] PUT /ibu/edit - NoPeserta: %s\n", np)
+		fmt.Printf("[DEBUG] Raw status_ibu: '%s'\n", statusIbu)
+		fmt.Printf("[DEBUG] Raw nama_ibu: '%s'\n", c.PostForm("nama_ibu"))
 
 		data := map[string]interface{}{
 			"nama_ibu":   c.PostForm("nama_ibu"),
@@ -102,24 +107,28 @@ func IbuRoutes(r *gin.RouterGroup) {
 			data["nik_ibu"] = c.PostForm("nik_ibu")
 			data["telepon_ibu"] = c.PostForm("telepon_ibu")
 			data["alamat_ibu"] = c.PostForm("alamat_ibu")
-			if pkj, errArg := strconv.Atoi(c.PostForm("pekerjaan_ibu")); errArg == nil {
-				data["pekerjaan_ibu"] = pkj
-			}
+			
+			data["pekerjaan_ibu"] = c.PostForm("pekerjaan_ibu")
+			
 			data["tempat_lahir_ibu"] = c.PostForm("tempat_lahir_ibu")
 			if tgl, errTgl := time.Parse("2006-01-02", c.PostForm("tanggal_lahir_ibu")); errTgl == nil {
 				data["tanggal_lahir_ibu"] = &tgl
+				fmt.Printf("[DEBUG] Parsed tanggal_lahir_ibu: %v\n", tgl)
+			} else {
+				fmt.Printf("[DEBUG] FAILED to parse tanggal_lahir_ibu: '%s' (Error: %v)\n", c.PostForm("tanggal_lahir_ibu"), errTgl)
 			}
 
 			data["provinsi_ibu"] = c.PostForm("provinsi_ibu")
 			data["kabkot_ibu"] = c.PostForm("kabkot_ibu")
 			data["kecamatan_ibu"] = c.PostForm("kecamatan_ibu")
 
-			if pen, errPen := strconv.Atoi(c.PostForm("penghasilan_ibu")); errPen == nil {
-				data["penghasilan_ibu"] = pen
-			}
-			if sam, errSam := strconv.Atoi(c.PostForm("sampingan_ibu")); errSam == nil {
-				data["sampingan_ibu"] = sam
-			}
+			fmt.Printf("[DEBUG] Final Data Map to Save (Ibu): %+v\n", data)
+
+			pen, _ := strconv.Atoi(c.PostForm("penghasilan_ibu"))
+			data["penghasilan_ibu"] = pen
+			
+			sam, _ := strconv.Atoi(c.PostForm("sampingan_ibu"))
+			data["sampingan_ibu"] = sam
 
 			// --- LOGIKA DINAMIS & EFISIENSI (CLEANUP) ---
 			var student models.CMahasiswa
@@ -158,9 +167,11 @@ func IbuRoutes(r *gin.RouterGroup) {
 		// 2. Jalankan Update/Upsert
 		res, err := ibuService.Edit(data, np, "original")
 		if err != nil {
+			fmt.Printf("[DEBUG] ERROR updating DB (Ibu): %v\n", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal simpan data: " + err.Error()})
 			return
 		}
+		fmt.Printf("[DEBUG] SUCCESS updating DB (Ibu) for %s\n", np)
 
 		// 3. Simpan Log
 		now := time.Now()
@@ -201,9 +212,9 @@ func IbuRoutes(r *gin.RouterGroup) {
 			data["nik_ibu"] = c.PostForm("nik_ibu")
 			data["telepon_ibu"] = c.PostForm("telepon_ibu")
 			data["alamat_ibu"] = c.PostForm("alamat_ibu")
-			if pkj, errArg := strconv.Atoi(c.PostForm("pekerjaan_ibu")); errArg == nil {
-				data["pekerjaan_ibu"] = pkj
-			}
+			
+			data["pekerjaan_ibu"] = c.PostForm("pekerjaan_ibu")
+			
 			data["tempat_lahir_ibu"] = c.PostForm("tempat_lahir_ibu")
 			if tgl, errTgl := time.Parse("2006-01-02", c.PostForm("tanggal_lahir_ibu")); errTgl == nil {
 				data["tanggal_lahir_ibu"] = &tgl
@@ -213,12 +224,11 @@ func IbuRoutes(r *gin.RouterGroup) {
 			data["kabkot_ibu"] = c.PostForm("kabkot_ibu")
 			data["kecamatan_ibu"] = c.PostForm("kecamatan_ibu")
 
-			if pen, errPen := strconv.Atoi(c.PostForm("penghasilan_ibu")); errPen == nil {
-				data["penghasilan_ibu"] = pen
-			}
-			if sam, errSam := strconv.Atoi(c.PostForm("sampingan_ibu")); errSam == nil {
-				data["sampingan_ibu"] = sam
-			}
+			pen, _ := strconv.Atoi(c.PostForm("penghasilan_ibu"))
+			data["penghasilan_ibu"] = pen
+			
+			sam, _ := strconv.Atoi(c.PostForm("sampingan_ibu"))
+			data["sampingan_ibu"] = sam
 
 			// --- LOGIKA DINAMIS & EFISIENSI (CLEANUP) - SANGGAH ---
 			var student models.CMahasiswa

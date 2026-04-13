@@ -33,7 +33,6 @@ import {
 let FormSuratKebenaran = (props) => {
     const {
         handleSubmit,
-        pristine,
         submitting,
         scan_pernyataan_kebenaran,
         unduhSuratKebenaran,
@@ -42,69 +41,88 @@ let FormSuratKebenaran = (props) => {
     const [checked, setChecked] = React.useState(false);
 
     return (
-        <Form onSubmit={handleSubmit} className="premium-card-inner p-4 mb-4 bg-light rounded-lg shadow-sm">
-            <div className="mb-3">
-                <i className="fa fa-info-circle text-primary mr-2"></i> 
-                <strong>Tahapan Penyelesaian Surat Pernyataan:</strong>
+        <Form onSubmit={handleSubmit} className="modern-details-list p-0 mb-5 border-0 shadow-none">
+            <div className="bg-light p-4 rounded-lg border mb-4 shadow-sm" style={{borderLeft: '4px solid var(--unj-green)'}}>
+                <div className="d-flex align-items-center mb-3">
+                    <div className="avatar avatar-sm bg-emerald-light mr-3">
+                        <i className="fa fa-info-circle text-emerald"></i>
+                    </div>
+                    <h6 className="mb-0 font-weight-bold">Tahapan Finalisasi Data</h6>
+                </div>
+                
+                <div className="timeline-modern mt-3">
+                    <div className="timeline-item-modern pb-3">
+                        <div className="timeline-marker-modern bg-emerald">1</div>
+                        <div className="timeline-content-modern">
+                            <p className="mb-2 text-muted small">Unduh draf surat pernyataan Anda:</p>
+                            <Button size="sm" color="danger" onClick={unduhSuratKebenaran} className="px-3 rounded-pill shadow-sm">
+                                <i className="fa fa-download mr-2"></i> {textSuratKebenaran}
+                            </Button>
+                        </div>
+                    </div>
+                    <div className="timeline-item-modern pb-3">
+                        <div className="timeline-marker-modern bg-emerald">2</div>
+                        <div className="timeline-content-modern">
+                            <p className="mb-0">Cetak, tanda tangani di atas materai, dan <strong>scan</strong> kembali (format PDF).</p>
+                        </div>
+                    </div>
+                    <div className="timeline-item-modern">
+                        <div className="timeline-marker-modern bg-emerald">3</div>
+                        <div className="timeline-content-modern">
+                            <p className="mb-0">Unggah berkas melalui form di bawah ini.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <ol className="pl-3 mb-4">
-                <li>
-                    <Button size="sm" color="danger" onClick={unduhSuratKebenaran} className="mb-2">
-                        <i className="fa fa-download"></i> {textSuratKebenaran}
-                    </Button>
-                </li>
-                <li>Cetak, tanda tangani, dan <strong>scan</strong> kembali surat tersebut (PDF).</li>
-                <li>Unggah surat pada form di bawah ini lalu klik <strong>Simpan</strong>.</li>
-            </ol>
-            <hr />
 
-            <FormGroup row className="align-items-center">
-                <Label for="file_scan_pernyataan_kebenaran" md={4} className="font-weight-bold">
-                    Upload Surat Pernyataan
-                </Label>
-                <Col md={4}>
-                    <Field
-                        component={InputFileBs}
-                        type="file"
-                        name="file_scan_pernyataan_kebenaran"
-                        id="file_scan_pernyataan_kebenaran"
-                        accept="application/pdf"
+            <div className="p-4 border rounded-lg bg-white shadow-sm mb-4">
+                <FormGroup className="mb-0">
+                    <Label className="font-weight-bold text-secondary small text-uppercase mb-3 d-block">Unggah Surat Pernyataan</Label>
+                    <Row className="align-items-center">
+                        <Col md={scan_pernyataan_kebenaran ? 8 : 12}>
+                            <Field
+                                component={InputFileBs}
+                                type="file"
+                                name="file_scan_pernyataan_kebenaran"
+                                id="file_scan_pernyataan_kebenaran"
+                                accept="application/pdf"
+                            />
+                        </Col>
+                        {scan_pernyataan_kebenaran && (
+                            <Col md={4} className="mt-3 mt-md-0">
+                                <a
+                                    href={storage + '/' + scan_pernyataan_kebenaran}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="btn details-btn-view w-100 py-2"
+                                >
+                                    <i className="fa fa-file-pdf-o mr-2"></i> Lihat File
+                                </a>
+                            </Col>
+                        )}
+                    </Row>
+                </FormGroup>
+
+                <div className="custom-control custom-checkbox my-4 p-3 rounded bg-light border-dashed">
+                    <input 
+                        type="checkbox" 
+                        className="custom-control-input" 
+                        id="checkSetuju" 
+                        onChange={(e) => setChecked(e.target.checked)}
                     />
-                </Col>
-                {scan_pernyataan_kebenaran && (
-                    <Col md={4}>
-                        <a
-                            href={storage + '/' + scan_pernyataan_kebenaran}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="modern-btn-primary py-2 w-100 btn text-white"
-                            style={{fontSize: '0.85rem'}}
-                        >
-                            <i className="fa fa-file-pdf-o mr-2"></i> Lihat Surat
-                        </a>
-                    </Col>
-                )}
-            </FormGroup>
-            
-            <div className="custom-control custom-checkbox my-3">
-                <input 
-                    type="checkbox" 
-                    className="custom-control-input" 
-                    id="checkSetuju" 
-                    onChange={(e) => setChecked(e.target.checked)}
-                />
-                <label className="custom-control-label font-weight-normal" htmlFor="checkSetuju">
-                    Saya menyatakan data yang diisi adalah benar dan jujur.
-                </label>
-            </div>
+                    <label className="custom-control-label font-weight-bold text-dark cursor-pointer" htmlFor="checkSetuju" style={{fontSize: '0.95rem'}}>
+                        Saya menyatakan bahwa seluruh data yang saya isi adalah BENAR dan JUJUR.
+                    </label>
+                </div>
 
-            <Button
-                type="submit"
-                className="modern-btn-primary w-100 py-2"
-                disabled={!checked || submitting}
-            >
-                <i className="fa fa-save mr-2"></i> Simpan Surat Pernyataan
-            </Button>
+                <Button
+                    type="submit"
+                    className="modern-btn-primary w-100 py-3 shadow-lg font-weight-bold"
+                    disabled={!checked || submitting}
+                >
+                    <i className="fa fa-cloud-upload mr-2"></i> Simpan & Perbarui Surat
+                </Button>
+            </div>
         </Form>
     );
 };

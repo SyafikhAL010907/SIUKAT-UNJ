@@ -20,6 +20,8 @@ vendor/
 # Student Uploads
 uploads/
 
+#Data/*.sql
+
 !*.md
 
 !*.md

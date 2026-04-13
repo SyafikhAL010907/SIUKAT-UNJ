@@ -1,4 +1,5 @@
 import React from 'react'
+import moment from 'moment'
 import { 
     Col, Alert, FormGroup, FormText, Label, Modal 
 } from 'reactstrap'
@@ -249,6 +250,20 @@ class Wali extends React.Component {
                                     <tr>
                                         <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Nama Lengkap</td>
                                         <td className="p-4 font-medium text-gray-800">{w.nama_wali || '-'}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Tempat, Tgl Lahir</td>
+                                        <td className="p-4 text-gray-700">
+                                            { (w.tempat_lahir_wali || w.tanggal_lahir_wali) ? (
+                                                <>
+                                                    {w.tempat_lahir_wali || '-'}, {w.tanggal_lahir_wali ? moment(w.tanggal_lahir_wali).format("DD MMMM YYYY") : '-'}
+                                                </>
+                                            ) : '-'}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Pekerjaan</td>
+                                        <td className="p-4 text-gray-700">{w.pekerjaan?.nama || '-'}</td>
                                     </tr>
                                     <tr>
                                         <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">Alamat</td>

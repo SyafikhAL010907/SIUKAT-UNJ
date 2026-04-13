@@ -42,21 +42,30 @@ func (s *WaliService) Edit(data map[string]interface{}, noPeserta string, atribu
 	}
 
 	// 4. Ambil data terbaru untuk return
-	db.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&wali)
+	db.Preload("Pekerjaan").Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
+		Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&wali)
 	return wali, nil
 }
 
 func (s *WaliService) GetByLoggedIn(noPeserta string) (models.Wali, error) {
+	db := config.DB
 	var res models.Wali
 	
-	// 1. Fetch main record without preloads first
-	if err := config.DB.Where("no_peserta = ?", noPeserta).First(&res).Error; err != nil {
-		// Return empty object if not found
-		return models.Wali{NoPeserta: noPeserta}, nil
+	// 1. PRIORITAS: Cek data 'sanggah' dulu
+	err := db.Preload("Pekerjaan").Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
+		Where("no_peserta = ? AND atribut = ?", noPeserta, "sanggah").First(&res).Error
+	
+	if err == nil {
+		return res, nil
 	}
 
-	// 2. Separately try to load associations
-	_ = config.DB.Model(&res).Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").First(&res).Error
+	// 2. FALLBACK: Jika tidak ada sanggah, ambil data 'original'
+	err = db.Preload("Pekerjaan").Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
+		Where("no_peserta = ? AND atribut = ?", noPeserta, "original").First(&res).Error
+	
+	if err != nil {
+		return models.Wali{NoPeserta: noPeserta}, nil
+	}
 
 	return res, nil
 }
@@ -70,6 +79,7 @@ func (s *WaliService) AddLog(user models.Wali, atribut string, executor string, 
 		ProvinsiWali:    user.ProvinsiWali,
 		KabkotWali:      user.KabkotWali,
 		KecamatanWali:   user.KecamatanWali,
+		PekerjaanWali:   user.PekerjaanWali,
 		KesanggupanWali: user.KesanggupanWali,
 		ScanWali:        user.ScanWali,
 		Atribut:         atribut,
