@@ -187,8 +187,8 @@ class JadwalUkt extends React.Component {
                                 onChange={this.handleStageChange}
                                 className="bg-white text-emerald-800 text-sm font-bold px-6 py-2 rounded-xl outline-none border-none focus:ring-2 focus:ring-yellow-400 transition-all cursor-pointer shadow-md"
                             >
-                                <option value="1">SNMPTN</option>
-                                <option value="2">SBMPTN</option>
+                                <option value="1">SNBP</option>
+                                <option value="2">SNBT</option>
                                 <option value="3">MANDIRI</option>
                             </select>
                         </div>
