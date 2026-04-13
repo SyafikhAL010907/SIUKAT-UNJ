@@ -41,7 +41,20 @@ func ConnectDB() {
 	})
 
 	if err != nil {
-		log.Fatalf("FAILED: Unable to connect to database: %v", err)
+		// FALLBACK: Jika koneksi ke host utama gagal, coba ke localhost
+		if host != "localhost" && host != "127.0.0.1" {
+			log.Printf("FALLBACK: Gagal koneksi ke %s (%v). Mencoba ke localhost...", host, err)
+			host = "localhost"
+			dsn = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Asia%%2FJakarta",
+				user, password, host, port, dbname)
+			db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
+				Logger: newLogger,
+			})
+		}
+
+		if err != nil {
+			log.Fatalf("FAILED: Unable to connect to database: %v", err)
+		}
 	}
 
 	// Set timezone ke WIB (+07:00) secara manual pas koneksi terbuka
