@@ -14,7 +14,7 @@ go run scripts/utils/dynamic_injector/main.go < running inject
 go run scripts/utils/generate_master_excel/main.go < running clean excel
 
 
-Nomor Peserta: 925111008305
+Nomor Peserta: 925111008305   
 Password (ddmmyyyy): 16092006 (berdasarkan tanggal lahir 16 September 2006)
 
 login Admin
