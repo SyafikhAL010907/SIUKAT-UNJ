@@ -48,7 +48,7 @@ class Dashboards extends React.Component {
                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
                             <div>
                                 <h2 className="text-2xl font-black text-gray-800 tracking-tight">
-                                    Traffic Pengisian UKT
+                                    Traffic Pengisian UKT New
                                 </h2>
                                 <p className="text-sm text-gray-400 mt-1 font-medium">
                                     Monitoring aktivitas mahasiswa per fakultas secara real-time
