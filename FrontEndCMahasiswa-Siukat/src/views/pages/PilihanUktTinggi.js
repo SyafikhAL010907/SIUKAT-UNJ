@@ -169,12 +169,12 @@ class PilihanUktTinggi extends React.Component {
                             <i className="fa fa-university fa-2x text-emerald"></i>
                         </div>
                         <h2 className="font-weight-bold color-emerald mb-2" style={{ letterSpacing: '-0.5px' }}>
-                           Pemilihan Kelompok UKT
+                            Pemilihan Kelompok UKT
                         </h2>
                         <p className="text-muted lead mx-auto" style={{ maxWidth: '600px', fontSize: '1.1rem' }}>
                             Berdasarkan data prodi Anda, silakan pilih apakah Anda bersedia ditetapkan pada <strong>UKT Kelompok Atas</strong> atau melalui <strong>Verifikasi Ekonomi</strong>.
                         </p>
-                        
+
                         {this.props.cmahasiswa.prodi != null && (
                             <div className="mt-4">
                                 <Badge color="success" pill className="px-4 py-2 shadow-sm" style={{ fontSize: '0.9rem', backgroundColor: '#0f6d3f' }}>
@@ -187,10 +187,10 @@ class PilihanUktTinggi extends React.Component {
 
                     <div className="row justify-content-center mb-5">
                         <div className="col-md-10">
-                             <div 
-                                className="ukt-high-group-container p-4 rounded-xl shadow-sm" 
-                                style={{ 
-                                    background: '#ffffff', 
+                            <div
+                                className="ukt-high-group-container p-4 rounded-xl shadow-sm"
+                                style={{
+                                    background: '#ffffff',
                                     border: '2px solid #0f6d3f',
                                     borderRadius: '24px',
                                     position: 'relative',
@@ -233,8 +233,8 @@ class PilihanUktTinggi extends React.Component {
                                         checked={this.state.kategori.toString() === '0'}
                                         onChange={this.batalUktTinggi}
                                     />
-                                    <label 
-                                        className="label-modern h-100 d-flex flex-column align-items-center justify-content-center" 
+                                    <label
+                                        className="label-modern h-100 d-flex flex-column align-items-center justify-content-center"
                                         htmlFor={'ukt-tinggi-0'}
                                         style={{ border: '2px solid #cbd5e1', borderRadius: '20px', padding: '30px' }}
                                     >
@@ -263,7 +263,7 @@ class PilihanUktTinggi extends React.Component {
                                             <div className="p-2 rounded bg-white shadow-sm mr-3 text-success">
                                                 <i className="fa fa-bolt"></i>
                                             </div>
-                                            <h6 className="mb-0 font-weight-bold text-success">Keuntungan Jalur Cepat</h6>
+                                            <h6 className="mb-0 font-weight-bold text-success">Keuntungan UKT Tinggi</h6>
                                         </div>
                                         <ul className="list-reset pl-0 mb-0 small text-muted">
                                             <li className="mb-2 d-flex"><i className="fa fa-check text-success mr-2 mt-1"></i> Langsung ditetapkan UKT permanen</li>
@@ -325,13 +325,13 @@ class PilihanUktTinggi extends React.Component {
                             <b>
                                 UKT Kelompok {this.state.kategori} - {this.state.besar_ukt}
                             </b>
-              .
+                            .
                         </Alert>
                         <Alert color="warning" className="text-justify">
                             <i className="fa fa-info-circle"></i> Anda dapat membatalkannya
-              dengan menekan tombol <b>{'"Batal UKT Kelompok Atas"'}</b> yang ada di
-              bagian bawah setiap laman selama anda belum menyelesaikan seluruh
-              proses.
+                            dengan menekan tombol <b>{'"Batal UKT Kelompok Atas"'}</b> yang ada di
+                            bagian bawah setiap laman selama anda belum menyelesaikan seluruh
+                            proses.
                         </Alert>
                     </ModalBody>
                     <ModalFooter className="text-right">
@@ -358,10 +358,10 @@ class PilihanUktTinggi extends React.Component {
                         </Alert>
                         <Alert color="warning" className="text-justify">
                             <i className="fa fa-info-circle"></i> Anda tetap mempunyai
-              kemungkinan untuk mendapatkan UKT kelompok VI, VII, atau VIII.
-              Anda dapat memilih UKT Kelompok Atas dengan tombol{' '}
+                            kemungkinan untuk mendapatkan UKT kelompok VI, VII, atau VIII.
+                            Anda dapat memilih UKT Kelompok Atas dengan tombol{' '}
                             <b>{'"Pilih UKT Kelompok Atas"'}</b> yang ada di bagian samping kiri
-              laman selama anda belum menyelesaikan proses.
+                            laman selama anda belum menyelesaikan proses.
                         </Alert>
                     </ModalBody>
                     <ModalFooter className="text-right">
