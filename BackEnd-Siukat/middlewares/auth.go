@@ -4,7 +4,6 @@ import (
 	"BackEnd-Siukat/constants"
 	"fmt"
 	"net/http"
-	"os"
 	"strings"
 
 	"github.com/gin-gonic/gin"
