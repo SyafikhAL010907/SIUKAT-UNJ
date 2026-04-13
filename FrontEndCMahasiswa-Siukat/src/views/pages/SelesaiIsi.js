@@ -46,44 +46,51 @@ class SelesaiIsi extends React.Component {
         }
 
         return (
-            <div className="finish-page-container">
+            <div className="finish-page-container bg-white">
                 <Row className="w-100 justify-content-center m-0">
-                    <Col xs={11} md={10} lg={9}>
-                        {/* Gambar Hero - Full Width Container */}
-                        <div className="image-wrapper">
+                    <Col xs={11} md={10} lg={8} className="text-center">
+                        <div className="image-wrapper d-none d-md-block">
                             <img src={Thx} alt='selesai-isi' />
                         </div>
                         
-                        <Card className="modern-card text-center">
-                            <CardTitle className="card-title-custom">
-                                Terima Kasih Telah Melengkapi Semua Data
-                            </CardTitle>
+                        <Card className="success-card-premium p-4 p-md-5 pt-md-5">
+                            <div className="pt-4 pt-md-2">
+                                <i className="fa fa-check-circle success-hero-icon"></i>
+                                <h3 className="font-weight-bold text-dark mb-3">
+                                    Simpan Data Berhasil!
+                                </h3>
+                                <p className="text-muted mb-4 px-md-5">
+                                    Terima kasih telah melengkapi seluruh persyaratan. Data Anda telah kami terima dan sedang dalam proses verifikasi oleh tim seleksi UKT.
+                                </p>
 
-                            <div className="content-text">
-                                <div className="mt-3">
-                                    Anda dapat mengunduh bukti penyelesaian data UKT.<br />
-                                    Kami akan memproses data yang Anda masukkan.<br />
-                                    Jangan lupa untuk <b>MASUK</b> kembali untuk melihat <b>HASIL UKT</b> pada tanggal<br />
-                                    <div className="date-highlight mt-2">
-                                        📅 {this.props.info?.pengumuman || "-"}
+                                <div className="announcement-box shadow-sm">
+                                    <div className="announcement-label">Jadwal Pengumuman Hasil UKT</div>
+                                    <div className="announcement-date">
+                                        <i className="fa fa-calendar-check-o mr-2 text-emerald"></i>
+                                        {this.props.info?.pengumuman || "Segera Hadir"}
                                     </div>
+                                    <p className="small text-muted mt-2 mb-0 italic">
+                                        *Silakan login kembali pada tanggal tersebut untuk melihat hasil penetapan UKT Anda.
+                                    </p>
                                 </div>
-                            </div>
 
-                            <div className="btn-container">
-                                <Button
-                                    className="btn-custom btn-download"
-                                    onClick={this.unduhBuktiSelesai.bind(this)}
-                                >
-                                    <i className="fa fa-download mr-2"></i> {this.state.textBuktiSelesai}
-                                </Button>
+                                <div className="btn-container-modern mt-4">
+                                    <Button
+                                        className="modern-btn-primary px-4 py-3 shadow-lg"
+                                        onClick={this.unduhBuktiSelesai.bind(this)}
+                                        style={{minWidth: '220px'}}
+                                    >
+                                        <i className="fa fa-download mr-2"></i> {this.state.textBuktiSelesai}
+                                    </Button>
 
-                                <Button
-                                    className="btn-custom btn-logout"
-                                    onClick={this.logout.bind(this)}
-                                >
-                                    <i className="fa fa-check mr-2"></i> Keluar
-                                </Button>
+                                    <Button
+                                        className="btn outline-emerald px-4 py-3"
+                                        onClick={this.logout.bind(this)}
+                                        style={{minWidth: '150px'}}
+                                    >
+                                        <i className="fa fa-sign-out mr-2"></i> Keluar
+                                    </Button>
+                                </div>
                             </div>
                         </Card>
                     </Col>
