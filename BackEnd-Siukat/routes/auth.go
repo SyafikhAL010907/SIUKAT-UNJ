@@ -4,6 +4,7 @@ import (
 	"log"
 	"strings"
 	"BackEnd-Siukat/config"
+	"BackEnd-Siukat/constants"
 	"BackEnd-Siukat/middlewares"
 	"BackEnd-Siukat/models"
 	"BackEnd-Siukat/services"
@@ -125,10 +126,7 @@ func AuthRoutes(r *gin.RouterGroup) {
 		}
 
 		// Generate JWT Token
-		secret := os.Getenv("SECRET")
-		if secret == "" {
-			secret = "rahasia_negara_siukat_2026_unj"
-		}
+		secret := constants.GetJWTSecret()
 
 		token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 			"id":  finalID,

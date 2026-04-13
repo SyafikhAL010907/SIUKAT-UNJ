@@ -1,6 +1,7 @@
 package middlewares
 
 import (
+	"BackEnd-Siukat/constants"
 	"fmt"
 	"net/http"
 	"os"
@@ -35,7 +36,7 @@ func JwtAuth() gin.HandlerFunc {
 			return
 		}
 		fmt.Printf("DEBUG AUTH: Token String: '%s'\n", tokenString)
-		secret := os.Getenv("SECRET") // Sesuai dengan constants/secret.js
+		secret := constants.GetJWTSecret() // Menggunakan pengaman otomatis
 
 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
