@@ -370,9 +370,16 @@ class Terima extends React.Component {
                                         <div className="bg-light p-4 rounded-xl mb-4 border text-center">
                                             <i className="fa fa-info-circle text-primary mb-2 fa-2x"></i>
                                             <h6 className="font-weight-bold">Tahap Selanjutnya</h6>
-                                            <p className="text-muted small mb-0 mx-auto" style={{ maxWidth: '500px' }}>
+                                            <p className="text-muted small mb-3 mx-auto" style={{ maxWidth: '500px' }}>
                                                 Silakan unduh slip pembayaran Anda dan lakukan pembayaran melalui bank mitra UNJ untuk mendapatkan Nomor Induk Mahasiswa (NIM).
                                             </p>
+                                            <Button 
+                                                className="modern-btn-primary px-4 py-2 shadow-sm" 
+                                                style={{ borderRadius: '50px' }}
+                                                onClick={this.unduhSlipPembayaran}
+                                            >
+                                                <i className="fa fa-download mr-2"></i> {this.state.textSlipPembayaran}
+                                            </Button>
                                         </div>
 
                                         <div className="text-center pt-4 border-top">
