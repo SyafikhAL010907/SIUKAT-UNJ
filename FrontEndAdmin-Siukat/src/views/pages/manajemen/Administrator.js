@@ -164,10 +164,10 @@ class Administrator extends React.Component{
                 {/* Header Page Premium */}
                 <div className="glass-header flex flex-col md:flex-row md:items-center justify-between gap-6">
                     <div>
-                        <h2 className="text-3xl font-extrabold text-emerald-900 tracking-tight">
+                        <h2 className="text-3xl font-extrabold text-white tracking-tight">
                             Manajemen Administrator
                         </h2>
-                        <p className="text-emerald-700/70 text-sm font-medium mt-1">Kelola hak akses dan data petugas sistem SIUKAT.</p>
+                        <p className="text-white text-sm font-medium mt-1">Kelola hak akses dan data petugas sistem SIUKAT.</p>
                     </div>
                     <button 
                         onClick={this.toggleAdministrator}

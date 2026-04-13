@@ -10,20 +10,13 @@ class Sidebar extends Component {
 
   handleClick(e) {
     e.preventDefault();
-    e.target.parentElement.classList.toggle('open');
+    // Menggunakan closest untuk memastikan yang di-toggle adalah <li> meskipun yang diklik adalah <span> atau <br>
+    e.currentTarget.parentElement.classList.toggle('open');
   }
 
   activeRoute(routeName, props) {
-    // return this.props.location.pathname.indexOf(routeName) > -1 ? 'nav-item nav-dropdown open' : 'nav-item nav-dropdown';
     return props.location.pathname.indexOf(routeName) > -1 ? 'nav-item nav-dropdown open' : 'nav-item nav-dropdown';
-
   }
-
-  // todo Sidebar nav secondLevel
-  // secondLevelActive(routeName) {
-  //   return this.props.location.pathname.indexOf(routeName) > -1 ? "nav nav-second-level collapse in" : "nav nav-second-level collapse";
-  // }
-
 
   render() {
 
@@ -31,7 +24,6 @@ class Sidebar extends Component {
     const activeRoute = this.activeRoute;
     const handleClick = this.handleClick;
 
-    // badge addon to NavItem
     const badge = (badge) => {
       if (badge) {
         const classes = classNames( badge.class );
@@ -39,19 +31,15 @@ class Sidebar extends Component {
       }
     };
 
-    // simple wrapper for nav-title item
     const wrapper = item => { return (!item.wrapper ? item.name : (React.createElement(item.wrapper.element, item.wrapper.attributes, item.name))) };
 
-    // nav list section title
     const title =  (title, key) => {
       const classes = classNames( "nav-title", title.class);
       return (<li key={key} className={ classes }>{wrapper(title)} </li>);
     };
 
-    // nav list divider
     const divider = (divider, key) => (<li key={key} className="divider"></li>);
 
-    // nav item with nav link
     const navItem = (item, key) => {
       const classes = classNames( "nav-link", item.class);
       return (
@@ -65,32 +53,53 @@ class Sidebar extends Component {
 
     // nav dropdown
     const navDropdown = (item, key) => {
+      const isCalonMahasiswa = item.name === "Calon Mahasiswa";
+      
       return (
         <li key={key} className={activeRoute(item.url, props)}>
-          <a className="nav-link nav-dropdown-toggle" onClick={handleClick.bind(this)}><i className={item.icon}></i> {item.name}</a>
+          {/* onClick dipasang pada tag <a> yang membungkus seluruh konten title */}
+          <a 
+            className="nav-link nav-dropdown-toggle" 
+            onClick={handleClick.bind(this)} 
+            style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', whiteSpace: 'normal' }}
+          >
+            <i className={item.icon}></i> 
+            
+            <span style={{ flex: '1', marginLeft: '10px', lineHeight: '1.2' }}>
+              {isCalonMahasiswa ? (
+                <span>Calon<br/>Mahasiswa</span>
+              ) : (
+                item.name
+              )}
+            </span>
+
+            {/* Indikator panah manual */}
+            <span style={{ fontWeight: 'bold', fontSize: '14px', marginLeft: '5px' }}>
+              {""}
+            </span>
+            
+            {badge(item.badge)}
+          </a>
           <ul className="nav-dropdown-items">
             {navList(item.children)}
           </ul>
         </li>)
     };
 
-    // nav link
     const navLink = (item, idx) =>
       item.title ? title(item, idx) :
       item.divider ? divider(item, idx) :
       item.children ? navDropdown(item, idx)
                     : navItem(item, idx) ;
 
-    // nav list
     const navList = (items) => {
       return items.map( (item, index) => navLink(item, index) );
     };
 
-    // sidebar-nav root
     const filteredNavItems = filterNavigation(nav.items, props.user?.role);
 
     return (
-      <div className="sidebar">
+      <div className="sidebar" style={{ width: '250px' }}>
         <nav className="sidebar-nav">
           <Nav>
             {navList(filteredNavItems)}
