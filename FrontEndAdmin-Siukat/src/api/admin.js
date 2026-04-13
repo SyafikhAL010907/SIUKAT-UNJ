@@ -67,3 +67,25 @@ export function deleteById(token, username){
             })
     })
 }
+
+export function triggerGlobalTerimaUKT(token, input) {
+    return new Promise((resolve, reject) => {
+        axios.post(service + '/admin/trigger-terima-ukt', input, {
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        })
+            .then((response) => {
+                if (response.data.success === false) {
+                    notif("Data Kosong", response.data.error, "info")
+                } else {
+                    notif("Berhasil!", response.data.message, "success")
+                }
+                resolve(response.data)
+            })
+            .catch((err) => {
+                notif("Gagal Trigger!", errLog(err.response), "error")
+                reject(err.response)
+            })
+    })
+}

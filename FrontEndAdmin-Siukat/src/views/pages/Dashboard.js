@@ -1,8 +1,8 @@
 import React from 'react'
 import { SummaryCmahasiswa, DashboardChartMetadata } from '../components';
-import { dashboard } from "../../actions"
+import { dashboard, admin } from "../../actions"
 import { connect } from 'react-redux'
-import { cookies, cookieName } from "../../global"
+import { cookies, cookieName, swal } from "../../global"
 import { isAllowed } from '../../utils/rbac';
 // Import sudah benar
 import ButtonInject from '../../views/components/ButtonInject';
@@ -54,26 +54,47 @@ const DashboardStyles = () => (
             color: white;
             cursor: pointer;
             outline: none;
-            border-radius: 0 16px 16px 0; /* Seamless flow */
-            box-shadow: 10px 0 20px rgba(16, 185, 129, 0.1);
+            border-radius: 0; /* Seamless flow middle */
+            box-shadow: none;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-left: 0; /* Align directly */
+            border-right: 1px solid rgba(255, 255, 255, 0.15);
             position: relative;
             z-index: 2;
         }
 
+        .select-flag-custom {
+            appearance: none;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border: none;
+            padding: 10px 30px; 
+            font-size: 11px;
+            font-weight: 900;
+            color: white;
+            cursor: pointer;
+            outline: none;
+            border-radius: 0 16px 16px 0; /* End of pill */
+            box-shadow: 10px 0 20px rgba(16, 185, 129, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 1;
+        }
+
         .select-year-custom option,
-        .select-jalur-custom option {
-            color: #1e293b; /* High contrast Slate-900 for options */
+        .select-jalur-custom option,
+        .select-flag-custom option {
+            color: #1e293b; 
             background: white;
             font-weight: 600;
         }
 
-        .select-jalur-custom:disabled {
-            background: #e2e8f0;
-            color: #94a3b8;
+        .select-jalur-custom:disabled,
+        .select-flag-custom:disabled {
+            background: #f1f5f9;
+            color: #cbd5e1;
             cursor: not-allowed;
             box-shadow: none;
             filter: grayscale(1);
@@ -116,17 +137,45 @@ class Dashboards extends React.Component {
             isModalOpen: false,
             modalTitle: "",
             selectedYear: "",
-            selectedJalur: ""
+            selectedJalur: "",
+            selectedFlag: ""
         }
     }
 
     handleTriggerChange = (field, value) => {
         this.setState({ [field]: value }, () => {
-            const { selectedYear, selectedJalur } = this.state;
-            if (selectedYear && selectedJalur) {
-                this.toggleModal(`Trigger ${selectedJalur} (${selectedYear})`);
+            const { selectedYear, selectedJalur, selectedFlag } = this.state;
+            if (selectedYear && selectedJalur && selectedFlag) {
+                // Sesuai permintaan: Hanya 2026 yang aktif, sisanya Coming Soon
+                if (selectedYear === "2026") {
+                    const flagLabel = selectedFlag === "terima_ukt" ? "TERIMA UKT" : "PENGUMUMAN";
+                    swal({
+                        title: "Yakin Gasspol bro?",
+                        text: `Ubah semua mahasiswa ${selectedJalur} tahun ${selectedYear} jadi ${flagLabel}?`,
+                        icon: "warning",
+                        buttons: {
+                            cancel: "Nanti dulu",
+                            confirm: {
+                                text: "Ya, Sikat!",
+                                value: true,
+                            },
+                        },
+                        dangerMode: true,
+                    }).then((willProcess) => {
+                        if (willProcess) {
+                            this.props.dispatch(admin.triggerGlobalTerimaUKT(cookies.get(cookieName), {
+                                year: selectedYear,
+                                jalur: selectedJalur,
+                                flag: selectedFlag
+                            }));
+                        }
+                    });
+                } else {
+                    this.toggleModal(`Trigger ${selectedJalur} (${selectedYear})`);
+                }
+                
                 // Reset setelah trigger agar bisa pilih lagi
-                this.setState({ selectedYear: "", selectedJalur: "" });
+                this.setState({ selectedYear: "", selectedJalur: "", selectedFlag: "" });
             }
         });
     }
@@ -212,6 +261,20 @@ class Dashboards extends React.Component {
                                             <option value="SNBP" className="text-gray-800 bg-white">SNBP</option>
                                             <option value="SNBT" className="text-gray-800 bg-white">SNBT</option>
                                             <option value="MANDIRI" className="text-gray-800 bg-white">MANDIRI</option>
+                                        </select>
+                                    </div>
+
+                                    {/* Wrapper Flag (Pilihan Status) */}
+                                    <div className="relative">
+                                        <select 
+                                            value={this.state.selectedFlag}
+                                            onChange={(e) => this.handleTriggerChange('selectedFlag', e.target.value)}
+                                            className="select-flag-custom"
+                                            disabled={!this.state.selectedYear || !this.state.selectedJalur}
+                                        >
+                                            <option value="" disabled>Pilih Flag</option>
+                                            <option value="terima_ukt" className="text-gray-800 bg-white italic">TERIMA UKT</option>
+                                            <option value="pengumuman" className="text-gray-800 bg-white italic">PENGUMUMAN</option>
                                         </select>
                                     </div>
                                 </div>

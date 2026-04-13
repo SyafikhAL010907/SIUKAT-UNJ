@@ -5,6 +5,7 @@ import (
 	"BackEnd-Siukat/middlewares"
 	"BackEnd-Siukat/models"
 	"BackEnd-Siukat/utils"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -183,5 +184,85 @@ func AdminRoutes(r *gin.RouterGroup) {
 
 	// Route for injecting data from Excel
 	auth.POST("/inject-data", utils.InjectDataExcel)
+
+	// Global Trigger: Update Flag to terima_ukt for mass students
+	auth.POST("/trigger-terima-ukt", func(c *gin.Context) {
+		type ReqTrigger struct {
+			Year  string `json:"year"`
+			Jalur string `json:"jalur"` // SNBP, SNBT, or MANDIRI
+			Flag  string `json:"flag"`  // terima_ukt, pengumuman, etc.
+		}
+		var req ReqTrigger
+		if err := c.ShouldBindJSON(&req); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request payload"})
+			return
+		}
+
+		// Default flag if empty for safety
+		if req.Flag == "" {
+			req.Flag = "terima_ukt"
+		}
+
+		tx := config.DB.Begin()
+
+		// Mapping Jalur ke Kode (Patokan Utama)
+		jalurMapping := map[string]int{
+			"SNBP":    1,
+			"SNBT":    2,
+			"MANDIRI": 3,
+		}
+
+		var info models.Info
+		found := false
+
+		// 1. PRIORITAS UTAMA: Cari berdasarkan Tahun & Kode (Hasil Pemetaan)
+		if kode, ok := jalurMapping[req.Jalur]; ok {
+			if err := tx.Where("tahun = ? AND kode = ?", req.Year, kode).First(&info).Error; err == nil {
+				found = true
+			}
+		}
+
+		// 2. FALLBACK (LOGIKA LAMA): Cari berdasarkan Tahun & Like Jalur (Jangan dihapus fungsinya)
+		if !found {
+			if err := tx.Where("tahun = ? AND pengisian LIKE ?", req.Year, "%"+req.Jalur+"%").First(&info).Error; err != nil {
+				tx.Rollback()
+				c.JSON(http.StatusOK, gin.H{
+					"success": false, 
+					"error": "Periode jalur untuk tahun " + req.Year + " belum terdaftar di sistem!",
+				})
+				return
+			}
+		}
+
+		// 2. Lakukan Update Massal pada tb_cmahasiswa via Join dengan tb_user
+		// u.jalur_masuk harus sama dengan info.Kode
+		result := tx.Table("tb_cmahasiswa").
+			Where("no_peserta IN (SELECT no_peserta FROM tb_user WHERE jalur_masuk = ?)", info.Kode).
+			Update("flag", req.Flag)
+
+		if result.Error != nil {
+			tx.Rollback()
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal melakukan update status massal: " + result.Error.Error()})
+			return
+		}
+
+		// Pintar: Cek apakah ada data yang beneran ter-update
+		if result.RowsAffected == 0 {
+			tx.Rollback()
+			c.JSON(http.StatusOK, gin.H{
+				"success": false, 
+				"error": "Data mahasiswa tidak ditemukan di jalur ini!",
+			})
+			return
+		}
+
+		tx.Commit()
+
+		message := "Berhasil! " + fmt.Sprintf("%d", result.RowsAffected) + " mahasiswa " + req.Jalur + " Tahun " + req.Year + " telah diubah menjadi TERIMA UKT!"
+		c.JSON(http.StatusOK, gin.H{
+			"message": message,
+			"updated": result.RowsAffected,
+		})
+	})
 }
 

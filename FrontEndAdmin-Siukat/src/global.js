@@ -129,4 +129,5 @@ export {
     getToken,
     setToken,
     removeToken,
+    swal
 }

@@ -77,7 +77,6 @@ let FormMahasiswa = (props) => {
                             <Field name="tanggal_lahir_cmahasiswa" component={InputDayPicker} startYear={1990} className="text-black" />
                         </div>
 
-                        {/* --- DROPDOWN WILAYAH DENGAN FIX MAPPING & KEYS --- */}
                         <div>
                             <label className="block text-xs font-bold text-gray-500 uppercase mb-2 ml-1">Provinsi</label>
                             <Field name="provinsi_cmahasiswa" component={InputBs} type="select" className="text-black" onChange={handleProvinsi}>
@@ -156,15 +155,12 @@ class Pribadi extends React.Component {
         const token = cookies.get(cookieName);
         const { noPeserta, dispatch } = this.props;
         
-        // Load Provinsi
         dispatch(provinsi.fetchProvinsi());
         
-        // Load Data Mahasiswa
         try {
             const res = await dispatch(cmahasiswa.fetchAllData(token, noPeserta, this.props.atribut));
             const val = res?.value?.data || res?.payload?.data;
             
-            // Auto-load dropdown jika data sudah ada
             if (val) {
                 if (val.provinsi_cmahasiswa) dispatch(kabkot.fetchForCmahasiswa(val.provinsi_cmahasiswa));
                 if (val.kabkot_cmahasiswa) dispatch(kecamatan.fetchForCmahasiswa(val.kabkot_cmahasiswa));
@@ -195,12 +191,8 @@ class Pribadi extends React.Component {
         });
 
         try {
-            // Logic Update dengan Await
             await this.props.dispatch(cmahasiswa.updateData(token, formData, this.props.noPeserta));
-            
-            // Refresh Data di UI (Gunakan Atribut agar dapet yang terbaru)
             await this.props.dispatch(cmahasiswa.fetchAllData(token, this.props.noPeserta, this.props.atribut));
-            
             this.modalToggle();
             alert("Data Berhasil Diperbarui!");
         } catch (error) {
@@ -213,6 +205,7 @@ class Pribadi extends React.Component {
         const { cmahasiswa: data, location } = this.props;
         if(!data) return <div className="p-10 text-center font-bold text-emerald-600">Memuat Profil...</div>;
 
+        // PENGUBAHAN: Tombol hanya tampil jika isModeSanggah bernilai true
         const isModeSanggah = location.state && location.state.modeEdit;
 
         return (
@@ -240,7 +233,8 @@ class Pribadi extends React.Component {
                                 <h2 className="text-2xl font-bold text-gray-800 uppercase">{data.nama_cmahasiswa}</h2>
                                 <p className="text-emerald-600 font-semibold">{data.no_peserta}</p>
                             </div>
-                            {this.props.editable && (
+                            {/* FIX: Menggunakan isModeSanggah alih-alih this.props.editable */}
+                            {isModeSanggah && (
                                 <button onClick={this.modalToggle} className="bg-amber-600 text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-amber-700 shadow-md">
                                     <i className="fa fa-edit mr-2"></i> Perbarui Data
                                 </button>
@@ -285,7 +279,7 @@ const InfoItem = ({ label, value }) => (
     </div>
 )
 
-// --- REDUX WRAPPERS DENGAN FIX PROTEKSI ARRAY ---
+// --- REDUX WRAPPERS ---
 FormMahasiswa = reduxForm({
     form: 'FormProfileMahasiswa',
     enableReinitialize: true,
@@ -294,7 +288,6 @@ FormMahasiswa = reduxForm({
 const selector = formValueSelector('FormProfileMahasiswa')
 
 FormMahasiswa = connect((store) => {
-    // Pastikan data yang diambil dari store selalu berupa array (handle raw array from backend)
     const getArray = (data) => Array.isArray(data) ? data : [];
     
     return {

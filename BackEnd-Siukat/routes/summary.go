@@ -12,7 +12,9 @@ func SummaryRoutes(r *gin.RouterGroup) {
 	summaryService := services.SummaryService{}
 
 	group.GET("/fakultas", func(c *gin.Context) {
-		data, err := summaryService.FetchByFakultas()
+		tahun := c.Query("tahun")
+		jalur := c.Query("jalur")
+		data, err := summaryService.FetchByFakultas(tahun, jalur)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, err)
 			return
@@ -21,7 +23,9 @@ func SummaryRoutes(r *gin.RouterGroup) {
 	})
 
 	group.GET("/prodi", func(c *gin.Context) {
-		data, err := summaryService.FetchByProdi()
+		tahun := c.Query("tahun")
+		jalur := c.Query("jalur")
+		data, err := summaryService.FetchByProdi(tahun, jalur)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, err)
 			return

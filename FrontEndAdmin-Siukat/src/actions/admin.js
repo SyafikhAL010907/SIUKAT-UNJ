@@ -33,6 +33,13 @@ export function save(token, input){
         })
     }
 }
+
+export function triggerGlobalTerimaUKT(token, input){
+    return {
+        type: "TRIGGER_GLOBAL_ACTION",
+        payload: admin.triggerGlobalTerimaUKT(token, input)
+    }
+}
 export function deleteById(token, username){
     return {
         type: "FETCH_ADMIN",

@@ -19,171 +19,32 @@ import { cookies, cookieName, rupiah } from "../../../global";
 
 const GOLONGAN_LIST = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII'];
 
-// STYLES: CSS-in-JS "Senior Engineer" Style
-const CustomStyles = () => (
-    <style dangerouslySetInnerHTML={{ __html: `
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
-        
-        .rekap-container {
-            font-family: 'Inter', sans-serif;
-            background: #f8fafc;
-        }
-
-        .glass-header-premium {
-            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
-            border-radius: 24px;
-            padding: 2.5rem;
-            color: white;
-            box-shadow: 0 20px 40px -10px rgba(16, 185, 129, 0.2);
-            margin-bottom: -40px;
-            position: relative;
-            z-index: 10;
-        }
-
-        .table-glass-card {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(16, 185, 129, 0.1);
-            border-radius: 32px;
-            box-shadow: 0 25px 50px -12px rgba(16, 185, 129, 0.08);
-            overflow: hidden;
-            padding-top: 50px;
-        }
-
-        .premium-table thead th {
-            background: #10b981 !important;
-            color: #ffffff !important;
-            font-weight: 900;
-            text-transform: uppercase;
-            font-size: 10.5px;
-            letter-spacing: 0.12em;
-            padding: 22px 15px !important;
-            border: none !important;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .premium-table tbody tr {
-            transition: all 0.3s ease;
-            border-bottom: 1px solid #f1f5f9;
-        }
-
-        .premium-table tbody tr:hover {
-            background: rgba(16, 185, 129, 0.04) !important;
-            transform: scale(0.998);
-        }
-
-        .sticky-column {
-            position: sticky;
-            left: 0;
-            z-index: 20;
-            background: white;
-            box-shadow: 5px 0 15px -5px rgba(0,0,0,0.02);
-        }
-
-        .grand-total-row {
-            background: #059669 !important;
-            color: white !important;
-            border: none !important;
-        }
-
-        .grand-total-row td {
-            padding: 25px 15px !important;
-            font-weight: 900;
-            text-transform: uppercase;
-            font-size: 11px;
-            border: none !important;
-        }
-
-        .badge-mhs {
-            background: #ecfdf5;
-            color: #059669;
-            padding: 8px 14px;
-            border-radius: 12px;
-            font-weight: 900;
-            border: 2px solid #d1fae5;
-        }
-
-        .badge-nominal {
-            background: #10b981;
-            color: white;
-            padding: 10px 16px;
-            border-radius: 14px;
-            font-weight: 900;
-            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.15);
-            font-family: 'JetBrains Mono', monospace;
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-
-        .btn-modern {
-            padding: 12px 28px;
-            border-radius: 9999px !important; /* Force Pill Shape */
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            font-size: 11px;
-            border: none;
-        }
-
-        .btn-modern:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-
-        /* Essential Targeting for Search Bar Lonjong */
-        .search-wrapper, 
-        .search-wrapper .input-group, 
-        .search-wrapper .input-group-text, 
-        .search-wrapper input {
-            border-radius: 9999px !important;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .animate-up {
-            animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        .jalur-select {
-            min-width: 160px;
-            height: 48px; 
-            padding: 0 40px 0 20px;
-            background: white url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2310b981' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e") no-repeat right 1rem center/12px 12px;
-            border: 0;
-            border-radius: 9999px !important; /* Force Pill Shape */
-            font-weight: 800;
-            color: #064e3b;
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            appearance: none;
-            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); /* Subtle shadow for depth */
-        }
-        .jalur-select:hover {
-            transform: translateY(-2px);
-        }
-        .jalur-select:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
-        }
-    ` }} />
-);
 
 class ProgramStudi extends React.Component {
     state = {
         search: '',
-        isModalOpen: false
+        isModalOpen: false,
+        selectedYear: "",
+        selectedJalur: "" // All
     };
 
     componentDidMount() {
-        const token = cookies.get(cookieName);
-        this.props.dispatch(rekapitulasi.fetchDataProdi(token));
+        // Initial state doesn't fetch until Year is selected
+    }
+
+    handleFilterChange = (field, value) => {
+        this.setState({ [field]: value }, () => {
+            const { selectedYear, selectedJalur } = this.state;
+            const token = cookies.get(cookieName);
+            
+            if (selectedYear) {
+                if (selectedYear === "2026") {
+                    this.props.dispatch(rekapitulasi.fetchDataProdi(token, selectedYear, selectedJalur));
+                } else {
+                    this.toggleModal(`Rekapitulasi Tahun ${selectedYear}`);
+                }
+            }
+        });
     }
 
     toggleModal = () => this.setState({ isModalOpen: !this.state.isModalOpen });
@@ -232,13 +93,12 @@ class ProgramStudi extends React.Component {
         const filteredData = this.getFilteredData();
 
         return (
-             <div className="rekap-container min-h-screen pb-20">
-                <CustomStyles />
+             <div className="min-h-screen pb-20 bg-slate-50 font-['Inter']">
                 
                 <Container fluid className="px-4 md:px-12 pt-10">
                     
                     {/* Header Section */}
-                    <div className="glass-header-premium animate-up">
+                    <div className="bg-gradient-to-br from-emerald-500 to-emerald-400 rounded-[24px] p-10 text-white shadow-[0_20px_40px_-10px_rgba(16,185,129,0.2)] mb-[-40px] relative z-10">
                         <Row className="align-items-center">
                             <Col lg="6" md="12" className="mb-4 mb-lg-0">
                                 <div className="d-flex align-items-center">
@@ -257,15 +117,15 @@ class ProgramStudi extends React.Component {
 
                             <Col lg="6" md="12">
                                 <Row className="justify-content-lg-end align-items-center">                                    <Col sm="12" md="auto" className="mb-3 mb-md-0 d-flex gap-3 align-items-center">
-                                        <div className="search-wrapper shadow-2xl flex-grow-1 rounded-full">
-                                            <InputGroup className="overflow-hidden border-0 bg-white rounded-full">
+                                        <div className="search-wrapper shadow-2xl flex-grow-1 !rounded-full">
+                                            <InputGroup className="overflow-hidden border-0 bg-white !rounded-full">
                                                 <InputGroupAddon addonType="prepend">
-                                                    <InputGroupText className="bg-transparent border-0 text-emerald-500 pl-4 pr-0">
+                                                    <InputGroupText className="bg-transparent border-0 text-emerald-500 pl-4 pr-0 !rounded-full">
                                                         <i className="fa fa-search"></i>
                                                     </InputGroupText>
                                                 </InputGroupAddon>
                                                 <Input 
-                                                    className="py-4 border-0 font-bold placeholder:text-gray-300 text-emerald-950 focus:ring-0"
+                                                    className="py-4 border-0 font-bold placeholder:text-gray-300 text-emerald-950 focus:ring-0 !rounded-full"
                                                     placeholder="Cari Program Studi..."
                                                     value={this.state.search}
                                                     onChange={this.handleSearch}
@@ -273,22 +133,39 @@ class ProgramStudi extends React.Component {
                                             </InputGroup>
                                         </div>
 
-                                        {/* Dropdown Jalur (Dummy) */}
-                                        <div className="shadow-2xl rounded-full">
+                                        {/* Dual Dropdown Filter (Tahun & Jalur) - Premium Pill Style */}
+                                        <div className="flex items-center bg-white rounded-full p-1 shadow-xl border border-emerald-100 overflow-hidden">
+                                            {/* Select Tahun */}
                                             <select 
-                                                className="jalur-select"
-                                                onChange={(e) => e.target.value !== "All" && this.toggleModal()}
+                                                value={this.state.selectedYear}
+                                                onChange={(e) => this.handleFilterChange('selectedYear', e.target.value)}
+                                                className="bg-emerald-600 text-white text-[10px] font-black uppercase tracking-widest px-6 py-3 border-0 outline-none cursor-pointer hover:bg-emerald-700 transition-colors"
                                             >
-                                                <option value="All">All Jalur</option>
-                                                <option value="SNBP">SNBP</option>
-                                                <option value="SNBT">SNBT</option>
-                                                <option value="MANDIRI">MANDIRI</option>
+                                                <option value="" disabled>Pilih Tahun</option>
+                                                <option value="2026">2026</option>
+                                                <option value="2027">2027</option>
+                                                <option value="2028">2028</option>
+                                                <option value="2029">2029</option>
+                                                <option value="2030">2030</option>
+                                            </select>
+
+                                            {/* Select Jalur */}
+                                            <select 
+                                                value={this.state.selectedJalur}
+                                                onChange={(e) => this.handleFilterChange('selectedJalur', e.target.value)}
+                                                disabled={!this.state.selectedYear}
+                                                className="bg-white text-emerald-900 text-[10px] font-black uppercase tracking-widest px-8 py-3 border-0 outline-none cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed hover:bg-emerald-50 transition-colors border-l border-emerald-100"
+                                            >
+                                                <option value="">All Jalur</option>
+                                                <option value="1">SNBP</option>
+                                                <option value="2">SNBT</option>
+                                                <option value="3">MANDIRI</option>
                                             </select>
                                         </div>
                                     </Col>
 
                                     <Col sm="auto" className="d-flex gap-3 mt-3 mt-sm-0">
-                                        <Button color="white" className="btn-modern bg-white text-emerald-600 shadow-xl w-100 w-md-auto rounded-full" onClick={this.handleExport}>
+                                        <Button color="white" className="py-3 px-7 font-[800] uppercase tracking-wider transition-all duration-300 text-[11px] border-none hover:-translate-y-0.5 hover:scale-[1.02] hover:shadow-lg bg-white text-emerald-600 !rounded-full shadow-xl w-100 w-md-auto" onClick={this.handleExport}>
                                             <i className="fa fa-file-excel-o mr-2"></i> Export CSV
                                         </Button>
                                     </Col>
@@ -298,32 +175,32 @@ class ProgramStudi extends React.Component {
                     </div>
 
                     {/* Table Section */}
-                    <div className="table-glass-card animate-up" style={{ animationDelay: '0.1s' }}>
-                        <Table responsive hover borderless className="premium-table mb-0">
+                    <div className="bg-white/70 backdrop-blur-2xl border border-emerald-500/10 rounded-[32px] shadow-[0_25px_50px_-12px_rgba(16,185,129,0.08)] overflow-hidden pt-[50px]">
+                        <Table responsive hover borderless className="premium-table mb-0 w-full">
                             <thead>
-                                <tr>
-                                    <th rowSpan="2" className="sticky-column text-center">Program Studi</th>
-                                    <th rowSpan="2" className="text-center">Total MHS</th>
-                                    <th colSpan="8" className="text-center bg-emerald-800/10 border-b border-emerald-900/10">Distribusi Golongan UKT</th>
-                                    <th rowSpan="2" className="text-center">Bidikmisi</th>
-                                    <th rowSpan="2" className="text-center">Selesai</th>
-                                    <th rowSpan="2" className="text-right pr-10">Total Nominal UKT</th>
+                                <tr className="bg-emerald-500">
+                                    <th rowSpan="2" className="sticky left-0 z-20 bg-emerald-500 text-white font-[900] uppercase text-[10.5px] tracking-[0.12em] p-[22px_15px] border-none shadow-[0_2px_4px_rgba(0,0,0,0.1)] text-center border-r-[0.5px] border-white/10">Program Studi</th>
+                                    <th rowSpan="2" className="bg-emerald-500 text-white font-[900] uppercase text-[10.5px] tracking-[0.12em] p-[22px_15px] border-none shadow-[0_2px_4px_rgba(0,0,0,0.1)] text-center">Total MHS</th>
+                                    <th colSpan="8" className="bg-emerald-600/20 text-white font-[900] uppercase text-[10.5px] tracking-[0.12em] p-[22px_15px] border-none shadow-[0_2px_4px_rgba(0,0,0,0.1)] text-center">Distribusi Golongan UKT</th>
+                                    <th rowSpan="2" className="bg-emerald-500 text-white font-[900] uppercase text-[10.5px] tracking-[0.12em] p-[22px_15px] border-none shadow-[0_2px_4px_rgba(0,0,0,0.1)] text-center">Bidikmisi</th>
+                                    <th rowSpan="2" className="bg-emerald-500 text-white font-[900] uppercase text-[10.5px] tracking-[0.12em] p-[22px_15px] border-none shadow-[0_2px_4px_rgba(0,0,0,0.1)] text-center">Selesai</th>
+                                    <th rowSpan="2" className="bg-emerald-500 text-white font-[900] uppercase text-[10.5px] tracking-[0.12em] p-[22px_15px] border-none shadow-[0_2px_4px_rgba(0,0,0,0.1)] text-right pr-10">Total Nominal UKT</th>
                                 </tr>
-                                <tr>
+                                <tr className="bg-emerald-500">
                                     {GOLONGAN_LIST.map(gol => (
-                                        <th key={gol} className="text-center border-l border-white/5">{gol}</th>
+                                        <th key={gol} className="bg-emerald-500 text-white font-[900] uppercase text-[10.5px] tracking-[0.12em] p-[22px_15px] border-none shadow-[0_2px_4px_rgba(0,0,0,0.1)] text-center border-l border-white/5">{gol}</th>
                                     ))}
                                 </tr>
                             </thead>
                             <tbody className="text-slate-800 font-bold text-[11.5px]">
                                 {filteredData.length > 0 ? (
                                     filteredData.map((item, idx) => (
-                                        <tr key={idx}>
-                                            <td className="sticky-column font-black text-emerald-950 px-6 py-5 min-w-[300px] uppercase italic tracking-tight">
+                                        <tr key={idx} className="transition-all duration-300 border-b border-slate-100 hover:bg-emerald-500/5 hover:scale-[0.998]">
+                                            <td className="sticky left-0 z-20 bg-white shadow-[5px_0_15px_-5px_rgba(0,0,0,0.02)] font-black text-emerald-950 px-6 py-5 min-w-[300px] uppercase italic tracking-tight border-r border-slate-50">
                                                 {item.prodi}
                                             </td>
                                             <td className="text-center py-5">
-                                                <span className="badge-mhs">{item.total_mahasiswa || 0}</span>
+                                                <span className="bg-[#ecfdf5] color-[#059669] px-3.5 py-2 rounded-xl font-black border-2 border-[#d1fae5]">{item.total_mahasiswa || 0}</span>
                                             </td>
                                             {GOLONGAN_LIST.map(gol => (
                                                 <td key={gol} className="text-center py-5 text-slate-500 font-black">{item[gol] || 0}</td>
@@ -331,7 +208,7 @@ class ProgramStudi extends React.Component {
                                             <td className="text-center py-5 font-black text-sky-600">{item.bidikmisi || 0}</td>
                                             <td className="text-center py-5 font-black text-amber-600 italic underline decoration-amber-400 decoration-2">{item.subtotal || 0}</td>
                                             <td className="text-right py-5 pr-10">
-                                                <span className="badge-nominal">{rupiah(item.total_ukt || 0)}</span>
+                                                <span className="bg-[#10b981] text-white px-4 py-2.5 rounded-[14px] font-black shadow-[0_4px_10px_rgba(16,185,129,0.15)] font-mono border border-white/20 text-[11px]">{rupiah(item.total_ukt || 0)}</span>
                                             </td>
                                         </tr>
                                     ))
@@ -345,9 +222,9 @@ class ProgramStudi extends React.Component {
                                 )}
                             </tbody>
                             <tfoot>
-                                <tr className="grand-total-row">
-                                    <td className="sticky-column text-center grand-total-row shadow-2xl">GRAND TOTAL</td>
-                                    <td className="text-center">
+                                <tr className="bg-emerald-600 text-white border-none">
+                                    <td className="sticky left-0 z-20 bg-emerald-600 text-white font-[900] uppercase text-[11px] p-[25px_15px] border-none text-center shadow-2xl">GRAND TOTAL</td>
+                                    <td className="text-center p-[25px_15px] font-[900] uppercase text-[11px] border-none">
                                         <div className="bg-yellow-400 text-emerald-950 px-3 py-1.5 rounded-lg inline-block">{this.calculateGrandTotal('total_mahasiswa')}</div>
                                     </td>
                                     {GOLONGAN_LIST.map(gol => (
@@ -395,9 +272,9 @@ const FormModal = ({ onClose }) => (
                 </div>
                 
                 <div className="space-y-2">
-                    <h4 className="text-xl font-black text-emerald-900 uppercase italic">Under Development</h4>
+                    <h4 className="text-xl font-black text-emerald-900 uppercase italic">Coming Soon</h4>
                     <p className="text-sm text-emerald-700/60 font-medium leading-relaxed px-5">
-                        Fitur filter jalur dan manajemen data prodi sedang dalam tahap integrasi database. Mohon tunggu update selanjutnya bro!
+                        Data rekapitulasi untuk periode yang Anda pilih sedang dalam tahap sinkronisasi server. Mohon tunggu update selanjutnya bro!
                     </p>
                 </div>
 

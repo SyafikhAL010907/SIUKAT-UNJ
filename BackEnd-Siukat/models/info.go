@@ -16,6 +16,7 @@ type Info struct {
 	Stage              string     `gorm:"column:stage;type:varchar(255)" json:"stage"`
 	StageDetail        string     `gorm:"column:stage_detail;type:varchar(255)" json:"stage_detail"`
 	TanggalAkhir       *time.Time `gorm:"column:tanggal_akhir;type:datetime" json:"tanggal_akhir"`
+	Tahun              string     `gorm:"column:tahun;type:varchar(20)" json:"tahun"`
 }
 
 func (Info) TableName() string {

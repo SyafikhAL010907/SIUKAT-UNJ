@@ -47,7 +47,7 @@ type SummaryDistribution struct {
 	Subtotal       int64  `json:"subtotal"`
 }
 
-func (s *SummaryService) FetchByFakultas() ([]SummaryDistribution, error) {
+func (s *SummaryService) FetchByFakultas(tahun string, jalur string) ([]SummaryDistribution, error) {
 	var rows []SummaryDistribution
 	query := `select
                     fakultas,
@@ -65,34 +65,48 @@ func (s *SummaryService) FetchByFakultas() ([]SummaryDistribution, error) {
                 from
                     (
                     SELECT
-                        nama_cmahasiswa,
-                        prodi_cmahasiswa,
-                        jalur_cmahasiswa,
-                        id_ukt,
-                        bidik_misi_cmahasiswa,
-                        golongan_id,
+                        a.nama_cmahasiswa,
+                        a.prodi_cmahasiswa,
+                        a.jalur_cmahasiswa,
+                        b.id_ukt,
+                        a.bidik_misi_cmahasiswa,
+                        a.golongan_id,
                         case
-                            when golongan_id = 'I' then b.I
-                            when golongan_id = 'II' then b.II
-                            when golongan_id = 'III' then b.III
-                            when golongan_id = 'IV' then b.IV
-                            when golongan_id = 'V' then b.V
-                            when golongan_id = 'VI' then b.VI
-                            when golongan_id = 'VII' then b.VII
-                            when golongan_id = 'VIII' then b.VIII
-                            when golongan_id = '' then 0
+                            when a.golongan_id = 'I' then b.I
+                            when a.golongan_id = 'II' then b.II
+                            when a.golongan_id = 'III' then b.III
+                            when a.golongan_id = 'IV' then b.IV
+                            when a.golongan_id = 'V' then b.V
+                            when a.golongan_id = 'VI' then b.VI
+                            when a.golongan_id = 'VII' then b.VII
+                            when a.golongan_id = 'VIII' then b.VIII
+                            when a.golongan_id = '' then 0
                             else 0
                         end as nilai_ukt,
                         COALESCE(c.nama, 'Tanpa Fakultas') as fakultas
                     FROM
                         tb_cmahasiswa a
+                    JOIN tb_user u ON u.no_peserta = a.no_peserta
+                    JOIN ref_info i ON i.kode = u.jalur_masuk
+                    LEFT JOIN tb_cmahasiswa t2 ON a.no_peserta = t2.no_peserta AND t2.atribut = 'sanggah'
                     left join ref_ukt b on
                         a.prodi_cmahasiswa = b.major_id
                         and a.jalur_cmahasiswa = b.entrance
                     left join ref_fakultas c on
                         a.fakultas_cmahasiswa = c.kode
                     where
-                        a.no_peserta not like '%fulan%' ) as a
+                        a.no_peserta not like '%fulan%' 
+                        AND (a.atribut = 'sanggah' OR (a.atribut = 'original' AND t2.id_cmahasiswa IS NULL)) `
+
+	if tahun != "" {
+		query += " AND i.tahun = '" + tahun + "'"
+	}
+
+	if jalur != "" {
+		query += " AND u.jalur_masuk = '" + jalur + "'"
+	}
+
+	query += ` ) as a
                 group by
                     fakultas`
 
@@ -108,7 +122,7 @@ func (s *SummaryService) FetchByFakultas() ([]SummaryDistribution, error) {
 	return rows, nil
 }
 
-func (s *SummaryService) FetchByProdi() ([]SummaryDistribution, error) {
+func (s *SummaryService) FetchByProdi(tahun string, jalur string) ([]SummaryDistribution, error) {
 	var rows []SummaryDistribution
 	query := `select
                     prodi,
@@ -126,27 +140,30 @@ func (s *SummaryService) FetchByProdi() ([]SummaryDistribution, error) {
                 from
                     (
                     SELECT
-                        nama_cmahasiswa,
-                        prodi_cmahasiswa,
-                        jalur_cmahasiswa,
-                        id_ukt,
-                        bidik_misi_cmahasiswa,
-                        golongan_id,
+                        a.nama_cmahasiswa,
+                        a.prodi_cmahasiswa,
+                        a.jalur_cmahasiswa,
+                        b.id_ukt,
+                        a.bidik_misi_cmahasiswa,
+                        a.golongan_id,
                         case
-                            when golongan_id = 'I' then b.I
-                            when golongan_id = 'II' then b.II
-                            when golongan_id = 'III' then b.III
-                            when golongan_id = 'IV' then b.IV
-                            when golongan_id = 'V' then b.V
-                            when golongan_id = 'VI' then b.VI
-                            when golongan_id = 'VII' then b.VII
-                            when golongan_id = 'VIII' then b.VIII
-                            when golongan_id = '' then 0
+                            when a.golongan_id = 'I' then b.I
+                            when a.golongan_id = 'II' then b.II
+                            when a.golongan_id = 'III' then b.III
+                            when a.golongan_id = 'IV' then b.IV
+                            when a.golongan_id = 'V' then b.V
+                            when a.golongan_id = 'VI' then b.VI
+                            when a.golongan_id = 'VII' then b.VII
+                            when a.golongan_id = 'VIII' then b.VIII
+                            when a.golongan_id = '' then 0
                             else 0
                         end as nilai_ukt,
                         COALESCE(c.nama, 'Tanpa Prodi') as prodi
                     FROM
                         tb_cmahasiswa a
+                    JOIN tb_user u ON u.no_peserta = a.no_peserta
+                    JOIN ref_info i ON i.kode = u.jalur_masuk
+                    LEFT JOIN tb_cmahasiswa t2 ON a.no_peserta = t2.no_peserta AND t2.atribut = 'sanggah'
                     left join ref_ukt b on
                         a.prodi_cmahasiswa = b.major_id
                         and a.jalur_cmahasiswa = b.entrance
@@ -154,7 +171,18 @@ func (s *SummaryService) FetchByProdi() ([]SummaryDistribution, error) {
                         a.prodi_cmahasiswa = c.kode
                         and a.jalur_cmahasiswa = c.jalur
                     where
-                        a.no_peserta not like '%fulan%' ) as a
+                        a.no_peserta not like '%fulan%' 
+                        AND (a.atribut = 'sanggah' OR (a.atribut = 'original' AND t2.id_cmahasiswa IS NULL)) `
+
+	if tahun != "" {
+		query += " AND i.tahun = '" + tahun + "'"
+	}
+
+	if jalur != "" {
+		query += " AND u.jalur_masuk = '" + jalur + "'"
+	}
+
+	query += ` ) as a
                 group by
                     prodi`
 

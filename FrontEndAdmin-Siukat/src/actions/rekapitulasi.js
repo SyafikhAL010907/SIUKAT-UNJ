@@ -1,14 +1,15 @@
 import { rekapitulasi } from '../api'
 
-export function fetchDataFakultas(token){      
+export function fetchDataFakultas(token, tahun, jalur) {
     return {
         type: "FETCH_REKAP_FAKULTAS",
-        payload: rekapitulasi.fetchDataFakultas(token)
+        payload: rekapitulasi.fetchDataFakultas(token, tahun, jalur)
     }
 }
-export function fetchDataProdi(token){      
+
+export function fetchDataProdi(token, tahun, jalur) {
     return {
         type: "FETCH_REKAP_PRODI",
-        payload: rekapitulasi.fetchDataProdi(token)
+        payload: rekapitulasi.fetchDataProdi(token, tahun, jalur)
     }
 }
