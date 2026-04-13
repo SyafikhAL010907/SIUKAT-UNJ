@@ -3,13 +3,13 @@ cd BackEnd-Siukat > go run cmd/api/main.go
 go build ./cmd/api/main.go
 
 cd FrontEndAdmin-Siukat > npm install
-cd FrontEndAdmin-Siukat > npm start
+cd FrontEndAdmin-Siukat > npm start 
 
 cd FrontEndCMahasiswa-Siukat > npm install
-cd FrontEndCMahasiswa-Siukat > npm start
+cd FrontEndCMahasiswa-Siukat > npm start  
 
 
-go run scripts/utils/rollback_full/main.go < running rollback
+go run scripts/utils/rollback_full/main.go < running rollbackc
 go run scripts/utils/dynamic_injector/main.go < running inject
 go run scripts/utils/generate_master_excel/main.go < running clean excel
 
