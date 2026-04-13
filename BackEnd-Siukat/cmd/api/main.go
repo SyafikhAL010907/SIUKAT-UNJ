@@ -35,14 +35,9 @@ func main() {
 
 	// Implementasi CORS seperti pada app.js Node.js
 	configCors := cors.DefaultConfig()
-	configCors.AllowOrigins = []string{
-		"http://siukat.unj.ac.id",
-		"http://localhost:3000",
-		"http://localhost:3001",
-	}
-	configCors.AllowMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"}
-	configCors.AllowHeaders = []string{"Origin", "Content-Type", "Accept", "Authorization"}
-	r.Use(cors.New(configCors))
+configCors.AllowOrigins = []string{"http://10.255.1.149:3000", "http://10.255.1.149:3001", "http://localhost:3000"} // Hapus koma di sini
+configCors.AllowMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"} // Hapus koma di sini
+configCors.AllowHeaders = []string{"Origin", "Content-Type", "Accept", "Authorization"} // Hapus koma di sini)
 
 	// Serve file statis (img, pdf pengumuman, foto upload mahasiswa)
 	// Path relatif terhadap root project eksekusi
