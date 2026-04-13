@@ -210,7 +210,7 @@ class Administrator extends React.Component{
                 {/* Form Modal */}
                 <FormAdmin
                     onSubmit={this.submitAdmin}
-                    initialValues={this.props.singleAdmin}
+                    initialValues={{...this.props.singleAdmin, password: ""}}
                     toggleAdministrator={this.state.toggleAdministrator}
                     handleToggleAdministrator={this.toggleAdministrator}
                 />      

@@ -58,6 +58,19 @@ func WaliRoutes(r *gin.RouterGroup) {
 			data["kesanggupan_wali"] = k
 		}
 
+		data["tempat_lahir_wali"] = c.PostForm("tempat_lahir_wali")
+		data["pekerjaan_wali"] = c.PostForm("pekerjaan_wali")
+
+		// Parse Tanggal Lahir
+		if tglStr := c.PostForm("tanggal_lahir_wali"); tglStr != "" {
+			if tgl, err := time.Parse("2006-01-02", tglStr); err == nil {
+				data["tanggal_lahir_wali"] = &tgl
+				fmt.Printf("[DEBUG] Parsed tanggal_lahir_wali: %v\n", tgl)
+			} else {
+				fmt.Printf("[WARNING] FAILED to parse tanggal_lahir_wali: '%s'. Error: %v\n", tglStr, err)
+			}
+		}
+
 		// --- LOGIKA DINAMIS & EFISIENSI (CLEANUP) ---
 		var student models.CMahasiswa
 		config.DB.Where("no_peserta = ?", np).First(&student)
@@ -119,8 +132,13 @@ func WaliRoutes(r *gin.RouterGroup) {
 		data["pekerjaan_wali"] = c.PostForm("pekerjaan_wali")
 
 		// Parse Tanggal Lahir
-		if tgl, err := time.Parse("2006-01-02", c.PostForm("tanggal_lahir_wali")); err == nil {
-			data["tanggal_lahir_wali"] = &tgl
+		if tglStr := c.PostForm("tanggal_lahir_wali"); tglStr != "" {
+			if tgl, err := time.Parse("2006-01-02", tglStr); err == nil {
+				data["tanggal_lahir_wali"] = &tgl
+				fmt.Printf("[DEBUG] Admin Parsed tanggal_lahir_wali: %v\n", tgl)
+			} else {
+				fmt.Printf("[WARNING] Admin FAILED to parse tanggal_lahir_wali: '%s'. Error: %v\n", tglStr, err)
+			}
 		}
 
 		if k, err := strconv.Atoi(c.PostForm("kesanggupan_wali")); err == nil {

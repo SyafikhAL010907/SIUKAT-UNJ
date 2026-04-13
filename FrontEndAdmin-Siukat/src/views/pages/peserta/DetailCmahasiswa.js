@@ -11,7 +11,7 @@ class DetailCmahasiswa extends React.Component {
     this.state = { activeTab: '1' };
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.props.dispatch(user.getByLoggedIn(cookies.get(cookieName)))
     this.props.dispatch(cmahasiswa.getById(cookies.get(cookieName), this.props.match.params.no_peserta))
     this.props.dispatch(ukt.getById(cookies.get(cookieName), this.props.match.params.no_peserta))
@@ -25,11 +25,21 @@ class DetailCmahasiswa extends React.Component {
   }
 
   batalKlarifikasi = () => {
-    this.props.dispatch(cmahasiswa.flagBatalKlarifikasi(cookies.get(cookieName), this.props.match.params.no_peserta))
+    const token = cookies.get(cookieName);
+    const noPeserta = this.props.match.params.no_peserta;
+    this.props.dispatch(cmahasiswa.flagBatalKlarifikasi(token, noPeserta))
+      .then(() => {
+        this.props.dispatch(cmahasiswa.getById(token, noPeserta));
+      });
   }
 
   selesaiKlarifikasi = () => {
-    this.props.dispatch(cmahasiswa.flagSelesaiKlarifikasi(cookies.get(cookieName), this.props.match.params.no_peserta))
+    const token = cookies.get(cookieName);
+    const noPeserta = this.props.match.params.no_peserta;
+    this.props.dispatch(cmahasiswa.flagSelesaiKlarifikasi(token, noPeserta))
+      .then(() => {
+        this.props.dispatch(cmahasiswa.getById(token, noPeserta));
+      });
   }
 
   selesaiHitung = (e, atribut) => {
@@ -76,7 +86,7 @@ class DetailCmahasiswa extends React.Component {
               </div>
             </div>
 
-            {isSanggah && userRole !== 'validator' && (
+            {isSanggah && userRole !== 'validator' && this.props.cmahasiswa.flag === 'sanggah_ukt' && (
               <div className="flex space-x-3">
                 <button 
                   onClick={this.selesaiKlarifikasi}

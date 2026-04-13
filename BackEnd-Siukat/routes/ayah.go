@@ -99,7 +99,9 @@ func AyahRoutes(r *gin.RouterGroup) {
 				data["tanggal_lahir_ayah"] = &tgl
 				fmt.Printf("[DEBUG] Parsed tanggal_lahir_ayah: %v\n", tgl)
 			} else {
-				fmt.Printf("[DEBUG] FAILED to parse tanggal_lahir_ayah: '%s' (Error: %v)\n", c.PostForm("tanggal_lahir_ayah"), errTgl)
+				if c.PostForm("tanggal_lahir_ayah") != "" {
+					fmt.Printf("[WARNING] FAILED to parse tanggal_lahir_ayah: '%s' (Format mismatch, expected YYYY-MM-DD). Error: %v\n", c.PostForm("tanggal_lahir_ayah"), errTgl)
+				}
 			}
 
 			fmt.Printf("[DEBUG] Final Data Map to Save (Ayah): %+v\n", data)
@@ -208,6 +210,16 @@ func AyahRoutes(r *gin.RouterGroup) {
 
 			sam, _ := strconv.Atoi(c.PostForm("sampingan_ayah"))
 			data["sampingan_ayah"] = sam
+
+			// Parse Tanggal Lahir (Fix for Klarifikasi/Admin)
+			if tglStr := c.PostForm("tanggal_lahir_ayah"); tglStr != "" {
+				if tgl, err := time.Parse("2006-01-02", tglStr); err == nil {
+					data["tanggal_lahir_ayah"] = &tgl
+					fmt.Printf("[DEBUG] Admin Parsed tanggal_lahir_ayah: %v\n", tgl)
+				} else {
+					fmt.Printf("[WARNING] Admin FAILED to parse tanggal_lahir_ayah: '%s'. Error: %v\n", tglStr, err)
+				}
+			}
 
 			// --- LOGIKA DINAMIS & EFISIENSI (CLEANUP) - SANGGAH ---
 			var student models.CMahasiswa

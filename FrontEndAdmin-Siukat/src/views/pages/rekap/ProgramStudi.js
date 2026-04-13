@@ -116,8 +116,8 @@ const CustomStyles = () => (
         }
 
         .btn-modern {
-            padding: 12px 24px;
-            border-radius: 16px;
+            padding: 12px 28px;
+            border-radius: 9999px !important; /* Force Pill Shape */
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -131,6 +131,14 @@ const CustomStyles = () => (
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
 
+        /* Essential Targeting for Search Bar Lonjong */
+        .search-wrapper, 
+        .search-wrapper .input-group, 
+        .search-wrapper .input-group-text, 
+        .search-wrapper input {
+            border-radius: 9999px !important;
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -138,6 +146,31 @@ const CustomStyles = () => (
 
         .animate-up {
             animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .jalur-select {
+            min-width: 160px;
+            height: 48px; 
+            padding: 0 40px 0 20px;
+            background: white url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2310b981' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e") no-repeat right 1rem center/12px 12px;
+            border: 0;
+            border-radius: 9999px !important; /* Force Pill Shape */
+            font-weight: 800;
+            color: #064e3b;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            appearance: none;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); /* Subtle shadow for depth */
+        }
+        .jalur-select:hover {
+            transform: translateY(-2px);
+        }
+        .jalur-select:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
         }
     ` }} />
 );
@@ -223,9 +256,9 @@ class ProgramStudi extends React.Component {
                             </Col>
 
                             <Col lg="6" md="12">
-                                <Row className="justify-content-lg-end align-items-center">                                    <Col sm="12" md="auto" className="mb-3 mb-md-0">
-                                        <div className="search-wrapper shadow-2xl">
-                                            <InputGroup className="overflow-hidden border-0 bg-white rounded-2xl">
+                                <Row className="justify-content-lg-end align-items-center">                                    <Col sm="12" md="auto" className="mb-3 mb-md-0 d-flex gap-3 align-items-center">
+                                        <div className="search-wrapper shadow-2xl flex-grow-1 rounded-full">
+                                            <InputGroup className="overflow-hidden border-0 bg-white rounded-full">
                                                 <InputGroupAddon addonType="prepend">
                                                     <InputGroupText className="bg-transparent border-0 text-emerald-500 pl-4 pr-0">
                                                         <i className="fa fa-search"></i>
@@ -239,14 +272,24 @@ class ProgramStudi extends React.Component {
                                                 />
                                             </InputGroup>
                                         </div>
+
+                                        {/* Dropdown Jalur (Dummy) */}
+                                        <div className="shadow-2xl rounded-full">
+                                            <select 
+                                                className="jalur-select"
+                                                onChange={(e) => e.target.value !== "All" && this.toggleModal()}
+                                            >
+                                                <option value="All">All Jalur</option>
+                                                <option value="SNBP">SNBP</option>
+                                                <option value="SNBT">SNBT</option>
+                                                <option value="MANDIRI">MANDIRI</option>
+                                            </select>
+                                        </div>
                                     </Col>
 
                                     <Col sm="auto" className="d-flex gap-3 mt-3 mt-sm-0">
-                                        <Button color="white" className="btn-modern bg-white text-emerald-600 shadow-xl" onClick={this.handleExport}>
+                                        <Button color="white" className="btn-modern bg-white text-emerald-600 shadow-xl w-100 w-md-auto rounded-full" onClick={this.handleExport}>
                                             <i className="fa fa-file-excel-o mr-2"></i> Export CSV
-                                        </Button>
-                                        <Button color="yellow" className="btn-modern bg-yellow-400 text-emerald-950 shadow-xl" onClick={this.toggleModal}>
-                                            <i className="fa fa-plus-circle mr-2"></i> Tambah
                                         </Button>
                                     </Col>
                                 </Row>
@@ -330,13 +373,13 @@ class ProgramStudi extends React.Component {
     }
 }
 const FormModal = ({ onClose }) => (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-emerald-900/40 backdrop-blur-md animate-fadeIn">
+    <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-emerald-900/40 backdrop-blur-md animate-fadeIn">
         <div className="bg-white rounded-[40px] shadow-2xl w-full max-w-md overflow-hidden border border-emerald-100">
             {/* Modal Header */}
             <div className="bg-gradient-to-r from-emerald-600 to-teal-400 p-8 flex justify-between items-center text-white">
                 <div>
                     <h3 className="font-black uppercase tracking-widest text-base">Sistem Report</h3>
-                    <p className="text-[10px] opacity-80 mt-1 font-bold italic uppercase tracking-widest">Manajemen Data Program Studi</p>
+                    <p className="text-[10px] opacity-80 mt-1 font-bold italic uppercase tracking-widest">Analytics Dashboard</p>
                 </div>
                 <button onClick={onClose} className="hover:bg-white/20 p-2.5 rounded-2xl transition-all active:scale-90 bg-black/5">
                     <i className="fa fa-times text-xl"></i>
@@ -354,7 +397,7 @@ const FormModal = ({ onClose }) => (
                 <div className="space-y-2">
                     <h4 className="text-xl font-black text-emerald-900 uppercase italic">Under Development</h4>
                     <p className="text-sm text-emerald-700/60 font-medium leading-relaxed px-5">
-                        Fitur untuk menambah data program studi sedang dalam tahap integrasi database. Mohon tunggu update selanjutnya bro!
+                        Fitur filter jalur dan manajemen data prodi sedang dalam tahap integrasi database. Mohon tunggu update selanjutnya bro!
                     </p>
                 </div>
 

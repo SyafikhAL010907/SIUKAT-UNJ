@@ -666,7 +666,17 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 			}
 		}
 
-		// LOGIKA SINKRONISASI IDENTITAS & FOLDER (Request USER)
+		// 4. Parse Date Fields (PENTING: Agar GORM bisa simpan ke format DATE)
+		if tglStr, ok := filteredData["tanggal_lahir_cmahasiswa"].(string); ok && tglStr != "" {
+			if tgl, err := time.Parse("2006-01-02", tglStr); err == nil {
+				filteredData["tanggal_lahir_cmahasiswa"] = &tgl
+				fmt.Printf("[DEBUG] Parsed tanggal_lahir_cmahasiswa: %v\n", tgl)
+			} else {
+				fmt.Printf("[WARNING] FAILED to parse tanggal_lahir_cmahasiswa: '%s'. Error: %v\n", tglStr, err)
+			}
+		}
+
+		// 5. LOGIKA SINKRONISASI IDENTITAS & FOLDER (Request USER)
 		newName, okName := filteredData["nama_cmahasiswa"].(string)
 		if !okName { newName = student.NamaCmahasiswa }
 		
@@ -776,6 +786,9 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 		if tglStr, ok := filteredData["tanggal_lahir_cmahasiswa"].(string); ok && tglStr != "" {
 			if tgl, err := time.Parse("2006-01-02", tglStr); err == nil {
 				filteredData["tanggal_lahir_cmahasiswa"] = &tgl
+				fmt.Printf("[DEBUG] Admin Parsed tanggal_lahir_cmahasiswa: %v\n", tgl)
+			} else {
+				fmt.Printf("[WARNING] Admin FAILED to parse tanggal_lahir_cmahasiswa: '%s'. Error: %v\n", tglStr, err)
 			}
 		}
 
