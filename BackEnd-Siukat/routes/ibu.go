@@ -115,7 +115,9 @@ func IbuRoutes(r *gin.RouterGroup) {
 				data["tanggal_lahir_ibu"] = &tgl
 				fmt.Printf("[DEBUG] Parsed tanggal_lahir_ibu: %v\n", tgl)
 			} else {
-				fmt.Printf("[DEBUG] FAILED to parse tanggal_lahir_ibu: '%s' (Error: %v)\n", c.PostForm("tanggal_lahir_ibu"), errTgl)
+				if c.PostForm("tanggal_lahir_ibu") != "" {
+					fmt.Printf("[WARNING] FAILED to parse tanggal_lahir_ibu: '%s' (Format mismatch, expected YYYY-MM-DD). Error: %v\n", c.PostForm("tanggal_lahir_ibu"), errTgl)
+				}
 			}
 
 			data["provinsi_ibu"] = c.PostForm("provinsi_ibu")

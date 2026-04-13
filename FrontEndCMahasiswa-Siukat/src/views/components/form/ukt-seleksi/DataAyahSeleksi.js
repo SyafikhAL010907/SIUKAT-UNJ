@@ -430,7 +430,7 @@ class DataAyahSeleksi extends React.Component {
                 }
             } else {
                 let val = values[key];
-                if (val instanceof Date) {
+                if (val instanceof Date || moment.isMoment(val)) {
                     val = moment(val).format("YYYY-MM-DD");
                 }
                 // Ekstraksi value jika berupa object (sering terjadi pada field referensi/dropdown)

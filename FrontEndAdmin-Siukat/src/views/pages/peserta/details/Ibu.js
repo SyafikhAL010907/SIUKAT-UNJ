@@ -198,7 +198,7 @@ class Ibu extends React.Component{
         }
     }
 
-    componentWillMount(){
+    UNSAFE_componentWillMount(){
         this.fetchInitialData();
     }
 
@@ -236,7 +236,7 @@ class Ibu extends React.Component{
             else if (!key.startsWith("file_scan") && !key.startsWith("scan_")) {
                 let val = values[key];
                 
-                if (val instanceof Date) {
+                if (val instanceof Date || moment.isMoment(val)) {
                     val = moment(val).format("YYYY-MM-DD");
                 }
                 // Konversi eksplisit ke Integer untuk field yang di Go bertipe 'int'

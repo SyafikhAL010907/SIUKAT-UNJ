@@ -143,7 +143,7 @@ class VerifikasiSeleksi extends React.Component {
         };
     }
 
-    UNSAFE_componentWillMount() {
+    componentDidMount() {
         this.props.dispatch(cmahasiswa.getByLoggedIn(cookies.get(cookieName)));
         this.props.dispatch(pendukung.getByLoggedIn(cookies.get(cookieName)));
     }

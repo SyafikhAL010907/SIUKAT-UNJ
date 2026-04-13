@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import {
     Card,
     Button,
@@ -301,8 +302,11 @@ class DataWaliSeleksi extends React.Component {
                 }
             } else {
                 let val = values[key];
+                if (val instanceof Date || moment.isMoment(val)) {
+                    val = moment(val).format("YYYY-MM-DD");
+                }
                 // Ekstraksi value jika berupa object
-                if (val && typeof val === 'object' && !Array.isArray(val)) {
+                else if (val && typeof val === 'object' && !Array.isArray(val)) {
                     // Cek apakah ini Redux Form Field object
                     if (val.input || val.meta || (val.name && val.onChange)) {
                         val = "";

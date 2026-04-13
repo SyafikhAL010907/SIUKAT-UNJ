@@ -180,8 +180,17 @@ class Wali extends React.Component {
                     formData.append(key, values[key][0])
                 }
             } else if (values[key] !== null && values[key] !== undefined) {
-                // Jangan kirim objek ke form data, kirim ID nya saja jika itu relasi
-                formData.append(key, values[key])
+                let val = values[key];
+                
+                if (val instanceof Date || moment.isMoment(val)) {
+                    val = moment(val).format("YYYY-MM-DD");
+                }
+                // Ekstraksi value jika berupa object
+                else if (val && typeof val === 'object' && !Array.isArray(val)) {
+                    val = val.kode || val.id || val.provinsi_id || val.kab_id || val.kecam_id || val;
+                }
+                
+                formData.append(key, val)
             }
         });
 
