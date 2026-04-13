@@ -183,7 +183,7 @@ class Pendukung extends React.Component {
                         </div>
                         <h4 className="text-lg font-bold text-gray-800 tracking-tight italic uppercase">Berkas Pendukung</h4>
                     </div>
-                    {isModeSanggah && (
+                    {this.props.editable && (
                         <button
                             onClick={this.modalToggle}
                             className="bg-amber-600 text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-amber-700 transition-all shadow-md"

@@ -184,6 +184,20 @@ func IbuRoutes(r *gin.RouterGroup) {
 				data["pekerjaan_ibu"] = pkj
 			}
 			data["tempat_lahir_ibu"] = c.PostForm("tempat_lahir_ibu")
+			if tgl, errTgl := time.Parse("2006-01-02", c.PostForm("tanggal_lahir_ibu")); errTgl == nil {
+				data["tanggal_lahir_ibu"] = &tgl
+			}
+
+			data["provinsi_ibu"] = c.PostForm("provinsi_ibu")
+			data["kabkot_ibu"] = c.PostForm("kabkot_ibu")
+			data["kecamatan_ibu"] = c.PostForm("kecamatan_ibu")
+
+			if pen, errPen := strconv.Atoi(c.PostForm("penghasilan_ibu")); errPen == nil {
+				data["penghasilan_ibu"] = pen
+			}
+			if sam, errSam := strconv.Atoi(c.PostForm("sampingan_ibu")); errSam == nil {
+				data["sampingan_ibu"] = sam
+			}
 
 			// --- LOGIKA DINAMIS & EFISIENSI (CLEANUP) - SANGGAH ---
 			var student models.CMahasiswa

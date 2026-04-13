@@ -76,19 +76,20 @@ class CalonMahasiswa extends React.Component {
                 </div>
 
                 {/* Main Card Container */}
-                <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+                <div className="modern-card bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
                     
                     {/* Header: Judul & Actions */}
-                    <div className="p-6 border-b border-gray-50 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                        <div className="flex items-center space-x-3">
-                            <div className="w-1.5 h-8 bg-emerald-600 rounded-full"></div>
+                    <div className="glass-header p-6 border-b border-gray-50 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                        <div className="flex items-center space-x-4">
+                            <div className="w-2 h-10 bg-gradient-to-b from-emerald-600 to-teal-400 rounded-full shadow-lg shadow-emerald-200"></div>
                             <div>
-                                <h2 className="text-xl font-bold text-gray-800">Data Master</h2>
-                                <p className="text-xs text-gray-400 font-medium tracking-wide">CALON MAHASISWA BARU</p>
+                                <h2 className="text-2xl font-black text-slate-800 tracking-tight">Data Master</h2>
+                                <p className="text-[10px] text-emerald-600 font-black uppercase tracking-[0.2em] opacity-70">CALON MAHASISWA BARU</p>
                             </div>
                         </div>
 
                        <div className="flex flex-wrap items-center gap-2">
+                        {/* Tombol PDF Master - Restored to original UI state */}
                         {/* Tombol PDF Master - Restored to original UI state */}
                         <button 
                             onClick={() => {
@@ -97,7 +98,7 @@ class CalonMahasiswa extends React.Component {
                                 const url = (service.startsWith('http') ? service : window.location.origin + service) + '/pdf/master?token=' + token;
                                 window.open(url);
                             }}
-                            className="flex items-center space-x-2 px-4 py-2 bg-white text-red-600 hover:bg-red-50 border border-red-200 rounded-xl text-sm font-bold transition-all shadow-sm active:scale-95"
+                            className="btn-pdf-modern"
                         >
                             <i className="fa fa-file-pdf-o"></i>
                             <span>PDF Master</span>

@@ -772,6 +772,13 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 			}
 		}
 
+		// 3.5 Parse Date Fields (PENTING: Biar GORM bisa simpan ke format DATE)
+		if tglStr, ok := filteredData["tanggal_lahir_cmahasiswa"].(string); ok && tglStr != "" {
+			if tgl, err := time.Parse("2006-01-02", tglStr); err == nil {
+				filteredData["tanggal_lahir_cmahasiswa"] = &tgl
+			}
+		}
+
 		// 4. Identity & Folder Synchronization (If Identity Changed)
 		newName, okName := filteredData["nama_cmahasiswa"].(string)
 		if !okName { newName = student.NamaCmahasiswa }

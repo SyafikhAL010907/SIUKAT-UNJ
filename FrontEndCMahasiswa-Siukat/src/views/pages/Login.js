@@ -208,7 +208,7 @@ class Login extends Component {
                                 <span className="badge badge-pill badge-light px-3 py-2 mb-3 shadow-sm border text-uppercase font-weight-bold" style={{ letterSpacing: '1px', fontSize: '10px' }}>
                                     {this.state.validationInfo ? this.getStageName(this.state.validationInfo.kode) : '...'}
                                 </span>
-                                
+
                                 <h4 className="font-weight-bold mb-3">
                                     Akses Pengisian Belum Tersedia
                                 </h4>
@@ -221,8 +221,8 @@ class Login extends Component {
                                     <div className="ml-4 small text-muted">
                                         {this.state.validationInfo ? (
                                             <>
-                                                {moment(this.state.validationInfo.tanggal_mulai).format('DD MMMM YYYY')} 
-                                                <span className="mx-2">s/d</span> 
+                                                {moment(this.state.validationInfo.tanggal_mulai).format('DD MMMM YYYY')}
+                                                <span className="mx-2">s/d</span>
                                                 {moment(this.state.validationInfo.tanggal_selesai).format('DD MMMM YYYY')}
                                             </>
                                         ) : 'Sedang memuat...'}
@@ -264,7 +264,7 @@ class Login extends Component {
                                     alt="logo unj"
                                 />
                                 <div>
-                                    <h1 className="h3 font-weight-bold text-dark mb-1" style={{letterSpacing: '-1px'}}>
+                                    <h1 className="h3 font-weight-bold text-dark mb-1" style={{ letterSpacing: '-1px' }}>
                                         Sistem Informasi Uang Kuliah Tunggal
                                     </h1>
                                     <div className="d-flex align-items-center mt-2">
@@ -313,8 +313,8 @@ class Login extends Component {
                                         <div className="rounded-xl overflow-hidden shadow-sm" style={{ background: '#fff1f2', borderLeft: '5px solid #ef4444' }}>
                                             <div className="p-4">
                                                 <div className="d-flex align-items-center mb-2">
-                                                    <div className="bg-danger rounded-circle mr-2 d-flex align-items-center justify-content-center shadow-sm" style={{width: '24px', height: '24px'}}>
-                                                        <i className="fa fa-exclamation text-white" style={{fontSize: '12px'}}></i>
+                                                    <div className="bg-danger rounded-circle mr-2 d-flex align-items-center justify-content-center shadow-sm" style={{ width: '24px', height: '24px' }}>
+                                                        <i className="fa fa-exclamation text-white" style={{ fontSize: '12px' }}></i>
                                                     </div>
                                                     <h6 className="mb-0 font-weight-bold text-danger">Perhatian!</h6>
                                                 </div>
@@ -332,7 +332,7 @@ class Login extends Component {
 
                             <hr className="my-5" />
                             <div className="text-center text-muted small">
-                                Siukat Front © 2017 - {new Date().getFullYear()} Pustikom UNJ. All Rights Reserved.
+                                Siukat FullStack © 2026 - {new Date().getFullYear()} Universitas Negeri Jakarta. All Rights Reserved.
                             </div>
                         </div>
                     </Col>
@@ -393,19 +393,19 @@ class Login extends Component {
                                     </div>
                                 </div>
                             </div> */}
-                            
+
                             <h3 className="text-center mb-4 font-weight-bold text-white">Silakan Masuk</h3>
-                             <div className="login-form-wrapper">
-                                <FormLogin 
-                                    open_login={this.state.open_login} 
-                                    stage={stage_detail} 
-                                    history={this.props.history} 
+                            <div className="login-form-wrapper">
+                                <FormLogin
+                                    open_login={this.state.open_login}
+                                    stage={stage_detail}
+                                    history={this.props.history}
                                     onLoginAttempt={this.handleLoginAttempt}
                                 />
                             </div>
-                            
+
                             <div className="mt-auto pt-5 text-center" style={{ opacity: 0.6, fontSize: '0.8rem', color: '#fff' }}>
-                                Siukat Front © 2017 - {new Date().getFullYear()} Pustikom UNJ.<br/>All Rights Reserved.
+                                Siukat Front © 2017 - {new Date().getFullYear()} Pustikom UNJ.<br />All Rights Reserved.
                             </div>
                         </div>
                     </Col>

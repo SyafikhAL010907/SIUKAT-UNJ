@@ -49,8 +49,13 @@ class DetailCmahasiswa extends React.Component {
   render() {
     const { activeTab } = this.state;
     // Safety Check: Jika data cmahasiswa belom ada, jangan paksa render atribut
-    const isSanggah = this.props.cmahasiswa && this.props.cmahasiswa.atribut === "sanggah" && this.props.cmahasiswa.flag === "sanggah_ukt";
+    // Prioritaskan state dari router (dari klik tombol Sanggah), fallback ke atribut DB
+    const isSanggah = this.props.location.state?.isSanggah || (this.props.cmahasiswa && this.props.cmahasiswa.atribut === "sanggah");
     const fetchAtribut = isSanggah ? "sanggah" : "original";
+    
+    // Protokol RBAC: Validator murni Read-Only. Developer & Operator bisa edit.
+    const userRole = this.props.user?.role;
+    const canEdit = (isSanggah || userRole === 'admin' || userRole === 'operator' || userRole === 'developer') && userRole !== 'validator';
 
     return (
       <div className="space-y-6">
@@ -71,7 +76,7 @@ class DetailCmahasiswa extends React.Component {
               </div>
             </div>
 
-            {isSanggah && (
+            {isSanggah && userRole !== 'validator' && (
               <div className="flex space-x-3">
                 <button 
                   onClick={this.selesaiKlarifikasi}
@@ -120,47 +125,36 @@ class DetailCmahasiswa extends React.Component {
         <div className="bg-white rounded-2xl border border-gray-100 p-6 min-h-[400px]">
           {activeTab === '1' && (
             <div className="animate-fadeIn">
-              <Pribadi 
-                noPeserta={this.props.match.params.no_peserta}
-                editable={isSanggah || (this.props.user && this.props.user.role === "admin")}
-              />
+              <Pribadi noPeserta={this.props.match.params.no_peserta} editable={canEdit} atribut={fetchAtribut} />
             </div>
           )}
 
           {activeTab === '2' && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-fadeIn">
-              <Ayah noPeserta={this.props.match.params.no_peserta} editable={isSanggah} atribut={fetchAtribut} />
-              <Ibu noPeserta={this.props.match.params.no_peserta} editable={isSanggah || (this.props.user && this.props.user.role === "admin")} atribut={fetchAtribut} />
+              <Ayah noPeserta={this.props.match.params.no_peserta} editable={canEdit} atribut={fetchAtribut} />
+              <Ibu noPeserta={this.props.match.params.no_peserta} editable={canEdit} atribut={fetchAtribut} />
               <div className="lg:col-span-2 pt-6 border-t border-dashed">
-                <Wali noPeserta={this.props.match.params.no_peserta} editable={isSanggah || (this.props.user && this.props.user.role === "admin")} atribut={fetchAtribut} />
+                <Wali noPeserta={this.props.match.params.no_peserta} editable={canEdit} atribut={fetchAtribut} />
               </div>
             </div>
           )}
 
           {activeTab === '3' && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-fadeIn">
-              <Rumah noPeserta={this.props.match.params.no_peserta} editable={isSanggah} atribut={fetchAtribut} />
-              <Listrik noPeserta={this.props.match.params.no_peserta} editable={isSanggah} atribut={fetchAtribut} />
+              <Rumah noPeserta={this.props.match.params.no_peserta} editable={canEdit} atribut={fetchAtribut} />
+              <Listrik noPeserta={this.props.match.params.no_peserta} editable={canEdit} atribut={fetchAtribut} />
             </div>
           )}
 
           {activeTab === '4' && (
             <div className="animate-fadeIn">
-              <Kendaraan 
-                noPeserta={this.props.match.params.no_peserta} 
-                editable={isSanggah} 
-                atribut={fetchAtribut}
-              />
+              <Kendaraan noPeserta={this.props.match.params.no_peserta} editable={canEdit} atribut={fetchAtribut} />
             </div>
           )}
 
           {activeTab === '5' && (
             <div className="animate-fadeIn">
-              <Pendukung 
-                noPeserta={this.props.match.params.no_peserta} 
-                editable={isSanggah} 
-                atribut={fetchAtribut}
-              />
+              <Pendukung noPeserta={this.props.match.params.no_peserta} editable={canEdit} atribut={fetchAtribut} />
             </div>
           )}
 

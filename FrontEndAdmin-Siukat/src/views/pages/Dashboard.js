@@ -3,6 +3,7 @@ import { SummaryCmahasiswa, DashboardChartMetadata } from '../components';
 import { dashboard } from "../../actions"
 import { connect } from 'react-redux'
 import { cookies, cookieName } from "../../global"
+import { isAllowed } from '../../utils/rbac';
 // Import sudah benar
 import ButtonInject from '../../views/components/ButtonInject';
 
@@ -56,8 +57,8 @@ class Dashboards extends React.Component {
                             
                             {/* Area Aksi: Ditambahkan ButtonInject di sini */}
                             <div className="flex items-center space-x-4">
-                                {/* Tombol Inject Data */}
-                                <ButtonInject />
+                                {/* Tombol Inject Data - Hanya untuk Developer */}
+                                { isAllowed(this.props.user?.role, 'INJECT_DATA') && <ButtonInject /> }
 
                                 <div className="h-8 w-[1px] bg-gray-200 hidden md:block"></div>
 
@@ -99,6 +100,7 @@ class Dashboards extends React.Component {
 }
 
 export default connect((store) => ({
+    user: store.user.user,
     fields: store.dashboarddata.fields,
     startDates: store.dashboarddata.startDates,
     endDates: store.dashboarddata.endDates
