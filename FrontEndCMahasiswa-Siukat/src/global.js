@@ -43,7 +43,15 @@ const cookies = new Proxy(_cookies, {
     }
 });
 
-const service = getEnv('REACT_APP_API_URL', 'http://10.255.1.149:8080/api/v1/');
+let apiBase = getEnv('REACT_APP_API_URL', 'http://10.255.1.149:8080/api/v1/');
+
+// Smart Switch: Jika dibuka via localhost, otomatis arahkan API ke localhost juga
+if (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
+    if (apiBase.includes('10.255.1.149')) {
+        apiBase = apiBase.replace('10.255.1.149', 'localhost');
+    }
+}
+const service = apiBase;
 
 // const service = 'http://192.168.4.174:3001'
 const storage = service;
