@@ -426,13 +426,14 @@ func (s *CMahasiswaService) Datatable(page, perPage int, keyword string) (map[st
 	var mhs []models.CMahasiswa
 	var count int64
 
-	// Smart Prioritas: Jika ada Sanggah, tampilkan Sanggah. Jika tidak ada Sanggah, tampilkan Original.
-	// Ini mencegah munculnya double data untuk mahasiswa yang sama di list Admin.
+	// Smart Prioritas (v2 - Metode JOIN): Memberi prioritas Sanggah > Original.
+	// Kita join tabel ini ke dirinya sendiri (t2) untuk mendeteksi apakah baris original punya pasangan baris sanggah.
 	query := db.Model(&models.CMahasiswa{}).Preload("Fakultas").Preload("Prodi").
-		Where("atribut = 'sanggah' OR (atribut = 'original' AND NOT EXISTS (SELECT 1 FROM tb_cmahasiswa t2 WHERE t2.no_peserta = tb_cmahasiswa.no_peserta AND t2.atribut = 'sanggah'))")
+		Joins("LEFT JOIN tb_cmahasiswa AS t2 ON tb_cmahasiswa.no_peserta = t2.no_peserta AND t2.atribut = 'sanggah'").
+		Where("tb_cmahasiswa.atribut = 'sanggah' OR (tb_cmahasiswa.atribut = 'original' AND t2.id_cmahasiswa IS NULL)")
 	
 	if keyword != "" {
-		query = query.Where("(no_peserta LIKE ? OR nama_cmahasiswa LIKE ?)", "%"+keyword+"%", "%"+keyword+"%")
+		query = query.Where("(tb_cmahasiswa.no_peserta LIKE ? OR tb_cmahasiswa.nama_cmahasiswa LIKE ?)", "%"+keyword+"%", "%"+keyword+"%")
 	}
 
 	if err := query.Count(&count).Error; err != nil {
