@@ -43,7 +43,7 @@ const cookies = new Proxy(_cookies, {
     }
 });
 
-const service = getEnv('REACT_APP_API_URL', 'http://localhost:8080/api/v1');
+const service = getEnv('REACT_APP_API_URL', 'http://10.255.1.149:8080/api/v1/');
 
 // const service = 'http://192.168.4.174:3001'
 const storage = service;
