@@ -194,7 +194,7 @@ class Dashboards extends React.Component {
         // Real-time Update: Polling data grafik/chart setiap 30 detik
         this.pollingDashboard = setInterval(() => {
             this.props.dispatch(dashboard.fetchData(cookies.get(cookieName)));
-        }, 30000);
+        }, 60000);
     }
 
     componentWillUnmount() {

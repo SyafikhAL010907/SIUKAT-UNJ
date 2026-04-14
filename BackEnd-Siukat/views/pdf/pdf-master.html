@@ -285,7 +285,7 @@
                     <th>Program Studi</th>
                     <th>Kelompok UKT</th>
                     <th>Nominal UKT</th>
-                    <th>No. Registrasi</th>
+                    <th>Tagihan UKT</th>
                     <th>Status</th>
                     <th>UKT Tinggi</th>
                 </tr>
@@ -306,20 +306,28 @@
                     <td>{{ if $row.Fakultas }}{{ $row.Fakultas.Nama }}{{ else }}-{{ end }}</td>
                     <td>{{ if $row.Prodi }}{{ $row.Prodi.Nama }}{{ else }}-{{ end }}</td>
                     <td class="text-center">
-                        {{ if $row.GolonganID }}
+                        {{ if eq $row.Atribut "sanggah" }}
+                        <!-- Jika data ini adalah hasil Sanggah -->
+                        <span class="badge badge-yellow" style="font-size: 8px;">Sanggah: {{ $row.GolonganID }}</span>
+                        {{ else if $row.GolonganID }}
+                        <!-- Jika data ini masih Original -->
                         <span class="badge badge-green">{{ $row.GolonganID }}</span>
                         {{ else }}
                         <span class="badge badge-gray">-</span>
                         {{ end }}
                     </td>
+
                     <td class="text-right">
                         {{ if $row.Ukt }}
-                        Rp {{ formatRupiah $row.Ukt.Nominal }}
+                        <!-- Nominal ini sudah dihitung di BackEnd (Go) tadi -->
+                        <b>Rp {{ formatRupiah $row.Ukt.Nominal }}</b>
                         {{ else }}
                         -
                         {{ end }}
                     </td>
-                    <td class="text-center">{{ if $row.NoRegistrasi }}{{ $row.NoRegistrasi }}{{ else }}-{{ end }}</td>
+
+
+                    <td class="text-center"><b>{{ $row.NoPeserta }}</b></td>
                     <td class="text-center">
                         {{ if eq $row.Flag "terima_ukt" }}
                         <span class="badge badge-green">Terima</span>

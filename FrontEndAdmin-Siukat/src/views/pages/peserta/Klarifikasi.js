@@ -37,7 +37,7 @@ class Klarifikasi extends React.Component{
                     keyword: ""
                 }))
             }
-        }, 15000);
+        }, 60000);
     }
 
     componentWillUnmount(){

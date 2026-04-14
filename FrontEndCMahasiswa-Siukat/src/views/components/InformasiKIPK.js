@@ -16,7 +16,7 @@ class InformasiKIPK extends React.Component {
                         <Col md={2} xs={12}><h2 className="margin-top-10"><i className={this.props.icon}></i></h2></Col>
                     </Row>
                     <Row className="margin-top-10">
-                        <Col md={12} xs={12}><a className="btn btn-primary" href="/dokumenKIPK.pdf" target="_blank" rel="noopener noreferrer"><i className="fa fa-file"></i> Dokumen KIPK</a></Col>
+                        <Col md={12} xs={12}><a className="btn btn-primary" href="/VerKIPK.pdf" target="_blank" rel="noopener noreferrer"><i className="fa fa-file"></i> Download Dokumen KIPK</a></Col>
                     </Row>
                 </Card>
                 <hr />

@@ -4,6 +4,7 @@ import (
 	"BackEnd-Siukat/config"
 	"BackEnd-Siukat/middlewares"
 	"BackEnd-Siukat/models"
+	"BackEnd-Siukat/services"
 	"fmt"
 	"net/http"
 	"time"
@@ -207,13 +208,34 @@ func PdfRoutes(r *gin.RouterGroup) {
 	})
 
 	authGroup.GET("/master", func(c *gin.Context) {
-		var mhsList []models.CMahasiswa
-		// Ambil semua data mahasiswa dengan relasi Fakultas, Prodi, dan UKT
-		config.DB.Preload("Fakultas").Preload("Prodi").Preload("Ukt").Find(&mhsList)
+    var mhsList []models.CMahasiswa
+    cmahasiswaService := services.CMahasiswaService{}
 
-		data := gin.H{
-			"cmahasiswa": mhsList,
-		}
-		c.HTML(http.StatusOK, "pdf-master.html", data)
-	})
+    // 1. QUERY ANTI-DOUBLE (Smart Prioritas)
+    config.DB.Model(&models.CMahasiswa{}).
+        Select("tb_cmahasiswa.*"). // Pastikan ambil kolom utama
+        Preload("Fakultas").Preload("Prodi").
+        Joins("LEFT JOIN tb_cmahasiswa AS t2 ON tb_cmahasiswa.no_peserta = t2.no_peserta AND t2.atribut = 'sanggah'").
+        Where("tb_cmahasiswa.atribut = 'sanggah' OR (tb_cmahasiswa.atribut = 'original' AND t2.id_cmahasiswa IS NULL)").
+        Order("tb_cmahasiswa.no_peserta ASC").
+        Find(&mhsList)
+
+    // 2. LOOP DUIT: Fix Nominal agar tidak 0
+    for i := range mhsList {
+        var uktMaster models.Ukt
+        // Gunakan WHERE yang lebih fleksibel buat Jalur (Entrance)
+        if err := config.DB.Where("major_id = ? AND CAST(entrance AS CHAR) = ?", mhsList[i].ProdiCmahasiswa, mhsList[i].JalurCmahasiswa).First(&uktMaster).Error; err == nil {
+            mhsList[i].Ukt = &uktMaster
+            // Hitung nominal pake helper service
+            mhsList[i].Ukt.Nominal = cmahasiswaService.CalculateNominalValue(uktMaster, mhsList[i].GolonganID)
+        }
+    }
+
+    data := gin.H{
+        "now":        time.Now().Format("02 January 2006, 15:04 WIB"),
+        "cmahasiswa": mhsList,
+    }
+    c.HTML(http.StatusOK, "pdf-master.html", data)
+})
+
 }

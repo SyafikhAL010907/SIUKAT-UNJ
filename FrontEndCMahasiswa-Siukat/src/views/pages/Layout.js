@@ -33,7 +33,7 @@ class Layout extends React.Component {
             // Real-time Update: Polling setiap 15 detik agar status mahasiswa selalu sinkron
             this.pollingStudent = setInterval(() => {
                 this.props.dispatch(cmahasiswa.getByLoggedIn(token));
-            }, 15000);
+            }, 60000);
         }
     }
 

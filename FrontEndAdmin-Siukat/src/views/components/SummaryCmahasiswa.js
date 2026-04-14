@@ -11,7 +11,7 @@ class SummaryCmahasiswa extends React.Component {
         // Real-time Update: Polling setiap 10 detik agar data dashboard selalu segar
         this.pollingStats = setInterval(() => {
             this.props.dispatch(cmahasiswa.flagCount(cookies.get(cookieName)));
-        }, 10000); 
+        }, 60000); 
     }
 
     componentWillUnmount() {

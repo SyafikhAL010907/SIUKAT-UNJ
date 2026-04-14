@@ -83,21 +83,26 @@ class DataDiri extends React.Component {
                         </tbody>
                     </Table>
                 </Col>
-                {safeInfo.stage === 'snbp' && (
+                                {/* LOGIC JALUR 1: SNBP / SNMPTN */}
+                {(cmahasiswa.jalur_cmahasiswa == 1) && (
                     <Col md={12} xs={12}>
-                        <h3>Hasil Verifikasi</h3>
-                        <Table responsive striped bordered>
+                        <h3 className="mt-4">Hasil Verifikasi</h3>
+                        <Table responsive striped bordered className="modern-table">
                             <tbody>
                                 <tr>
-                                    <td>Verifikasi Akademik</td>
-                                    <td>{safeVerifikasi.result_akademik || '-'}</td>
+                                    <td style={{ width: '40%' }}>Verifikasi Akademik</td>
+                                    <td>
+                                        <span className={`badge ${safeVerifikasi.result_akademik === 'lolos' ? 'badge-success' : 'badge-warning'}`}>
+                                            {safeVerifikasi.result_akademik || '-'}
+                                        </span>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>Status KIPK</td>
                                     <td>
-                                        {!safeVerifikasi.result_kipk
-                                            ? 'Tidak'
-                                            : safeVerifikasi.result_kipk}
+                                        <span className={`badge ${safeVerifikasi.result_kipk === 'lolos' ? 'badge-success' : 'badge-danger'}`}>
+                                            {!safeVerifikasi.result_kipk ? 'Tidak' : safeVerifikasi.result_kipk}
+                                        </span>
                                     </td>
                                 </tr>
                             </tbody>
@@ -113,22 +118,22 @@ class DataDiri extends React.Component {
                         )}
                     </Col>
                 )}
-                {safeInfo.stage_detail === 'sbmptn' && (
+
+                {/* LOGIC JALUR 2: SNBT / SBMPTN */}
+                {(cmahasiswa.jalur_cmahasiswa == 2) && (
                     <Col md={12} xs={12}>
-                        {!(
-                            safeVerifikasi.result_kipk === 'tidak_lolos' ||
-                            !safeVerifikasi.result_kipk
-                        ) && (
-                                <InformasiKIPK
-                                    cardStyles="text-center"
-                                    content="Informasi Peserta KIPK"
-                                    color="warning"
-                                    icon="fa fa-info-circle"
-                                    message="Semua Peserta KIPK Wajib Mengunduh File di bawah ini!!"
-                                />
-                            )}
+                        {!(safeVerifikasi.result_kipk === 'tidak_lolos' || !safeVerifikasi.result_kipk) && (
+                            <InformasiKIPK
+                                cardStyles="text-center"
+                                content="Informasi Peserta KIPK"
+                                color="warning"
+                                icon="fa fa-info-circle"
+                                message="Semua Peserta KIPK Wajib Mengunduh File di bawah ini!!"
+                            />
+                        )}
                     </Col>
                 )}
+
             </Row>
         );
     }
