@@ -387,7 +387,7 @@ class DataRumahSeleksi extends React.Component {
             }
         }
         this.props.dispatch(rumah.updateData(cookies.get(cookieName), formData)).then(() => {
-            this.props.dispatch(reset('DataRumahSeleksi'));
+            // this.props.dispatch(reset('DataRumahSeleksi'));
             if (this.props.updateVerifikasi) {
                 this.props.updateVerifikasi();
             }

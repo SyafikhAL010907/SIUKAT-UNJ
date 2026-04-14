@@ -165,6 +165,40 @@ class Wali extends React.Component {
         this.state = { modalToggle: false }
     }
 
+    componentDidMount() {
+        const token = cookies.get(cookieName);
+        const { noPeserta, atribut } = this.props;
+        
+        // 1. Ambil data referensi provinsi
+        this.props.dispatch(provinsi.fetchProvinsi());
+        
+        // 2. Ambil data wali utama
+        if (noPeserta) {
+            this.props.dispatch(wali.fetchAllData(token, noPeserta, atribut));
+        }
+    }
+
+    componentDidUpdate(prevProps) {
+        // Jika data wali baru saja di-load, ambil data referensi kabkot & kecamatan
+        if (this.props.wali && prevProps.wali !== this.props.wali) {
+            const token = cookies.get(cookieName);
+            const data = this.props.wali;
+            
+            if (data.provinsi_wali) {
+                this.props.dispatch(kabkot.fetchForWali(data.provinsi_wali));
+            }
+            if (data.kabkot_wali) {
+                this.props.dispatch(kecamatan.fetchForWali(data.kabkot_wali));
+            }
+        }
+
+        // Jika atribut atau noPeserta berubah (misal pindah tab/peserta), fetch ulang
+        if (prevProps.noPeserta !== this.props.noPeserta || prevProps.atribut !== this.props.atribut) {
+            const token = cookies.get(cookieName);
+            this.props.dispatch(wali.fetchAllData(token, this.props.noPeserta, this.props.atribut));
+        }
+    }
+
     modalToggle = () => {
         this.setState({ modalToggle: !this.state.modalToggle })
     }
@@ -203,7 +237,6 @@ class Wali extends React.Component {
             
             // 3. Close Modal & Alert
             this.modalToggle();
-            alert("Data Wali berhasil disimpan!");
             
             // 4. Reset Field File (Manual DOM reset untuk input file)
             const fileInput = document.getElementById('file_scan_wali');
@@ -211,7 +244,6 @@ class Wali extends React.Component {
 
         } catch (err) {
             console.error("Gagal menyimpan data wali:", err);
-            alert("Terjadi kesalahan saat menyimpan data.");
         }
     }
 

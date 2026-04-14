@@ -160,7 +160,7 @@ class VerifikasiSeleksi extends React.Component {
             }
         }
         this.props.dispatch(pendukung.updateData(cookies.get(cookieName), formData));
-        this.props.dispatch(reset('DataSuratKebenaran'));
+        // this.props.dispatch(reset('DataSuratKebenaran'));
         this.props.updateVerifikasi();
     }
 

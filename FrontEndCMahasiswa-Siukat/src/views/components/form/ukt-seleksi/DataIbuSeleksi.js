@@ -448,7 +448,7 @@ class DataIbuSeleksi extends React.Component {
             }
         }
         this.props.dispatch(ibu.updateData(cookies.get(cookieName), formData)).then(() => {
-            this.props.dispatch(reset('DataIbuSeleksi'));
+            // this.props.dispatch(reset('DataIbuSeleksi'));
             if (this.props.updateVerifikasi) {
                 this.props.updateVerifikasi();
             }

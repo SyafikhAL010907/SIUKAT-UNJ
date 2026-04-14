@@ -451,7 +451,7 @@ class DataAyahSeleksi extends React.Component {
         }
 
         this.props.dispatch(ayah.updateData(cookies.get(cookieName), formData)).then(() => {
-            this.props.dispatch(reset('DataAyahSeleksi'));
+            // this.props.dispatch(reset('DataAyahSeleksi'));
             if (this.props.updateVerifikasi) {
                 this.props.updateVerifikasi();
             }

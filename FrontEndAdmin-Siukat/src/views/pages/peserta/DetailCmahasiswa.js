@@ -3,59 +3,89 @@ import classnames from 'classnames';
 import { connect } from 'react-redux'
 import { cmahasiswa, ukt, user, hitung } from '../../../actions'
 import { Ayah, Ibu, Kendaraan, Listrik, Pendukung, Pribadi, Rumah, Wali } from './details'
-import { cookies, cookieName, rupiah } from '../../../global'
-
+import { cookies, cookieName, rupiah, swal } from '../../../global' // Tambahkan swal di sini
 class DetailCmahasiswa extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { activeTab: '1' };
+    this.state = { 
+        activeTab: '1',
+        isSudahHitung: false // Penanda apakah admin sudah melakukan hitung ulang
+    };
   }
-
   UNSAFE_componentWillMount() {
     this.props.dispatch(user.getByLoggedIn(cookies.get(cookieName)))
     this.props.dispatch(cmahasiswa.getById(cookies.get(cookieName), this.props.match.params.no_peserta))
     this.props.dispatch(ukt.getById(cookies.get(cookieName), this.props.match.params.no_peserta))
     this.props.dispatch(hitung.flagHitung(cookies.get(cookieName), this.props.match.params.no_peserta))
   }
-
   toggle(tab) {
     if (this.state.activeTab !== tab) {
       this.setState({ activeTab: tab });
     }
   }
-
   batalKlarifikasi = () => {
     const token = cookies.get(cookieName);
     const noPeserta = this.props.match.params.no_peserta;
-    this.props.dispatch(cmahasiswa.flagBatalKlarifikasi(token, noPeserta))
-      .then(() => {
-        this.props.dispatch(cmahasiswa.getById(token, noPeserta));
-      });
+    
+    swal({
+        title: "Batalkan Klarifikasi?",
+        text: "Status mahasiswa akan dikembalikan ke antrian awal.",
+        icon: "warning",
+        buttons: ["Tutup", "Ya, Batalkan"],
+        dangerMode: true,
+    }).then((willDelete) => {
+        if (willDelete) {
+            this.props.dispatch(cmahasiswa.flagBatalKlarifikasi(token, noPeserta))
+              .then(() => {
+                this.props.dispatch(cmahasiswa.getById(token, noPeserta));
+                swal("Berhasil!", "Klarifikasi telah dibatalkan.", "success");
+              });
+        }
+    });
   }
-
   selesaiKlarifikasi = () => {
+    // VERIFIKASI: Cek apakah Admin sudah menekan tombol Menghitung Ulang
+    if (!this.state.isSudahHitung) {
+      swal({
+        title: "Perhatian!",
+        text: "Anda wajib menekan tombol 'Menghitung Ulang' terlebih dahulu pada tab Simulasi Hitung untuk memastikan perubahan data sudah benar dan nominal UKT diperbarui.",
+        icon: "warning",
+        dangerMode: true,
+      });
+      return;
+    }
     const token = cookies.get(cookieName);
     const noPeserta = this.props.match.params.no_peserta;
-    this.props.dispatch(cmahasiswa.flagSelesaiKlarifikasi(token, noPeserta))
-      .then(() => {
-        this.props.dispatch(cmahasiswa.getById(token, noPeserta));
-      });
+    swal({
+        title: "Selesaikan Klarifikasi?",
+        text: "Pastikan seluruh data sudah benar. Setelah selesai, data akan dikunci.",
+        icon: "info",
+        buttons: ["Kembali", "Ya, Selesai"],
+    }).then((willConfirm) => {
+        if (willConfirm) {
+            this.props.dispatch(cmahasiswa.flagSelesaiKlarifikasi(token, noPeserta))
+              .then(() => {
+                this.props.dispatch(cmahasiswa.getById(token, noPeserta));
+                swal("Berhasil!", "Proses klarifikasi selesai.", "success");
+              });
+        }
+    });
   }
-
   selesaiHitung = (e, atribut) => {
     e.preventDefault();
     const { dispatch, match } = this.props;
     const token = cookies.get(cookieName);
     const noPeserta = match.params.no_peserta;
-
     // Hitung ulang → setelah selesai, langsung re-fetch data mahasiswa
-    // supaya "UKT Saat Ini" di header langsung update tanpa perlu refresh halaman
     dispatch(hitung.flagHitung(token, noPeserta, atribut))
       .then(() => {
+        // Tandai bahwa perhitungan ulang sudah dilakukan dalam sesi ini
+        this.setState({ isSudahHitung: true }); 
+        
         dispatch(cmahasiswa.getById(token, noPeserta))
+        swal("Berhasil!", "Potensi UKT terbaru telah dihitung.", "success");
       })
   }
-
   render() {
     const { activeTab } = this.state;
     // Safety Check: Jika data cmahasiswa belom ada, jangan paksa render atribut
@@ -68,7 +98,6 @@ class DetailCmahasiswa extends React.Component {
     // canEdit: Hanya boleh edit jika admin datang dari aksi "Klarifikasi" atau "Perbarui" (isActionEdit)
     const userRole = this.props.user?.role;
     const canEdit = isActionEdit && (userRole === 'admin' || userRole === 'operator' || userRole === 'developer') && userRole !== 'validator';
-
     return (
       <div className="space-y-6">
         {/* Header Section: UKT Info & Actions */}
@@ -87,7 +116,6 @@ class DetailCmahasiswa extends React.Component {
                 </h4>
               </div>
             </div>
-
             {isActionEdit && userRole !== 'validator' && this.props.cmahasiswa.flag === 'sanggah_ukt' && (
               <div className="flex space-x-3">
                 <button 
@@ -106,7 +134,6 @@ class DetailCmahasiswa extends React.Component {
             )}
           </div>
         )}
-
         {/* Tab Navigation */}
         <div className="bg-gray-100/50 p-1 rounded-2xl flex flex-wrap gap-1">
           {[
@@ -132,7 +159,6 @@ class DetailCmahasiswa extends React.Component {
             </button>
           ))}
         </div>
-
         {/* Tab Content Area */}
         <div className="bg-white rounded-2xl border border-gray-100 p-6 min-h-[400px]">
           {activeTab === '1' && (
@@ -140,7 +166,6 @@ class DetailCmahasiswa extends React.Component {
               <Pribadi noPeserta={this.props.match.params.no_peserta} editable={canEdit} atribut={fetchAtribut} />
             </div>
           )}
-
           {activeTab === '2' && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-fadeIn">
               <Ayah noPeserta={this.props.match.params.no_peserta} editable={canEdit} atribut={fetchAtribut} />
@@ -150,26 +175,22 @@ class DetailCmahasiswa extends React.Component {
               </div>
             </div>
           )}
-
           {activeTab === '3' && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-fadeIn">
               <Rumah noPeserta={this.props.match.params.no_peserta} editable={canEdit} atribut={fetchAtribut} />
               <Listrik noPeserta={this.props.match.params.no_peserta} editable={canEdit} atribut={fetchAtribut} />
             </div>
           )}
-
           {activeTab === '4' && (
             <div className="animate-fadeIn">
               <Kendaraan noPeserta={this.props.match.params.no_peserta} editable={canEdit} atribut={fetchAtribut} />
             </div>
           )}
-
           {activeTab === '5' && (
             <div className="animate-fadeIn">
               <Pendukung noPeserta={this.props.match.params.no_peserta} editable={canEdit} atribut={fetchAtribut} />
             </div>
           )}
-
           {activeTab === '6' && (
             <div className="animate-fadeIn max-w-2xl mx-auto">
               <div className="text-center mb-8">
@@ -190,7 +211,6 @@ class DetailCmahasiswa extends React.Component {
                   <span>Coba Menghitung Ulang</span>
                 </button>
               )}
-
               <div className="bg-gray-50 rounded-2xl overflow-hidden border border-gray-100">
                 <table className="w-full text-left text-sm">
                   <tbody>
@@ -218,7 +238,6 @@ class DetailCmahasiswa extends React.Component {
     )
   }
 }
-
 export default connect(
   (store) => ({
       ukt: store.ukt.ukt,

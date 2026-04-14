@@ -307,7 +307,7 @@ class DataKendaraanSeleksi extends React.Component {
             }
         }
         this.props.dispatch(kendaraan.updateData(cookies.get(cookieName), formData)).then(() => {
-            this.props.dispatch(reset('DataKendaraanSeleksi'));
+            // this.props.dispatch(reset('DataKendaraanSeleksi'));
             if (this.props.updateVerifikasi) {
                 this.props.updateVerifikasi();
             }

@@ -173,7 +173,7 @@ class DataListrikSeleksi extends React.Component {
             }
         }
         this.props.dispatch(listrik.updateData(cookies.get(cookieName), formData)).then(() => {
-            this.props.dispatch(reset('DataListrikSeleksi'));
+            // this.props.dispatch(reset('DataListrikSeleksi'));
             if (this.props.updateVerifikasi) {
                 this.props.updateVerifikasi();
             }

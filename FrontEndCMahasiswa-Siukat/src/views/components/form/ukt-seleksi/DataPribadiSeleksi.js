@@ -427,7 +427,7 @@ class DataPribadiSeleksi extends React.Component {
             cmahasiswa.updateData(cookies.get(cookieName), formData)
         ).then(() => {
             // Jalankan reset form sesuai nama form yang didaftarkan di reduxForm
-            this.props.dispatch(reset('DataPribadiSeleksi'));
+            // this.props.dispatch(reset('DataPribadiSeleksi'));
             // Panggil updateVerifikasi hanya setelah data dipastikan tersimpan di server
             if (this.props.updateVerifikasi) {
                 this.props.updateVerifikasi();

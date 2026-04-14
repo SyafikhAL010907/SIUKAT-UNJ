@@ -31,6 +31,7 @@ const cookies = new Proxy(_cookies, {
     }
 });
 let apiBase = process.env.REACT_APP_API_URL || 'http://10.255.1.149:8080/api/v1/';
+// let apiBase = process.env.REACT_APP_API_URL || 'https://10.255.1.149:8080/api/v1/'; PUBLIK 
 
 // Smart Switch: Jika dibuka via localhost, otomatis arahkan API ke localhost juga
 if (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {

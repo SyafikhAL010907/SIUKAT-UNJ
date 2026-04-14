@@ -118,7 +118,7 @@ class DataPendukungSeleksi extends React.Component {
             }
         }
         this.props.dispatch(pendukung.updateData(cookies.get(cookieName), formData)).then(() => {
-            this.props.dispatch(reset('DataPendukungSeleksi'));
+            // this.props.dispatch(reset('DataPendukungSeleksi'));
             if (this.props.updateVerifikasi) {
                 this.props.updateVerifikasi();
             }
