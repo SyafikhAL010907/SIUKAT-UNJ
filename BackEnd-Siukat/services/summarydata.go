@@ -63,7 +63,7 @@ func (s *SummaryService) FetchByFakultas(tahun string, jalur string) ([]SummaryD
                     sum(case when golongan_id = 'VII' and bidik_misi_cmahasiswa = 'Tidak' then 1 else 0 end) as VII,
                     sum(case when golongan_id = 'VIII' and bidik_misi_cmahasiswa = 'Tidak' then 1 else 0 end) as VIII,
                     sum(case when bidik_misi_cmahasiswa = 'Ya' then 1 else 0 end) as bidikmisi,
-                    sum(case when bidik_misi_cmahasiswa = 'Ya' then 2400000 else nilai_ukt end) as total_ukt
+                    sum(IFNULL(nilai_ukt, 0)) as total_ukt
                 from
                     (
                     SELECT
@@ -85,17 +85,17 @@ func (s *SummaryService) FetchByFakultas(tahun string, jalur string) ([]SummaryD
                             when a.golongan_id = '' then 0
                             else 0
                         end as nilai_ukt,
-                        COALESCE(c.nama, 'Tanpa Fakultas') as fakultas
+                        COALESCE(fac.nama, 'Tanpa Fakultas') as fakultas
                     FROM
                         tb_cmahasiswa a
                     JOIN tb_user u ON u.no_peserta = a.no_peserta
                     JOIN ref_info i ON i.kode = u.jalur_masuk
                     LEFT JOIN tb_cmahasiswa t2 ON a.no_peserta = t2.no_peserta AND t2.atribut = 'sanggah'
                     left join ref_ukt b on
-                        a.prodi_cmahasiswa = b.major_id
-                        and a.jalur_cmahasiswa = b.entrance
-                    left join ref_fakultas c on
-                        a.fakultas_cmahasiswa = c.kode
+                        CAST(a.prodi_cmahasiswa AS CHAR) = CAST(b.major_id AS CHAR)
+                        and CAST(a.jalur_cmahasiswa AS CHAR) = CAST(b.entrance AS CHAR)
+                    left join ref_fakultas fac on
+                        a.fakultas_cmahasiswa = fac.kode
                     where
                         a.no_peserta not like '%fulan%' 
                         AND (a.atribut = 'sanggah' OR (a.atribut = 'original' AND t2.id_cmahasiswa IS NULL)) `
@@ -138,7 +138,7 @@ func (s *SummaryService) FetchByProdi(tahun string, jalur string) ([]SummaryDist
                     sum(case when golongan_id = 'VII' and bidik_misi_cmahasiswa = 'Tidak' then 1 else 0 end) as VII,
                     sum(case when golongan_id = 'VIII' and bidik_misi_cmahasiswa = 'Tidak' then 1 else 0 end) as VIII,
                     sum(case when bidik_misi_cmahasiswa = 'Ya' then 1 else 0 end) as bidikmisi,
-                    sum(case when bidik_misi_cmahasiswa = 'Ya' then 2400000 else nilai_ukt end) as total_ukt
+                    sum(IFNULL(nilai_ukt, 0)) as total_ukt
                 from
                     (
                     SELECT
@@ -167,8 +167,8 @@ func (s *SummaryService) FetchByProdi(tahun string, jalur string) ([]SummaryDist
                     JOIN ref_info i ON i.kode = u.jalur_masuk
                     LEFT JOIN tb_cmahasiswa t2 ON a.no_peserta = t2.no_peserta AND t2.atribut = 'sanggah'
                     left join ref_ukt b on
-                        a.prodi_cmahasiswa = b.major_id
-                        and a.jalur_cmahasiswa = b.entrance
+                        CAST(a.prodi_cmahasiswa AS CHAR) = CAST(b.major_id AS CHAR)
+                        and CAST(a.jalur_cmahasiswa AS CHAR) = CAST(b.entrance AS CHAR)
                     left join ref_prodi c on
                         a.prodi_cmahasiswa = c.kode
                         and a.jalur_cmahasiswa = c.jalur
@@ -199,4 +199,3 @@ func (s *SummaryService) FetchByProdi(tahun string, jalur string) ([]SummaryDist
 
 	return rows, nil
 }
-
