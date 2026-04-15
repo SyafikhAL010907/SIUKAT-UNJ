@@ -230,17 +230,22 @@ func PdfRoutes(r *gin.RouterGroup) {
         Order("tb_cmahasiswa.no_peserta ASC").
         Find(&mhsList)
 
-    // 2. LOOP DUIT: Fix Nominal agar tidak 0 & Konversi Tagihan (String -> Int) buat Template
+    // 2. LOOP DUIT: Hybrid Display (Nominal=Original, Tagihan=Current/Sanggah)
     for i := range mhsList {
-        // A. Hitung Nominal Live (Kelompok Sanggah/Original)
+        // A. Ambil data ORIGINAL buat penentu Nominal
+        var mhsOriginal models.CMahasiswa
+        config.DB.Where("no_peserta = ? AND atribut = ?", mhsList[i].NoPeserta, "original").First(&mhsOriginal)
+
+        // B. Kolom NOMINAL UKT: Paksa nampilin Nominal Original
         var uktMaster models.Ukt
         if err := config.DB.Where("major_id = ? AND CAST(entrance AS CHAR) = ?", mhsList[i].ProdiCmahasiswa, mhsList[i].JalurCmahasiswa).First(&uktMaster).Error; err == nil {
             mhsList[i].Ukt = &uktMaster
-            mhsList[i].Ukt.Nominal = cmahasiswaService.CalculateNominalValue(uktMaster, mhsList[i].GolonganID)
+            // Hitung pake GolonganID dari data Original
+            mhsList[i].Ukt.Nominal = cmahasiswaService.CalculateNominalValue(uktMaster, mhsOriginal.GolonganID)
         }
 
-        // B. Konversi Tagihan (dari DB) ke Integer agar formatRupiah tidak error
-        // Kita simpan sementara di field OriginalNominal (Virtual) khusus buat PDF Master ini
+        // C. Kolom TAGIHAN UKT: Pake data SEKARANG (Sanggah jika ada, Ori jika tidak)
+        // Kita ambil dari mhsList[i].Tagihan langsung karena query sudah memprioritaskan Sanggah
         if tagihanInt, errStr := strconv.Atoi(mhsList[i].Tagihan); errStr == nil {
             mhsList[i].OriginalNominal = tagihanInt
         } else {
