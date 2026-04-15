@@ -221,7 +221,7 @@ class TerimaSanggah extends React.Component {
                                 )}
 
                                 {/* Instruction for Acceptance */}
-                                {(!this.props.keringanan?.flag || this.props.keringanan?.flag === 'diterima' || this.props.keringanan?.flag === 'ditolak') && (
+                                {/* {(!this.props.keringanan?.flag || this.props.keringanan?.flag === 'diterima' || this.props.keringanan?.flag === 'ditolak') && (
                                     <div className="text-center pt-5 border-top">
                                         <div className="mb-4">
                                             <i className="fa fa-info-circle text-primary mb-2 fa-lg"></i>
@@ -240,7 +240,7 @@ class TerimaSanggah extends React.Component {
                                             <i className="fa fa-check-circle mr-2"></i> TERIMA HASIL UKT
                                         </Button>
                                     </div>
-                                )}
+                                )} */}
                             </div>
                         </Card>
                     </Col>

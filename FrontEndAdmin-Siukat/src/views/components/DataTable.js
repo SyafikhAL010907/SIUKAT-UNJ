@@ -18,11 +18,26 @@ class DataTable extends React.Component {
         }
     }
 
-    toggleModal = (id = null) => {
+    toggleModal = async (id = null) => {
         this.setState({
             modalOpen: !this.state.modalOpen,
-            selectedId: id
+            selectedId: id,
+            errorMsg: null
         })
+
+        if (!this.state.modalOpen && id) {
+            try {
+                const token = cookies.get(cookieName)
+                const res = await axios.get(`${service}/cmahasiswa/cek-bayar-bank/${id}`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                })
+                if (res.data.sudah_bayar) {
+                    this.setState({ errorMsg: `Mahasiswa ini sudah melakukan pembayaran di bank (Status: ${res.data.status}). Klarifikasi tidak akan mengubah nominal tagihan di bank!` })
+                }
+            } catch (err) {
+                console.log("Gagal cek status bayar", err)
+            }
+        }
     }
 
     handleConfirm = async () => {

@@ -327,7 +327,7 @@
                     </td>
 
 
-                    <td class="text-center"><b>{{ $row.NoPeserta }}</b></td>
+                    <td class="text-right"><b>Rp {{ formatRupiah $row.OriginalNominal }}</b></td>
                     <td class="text-center">
                         {{ if eq $row.Flag "terima_ukt" }}
                         <span class="badge badge-green">Terima</span>

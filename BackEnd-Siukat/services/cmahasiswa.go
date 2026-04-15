@@ -510,6 +510,14 @@ func (s *CMahasiswaService) Datatable(page, perPage int, keyword string) (map[st
 				mhs[i].OriginalNominal = mhs[i].Ukt.Nominal
 			}
 		}
+
+		// C. Kosongkan "Sanggah" jika record ini sebenarnya adalah original murni
+		if mhs[i].Atribut == "original" {
+			mhs[i].GolonganID = "-"
+			if mhs[i].Ukt != nil {
+				mhs[i].Ukt.Nominal = 0
+			}
+		}
 	}
 
 	return map[string]interface{}{

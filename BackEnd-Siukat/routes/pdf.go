@@ -7,6 +7,7 @@ import (
 	"BackEnd-Siukat/services"
 	"fmt"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -229,14 +230,21 @@ func PdfRoutes(r *gin.RouterGroup) {
         Order("tb_cmahasiswa.no_peserta ASC").
         Find(&mhsList)
 
-    // 2. LOOP DUIT: Fix Nominal agar tidak 0
+    // 2. LOOP DUIT: Fix Nominal agar tidak 0 & Konversi Tagihan (String -> Int) buat Template
     for i := range mhsList {
+        // A. Hitung Nominal Live (Kelompok Sanggah/Original)
         var uktMaster models.Ukt
-        // Gunakan WHERE yang lebih fleksibel buat Jalur (Entrance)
         if err := config.DB.Where("major_id = ? AND CAST(entrance AS CHAR) = ?", mhsList[i].ProdiCmahasiswa, mhsList[i].JalurCmahasiswa).First(&uktMaster).Error; err == nil {
             mhsList[i].Ukt = &uktMaster
-            // Hitung nominal pake helper service
             mhsList[i].Ukt.Nominal = cmahasiswaService.CalculateNominalValue(uktMaster, mhsList[i].GolonganID)
+        }
+
+        // B. Konversi Tagihan (dari DB) ke Integer agar formatRupiah tidak error
+        // Kita simpan sementara di field OriginalNominal (Virtual) khusus buat PDF Master ini
+        if tagihanInt, errStr := strconv.Atoi(mhsList[i].Tagihan); errStr == nil {
+            mhsList[i].OriginalNominal = tagihanInt
+        } else {
+            mhsList[i].OriginalNominal = 0
         }
     }
 

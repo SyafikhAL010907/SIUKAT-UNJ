@@ -136,6 +136,23 @@ func (s *UKTService) ComputeUkt(noPeserta string, atribut string) (map[string]in
 	// Decision Golongan
 	choosenUkt := decisionMaker(ikb, ukt)
 
+	// [SINKRONISASI TAGIHAN] --------------------------------------------------
+	// Ambil nominal berdasarkan golongan yang dipilih buat di simpan ke kolom tagihan
+	var nominal int
+	switch choosenUkt {
+	case "I":    nominal = ukt.I
+	case "II":   nominal = ukt.II
+	case "III":  nominal = ukt.III
+	case "IV":   nominal = ukt.IV
+	case "V":    nominal = ukt.V
+	case "VI":   nominal = ukt.VI
+	case "VII":  nominal = ukt.VII
+	case "VIII": nominal = ukt.VIII
+	default:     nominal = 0
+	}
+	nominalStr := fmt.Sprintf("%d", nominal)
+	// --------------------------------------------------------------------------
+
 	// [DEBUG LOGS] -------------------------------------------------------------
 	fmt.Printf("\n--- 🔍 HASIL RE-KALKULASI UKT [%s] ---\n", noPeserta)
 	fmt.Printf("💰 V1 (Penghasilan): %v -> Bobot: %v\n", v1, av1)
@@ -178,7 +195,11 @@ func (s *UKTService) ComputeUkt(noPeserta string, atribut string) (map[string]in
 	now := time.Now()
 	valService.AddLog(valueResult, noPeserta, now, atribut)
 	
-	db.Model(&models.CMahasiswa{}).Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).Update("golongan_id", choosenUkt)
+	// Simpan GolonganID DAN Tagihan ke tb_cmahasiswa agar sinkron (SIUKAT -> WSDL)
+	db.Model(&models.CMahasiswa{}).Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).Updates(map[string]interface{}{
+		"golongan_id": choosenUkt,
+		"tagihan":     nominalStr,
+	})
 
 
 	var updatedCMhs models.CMahasiswa

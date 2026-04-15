@@ -139,11 +139,78 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 		c.JSON(http.StatusOK, "Anda telah menerima hasil UKT")
 	})
 
+	// GET /cmahasiswa/cek-bayar-bank/:no_peserta
+	cmahasiswaGroup.GET("/cek-bayar-bank/:no_peserta", func(c *gin.Context) {
+		np := c.Param("no_peserta")
+		if config.DBWsdl != nil {
+			var checkMhs models.CMahasiswa
+			config.DB.Where("no_peserta = ?", np).First(&checkMhs)
+
+			var user models.User
+			config.DB.Where("no_peserta = ?", np).First(&user)
+			if user.NoPeserta == "" {
+				user.JalurMasuk = checkMhs.JalurCmahasiswa
+			}
+
+			var stageName string
+			switch user.JalurMasuk {
+			case "1": stageName = "snmptn"
+			case "2": stageName = "sbmptn"
+			case "3": stageName = "mandiri"
+			default: stageName = "snmptn"
+			}
+
+			var info models.Info
+			if err := config.DB.Where("stage = ?", stageName).First(&info).Error; err == nil {
+				var existingStatus string
+				if err := config.DBWsdl.Raw("SELECT flag_status FROM tb_bill_detail WHERE nim = ? AND bill_issue_id = ?", np, info.BillIssueID).Scan(&existingStatus).Error; err == nil {
+					if existingStatus != "" && existingStatus != "01" && existingStatus != "88" {
+						c.JSON(http.StatusOK, gin.H{"sudah_bayar": true, "status": existingStatus})
+						return
+					}
+				}
+			}
+		}
+		c.JSON(http.StatusOK, gin.H{"sudah_bayar": false})
+	})
+
 	// PUT /cmahasiswa/flag-klarifikasi
 	// Atomic transaction: update flag original → 'sanggah_ukt' + INSERT salinan ke semua tabel dengan atribut='sanggah'
 	cmahasiswaGroup.PUT("/flag-klarifikasi", func(c *gin.Context) {
 		noPeserta, _ := c.Get("no_peserta")
 		np := noPeserta.(string)
+
+		//kalo mau matiin commant di sini yaa --- CEK WSDL: Tunda klarifikasi jika mahasiswa sudah bayar ---
+		var warningMsg string
+		if config.DBWsdl != nil {
+			var checkMhs models.CMahasiswa
+			config.DB.Where("no_peserta = ?", np).First(&checkMhs)
+
+			var user models.User
+			config.DB.Where("no_peserta = ?", np).First(&user)
+			if user.NoPeserta == "" {
+				user.JalurMasuk = checkMhs.JalurCmahasiswa
+			}
+
+			var stageName string
+			switch user.JalurMasuk {
+			case "1": stageName = "snmptn"
+			case "2": stageName = "sbmptn"
+			case "3": stageName = "mandiri"
+			default: stageName = "snmptn"
+			}
+
+			var info models.Info
+			if err := config.DB.Where("stage = ?", stageName).First(&info).Error; err == nil {
+				var existingStatus string
+				if err := config.DBWsdl.Raw("SELECT flag_status FROM tb_bill_detail WHERE nim = ? AND bill_issue_id = ?", np, info.BillIssueID).Scan(&existingStatus).Error; err == nil {
+					if existingStatus != "" && existingStatus != "01" && existingStatus != "88" {
+						warningMsg = " [PERINGATAN: Anda sudah terdeteksi lunas (Status: " + existingStatus + ") di sistem Bank. Klarifikasi ini tidak akan merubah nominal di Bank!]"
+					}
+				}
+			}
+		}
+		// --- END CEK WSDL ---
 
 		// Cek apakah row sanggah sudah ada (idempotent - prevent duplikasi)
 		var existingSanggah models.CMahasiswa
@@ -312,13 +379,45 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 		}
 
 		fmt.Printf("✅ KLARIFIKASI SUCCESS [%s]: Semua tabel di-copy dengan atribut='sanggah'\n", np)
-		c.JSON(http.StatusOK, gin.H{"message": "Anda telah memilih klarifikasi UKT"})
+		c.JSON(http.StatusOK, gin.H{"message": "Anda telah memilih klarifikasi UKT." + warningMsg})
 	})
 
 	// PUT /cmahasiswa/flag-klarifikasi-admin/:no_peserta
 	// Endpoint khusus admin — Mendukung "Sanggah Baru" dan "Reset Sanggah"
 	cmahasiswaGroup.PUT("/flag-klarifikasi-admin/:no_peserta", func(c *gin.Context) {
 		np := c.Param("no_peserta")
+
+		// --- CEK WSDL: Tunda klarifikasi jika mahasiswa sudah bayar ---
+		var warningMsg string
+		if config.DBWsdl != nil {
+			var checkMhs models.CMahasiswa
+			config.DB.Where("no_peserta = ?", np).First(&checkMhs)
+
+			var user models.User
+			config.DB.Where("no_peserta = ?", np).First(&user)
+			if user.NoPeserta == "" {
+				user.JalurMasuk = checkMhs.JalurCmahasiswa
+			}
+
+			var stageName string
+			switch user.JalurMasuk {
+			case "1": stageName = "snmptn"
+			case "2": stageName = "sbmptn"
+			case "3": stageName = "mandiri"
+			default: stageName = "snmptn"
+			}
+
+			var info models.Info
+			if err := config.DB.Where("stage = ?", stageName).First(&info).Error; err == nil {
+				var existingStatus string
+				if err := config.DBWsdl.Raw("SELECT flag_status FROM tb_bill_detail WHERE nim = ? AND bill_issue_id = ?", np, info.BillIssueID).Scan(&existingStatus).Error; err == nil {
+					if existingStatus != "" && existingStatus != "01" && existingStatus != "88" {
+						warningMsg = " [PERINGATAN: Mahasiswa ini sudah bayar lunas di bank. Tagihan WSDL tidak akan diubah!]"
+					}
+				}
+			}
+		}
+		// --- END CEK WSDL ---
 
 		// 1. CLEANUP: Hapus data sanggah lama jika ada (buat "Reset/Replace")
 		// Ini memastikan dataatribut='sanggah' dibersihkan dulu sebelum di-copy ulang dari master.
@@ -461,7 +560,7 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 		}
 
 		fmt.Printf("✅ KLARIFIKASI ADMIN SUCCESS [%s]: Copy data original ke sanggah berhasil\n", np)
-		c.JSON(http.StatusOK, gin.H{"message": "Klarifikasi berhasil diproses. Data sanggah telah direplace dari master data."})
+		c.JSON(http.StatusOK, gin.H{"message": "Klarifikasi berhasil diproses. Data sanggah ditarik dari master." + warningMsg})
 	})
 
 
