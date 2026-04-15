@@ -1,7 +1,7 @@
 /* ============================================================
    MODERN SIDEBAR & LAYOUT STYLES - RESPONSIVE OPTIMIZED
    Environment: React Class Components, Reactstrap
-   Theme: Emerald Green #0f6d3f
+   Theme: Emerald Green var(--unj-green)
    ============================================================ */
 
 .app-wrapper {
@@ -13,7 +13,7 @@
 
 /* SIDEBAR CONTAINER */
 .sidebar-container {
-    background-color: #0f6d3f; /* Premium Emerald */
+    background-color: var(--unj-green-dark); /* Deeper Premium Emerald */
     color: #ffffff;
     height: 100vh;
     position: fixed;
@@ -98,7 +98,7 @@
     position: absolute;
     right: -16px; 
     top: calc(50% - 16px);
-    background: #0f6d3f;
+    background: var(--unj-green-dark);
     border: 2px solid #ffffff;
     color: #ffffff;
     width: 32px;
@@ -252,7 +252,7 @@
 
 .toggle-btn:hover {
     background-color: #f7fafc;
-    color: #0f6d3f;
+    color: var(--unj-green);
 }
 
 .header-title-text {
@@ -361,7 +361,7 @@
         padding: 12px 0;
         justify-content: center;
         background-color: transparent; /* Transparan agar tidak kaku di bar tipis */
-        color: #fffff !important; /* Ikon merah menyala saat tertutup */
+        color: #ffffff !important; /* Ikon putih saat tertutup */
     }
 
     .sidebar-container:not(.open-mobile) .logout-link-sidebar span:not(.nav-icon-wrapper) {
@@ -458,7 +458,7 @@
     width: 80px;
     height: 80px;
     border-radius: 50%;
-    border: 2px solid #0f6d3f;
+    border: 2px solid var(--unj-green);
     overflow: hidden;
     background: #252525;
     box-shadow: 0 0 15px rgba(15, 109, 63, 0.3);

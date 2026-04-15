@@ -13,6 +13,9 @@ import (
 
 var DB *gorm.DB
 
+var DBWsdl *gorm.DB  // Koneksi ke WSDL_UNJ (Baru)
+
+
 func ConnectDB() {
 	user := os.Getenv("DB_USER")
 	password := os.Getenv("DB_PASS")
@@ -70,6 +73,38 @@ func ConnectDB() {
 	// Set timezone ke WIB (+07:00) secara manual pas koneksi terbuka
 	db.Exec("SET time_zone = '+07:00'")
 
-	fmt.Println("SUCCESS: Connection to database has been established successfully (GORM SQL).")
+	fmt.Println("SUCCESS: Connection to database SIUKAT established successfully.")
 	DB = db
+
+	// --- KONEKSI 2: WSDL UNJ (With Robust Fallback) ---
+	hostWsdl := os.Getenv("WSDL_DB_HOST")
+	dsnWsdl := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Asia%%2FJakarta",
+		os.Getenv("WSDL_DB_USER"), os.Getenv("WSDL_DB_PASS"), hostWsdl, os.Getenv("WSDL_DB_PORT"), os.Getenv("WSDL_DB_NAME"))
+	
+	dbWsdl, errWsdl := gorm.Open(mysql.Open(dsnWsdl), &gorm.Config{})
+
+	// FALLBACK 1: Jika gagal, coba ke localhost
+	if errWsdl != nil && hostWsdl != "localhost" && hostWsdl != "127.0.0.1" {
+		log.Printf("FALLBACK WSDL: Gagal koneksi ke %s. Mencoba ke localhost...", hostWsdl)
+		hostWsdl = "localhost"
+		dsnWsdl = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Asia%%2FJakarta",
+			os.Getenv("WSDL_DB_USER"), os.Getenv("WSDL_DB_PASS"), hostWsdl, os.Getenv("WSDL_DB_PORT"), os.Getenv("WSDL_DB_NAME"))
+		dbWsdl, errWsdl = gorm.Open(mysql.Open(dsnWsdl), &gorm.Config{})
+
+		// FALLBACK 2: Jika masih gagal, coba tanpa password (khusus localhost)
+		if errWsdl != nil {
+			log.Printf("FALLBACK WSDL: Koneksi localhost dengan password gagal. Mencoba tanpa password...")
+			dsnWsdl = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Asia%%2FJakarta",
+				os.Getenv("WSDL_DB_USER"), "", hostWsdl, os.Getenv("WSDL_DB_PORT"), os.Getenv("WSDL_DB_NAME"))
+			dbWsdl, errWsdl = gorm.Open(mysql.Open(dsnWsdl), &gorm.Config{})
+		}
+	}
+
+	if errWsdl != nil {
+		log.Printf("WARNING: Gagal koneksi ke DB WSDL: %v. Aplikasi tetap berjalan tanpa fitur WSDL.", errWsdl)
+	} else {
+		DBWsdl = dbWsdl
+		fmt.Println("SUCCESS: Connection to database WSDL established successfully.")
+	}
 }
+

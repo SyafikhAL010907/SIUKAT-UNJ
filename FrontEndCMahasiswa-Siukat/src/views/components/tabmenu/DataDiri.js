@@ -82,58 +82,73 @@ class DataDiri extends React.Component {
                             </tr>
                         </tbody>
                     </Table>
+
+                    {/* HASIL VERIFIKASI: TAMPIL DI BAWAH FAKULTAS (MASIH DALAM COL-8) */}
+                    {(cmahasiswa.jalur_cmahasiswa == 1) && (
+                        <div className="mt-4 pt-3 border-top">
+                            <h6 className="mb-3 font-weight-bold text-uppercase text-center" 
+                                style={{ letterSpacing: '1.5px', fontSize: '0.8rem', color: '#64748b' }}>
+                                <i className="fa fa-id-card-o mr-2"></i> Hasil Verifikasi
+                            </h6>
+                            <Row className="justify-content-center">
+                                <Col md={6} xs={12} className="mb-3">
+                                    <div className="verification-card-premium text-center h-100">
+                                        <div className={`icon-wrapper-soft mx-auto ${safeVerifikasi.result_akademik === 'lolos' ? 'bg-success text-white' : 'bg-warning text-white'}`}
+                                             style={{ boxShadow: safeVerifikasi.result_akademik === 'lolos' ? '0 4px 12px rgba(40, 167, 69, 0.2)' : '0 4px 12px rgba(255, 193, 7, 0.2)' }}>
+                                            <i className={safeVerifikasi.result_akademik === 'lolos' ? 'fa fa-check' : 'fa fa-info'}></i>
+                                        </div>
+                                        <div className="text-muted small text-uppercase font-weight-bold" style={{ letterSpacing: '0.5px', fontSize: '0.65rem' }}>Verifikasi Akademik</div>
+                                        <div className="mt-2">
+                                            <span className={safeVerifikasi.result_akademik === 'lolos' ? 'badge-soft-success' : 'badge-soft-warning'}>
+                                                {safeVerifikasi.result_akademik || 'PROSES'}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </Col>
+                                <Col md={6} xs={12} className="mb-3">
+                                    <div className="verification-card-premium text-center h-100">
+                                        <div className={`icon-wrapper-soft mx-auto ${safeVerifikasi.result_kipk === 'lolos' ? 'bg-success text-white' : 'bg-danger text-white'}`}
+                                             style={{ boxShadow: safeVerifikasi.result_kipk === 'lolos' ? '0 4px 12px rgba(40, 167, 69, 0.2)' : '0 4px 12px rgba(220, 53, 69, 0.2)' }}>
+                                            <i className={safeVerifikasi.result_kipk === 'lolos' ? 'fa fa-graduation-cap' : 'fa fa-times'}></i>
+                                        </div>
+                                        <div className="text-muted small text-uppercase font-weight-bold" style={{ letterSpacing: '0.5px', fontSize: '0.65rem' }}>Status KIPK</div>
+                                        <div className="mt-2">
+                                            <span className={safeVerifikasi.result_kipk === 'lolos' ? 'badge-soft-success' : 'badge-soft-danger'}>
+                                                {!safeVerifikasi.result_kipk ? 'TIDAK TERDAFTAR' : safeVerifikasi.result_kipk}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </Col>
+                            </Row>
+                        </div>
+                    )}
                 </Col>
-                                {/* LOGIC JALUR 1: SNBP / SNMPTN */}
-                {(cmahasiswa.jalur_cmahasiswa == 1) && (
-                    <Col md={12} xs={12}>
-                        <h3 className="mt-4">Hasil Verifikasi</h3>
-                        <Table responsive striped bordered className="modern-table">
-                            <tbody>
-                                <tr>
-                                    <td style={{ width: '40%' }}>Verifikasi Akademik</td>
-                                    <td>
-                                        <span className={`badge ${safeVerifikasi.result_akademik === 'lolos' ? 'badge-success' : 'badge-warning'}`}>
-                                            {safeVerifikasi.result_akademik || '-'}
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Status KIPK</td>
-                                    <td>
-                                        <span className={`badge ${safeVerifikasi.result_kipk === 'lolos' ? 'badge-success' : 'badge-danger'}`}>
-                                            {!safeVerifikasi.result_kipk ? 'Tidak' : safeVerifikasi.result_kipk}
-                                        </span>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </Table>
-                        {safeVerifikasi.result_akademik === 'belum_verifikasi' && (
-                            <VerifikasiSNMPTN
-                                cardStyles="text-center"
-                                content="Belum Melakukan Verifikasi SNBP"
-                                color="warning"
-                                icon="fa fa-info-circle"
-                                message="Segera hubungi Fakultas sesuai dengan Program Studi yang Anda pilih"
-                            />
-                        )}
+
+                {/* ALERT KHUSUS JALUR 1 (BELUM VERIFIKASI) */}
+                {(cmahasiswa.jalur_cmahasiswa == 1 && safeVerifikasi.result_akademik === 'belum_verifikasi') && (
+                    <Col md={12} xs={12} className="mt-3">
+                        <VerifikasiSNMPTN
+                            cardStyles="text-center"
+                            content="Belum Melakukan Verifikasi SNBP"
+                            color="warning"
+                            icon="fa fa-info-circle"
+                            message="Segera hubungi Fakultas sesuai dengan Program Studi yang Anda pilih"
+                        />
                     </Col>
                 )}
 
-                {/* LOGIC JALUR 2: SNBT / SBMPTN */}
-                {(cmahasiswa.jalur_cmahasiswa == 2) && (
+                {/* INFORMASI KIPK JALUR 2 */}
+                {(cmahasiswa.jalur_cmahasiswa == 2 && safeVerifikasi.result_kipk !== 'tidak_lolos' && safeVerifikasi.result_kipk) && (
                     <Col md={12} xs={12}>
-                        {!(safeVerifikasi.result_kipk === 'tidak_lolos' || !safeVerifikasi.result_kipk) && (
-                            <InformasiKIPK
-                                cardStyles="text-center"
-                                content="Informasi Peserta KIPK"
-                                color="warning"
-                                icon="fa fa-info-circle"
-                                message="Semua Peserta KIPK Wajib Mengunduh File di bawah ini!!"
-                            />
-                        )}
+                        <InformasiKIPK
+                            cardStyles="text-center"
+                            content="Informasi Peserta KIPK"
+                            color="warning"
+                            icon="fa fa-info-circle"
+                            message="Semua Peserta KIPK Wajib Mengunduh File di bawah ini!!"
+                        />
                     </Col>
                 )}
-
             </Row>
         );
     }

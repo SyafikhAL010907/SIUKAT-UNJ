@@ -212,16 +212,21 @@ func (s *CMahasiswaService) SelesaiIsi(info models.Info, noPeserta string, atrib
 	db := config.DB
 	now := time.Now()
 
-	tagihan, err := GenerateTagihan(info, noPeserta)
-	if err != nil {
-		// Fallback jika stage tidak dikenal — gunakan format sederhana
-		tagihan = noPeserta
+	// -------------------------------------------------------------------------
+	// [FOR TESTING] AUTO-CALCULATE UKT (Lu bisa comment bagian ini kalo mau dimatiin)
+	// -------------------------------------------------------------------------
+	uktService := UKTService{}
+	res, err := uktService.ComputeUkt(noPeserta, atribut)
+	if err == nil {
+		fmt.Printf("🚀 AUTO-SYNC: UKT recalculated for [%s] -> Group: %v\n", noPeserta, res["choosenUkt"])
+	} else {
+		fmt.Printf("⚠️ AUTO-SYNC WARNING: Failed to recalculate UKT: %v\n", err)
 	}
+	// -------------------------------------------------------------------------
 
 	return db.Model(&models.CMahasiswa{}).Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).Updates(map[string]interface{}{
 		"flag":          "selesai_isi",
 		"waktu_selesai": now,
-		"tagihan":       tagihan,
 	}).Error
 }
 

@@ -68,17 +68,26 @@ func PdfRoutes(r *gin.RouterGroup) {
 		noPeserta, _ := c.Get("no_peserta")
 		np := noPeserta.(string)
 
+		// [Langkah 2] Panggil Kurir WSDL (Smart Sync)
+		wsdlService := services.WsdlService{}
+		if err := wsdlService.SyncToWsdl(np); err != nil {
+			fmt.Printf("⚠️ WSDL SYNC WARNING: %v\n", err)
+		}
+
 		// Tarik model Info
 		var info models.Info
 		config.DB.First(&info)
 
-		// Tarik data Mahasiswa dengan Preload Relasi
-		var mhs models.CMahasiswa
-		err := config.DB.Preload("Fakultas").Preload("Prodi").Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").Where("no_peserta = ?", np).First(&mhs).Error
+		// Tarik data Mahasiswa dengan Preload Relasi (Gunakan Service agar Smart Priority Sanggah > Original)
+		cmahasiswaService := services.CMahasiswaService{}
+		mhs, err := cmahasiswaService.GetCmahasiswa(np)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Data Mahasiswa tidak ditemukan"})
 			return
 		}
+		
+		// Pastikan relasi Prodi & Fakultas ke-load
+		config.DB.Preload("Fakultas").Preload("Prodi").Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").First(&mhs, mhs.IDCmahasiswa)
 
 		// Tarik UKT berdasarkan Golongan & Mayor
 		var ukt models.Ukt

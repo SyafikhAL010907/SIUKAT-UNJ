@@ -3,6 +3,8 @@ package services
 import (
 	"BackEnd-Siukat/config"
 	"BackEnd-Siukat/models"
+	"fmt"
+	"time"
 )
 
 type UKTService struct{}
@@ -134,6 +136,19 @@ func (s *UKTService) ComputeUkt(noPeserta string, atribut string) (map[string]in
 	// Decision Golongan
 	choosenUkt := decisionMaker(ikb, ukt)
 
+	// [DEBUG LOGS] -------------------------------------------------------------
+	fmt.Printf("\n--- 🔍 HASIL RE-KALKULASI UKT [%s] ---\n", noPeserta)
+	fmt.Printf("💰 V1 (Penghasilan): %v -> Bobot: %v\n", v1, av1)
+	fmt.Printf("🏠 V2 (Rumah/PBB): %v -> Bobot: %v\n", v2, bv2)
+	fmt.Printf("⚡ V3 (Listrik): %v -> Bobot: %v\n", v3, cv3)
+	fmt.Printf("🏍️ V4 (Motor): %v -> Bobot: %v\n", v4, dv4)
+	fmt.Printf("🚗 V5 (Mobil): %v -> Bobot: %v\n", v5, ev5)
+	fmt.Printf("📈 TOTAL SKOR IKB: %v\n", ikb)
+	fmt.Printf("📊 Threshold Group I: %v, II: %v, III: %v, IV: %v\n", ukt.I, ukt.II, ukt.III, ukt.IV)
+	fmt.Printf("🎯 HASIL AKHIR: Kelompok %s\n", choosenUkt)
+	fmt.Println("------------------------------------------")
+	// --------------------------------------------------------------------------
+
 	// Save calculation metrics to data map
 	data["v1"] = v1
 	data["v2"] = v2
@@ -159,9 +174,13 @@ func (s *UKTService) ComputeUkt(noPeserta string, atribut string) (map[string]in
 	db.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&valueResult)
 	data["value"] = valueResult
 
-	// Translating CMahasiswa.update(golongan_id)
-	db.Model(&models.CMahasiswa{}).Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).Update("golongan_id", choosenUkt)
+	valService := ValueService{}
+	now := time.Now()
+	valService.AddLog(valueResult, noPeserta, now, atribut)
 	
+	db.Model(&models.CMahasiswa{}).Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).Update("golongan_id", choosenUkt)
+
+
 	var updatedCMhs models.CMahasiswa
 	db.Where("no_peserta = ? AND atribut = ?", noPeserta, atribut).First(&updatedCMhs)
 	data["uktCmahasiswa"] = updatedCMhs
@@ -212,7 +231,7 @@ func (s *UKTService) JustCompute(noPeserta string, atribut string) (map[string]i
 	}
 	var bobot models.Bobot
 	db.Where("id = ?", 1).First(&bobot)
-	
+
 	var ukt models.Ukt
 	db.Where("major_id = ? AND entrance = ?", cmahasiswa.ProdiCmahasiswa, cmahasiswa.JalurCmahasiswa).First(&ukt)
 
