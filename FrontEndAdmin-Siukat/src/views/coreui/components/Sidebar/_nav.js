@@ -33,6 +33,11 @@ export default {
           url: '/admin/manajemen/jadwal-ukt',
           icon: 'fa fa-clock-o'
         },
+        {
+          name: 'UKT',
+          url: '/admin/manajemen/ukt',
+          icon: 'fa fa-university'
+        },
       ]
     },
     {

@@ -141,6 +141,8 @@ func SetupRoutes(r *gin.Engine) {
 	PekerjaanRoutes(api)
 	InfoRoutes(api)
 	UktRoutes(api)
+	UktRefRoutes(api)
+
 
 	// === Data Mahasiswa ===
 	CmahasiswaRoutes(api)

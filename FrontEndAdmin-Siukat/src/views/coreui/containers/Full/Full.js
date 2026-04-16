@@ -24,7 +24,7 @@ import Page404 from '../../views/Pages/Page404';
 import { connect } from 'react-redux'
 import { user } from '../../../../actions'
 import { cookies, cookieName, notif } from '../../../../global'
-import {Administrator, Dashboard, JadwalUkt, CalonMahasiswa, DetailCmahasiswa,
+import {Administrator, Dashboard, JadwalUkt, RefUkt, CalonMahasiswa, DetailCmahasiswa,
         Fakultas, ProgramStudi, Klarifikasi} from '../../../pages';
 import { Loading }  from 'redux-global-loader';
 import { Loader } from '../../../components'
@@ -63,6 +63,7 @@ class Full extends Component {
                 <Route exact path={this.props.match.path + "/dashboard"} component={Dashboard}/>
                 <Route exact path={this.props.match.path + "/manajemen/administrator"} component={Administrator}/>
                 <Route exact path={this.props.match.path + "/manajemen/jadwal-ukt"} component={JadwalUkt}/>
+                <Route exact path={this.props.match.path + "/manajemen/ukt"} component={RefUkt}/>
                 <Route exact path={this.props.match.path + "/peserta/semua"} component={CalonMahasiswa}/>
                 <Route exact path={this.props.match.path + "/peserta/klarifikasi"} component={Klarifikasi}/>
                 <Route path={this.props.match.path + "/peserta/:no_peserta"} component={DetailCmahasiswa}/>
