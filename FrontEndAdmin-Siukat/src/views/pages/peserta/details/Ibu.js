@@ -5,7 +5,7 @@ import { Row, Col, Table, Button, Form, Modal, ModalHeader, ModalBody, ModalFoot
 import { Field, reduxForm, reset, formValueSelector } from 'redux-form'
 import { ibu, provinsi, pekerjaan, kabkot, kecamatan } from '../../../../actions'
 import { InputBs, InputDayPicker, InputFileBs, money } from '../../../components'
-import { cookies, cookieName, rupiah, storage, service } from '../../../../global'
+import { cookies, cookieName, rupiah, storage, service, dateConverter } from '../../../../global'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
@@ -339,7 +339,7 @@ class Ibu extends React.Component{
                                     <td className="p-4 text-gray-700">
                                         { (data.tempat_lahir_ibu || data.tanggal_lahir_ibu) ? (
                                             <>
-                                                {data.tempat_lahir_ibu || '-'}, {data.tanggal_lahir_ibu ? moment(data.tanggal_lahir_ibu).format("DD MMMM YYYY") : '-'}
+                                                {data.tempat_lahir_ibu || '-'}, {dateConverter(data.tanggal_lahir_ibu)}
                                             </>
                                         ) : '-'}
                                     </td>

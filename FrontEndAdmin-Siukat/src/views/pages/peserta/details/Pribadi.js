@@ -7,7 +7,7 @@ import { Field, reduxForm, formValueSelector } from 'redux-form'
 import { Modal } from 'reactstrap' 
 import { cmahasiswa, provinsi, kabkot, kecamatan } from '../../../../actions'
 import { InputBs, InputDayPicker, InputFileBs } from '../../../components'
-import { cookies, cookieName, rupiah, storage } from '../../../../global'
+import { cookies, cookieName, rupiah, storage, dateConverter } from '../../../../global'
 import { withRouter } from 'react-router-dom'
 
 // --- KOMPONEN MODAL FORM ---
@@ -248,7 +248,7 @@ class Pribadi extends React.Component {
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
                             <InfoItem label="Jenis Kelamin" value={data.gender_cmahasiswa} />
-                            <InfoItem label="Tempat, Tgl Lahir" value={`${data.tempat_lahir_cmahasiswa || '-'}, ${data.tanggal_lahir_cmahasiswa ? data.tanggal_lahir_cmahasiswa.split('T')[0] : '-'}`} />
+                            <InfoItem label="Tempat, Tgl Lahir" value={`${data.tempat_lahir_cmahasiswa || '-'}, ${dateConverter(data.tanggal_lahir_cmahasiswa)}`} />
                             <InfoItem label="Golongan Darah" value={data.goldar_cmahasiswa} />
                             <InfoItem label="Nomor Telepon" value={data.telepon_cmahasiswa} />
                             <InfoItem label="Penghasilan" value={`${rupiah(data.penghasilan_cmahasiswa)} / bulan`} />

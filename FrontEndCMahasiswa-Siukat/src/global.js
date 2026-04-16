@@ -110,8 +110,9 @@ const rupiah = (angka) => {
 };
 
 const dateConverter = (date) => {
-    var birthdate = date;
-    return date && (date !== '0000-00-00') ? moment(birthdate).format('DD MMMM YYYY') : '';
+    if (!date || date === "0000-00-00" || date === "" || date === "0001-01-01T00:00:00Z") return "-"
+    const birthdate = moment(date)
+    return birthdate.isValid() ? birthdate.format("DD MMMM YYYY") : "-"
 };
 
 const getToken = () => {
