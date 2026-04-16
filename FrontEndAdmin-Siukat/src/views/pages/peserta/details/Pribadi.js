@@ -1,4 +1,5 @@
 import React from 'react'
+import swal from 'sweetalert'
 import moment from 'moment'
 import defaultPhoto from '../../../dist/images/profile.png'
 import { connect } from 'react-redux'
@@ -194,10 +195,14 @@ class Pribadi extends React.Component {
             await this.props.dispatch(cmahasiswa.updateData(token, formData, this.props.noPeserta));
             await this.props.dispatch(cmahasiswa.fetchAllData(token, this.props.noPeserta, this.props.atribut));
             // this.modalToggle();
-            // alert("Data Berhasil Diperbarui!");
+            // await swal("Berhasil!", "Data Berhasil Diperbarui!", "success");
         } catch (error) {
             console.error("Update Error", error);
-            alert("Gagal menyimpan perubahan.");
+            swal({
+                title: "Gagal Menyimpa!",
+                text: "Terjadi kesalahan saat mencoba menyimpan perubahan profil Anda.",
+                icon: "error",
+            });
         }
     }
 

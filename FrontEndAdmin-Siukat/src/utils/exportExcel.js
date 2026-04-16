@@ -1,5 +1,6 @@
 import * as ExcelJS from 'exceljs/dist/exceljs.min.js';
 import { saveAs } from 'file-saver';
+import swal from 'sweetalert';
 
 /**
  * Utility untuk export data ke Excel dengan styling premium SIUKAT.
@@ -150,7 +151,11 @@ export const exportRekapExcel = async (type, data, totals) => {
     console.log(`[SIUKAT] Export ${type} Berhasil Diturunkan!`);
     } catch (error) {
         console.error(`[SIUKAT] Error Export ${type}:`, error);
-        alert(`Gagal export ${type}. Silahkan cek konsol browser.`);
+        swal({
+            title: "Export Gagal!",
+            text: `Terjadi kesalahan saat mengekspor data ${type}.`,
+            icon: "error",
+        });
     }
 };
 
@@ -238,6 +243,10 @@ export const exportMasterDataExcel = async (data) => {
     console.log('[SIUKAT] Export Master Data Berhasil Diturunkan!');
     } catch (error) {
         console.error('[SIUKAT] Error Export Master Data:', error);
-        alert('Gagal export Master Data. Silahkan cek konsol browser.');
+        swal({
+            title: "Export Gagal!",
+            text: "Gagal mengekspor Master Data. Silahkan cek koneksi atau hubungi admin.",
+            icon: "error",
+        });
     }
 };

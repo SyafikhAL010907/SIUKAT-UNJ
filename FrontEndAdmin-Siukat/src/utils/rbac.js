@@ -33,6 +33,10 @@ export const isAllowed = (role, action) => {
             // Operator & Validator dilarang.
             return role === ROLES.DEVELOPER;
 
+        case 'SEE_UKT_MENU':
+            // Sesuai request: Cuma Developer yang boleh liat menu UKT.
+            return role === ROLES.DEVELOPER;
+
         default:
             return true;
     }
@@ -49,6 +53,10 @@ export const filterNavigation = (items, role) => {
             // Cek spesifik buat menu Administrator
             if (item.url === '/admin/manajemen/administrator') {
                 return isAllowed(role, 'SEE_ADMIN_MENU');
+            }
+            // Cek spesifik buat menu UKT
+            if (item.url === '/admin/manajemen/ukt') {
+                return isAllowed(role, 'SEE_UKT_MENU');
             }
             return true;
         })

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link, withRouter } from 'react-router-dom'
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap'
+import swal from 'sweetalert';
 import axios from 'axios'
 import { cookies, cookieName, service, storage } from '../../global'
 import defaultPhoto from '../dist/images/profile.png'
@@ -114,8 +115,15 @@ class DataTable extends React.Component {
                             )}
                             {this.props.user?.role !== 'validator' && (
                                 <button
-                                    onClick={(e) => {
-                                        if (window.confirm("Apakah Anda yakin ingin menghapus data ini?")) {
+                                    onClick={async (e) => {
+                                        const willDelete = await swal({
+                                            title: "Yakin ingin menghapus?",
+                                            text: "Data yang sudah dihapus tidak dapat dikembalikan!",
+                                            icon: "warning",
+                                            buttons: ["Batal", "Ya, Hapus!"],
+                                            dangerMode: true,
+                                        });
+                                        if (willDelete) {
                                             this.props.handleHapus(e, id)
                                         }
                                     }}
