@@ -90,7 +90,7 @@ class Klarifikasi extends React.Component{
                                     no_peserta: "Nomor Peserta",
                                     foto_cmahasiswa: "Foto",
                                     nama_cmahasiswa: "Nama Lengkap", 
-                                    bidik_misi_cmahasiswa: "BM", 
+                                    bidik_misi_cmahasiswa: "KIPK", 
                                     "fakultas.nama": "Fakultas", 
                                     "prodi.nama": "Program Studi", 
                                     golongan_id: "Kelompok UKT",

@@ -1,15 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { 
-    Container, 
-    Row, 
-    Col, 
-    Table, 
-    Badge, 
-    Button, 
-    Input, 
-    InputGroup, 
-    InputGroupAddon, 
+import {
+    Container,
+    Row,
+    Col,
+    Table,
+    Badge,
+    Button,
+    Input,
+    InputGroup,
+    InputGroupAddon,
     InputGroupText
 } from 'reactstrap';
 import { rekapitulasi } from "../../../actions";
@@ -41,7 +41,7 @@ class Fakultas extends React.Component {
     handleFilterChange = (field, value) => {
         this.setState({ [field]: value }, () => {
             const { selectedYear, selectedJalur } = this.state;
-            
+
             if (selectedYear) {
                 if (selectedYear === "2026") {
                     this.props.dispatch(rekapitulasi.fetchDataFakultas(cookies.get(cookieName), selectedYear, selectedJalur));
@@ -67,7 +67,7 @@ class Fakultas extends React.Component {
         const data = this.props.data.rekapFakultas || [];
         if (data.length === 0) return;
 
-        const headers = ["Fakultas", "Total Mhs", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "Bidikmisi", "Selesai Isi", "Total UKT"];
+        const headers = ["Fakultas", "Total Mhs", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "KIPK", "Selesai Isi", "Total UKT"];
         const csvRows = [headers.join(",")];
 
         data.forEach(item => {
@@ -96,15 +96,15 @@ class Fakultas extends React.Component {
 
     render() {
         const { rekapFakultas } = this.props.data;
-        const filteredData = (rekapFakultas || []).filter(item => 
+        const filteredData = (rekapFakultas || []).filter(item =>
             (item.fakultas || "").toLowerCase().includes(this.state.search.toLowerCase())
         );
 
         return (
-             <div className="min-h-screen pb-20 bg-slate-50 font-['Inter']">
-                
+            <div className="min-h-screen pb-20 bg-slate-50 font-['Inter']">
+
                 <Container fluid className="px-4 md:px-12 pt-10">
-                    
+
                     {/* Header Section */}
                     <div className="bg-gradient-to-br from-emerald-500 to-emerald-400 rounded-[24px] p-10 text-white shadow-[0_20px_40px_-10px_rgba(16,185,129,0.2)] mb-[-40px] relative z-10">
                         <Row className="align-items-center">
@@ -126,29 +126,29 @@ class Fakultas extends React.Component {
                             <Col lg="6" md="12">
                                 <Row className="justify-content-lg-end align-items-center">
                                     <Col sm="12" md="auto" className="mb-3 mb-md-0 d-flex gap-3 align-items-center">
-                                        <div className="search-wrapper shadow-2xl flex-grow-1 !rounded-full">
-                                            <InputGroup className="overflow-hidden border-0 bg-white !rounded-full">
+                                        <div className="search-wrapper shadow-2xl flex-grow-1">
+                                            <InputGroup className="overflow-hidden border-0 bg-white rounded-full !h-[48px]">
                                                 <InputGroupAddon addonType="prepend">
-                                                    <InputGroupText className="bg-transparent border-0 text-emerald-500 pl-4 pr-0 !rounded-full">
+                                                    <InputGroupText className="!h-[48px] bg-transparent border-0 text-emerald-500 pl-4 pr-0">
                                                         <i className="fa fa-search"></i>
                                                     </InputGroupText>
                                                 </InputGroupAddon>
                                                 <Input 
-                                                    className="py-4 border-0 font-bold placeholder:text-gray-300 text-emerald-950 focus:ring-0 !rounded-full"
+                                                    className="!h-[48px] border-0 font-bold placeholder:text-gray-300 text-emerald-950 focus:ring-0 text-center placeholder:text-center"
                                                     placeholder="Cari Fakultas..."
                                                     value={this.state.search}
                                                     onChange={this.handleSearch}
                                                 />
                                             </InputGroup>
                                         </div>
-                                        
+
                                         {/* Dual Dropdown Filter (Tahun & Jalur) - Premium Pill Style */}
-                                        <div className="flex items-center bg-white rounded-full p-1 shadow-xl border border-emerald-100 overflow-hidden">
+                                        <div className="flex items-center !h-[48px] bg-white rounded-full shadow-xl border border-emerald-100 overflow-hidden">
                                             {/* Select Tahun */}
                                             <select 
                                                 value={this.state.selectedYear}
                                                 onChange={(e) => this.handleFilterChange('selectedYear', e.target.value)}
-                                                className="bg-emerald-600 text-white text-[10px] font-black uppercase tracking-widest px-6 py-3 border-0 outline-none cursor-pointer hover:bg-emerald-700 transition-colors"
+                                                className="!h-[48px] bg-white text-emerald-900 text-[10px] font-black uppercase tracking-widest px-6 border-0 outline-none cursor-pointer hover:bg-emerald-50 transition-colors"
                                             >
                                                 <option value="" disabled>Pilih Tahun</option>
                                                 <option value="2026">2026</option>
@@ -163,7 +163,7 @@ class Fakultas extends React.Component {
                                                 value={this.state.selectedJalur}
                                                 onChange={(e) => this.handleFilterChange('selectedJalur', e.target.value)}
                                                 disabled={!this.state.selectedYear}
-                                                className="bg-white text-emerald-900 text-[10px] font-black uppercase tracking-widest px-8 py-3 border-0 outline-none cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed hover:bg-emerald-50 transition-colors border-l border-emerald-100"
+                                                className="!h-[48px] bg-white text-emerald-900 text-[10px] font-black uppercase tracking-widest px-8 border-0 outline-none cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed hover:bg-emerald-50 transition-colors border-l border-emerald-100"
                                             >
                                                 <option value="">All Jalur</option>
                                                 <option value="1">SNBP</option>
@@ -173,7 +173,7 @@ class Fakultas extends React.Component {
                                         </div>
                                     </Col>
                                     <Col sm="auto">
-                                        <Button color="white" className="py-3 px-7 font-[800] uppercase tracking-wider transition-all duration-300 text-[11px] border-none hover:-translate-y-0.5 hover:scale-[1.02] hover:shadow-lg bg-white text-emerald-600 !rounded-full shadow-xl" onClick={this.handleExport}>
+                                        <Button color="white" className="!h-[48px] px-7 font-[800] uppercase tracking-wider transition-all duration-300 text-[11px] border-none hover:-translate-y-0.5 hover:scale-[1.02] hover:shadow-lg bg-white text-emerald-600 rounded-full shadow-xl" onClick={this.handleExport}>
                                             <i className="fa fa-file-excel-o mr-2"></i> Export CSV
                                         </Button>
                                     </Col>
@@ -187,16 +187,16 @@ class Fakultas extends React.Component {
                         <Table responsive hover borderless className="premium-table mb-0 w-full">
                             <thead>
                                 <tr className="bg-emerald-500">
-                                    <th rowSpan="2" className="sticky left-0 z-20 bg-emerald-500 text-white font-[900] uppercase text-[10.5px] tracking-[0.12em] p-[22px_15px] border-none shadow-[0_2px_4px_rgba(0,0,0,0.1)] text-center">Fakultas</th>
-                                    <th rowSpan="2" className="bg-emerald-500 text-white font-[900] uppercase text-[10.5px] tracking-[0.12em] p-[22px_15px] border-none shadow-[0_2px_4px_rgba(0,0,0,0.1)] text-center">Total MHS</th>
-                                    <th colSpan="8" className="bg-emerald-600/20 text-white font-[900] uppercase text-[10.5px] tracking-[0.12em] p-[22px_15px] border-none shadow-[0_2px_4px_rgba(0,0,0,0.1)] text-center">Distribusi Golongan UKT</th>
-                                    <th rowSpan="2" className="bg-emerald-500 text-white font-[900] uppercase text-[10.5px] tracking-[0.12em] p-[22px_15px] border-none shadow-[0_2px_4px_rgba(0,0,0,0.1)] text-center">Bidikmisi</th>
-                                    <th rowSpan="2" className="bg-emerald-500 text-white font-[900] uppercase text-[10.5px] tracking-[0.12em] p-[22px_15px] border-none shadow-[0_2px_4px_rgba(0,0,0,0.1)] text-center">Selesai</th>
-                                    <th rowSpan="2" className="bg-emerald-500 text-white font-[900] uppercase text-[10.5px] tracking-[0.12em] p-[22px_15px] border-none shadow-[0_2px_4px_rgba(0,0,0,0.1)] text-right pr-10">Total Nominal UKT</th>
+                                    <th rowSpan="2" className="sticky left-0 z-20 bg-emerald-500 text-white font-[900] uppercase text-[10.5px] tracking-[0.12em] py-2 px-[15px] border-none shadow-[0_2px_4px_rgba(0,0,0,0.1)] text-center border-r-[0.5px] border-white/10">Fakultas</th>
+                                    <th rowSpan="2" className="bg-emerald-500 text-white font-[900] uppercase text-[10.5px] tracking-[0.12em] py-2 px-[15px] border-none shadow-[0_2px_4px_rgba(0,0,0,0.1)] text-center">Total MHS</th>
+                                    <th colSpan="8" className="bg-emerald-600/20 text-white font-[900] uppercase text-[10.5px] tracking-[0.12em] py-2 px-[15px] border-none shadow-[0_2px_4px_rgba(0,0,0,0.1)] text-center">Distribusi Golongan UKT</th>
+                                    <th rowSpan="2" className="bg-emerald-500 text-white font-[900] uppercase text-[10.5px] tracking-[0.12em] py-2 px-[15px] border-none shadow-[0_2px_4px_rgba(0,0,0,0.1)] text-center">KIPK</th>
+                                    <th rowSpan="2" className="bg-emerald-500 text-white font-[900] uppercase text-[10.5px] tracking-[0.12em] py-2 px-[15px] border-none shadow-[0_2px_4px_rgba(0,0,0,0.1)] text-center">Selesai</th>
+                                    <th rowSpan="2" className="bg-emerald-500 text-white font-[900] uppercase text-[10.5px] tracking-[0.12em] py-2 px-[15px] border-none shadow-[0_2px_4px_rgba(0,0,0,0.1)] text-center">Total Nominal UKT</th>
                                 </tr>
                                 <tr className="bg-emerald-500">
                                     {GOLONGAN_LIST.map(gol => (
-                                        <th key={gol} className="bg-emerald-500 text-white font-[900] uppercase text-[10.5px] tracking-[0.12em] p-[22px_15px] border-none shadow-[0_2px_4px_rgba(0,0,0,0.1)] text-center border-l border-white/5">{gol}</th>
+                                        <th key={gol} className="bg-emerald-500 text-white font-[900] uppercase text-[10.5px] tracking-[0.12em] py-2 border-none shadow-[0_2px_4px_rgba(0,0,0,0.1)] text-center border-l border-white/5">{gol}</th>
                                     ))}
                                 </tr>
                             </thead>
@@ -204,7 +204,7 @@ class Fakultas extends React.Component {
                                 {filteredData.length > 0 ? (
                                     filteredData.map((item, idx) => (
                                         <tr key={idx} className="transition-all duration-300 border-b border-slate-100 hover:bg-emerald-500/5 hover:scale-[0.998]">
-                                            <td className="sticky left-0 z-20 bg-white shadow-[5px_0_15px_-5px_rgba(0,0,0,0.02)] font-black text-emerald-950 px-6 py-5 min-w-[300px] uppercase italic tracking-tight">
+                                            <td className="sticky left-0 z-20 bg-white shadow-[5px_0_15px_-5px_rgba(0,0,0,0.02)] text-center font-black text-emerald-950 px-6 py-5 min-w-[300px] uppercase italic tracking-tight border-r border-slate-50">
                                                 {item.fakultas}
                                             </td>
                                             <td className="text-center py-5">
@@ -215,7 +215,7 @@ class Fakultas extends React.Component {
                                             ))}
                                             <td className="text-center py-5 font-black text-sky-600">{item.bidikmisi || 0}</td>
                                             <td className="text-center py-5 font-black text-amber-600 italic underline decoration-amber-400 decoration-2">{item.subtotal || 0}</td>
-                                            <td className="text-right py-5 pr-10">
+                                            <td className="text-center py-5">
                                                 <span className="bg-[#10b981] text-white px-4 py-2.5 rounded-[14px] font-black shadow-[0_4px_10px_rgba(16,185,129,0.15)] font-mono border border-white/20 text-[11px]">{rupiah(item.total_ukt || 0)}</span>
                                             </td>
                                         </tr>
@@ -240,7 +240,7 @@ class Fakultas extends React.Component {
                                     ))}
                                     <td className="text-center text-sky-300">{this.calculateTotal('bidikmisi')}</td>
                                     <td className="text-center text-amber-300">{this.calculateTotal('subtotal')}</td>
-                                    <td className="text-right pr-10">
+                                    <td className="text-center">
                                         <div className="text-xl font-black text-yellow-300 drop-shadow-sm">
                                             {rupiah(this.calculateTotal('total_ukt'))}
                                         </div>
@@ -254,9 +254,9 @@ class Fakultas extends React.Component {
 
                 {/* Modal Coming Soon */}
                 {this.state.isModalOpen && (
-                    <FormModal 
+                    <FormModal
                         title="Filter Jalur UKT"
-                        onClose={this.toggleModal} 
+                        onClose={this.toggleModal}
                     />
                 )}
             </div>
@@ -285,7 +285,7 @@ const FormModal = ({ onClose, title }) => (
                         <i className="fa fa-filter text-4xl text-emerald-500"></i>
                     </div>
                 </div>
-                
+
                 <div className="space-y-2">
                     <h4 className="text-xl font-black text-emerald-900 uppercase italic">Coming Soon</h4>
                     <p className="text-sm text-emerald-700/60 font-medium leading-relaxed px-5">
@@ -294,7 +294,7 @@ const FormModal = ({ onClose, title }) => (
                 </div>
 
                 <div className="pt-4">
-                    <button 
+                    <button
                         onClick={onClose}
                         className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black py-4 rounded-2xl text-xs shadow-xl shadow-emerald-600/20 tracking-[0.2em] transition-all active:scale-95 uppercase"
                     >

@@ -140,13 +140,13 @@ class DataTable extends React.Component {
                         </Link>
 
                         {/* Tombol Sanggah - Hidden on original if sanggah exists (Reliable for ALL users via Backend Flag) */}
-                        {(!(values.atribut === 'original' && values.has_sanggah)) && (this.props.user?.role !== 'validator') && (
+                        {(!(values.atribut === 'original' && values.has_sanggah)) && (this.props.user?.role !== 'validator') && (values.flag !== 'selesai_sanggah' && values.flag !== 'terima_ukt') && (
                             <button
                                 onClick={() => this.toggleModal(id)}
                                 className={`inline-flex items-center px-3 py-1.5 ${values.atribut === 'sanggah' ? 'bg-red-50 text-red-600 border-red-200 hover:bg-red-600' : 'bg-orange-50 text-orange-600 border-orange-200 hover:bg-orange-600'} hover:text-white border text-[10px] font-black uppercase tracking-wider rounded-lg transition-all shadow-sm active:scale-95`}
                             >
                                 <i className={`fa ${values.atribut === 'sanggah' ? 'fa-refresh' : 'fa-pencil-square-o'} mr-1.5`}></i> 
-                                {values.atribut === 'sanggah' ? 'Perbarui' : 'Sanggah'}
+                                {values.atribut === 'sanggah' ? 'Sanggah UKT' : 'Sanggah'}
                             </button>
                         )}
                     </td>
@@ -289,7 +289,7 @@ class DataTable extends React.Component {
                             placeholder="Cari data..."
                             value={this.props.keyword}
                             onChange={this.props.handleSearch}
-                            className="block w-full pl-10 pr-3 py-2 border border-emerald-200 rounded-lg sm:text-sm"
+                            className="block w-full px-4 py-2.5 text-center border border-emerald-200 rounded-xl sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all duration-200 shadow-sm placeholder:text-gray-400 placeholder:text-center"
                         />
                     </div>
                 </div>

@@ -405,7 +405,7 @@ class Login extends Component {
                             </div>
 
                             <div className="mt-auto pt-5 text-center" style={{ opacity: 0.6, fontSize: '0.8rem', color: '#fff' }}>
-                                Siukat Front © 2017 - {new Date().getFullYear()} Pustikom UNJ.<br />All Rights Reserved.
+                                Siukat Fullstack © {new Date().getFullYear()} Universitas Negeri Jakarta.<br />All Rights Reserved.
                             </div>
                         </div>
                     </Col>
