@@ -88,8 +88,7 @@ class Fakultas extends React.Component {
             total_ukt: this.calculateTotal('total_ukt'),
         };
 
-        // exportRekapExcel('fakultas', rekapFakultas, totals);
-        swal("Info!", "Fitur Export Excel sedang dinonaktifkan sementara oleh Admin.", "info");
+        exportRekapExcel('fakultas', rekapFakultas, totals);
     };
 
     render() {

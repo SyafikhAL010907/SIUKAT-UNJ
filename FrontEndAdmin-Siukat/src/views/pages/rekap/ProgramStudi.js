@@ -75,8 +75,7 @@ class ProgramStudi extends React.Component {
             total_ukt: this.calculateGrandTotal('total_ukt'),
         };
 
-        // exportRekapExcel('program studi', rekapProdi, totals);
-        swal("Info!", "Fitur Export Excel sedang dinonaktifkan sementara oleh Admin.", "info");
+        exportRekapExcel('program studi', rekapProdi, totals);
     };
 
     getFilteredData = () => {
