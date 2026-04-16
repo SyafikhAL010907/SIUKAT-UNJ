@@ -1,4 +1,5 @@
 import React from 'react';
+import swal from 'sweetalert';
 import { cookies, cookieName } from "../../global"
 
 class ButtonInject extends React.Component {
@@ -49,14 +50,22 @@ class ButtonInject extends React.Component {
 
     const fileExtension = file.name.split('.').pop().toLowerCase();
     if (fileExtension !== 'xlsx' && fileExtension !== 'xls') {
-      alert("Format file salah! Hanya file Excel (.xlsx atau .xls) yang diperbolehkan.");
+      swal({
+        title: "Format Salah!",
+        text: "Hanya file Excel (.xlsx atau .xls) yang diperbolehkan.",
+        icon: "warning",
+      });
       if (this.fileInputRef.current) this.fileInputRef.current.value = "";
       return;
     }
 
-    const confirmInject = window.confirm(
-      `Peringatan: Anda akan menginject data dari file "${file.name}" ke sistem SIUKAT.\n\nLanjutkan?`
-    );
+    const confirmInject = await swal({
+      title: "Konfirmasi Injeksi!",
+      text: `Peringatan: Anda akan menginject data dari file "${file.name}" ke sistem SIUKAT. Data lama mungkin tertimpa. Lanjutkan?`,
+      icon: "warning",
+      buttons: ["Batal", "Gaspol!"],
+      dangerMode: true,
+    });
     
     if (!confirmInject) {
       if (this.fileInputRef.current) this.fileInputRef.current.value = "";
@@ -88,18 +97,30 @@ class ButtonInject extends React.Component {
         this.setState({ progress: 100, statusMsg: "Berhasil! Data Disimpan." });
         
         setTimeout(() => {
-          alert(`Berhasil! Data SNBP 2026 telah berhasil di-inject ke 13 Tabel dengan pengamanan BCrypt.`);
+          swal({
+            title: "Success Hook!",
+            text: "Berhasil! Data SNBP 2026 telah berhasil di-inject ke 13 Tabel dengan pengamanan BCrypt.",
+            icon: "success",
+          });
           this.setState({ loading: false, progress: 0 });
         }, 500);
       } else {
         clearInterval(this.progressInterval);
-        alert(`Gagal: ${result.message || 'Terjadi kesalahan pada server'}`);
+        swal({
+          title: "Injeksi Gagal!",
+          text: result.message || 'Terjadi kesalahan pada server saat memproses data.',
+          icon: "error",
+        });
         this.setState({ loading: false, progress: 0 });
       }
     } catch (error) {
       clearInterval(this.progressInterval);
       console.error("Error inject data:", error);
-      alert("Koneksi gagal: Pastikan Backend Golang (Port 8080) aktif.");
+      swal({
+        title: "Koneksi Terputus!",
+        text: "Pastikan Backend Golang (Port 8080) aktif dan dapat dijangkau.",
+        icon: "error",
+      });
       this.setState({ loading: false, progress: 0 });
     } finally {
       if (this.fileInputRef.current) this.fileInputRef.current.value = "";

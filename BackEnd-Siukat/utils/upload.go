@@ -22,30 +22,57 @@ func SanitizeString(s string) string {
 
 // HandleDynamicUpload creates dynamic directory and saves file (overwrites if exists)
 // Folder structure: uploads/{SanitizedNama}_{NoPeserta}/{Original|Sanggah}/{Sanitized_Filename.ext}
-// forcedFilename (optional): if provided, uses this name instead of original while keeping extension
 func HandleDynamicUpload(c *gin.Context, file *multipart.FileHeader, namaMahasiswa string, noPeserta string, atribut string, forcedFilename ...string) (string, error) {
+	// --- SECURITY VALIDATION ---
+	// 1. Check Max Size (200KB = 204800 Bytes)
+	if file.Size > 204800 {
+		return "", fmt.Errorf("ukuran file terlalu besar (Maks 200KB)")
+	}
+
+	// 2. Strict Check Double Extension (Security Risk)
+	if strings.Count(file.Filename, ".") > 1 {
+		return "", fmt.Errorf("file tidak aman (Double Extension detected)")
+	}
+
+	// 3. Check Allowed Extension
+	ext := strings.ToLower(filepath.Ext(file.Filename))
+	isProfile := false
+	if len(forcedFilename) > 0 && strings.HasPrefix(forcedFilename[0], "Profile") {
+		isProfile = true
+	}
+
+	if isProfile {
+		// Profile: Only images allowed
+		if ext != ".jpg" && ext != ".jpeg" && ext != ".png" {
+			return "", fmt.Errorf("format foto tidak valid (Gunakan .jpg, .jpeg, atau .png)")
+		}
+	} else {
+		// Documents: Only PDF allowed
+		if ext != ".pdf" {
+			return "", fmt.Errorf("format dokumen tidak valid (Wajib .pdf)")
+		}
+	}
+
+	// --- PROSES UPLOAD ---
 	// 1. Sanitize Nama and NoPeserta for Folder Name
 	sanitizedNama := SanitizeString(namaMahasiswa)
 	folderName := fmt.Sprintf("%s_%s", sanitizedNama, noPeserta)
 
 	// 2. Define Root & Sub Directory (Original/Sanggah)
-	// Kita gunakan strings.Title agar rapi (misal: "sanggah" -> "Sanggah")
 	subFolder := strings.Title(strings.ToLower(atribut))
 	if subFolder == "" {
-		subFolder = "Original" // Default jika kosong
+		subFolder = "Original" 
 	}
 	
 	targetDir := filepath.Join("uploads", folderName, subFolder)
 
-	// 3. Create Directory if it doesn't exist (MkdirAll is idempotent)
+	// 3. Create Directory if it doesn't exist
 	if err := os.MkdirAll(targetDir, 0755); err != nil {
 		return "", fmt.Errorf("failed to create directory: %v", err)
 	}
 
 	// 4. Sanitize Filename (keep extension)
-	ext := filepath.Ext(file.Filename)
 	var finalFilename string
-
 	if len(forcedFilename) > 0 && forcedFilename[0] != "" {
 		baseForce := SanitizeString(forcedFilename[0])
 		
@@ -66,7 +93,7 @@ func HandleDynamicUpload(c *gin.Context, file *multipart.FileHeader, namaMahasis
 
 		finalFilename = baseForce + ext
 	} else {
-		base := strings.TrimSuffix(file.Filename, ext)
+		base := strings.TrimSuffix(file.Filename, filepath.Ext(file.Filename))
 		sanitizedBase := SanitizeString(base)
 		finalFilename = sanitizedBase + ext
 	}
@@ -78,7 +105,7 @@ func HandleDynamicUpload(c *gin.Context, file *multipart.FileHeader, namaMahasis
 		return "", fmt.Errorf("failed to save file: %v", err)
 	}
 
-	// Return relative path for database storage (uploads/Folder/SubFolder/File.ext)
+	// Return relative path for database storage
 	dbPath := filepath.ToSlash(filepath.Join("uploads", folderName, subFolder, finalFilename))
 	fmt.Printf("📂 DEBUG DYNAMIC UPLOAD: TargetDir [%s] DBPath [%s]\n", targetDir, dbPath)
 	return dbPath, nil
