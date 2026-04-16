@@ -30,7 +30,8 @@ class Exports extends Component{
     componentWillReceiveProps(nextProps){
         // Jika sedang dalam proses download dan data baru sudah sampai
         if(this.state.isDownloading && nextProps.fetched){
-            exportMasterDataExcel(nextProps.cmahasiswa);
+            // exportMasterDataExcel(nextProps.cmahasiswa);
+            swal("Info!", "Fitur Export Excel sedang dinonaktifkan sementara oleh Admin.", "info");
             this.setState({ isDownloading: false });
         }
     }

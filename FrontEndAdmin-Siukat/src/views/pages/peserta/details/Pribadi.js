@@ -193,8 +193,8 @@ class Pribadi extends React.Component {
         try {
             await this.props.dispatch(cmahasiswa.updateData(token, formData, this.props.noPeserta));
             await this.props.dispatch(cmahasiswa.fetchAllData(token, this.props.noPeserta, this.props.atribut));
-            this.modalToggle();
-            alert("Data Berhasil Diperbarui!");
+            // this.modalToggle();
+            // alert("Data Berhasil Diperbarui!");
         } catch (error) {
             console.error("Update Error", error);
             alert("Gagal menyimpan perubahan.");
