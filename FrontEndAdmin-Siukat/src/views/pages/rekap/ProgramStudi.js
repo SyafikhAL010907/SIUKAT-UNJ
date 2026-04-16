@@ -16,6 +16,7 @@ import {
 } from 'reactstrap';
 import { rekapitulasi } from "../../../actions";
 import { cookies, cookieName, rupiah } from "../../../global";
+import { exportRekapExcel } from '../../../utils/exportExcel';
 
 const GOLONGAN_LIST = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII'];
 
@@ -51,30 +52,30 @@ class ProgramStudi extends React.Component {
     handleSearch = (e) => this.setState({ search: e.target.value });
 
     handleExport = () => {
-        const data = this.props.data.rekapProdi || [];
-        if (!data.length) return;
+        if (!this.state.selectedYear) {
+            return swal("Peringatan!", "Pilih Tahun dulu broo sebelum export!", "info");
+        }
+        const { rekapProdi = [] } = this.props.data;
+        if (!rekapProdi.length) {
+            return swal("Waduh!", "Data rekapitulasi masih kosong, gak ada yang bisa diexport broo!", "warning");
+        }
 
-        const headers = ['Program Studi', 'Total Mhs', ...GOLONGAN_LIST, 'Bidikmisi', 'Selesai', 'Total Nominal UKT'];
-        const rows = data.map(item => [
-            item.prodi || '-',
-            item.total_mahasiswa || 0,
-            ...GOLONGAN_LIST.map(g => item[g] || 0),
-            item.bidikmisi || 0,
-            item.subtotal || 0,
-            item.total_ukt || 0
-        ]);
+        const totals = {
+            total_mahasiswa: this.calculateGrandTotal('total_mahasiswa'),
+            I: this.calculateGrandTotal('I'),
+            II: this.calculateGrandTotal('II'),
+            III: this.calculateGrandTotal('III'),
+            IV: this.calculateGrandTotal('IV'),
+            V: this.calculateGrandTotal('V'),
+            VI: this.calculateGrandTotal('VI'),
+            VII: this.calculateGrandTotal('VII'),
+            VIII: this.calculateGrandTotal('VIII'),
+            bidikmisi: this.calculateGrandTotal('bidikmisi'),
+            subtotal: this.calculateGrandTotal('subtotal'),
+            total_ukt: this.calculateGrandTotal('total_ukt'),
+        };
 
-        const csvContent = [headers, ...rows]
-            .map(row => row.map(v => `"${v}"`).join(','))
-            .join('\n');
-
-        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = 'Rekap_Program_Studi_SIUKAT.csv';
-        link.click();
-        URL.revokeObjectURL(url);
+        exportRekapExcel('program studi', rekapProdi, totals);
     };
 
     getFilteredData = () => {
@@ -166,7 +167,7 @@ class ProgramStudi extends React.Component {
 
                                     <Col sm="auto" className="d-flex gap-3 mt-3 mt-sm-0">
                                         <Button color="white" className="!h-[48px] px-7 font-[800] uppercase tracking-wider transition-all duration-300 text-[11px] border-none hover:-translate-y-0.5 hover:scale-[1.02] hover:shadow-lg bg-white text-emerald-600 rounded-full shadow-xl w-100 w-md-auto" onClick={this.handleExport}>
-                                            <i className="fa fa-file-excel-o mr-2"></i> Export CSV
+                                            <i className="fa fa-file-excel-o mr-2"></i> Export Excel
                                         </Button>
                                     </Col>
                                 </Row>

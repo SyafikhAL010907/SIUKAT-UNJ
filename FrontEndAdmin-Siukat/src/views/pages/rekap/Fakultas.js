@@ -14,6 +14,7 @@ import {
 } from 'reactstrap';
 import { rekapitulasi } from "../../../actions";
 import { cookies, cookieName, rupiah } from "../../../global";
+import { exportRekapExcel } from '../../../utils/exportExcel';
 
 
 const GOLONGAN_LIST = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII'];
@@ -64,34 +65,30 @@ class Fakultas extends React.Component {
     };
 
     handleExport = () => {
-        const data = this.props.data.rekapFakultas || [];
-        if (data.length === 0) return;
+        if (!this.state.selectedYear) {
+            return swal("Peringatan!", "Pilih Tahun dulu broo sebelum export!", "info");
+        }
+        const { rekapFakultas = [] } = this.props.data;
+        if (!rekapFakultas.length) {
+            return swal("Waduh!", "Data rekapitulasi masih kosong, gak ada yang bisa diexport broo!", "warning");
+        }
 
-        const headers = ["Fakultas", "Total Mhs", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "KIPK", "Selesai Isi", "Total UKT"];
-        const csvRows = [headers.join(",")];
+        const totals = {
+            total_mahasiswa: this.calculateTotal('total_mahasiswa'),
+            I: this.calculateTotal('I'),
+            II: this.calculateTotal('II'),
+            III: this.calculateTotal('III'),
+            IV: this.calculateTotal('IV'),
+            V: this.calculateTotal('V'),
+            VI: this.calculateTotal('VI'),
+            VII: this.calculateTotal('VII'),
+            VIII: this.calculateTotal('VIII'),
+            bidikmisi: this.calculateTotal('bidikmisi'),
+            subtotal: this.calculateTotal('subtotal'),
+            total_ukt: this.calculateTotal('total_ukt'),
+        };
 
-        data.forEach(item => {
-            const row = [
-                `"${item.fakultas}"`,
-                item.total_mahasiswa,
-                item.I, item.II, item.III, item.IV, item.V, item.VI, item.VII, item.VIII,
-                item.bidikmisi,
-                item.subtotal,
-                item.total_ukt
-            ];
-            csvRows.push(row.join(","));
-        });
-
-        const csvString = csvRows.join("\n");
-        const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement("a");
-        const url = URL.createObjectURL(blob);
-        link.setAttribute("href", url);
-        link.setAttribute("download", `Rekap_Fakultas_${new Date().toLocaleDateString()}.csv`);
-        link.style.visibility = 'hidden';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        exportRekapExcel('fakultas', rekapFakultas, totals);
     };
 
     render() {
@@ -174,7 +171,7 @@ class Fakultas extends React.Component {
                                     </Col>
                                     <Col sm="auto">
                                         <Button color="white" className="!h-[48px] px-7 font-[800] uppercase tracking-wider transition-all duration-300 text-[11px] border-none hover:-translate-y-0.5 hover:scale-[1.02] hover:shadow-lg bg-white text-emerald-600 rounded-full shadow-xl" onClick={this.handleExport}>
-                                            <i className="fa fa-file-excel-o mr-2"></i> Export CSV
+                                            <i className="fa fa-file-excel-o mr-2"></i> Export Excel
                                         </Button>
                                     </Col>
                                 </Row>

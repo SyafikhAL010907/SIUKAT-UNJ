@@ -3,7 +3,7 @@ import { cmahasiswa } from '../../actions'
 import { connect } from 'react-redux'
 import { cookies, cookieName } from '../../global'
 import { Button } from 'reactstrap'
-import { CSVLink, CSVDownload} from 'react-csv'
+import { exportMasterDataExcel } from '../../utils/exportExcel'
 
 const columnsHeaders = [
     {label:"Nomor Peserta", key:"no_peserta"},
@@ -30,13 +30,8 @@ class Exports extends Component{
     componentWillReceiveProps(nextProps){
         // Jika sedang dalam proses download dan data baru sudah sampai
         if(this.state.isDownloading && nextProps.fetched){
-            // Trigger download secara paksa menggunakan ref
-            setTimeout(() => {
-                if (this.csvLink && this.csvLink.current && this.csvLink.current.link) {
-                    this.csvLink.current.link.click()
-                }
-                this.setState({ isDownloading: false })
-            }, 500)
+            exportMasterDataExcel(nextProps.cmahasiswa);
+            this.setState({ isDownloading: false });
         }
     }
 
@@ -57,15 +52,7 @@ class Exports extends Component{
                     {this.state.isDownloading ? " Loading..." : ` Excel ${this.props.title}`}
                 </Button>
                 
-                {this.state.isDownloading && this.props.cmahasiswa && this.props.cmahasiswa.length > 0 && (
-                    <CSVLink 
-                        data={this.props.cmahasiswa} 
-                        headers={columnsHeaders}
-                        filename={`Data_Master_Siukat.csv`}
-                        ref={this.csvLink}
-                        className="hidden"
-                    />
-                )}
+                {/* Download handled via centralized utility in componentWillReceiveProps */}
             </div>
         )
     }
