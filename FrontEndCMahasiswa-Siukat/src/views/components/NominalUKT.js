@@ -41,12 +41,22 @@ class NominalUKT extends React.Component {
             besar_ukt: this.props.ukt[this.props.cmahasiswa.golongan_id],
         };
         return (
-            <div className="py-1 sm:py-2">
-                <div className="text-uppercase text-[10px] sm:text-xs font-weight-bold text-muted mb-1">Besaran UKT Anda:</div>
-                <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-weight-bold mb-2" style={{ color: '#008d4c', letterSpacing: '-1px' }}>
+            <div className="py-2 sm:py-4 px-2">
+                <div className="text-uppercase font-weight-bold text-muted mb-2" style={{ fontSize: 'clamp(0.7rem, 2vw, 0.9rem)', letterSpacing: '1px' }}>BESARAN UKT ANDA:</div>
+                <div className="mb-3 font-weight-bold text-emerald text-center" style={{ 
+                    fontSize: 'clamp(1.1rem, 4.5vw, 2.2rem)', 
+                    letterSpacing: '-0.5px', 
+                    lineHeight: '1.2',
+                    color: '#008d4c'
+                }}>
                     {rupiah(ukt_now.besar_ukt)}
                 </div>
-                <div className="d-inline-block px-3 py-1 rounded-pill" style={{ backgroundColor: '#ffcc00', color: '#000', fontWeight: '600', fontSize: '0.75rem', sm: '0.9rem' }}>
+                <div className="d-inline-block px-3 py-1 sm:px-4 sm:py-2 rounded-pill shadow-sm" style={{ 
+                    backgroundColor: '#ffcc00', 
+                    color: '#000', 
+                    fontWeight: '800',
+                    fontSize: 'clamp(0.75rem, 1.5vw, 1rem)'
+                }}>
                     Kelompok {ukt_now.kategori}
                 </div>
             </div>
@@ -78,9 +88,9 @@ class NominalUKT extends React.Component {
                                             <p className="text-muted small">Jika usulan KIPK tidak diterima, maka nominal UKT Anda berdasarkan data unggahan:</p>
                                         </div>
                                     ) : (
-                                        <h5 className="font-weight-normal text-secondary mb-4">
+                                        <div className="font-weight-bold text-dark mb-4 text-xs sm:text-base md:text-lg lg:text-xl" style={{ lineHeight: '1.4' }}>
                                             Berdasarkan hasil verifikasi data, penetapan UKT Anda adalah:
-                                        </h5>
+                                        </div>
                                     )}
                                 </div>
 

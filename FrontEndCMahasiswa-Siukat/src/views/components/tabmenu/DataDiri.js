@@ -41,7 +41,7 @@ class DataDiri extends React.Component {
                                         ? cmahasiswa.foto_cmahasiswa 
                                         : storage + '/' + cmahasiswa.foto_cmahasiswa
                                     }
-                                    style={{ width: '100%', maxWidth: '160px', height: 'auto', aspectRatio: '3/4', objectFit: 'cover', borderRadius: '6px' }}
+                                    style={{ width: '100%', maxWidth: '220px', height: 'auto', aspectRatio: '3/4', objectFit: 'cover', borderRadius: '12px' }}
                                     alt="foto-cmahasiswa"
                                     onError={(e) => {
                                         if (!e.target.dataset.triedFallback) {
@@ -56,7 +56,7 @@ class DataDiri extends React.Component {
                             ) : (
                                 <img
                                     src={service + '/img/profile.png'}
-                                    style={{ width: '100%', maxWidth: '160px', height: 'auto', aspectRatio: '3/4', objectFit: 'cover', borderRadius: '6px' }}
+                                    style={{ width: '100%', maxWidth: '220px', height: 'auto', aspectRatio: '3/4', objectFit: 'cover', borderRadius: '12px' }}
                                     alt="belum-ada-foto"
                                 />
                             )}
@@ -67,20 +67,20 @@ class DataDiri extends React.Component {
                             <Table className="modern-table-premium mb-0 border-0">
                                 <tbody>
                                     <tr>
-                                        <td className="text-xs sm:text-sm py-2" style={{ width: '40%' }}>No. Peserta</td>
-                                        <td className="text-xs sm:text-sm py-2 font-weight-bold">{cmahasiswa.no_peserta || '-'}</td>
+                                        <td className="text-sm sm:text-base md:text-lg py-3" style={{ width: '35%' }}>No. Peserta</td>
+                                        <td className="text-sm sm:text-base md:text-lg py-3 font-weight-bold">{cmahasiswa.no_peserta || '-'}</td>
                                     </tr>
                                     <tr>
-                                        <td className="text-xs sm:text-sm py-2">Nama</td>
-                                        <td className="text-xs sm:text-sm py-2 font-weight-bold" style={{color: '#000'}}>{cmahasiswa.nama_cmahasiswa || '-'}</td>
+                                        <td className="text-sm sm:text-base md:text-lg py-3">Nama Lengkap</td>
+                                        <td className="text-sm sm:text-base md:text-lg py-3 font-weight-bold" style={{color: '#000'}}>{cmahasiswa.nama_cmahasiswa || '-'}</td>
                                     </tr>
                                     <tr>
-                                        <td className="text-xs sm:text-sm py-2">Prodi</td>
-                                        <td className="text-xs sm:text-sm py-2 font-weight-bold">{cmahasiswa.prodi?.nama || cmahasiswa.prodi_cmahasiswa || '-'}</td>
+                                        <td className="text-sm sm:text-base md:text-lg py-3">Program Studi</td>
+                                        <td className="text-sm sm:text-base md:text-lg py-3 font-weight-bold">{cmahasiswa.prodi?.nama || cmahasiswa.prodi_cmahasiswa || '-'}</td>
                                     </tr>
                                     <tr>
-                                        <td className="text-xs sm:text-sm py-2">Fakultas</td>
-                                        <td className="text-xs sm:text-sm py-2 font-weight-bold">{cmahasiswa.fakultas?.nama || '-'}</td>
+                                        <td className="text-sm sm:text-base md:text-lg py-3">Fakultas</td>
+                                        <td className="text-sm sm:text-base md:text-lg py-3 font-weight-bold">{cmahasiswa.fakultas?.nama || '-'}</td>
                                     </tr>
                                 </tbody>
                             </Table>
@@ -96,7 +96,7 @@ class DataDiri extends React.Component {
                             <i className="fa fa-id-card-o mr-2"></i> Hasil Verifikasi
                         </h6>
                         <Row className="justify-content-center px-2">
-                            <Col sm={6} md={5} xs={12} className="px-1 mb-3">
+                            <Col xl={5} lg={6} md={12} xs={12} className="px-1 mb-3">
                                 <div className="verification-card-premium text-center h-100 p-3 sm:p-4">
                                     <div className={`icon-wrapper-soft mx-auto mb-2 ${safeVerifikasi.result_akademik === 'lolos' ? 'bg-success text-white' : 'bg-warning text-white'}`}
                                          style={{ width: '45px', height: '45px', lineHeight: '45px', fontSize: '1rem' }}>
@@ -110,7 +110,7 @@ class DataDiri extends React.Component {
                                     </div>
                                 </div>
                             </Col>
-                            <Col sm={6} md={5} xs={12} className="px-1 mb-3">
+                            <Col xl={5} lg={6} md={12} xs={12} className="px-1 mb-3">
                                 <div className="verification-card-premium text-center h-100 p-3 sm:p-4">
                                     <div className={`icon-wrapper-soft mx-auto mb-2 ${safeVerifikasi.result_kipk === 'lolos' ? 'bg-success text-white' : 'bg-danger text-white'}`}
                                          style={{ width: '45px', height: '45px', lineHeight: '45px', fontSize: '1rem' }}>

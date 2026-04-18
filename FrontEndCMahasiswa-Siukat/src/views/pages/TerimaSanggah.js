@@ -157,7 +157,7 @@ class TerimaSanggah extends React.Component {
                                         <div className="mb-5 rounded-xl overflow-hidden shadow-sm border" style={{ borderColor: '#10b981' }}>
                                             <div className="bg-light p-3 border-bottom d-flex align-items-center">
                                                 <i className="fa fa-money text-success mr-3 fa-lg"></i>
-                                                <h6 className="mb-0 font-weight-bold color-emerald text-uppercase" style={{ letterSpacing: '1px' }}>Besaran UKT Anda</h6>
+                                                <h5 className="mb-0 font-weight-bold color-emerald text-uppercase text-sm sm:text-base md:text-lg" style={{ letterSpacing: '1.5px' }}>Besaran UKT Anda</h5>
                                             </div>
                                             <NominalUKT />
                                         </div>
