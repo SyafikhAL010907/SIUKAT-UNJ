@@ -51,10 +51,10 @@ class Header extends Component {
 
     return (
       <header className="sticky top-0 z-40 w-full border-b border-gray-100 bg-white/80 backdrop-blur-md shadow-sm">
-        <div className="flex h-16 items-center justify-between px-4 md:px-8">
+        <div className="flex h-16 items-center justify-between px-3 md:px-8">
           
           {/* SISI KIRI: BRANDING & TOGGLER */}
-          <div className="flex items-center gap-5">
+          <div className="flex items-center gap-2 md:gap-5">
             <button 
               onClick={(e) => this.toggleSidebar(e, 'mobile')}
               className="rounded-xl p-2 text-gray-500 transition-colors hover:bg-green-50 hover:text-green-600 lg:hidden"
@@ -64,17 +64,20 @@ class Header extends Component {
               </svg>
             </button>
 
-            <div className="flex items-center gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-full bg-white p-1.5 shadow-sm border border-gray-100">
+            <div className="flex items-center gap-2 md:gap-3">
+              <div className="flex h-9 w-9 md:h-11 md:w-11 items-center justify-center rounded-full bg-white p-1 md:p-1.5 shadow-sm border border-gray-100">
                 <img src="/unj.png" alt="Logo UNJ" className="h-full w-auto object-contain" />
               </div>
               
               <div className="flex flex-col leading-tight">
-
                 <span className="text-xl font-black italic tracking-tighter text-gray-800 uppercase">
                   SIUKAT <span className="bg-gradient-to-r from-green-600 to-green-400 bg-clip-text text-transparent">ADMIN</span>
                 </span>
-                <span className="text-[9px] font-bold tracking-[0.2em] text-gray-400 uppercase">Universitas Negeri Jakarta</span>
+                {/* Text UNJ disingkat di mobile agar tidak overflow */}
+                <span className="text-[7px] md:text-[9px] font-bold tracking-[0.1em] md:tracking-[0.2em] text-gray-400 uppercase">
+                   <span className="hidden md:inline">Universitas Negeri Jakarta</span>
+                   <span className="md:hidden">UNJ</span>
+                </span>
               </div>
             </div>
 
@@ -89,22 +92,23 @@ class Header extends Component {
           </div>
 
           {/* SISI KANAN: USER PROFILE & ACTIONS */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 md:gap-4">
             
             {/* USER PROFILE BOX */}
-            <div className="flex items-center gap-3 rounded-2xl bg-gray-50/50 p-1.5 pr-4 border border-gray-100 transition-all hover:bg-gray-50">
+            <div className="flex items-center gap-2 md:gap-3 rounded-2xl bg-gray-50/50 p-1 md:p-1.5 md:pr-4 border border-gray-100 transition-all hover:bg-gray-50">
               <div className="relative">
-                <div className="h-9 w-9 overflow-hidden rounded-xl bg-gradient-to-br from-green-500 to-green-600 p-0.5 shadow-md">
-                  <div className="flex h-full w-full items-center justify-center rounded-[10px] bg-white text-green-600 font-black text-sm uppercase">
+                <div className="h-8 w-8 md:h-9 md:w-9 overflow-hidden rounded-xl bg-gradient-to-br from-green-500 to-green-600 p-0.5 shadow-md">
+                  <div className="flex h-full w-full items-center justify-center rounded-[10px] bg-white text-green-600 font-black text-xs md:text-sm uppercase">
                     {nama_lengkap.charAt(0)}
                   </div>
                 </div>
-                <div className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-white bg-green-500"></div>
+                <div className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 md:h-3 md:w-3 rounded-full border-2 border-white bg-green-500"></div>
               </div>
               
-              <div className="flex flex-col">
-                <span className="text-[9px] font-black uppercase tracking-widest text-green-600/70">Authenticated User</span>
-                <span className="text-xs font-bold text-gray-800 line-clamp-1 truncate max-w-[120px]">
+              {/* Nama hanya muncul di layar small (tablet) ke atas agar header tidak sesak di HP */}
+              <div className="hidden sm:flex flex-col">
+                <span className="text-[9px] font-black uppercase tracking-widest text-green-600/70">Authenticated</span>
+                <span className="text-xs font-bold text-gray-800 line-clamp-1 truncate max-w-[80px] md:max-w-[120px]">
                   {nama_lengkap}
                 </span>
               </div>
@@ -116,7 +120,7 @@ class Header extends Component {
             {/* LOGOUT */}
             <button 
               onClick={this.logout}
-              className="group flex h-10 w-10 items-center justify-center rounded-xl bg-white border border-red-100 text-red-500 transition-all hover:bg-red-500 hover:text-red-500 hover:shadow-lg hover:shadow-red-200 active:scale-95"
+              className="group flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-xl bg-white border border-red-100 text-red-500 transition-all hover:bg-red-500 hover:text-white hover:shadow-lg hover:shadow-red-200 active:scale-95"
               title="Keluar Aplikasi"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 transition-transform group-hover:rotate-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -116,61 +116,60 @@ class ProgramStudi extends React.Component {
                                 </div>
                             </Col>
 
-                            <Col lg="6" md="12">
-                                <Row className="justify-content-lg-end align-items-center">                                    <Col sm="12" md="auto" className="mb-3 mb-md-0 d-flex gap-3 align-items-center">
-                                        <div className="search-wrapper shadow-2xl flex-grow-1">
-                                           <InputGroup className="overflow-hidden border-0 bg-white rounded-full !h-[48px]">
-                                               <InputGroupAddon addonType="prepend">
-                                                   <InputGroupText className="!h-[48px] bg-transparent border-0 text-emerald-500 pl-4 pr-0">
-                                                       <i className="fa fa-search"></i>
-                                                   </InputGroupText>
-                                               </InputGroupAddon>
-                                               <Input 
-                                                   className="!h-[48px] border-0 font-bold placeholder:text-gray-300 text-emerald-950 focus:ring-0 text-center placeholder:text-center"
-                                                   placeholder="Cari Program Studi..."
-                                                   value={this.state.search}
-                                                   onChange={this.handleSearch}
-                                               />
-                                           </InputGroup>
-                                       </div>
+                            <Col lg="7" md="12" className="mt-4 lg:mt-0">
+                                <div className="flex flex-col md:flex-row gap-4 items-center justify-end font-['Montserrat']">
+                                    
+                                    {/* --- 1. Dual Filter (Pill Style) --- */}
+                                    <div className="flex w-full md:w-auto bg-white rounded-2xl shadow-lg border border-emerald-50 p-1">
+                                        <select 
+                                            value={this.state.selectedYear}
+                                            onChange={(e) => this.handleFilterChange('selectedYear', e.target.value)}
+                                            className="flex-1 md:w-28 bg-transparent text-emerald-900 text-[11px] font-black uppercase tracking-tight h-[42px] px-3 border-0 outline-none cursor-pointer hover:bg-emerald-50 rounded-xl transition-all"
+                                        >
+                                            <option value="" disabled>Tahun</option>
+                                            <option value="2026">2026</option>
+                                            <option value="2027">2027</option>
+                                            <option value="2028">2028</option>
+                                        </select>
 
-                                        {/* Dual Dropdown Filter (Tahun & Jalur) - Premium Pill Style */}
-                                        <div className="flex items-center !h-[48px] bg-white rounded-full shadow-xl border border-emerald-100 overflow-hidden">
-                                            {/* Select Tahun */}
-                                            <select 
-                                                value={this.state.selectedYear}
-                                                onChange={(e) => this.handleFilterChange('selectedYear', e.target.value)}
-                                                className="!h-[48px] bg-white text-emerald-900 text-[10px] font-black uppercase tracking-widest px-6 border-0 outline-none cursor-pointer hover:bg-emerald-50 transition-colors"
-                                            >
-                                                <option value="" disabled>Pilih Tahun</option>
-                                                <option value="2026">2026</option>
-                                                <option value="2027">2027</option>
-                                                <option value="2028">2028</option>
-                                                <option value="2029">2029</option>
-                                                <option value="2030">2030</option>
-                                            </select>
+                                        <div className="w-[1px] h-6 bg-emerald-100 self-center"></div>
 
-                                            {/* Select Jalur */}
-                                            <select 
-                                                value={this.state.selectedJalur}
-                                                onChange={(e) => this.handleFilterChange('selectedJalur', e.target.value)}
-                                                disabled={!this.state.selectedYear}
-                                                className="!h-[48px] bg-white text-emerald-900 text-[10px] font-black uppercase tracking-widest px-8 border-0 outline-none cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed hover:bg-emerald-50 transition-colors border-l border-emerald-100"
-                                            >
-                                                <option value="">All Jalur</option>
-                                                <option value="1">SNBP</option>
-                                                <option value="2">SNBT</option>
-                                                <option value="3">MANDIRI</option>
-                                            </select>
+                                        <select 
+                                            value={this.state.selectedJalur}
+                                            onChange={(e) => this.handleFilterChange('selectedJalur', e.target.value)}
+                                            disabled={!this.state.selectedYear}
+                                            className="flex-1 md:w-32 bg-transparent text-emerald-900 text-[11px] font-black uppercase tracking-tight h-[42px] px-3 border-0 outline-none cursor-pointer disabled:opacity-30 hover:bg-emerald-50 rounded-xl transition-all"
+                                        >
+                                            <option value="">Semua Jalur</option>
+                                            <option value="1">SNBP</option>
+                                            <option value="2">SNBT</option>
+                                            <option value="3">MANDIRI</option>
+                                        </select>
+                                    </div>
+
+                                    {/* --- 2. Export Button --- */}
+                                    <Button 
+                                        className="w-full md:w-auto !h-[50px] px-8 bg-yellow-400 hover:bg-yellow-300 text-emerald-950 border-0 !rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] shadow-lg hover:-translate-y-1 transition-all active:scale-95" 
+                                        onClick={this.handleExport}
+                                    >
+                                        <i className="fa fa-file-excel-o mr-2"></i> Export
+                                    </Button>
+
+                                    {/* --- 3. Search Bar (Sekarang di Paling Kanan) --- */}
+                                    <div className="relative w-full md:w-64 group">
+                                        {/* Ikon Search dengan pointer-events-none agar input tetap bisa diklik dengan lancar */}
+                                        <div className="absolute right-4 top-1/2 -translate-y-1/2 text-emerald-500 z-10 pointer-events-none transition-transform group-focus-within:scale-110">
+                                            <i className="fa fa-search"></i>
                                         </div>
-                                    </Col>
+                                        <Input 
+                                            className="!h-[50px] !rounded-2xl border-0 bg-white shadow-lg focus:ring-4 focus:ring-emerald-500/20 font-bold text-emerald-950 pl-11 placeholder:text-gray-300 transition-all text-sm"
+                                            placeholder="Cari Fakultas..."
+                                            value={this.state.search}
+                                            onChange={this.handleSearch}
+                                        />
+                                    </div>
 
-                                    <Col sm="auto" className="d-flex gap-3 mt-3 mt-sm-0">
-                                        <Button color="white" className="!h-[48px] px-7 font-[800] uppercase tracking-wider transition-all duration-300 text-[11px] border-none hover:-translate-y-0.5 hover:scale-[1.02] hover:shadow-lg bg-white text-emerald-600 rounded-full shadow-xl w-100 w-md-auto" onClick={this.handleExport}>
-                                            <i className="fa fa-file-excel-o mr-2"></i> Export Excel
-                                        </Button>
-                                    </Col>
-                                </Row>
+                                </div>
                             </Col>
                         </Row>
                     </div>

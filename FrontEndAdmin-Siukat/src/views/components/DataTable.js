@@ -205,7 +205,7 @@ class DataTable extends React.Component {
         let currentPage = parseInt(this.props.currentPage, 10);
         let totalPages = parseInt(this.props.totalPages, 10);
 
-        const btnClass = "relative inline-flex items-center px-4 py-2 border text-sm font-medium transition-colors ";
+        const btnClass = "relative inline-flex items-center px-2 py-1.5 md:px-4 md:py-2 border text-[11px] md:text-sm font-medium transition-colors ";
         const activeClass = "z-10 bg-emerald-700 border-emerald-700 text-white";
         const inactiveClass = "bg-white border-gray-300 text-gray-500 hover:bg-emerald-50 hover:text-emerald-700";
 
@@ -216,7 +216,8 @@ class DataTable extends React.Component {
                 onClick={(e) => this.props.renderData(e, this.props.perPage, currentPage - 1, this.props.keyword)}
                 className={`${btnClass} rounded-l-md ${currentPage === 1 ? 'bg-gray-100 text-gray-400' : inactiveClass}`}
             >
-                Prev
+                <i className="fa fa-chevron-left md:hidden"></i>
+                <span className="hidden md:inline">Prev</span>
             </button>
         );
 
@@ -242,7 +243,8 @@ class DataTable extends React.Component {
                 onClick={(e) => this.props.renderData(e, this.props.perPage, currentPage + 1, this.props.keyword)}
                 className={`${btnClass} rounded-r-md ${currentPage === totalPages || totalPages === 0 ? 'bg-gray-100 text-gray-400' : inactiveClass}`}
             >
-                Next
+                <span className="hidden md:inline">Next</span>
+                <i className="fa fa-chevron-right md:hidden"></i>
             </button>
         );
 
@@ -302,11 +304,11 @@ class DataTable extends React.Component {
                     </div>
                 </div>
 
-                <div className="overflow-x-auto">
+               <div className="overflow-x-auto w-full scrollbar-thin scrollbar-thumb-emerald-200 scrollbar-track-gray-50">
                     <table className="min-w-full divide-y divide-emerald-200">
                         <thead className="bg-emerald-700">
                             <tr>
-                                <th className="px-6 py-3 text-left text-xs font-bold text-yellow-400 uppercase tracking-wider">No</th>
+                                <th className="px-3 md:px-6 py-3 text-left text-[10px] md:text-xs font-bold text-yellow-400 uppercase tracking-wider">No</th>
                                 {this.renderColumns()}
                             </tr>
                         </thead>
@@ -316,11 +318,11 @@ class DataTable extends React.Component {
                     </table>
                 </div>
 
-                <div className="px-5 py-4 flex flex-col md:flex-row justify-between items-center bg-gray-50 border-t border-emerald-100">
-                    <p className="text-sm text-gray-600">
+                <div className="px-3 py-3 md:px-5 md:py-4 flex flex-col md:flex-row justify-between items-center gap-3 bg-gray-50 border-t border-emerald-100">
+                    <p className="text-[11px] md:text-sm text-gray-600 order-2 md:order-1">
                         Menampilkan <span className="font-bold text-emerald-700">{this.props.data ? this.props.data.length : 0}</span> dari <span className="font-bold text-emerald-700">{this.props.total || 0}</span> data
                     </p>
-                    <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
+                    <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px order-1 md:order-2">
                         {this.renderPagination()}
                     </nav>
                 </div>
