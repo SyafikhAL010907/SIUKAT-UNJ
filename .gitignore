@@ -1,14 +1,14 @@
-*.sql
-DATA/
+#*.sql
+#DATA/
 node_modules/
 bin/
 # Database
-*.sql
-DATA/
+#*.sql
+#DATA/
 !*.md
 
 # Student Uploads
-BackEnd-Siukat/uploads/
+#BackEnd-Siukat/uploads/
 
 # Pastikan file .md selalu masuk
 !*.md
