@@ -1,8 +1,8 @@
-import { provinsi } from '../api'
+import { provinsi } from "../api";
 
-export function fetchProvinsi(){
-    return {
-        type: "FETCH_PROVINSI",
-        payload: provinsi.fetchProvinsi()
-    }
+export function fetchProvinsi() {
+  return {
+    type: "FETCH_PROVINSI",
+    payload: provinsi.fetchProvinsi(),
+  };
 }

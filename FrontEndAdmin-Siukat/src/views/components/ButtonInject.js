@@ -1,6 +1,6 @@
-import React from 'react';
-import swal from 'sweetalert';
-import { cookies, cookieName } from "../../global"
+import React from "react";
+import swal from "sweetalert";
+import { cookies, cookieName } from "../../global";
 
 class ButtonInject extends React.Component {
   constructor(props) {
@@ -34,7 +34,10 @@ class ButtonInject extends React.Component {
         if (newProgress > 95) newProgress = 95; // Stuck at 95 until server response
 
         let newMsg = prev.statusMsg;
-        if (currentMsgIdx < messages.length && newProgress >= messages[currentMsgIdx].p) {
+        if (
+          currentMsgIdx < messages.length &&
+          newProgress >= messages[currentMsgIdx].p
+        ) {
           newMsg = messages[currentMsgIdx].m;
           currentMsgIdx++;
         }
@@ -48,8 +51,8 @@ class ButtonInject extends React.Component {
     const file = e.target.files[0];
     if (!file) return;
 
-    const fileExtension = file.name.split('.').pop().toLowerCase();
-    if (fileExtension !== 'xlsx' && fileExtension !== 'xls') {
+    const fileExtension = file.name.split(".").pop().toLowerCase();
+    if (fileExtension !== "xlsx" && fileExtension !== "xls") {
       swal({
         title: "Format Salah!",
         text: "Hanya file Excel (.xlsx atau .xls) yang diperbolehkan.",
@@ -66,7 +69,7 @@ class ButtonInject extends React.Component {
       buttons: ["Batal", "Gaspol!"],
       dangerMode: true,
     });
-    
+
     if (!confirmInject) {
       if (this.fileInputRef.current) this.fileInputRef.current.value = "";
       return;
@@ -77,25 +80,28 @@ class ButtonInject extends React.Component {
     this.startProgressSim();
 
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append("file", file);
 
     try {
       const token = cookies.get(cookieName);
 
-      const response = await fetch('http://localhost:8080/api/v1/admin/inject-data', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
+      const response = await fetch(
+        "http://localhost:8080/api/v1/admin/inject-data",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
         },
-        body: formData,
-      });
+      );
 
       const result = await response.json();
 
       if (response.ok) {
         clearInterval(this.progressInterval);
         this.setState({ progress: 100, statusMsg: "Berhasil! Data Disimpan." });
-        
+
         setTimeout(() => {
           swal({
             title: "Success Hook!",
@@ -108,7 +114,9 @@ class ButtonInject extends React.Component {
         clearInterval(this.progressInterval);
         swal({
           title: "Injeksi Gagal!",
-          text: result.message || 'Terjadi kesalahan pada server saat memproses data.',
+          text:
+            result.message ||
+            "Terjadi kesalahan pada server saat memproses data.",
           icon: "error",
         });
         this.setState({ loading: false, progress: 0 });
@@ -134,20 +142,20 @@ class ButtonInject extends React.Component {
       <div className="flex items-center">
         {/* Progress Overlay Premium - Menggunakan Inline Style untuk memastikan Z-Index tertinggi */}
         {loading && (
-          <div 
-            style={{ 
-              position: 'fixed', 
-              top: 0, 
-              left: 0, 
-              right: 0, 
-              bottom: 0, 
-              zIndex: 99999, 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'center',
-              backgroundColor: 'rgba(6, 78, 59, 0.4)', // bg-emerald-900/40
-              backdropFilter: 'blur(8px)', // backdrop-blur-sm
-              padding: '1rem'
+          <div
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              zIndex: 99999,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: "rgba(6, 78, 59, 0.4)", // bg-emerald-900/40
+              backdropFilter: "blur(8px)", // backdrop-blur-sm
+              padding: "1rem",
             }}
           >
             <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md border border-emerald-100 scale-100 transition-transform duration-300">
@@ -155,17 +163,19 @@ class ButtonInject extends React.Component {
                 <div className="w-24 h-24 mb-6 relative">
                   {/* Outer spinning ring */}
                   <div className="absolute inset-0 border-4 border-emerald-100 rounded-full"></div>
-                  <div 
+                  <div
                     className="absolute inset-0 border-4 border-emerald-600 rounded-full border-t-transparent animate-spin"
-                    style={{ transition: 'all 0.5s linear' }}
+                    style={{ transition: "all 0.5s linear" }}
                   ></div>
                   {/* Inner percentage */}
                   <div className="absolute inset-0 flex items-center justify-center text-emerald-700 font-bold text-2xl">
                     {progress}%
                   </div>
                 </div>
-                
-                <h2 className="text-2xl font-black text-gray-800 mb-1 tracking-tight">DATA INJECTION</h2>
+
+                <h2 className="text-2xl font-black text-gray-800 mb-1 tracking-tight">
+                  DATA INJECTION
+                </h2>
                 <p className="text-emerald-600 font-bold text-sm mb-8 flex items-center justify-center gap-2">
                   <i className="fa fa-refresh fa-spin"></i>
                   {statusMsg}
@@ -173,14 +183,14 @@ class ButtonInject extends React.Component {
 
                 {/* Progress Bar Container */}
                 <div className="w-full h-4 bg-emerald-50 rounded-full overflow-hidden mb-3 border border-emerald-100 p-0.5">
-                  <div 
+                  <div
                     className="h-full bg-emerald-600 rounded-full transition-all duration-700 ease-out shadow-[0_0_15px_rgba(5,150,105,0.5)]"
                     style={{ width: `${progress}%` }}
                   ></div>
                 </div>
                 <div className="w-full flex justify-between text-[11px] text-gray-400 font-black uppercase tracking-widest">
                   <span>Processing</span>
-                  <span>{progress === 100 ? 'Completed' : 'Wait...'}</span>
+                  <span>{progress === 100 ? "Completed" : "Wait..."}</span>
                 </div>
               </div>
             </div>
@@ -195,7 +205,7 @@ class ButtonInject extends React.Component {
           accept=".xlsx, .xls"
           className="hidden"
         />
-        
+
         {/* Tombol pemicu */}
         <button
           type="button"
@@ -203,14 +213,19 @@ class ButtonInject extends React.Component {
           disabled={loading}
           className={`
             flex items-center gap-3 px-6 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 transform active:scale-95
-            ${loading 
-              ? 'bg-gray-50 text-emerald-300 cursor-not-allowed border border-gray-100 opacity-50' 
-              : 'bg-emerald-600 text-white hover:bg-emerald-700 hover:shadow-lg hover:shadow-emerald-200 active:shadow-inner'
+            ${
+              loading
+                ? "bg-gray-50 text-emerald-300 cursor-not-allowed border border-gray-100 opacity-50"
+                : "bg-emerald-600 text-white hover:bg-emerald-700 hover:shadow-lg hover:shadow-emerald-200 active:shadow-inner"
             }
           `}
         >
-          <i className={`fa ${loading ? 'fa-spinner fa-spin' : 'fa-database'} text-base`}></i>
-          <span>{loading ? 'Processing Data...' : 'Inject Data SNBP 2026'}</span>
+          <i
+            className={`fa ${loading ? "fa-spinner fa-spin" : "fa-database"} text-base`}
+          ></i>
+          <span>
+            {loading ? "Processing Data..." : "Inject Data SNBP 2026"}
+          </span>
         </button>
       </div>
     );

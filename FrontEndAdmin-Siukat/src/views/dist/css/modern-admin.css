@@ -3,19 +3,23 @@
  * Focus: Sidebar & Global Typography
  */
 
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap");
 
 :root {
   --primary-emerald: #10b981;
   --dark-emerald: #065f46;
-  --sidebar-bg: linear-gradient(180deg, #d1fae5 0%, #ffffff 100%); /* Favorit lu: Hijau muda ke putih */
+  --sidebar-bg: linear-gradient(
+    180deg,
+    #d1fae5 0%,
+    #ffffff 100%
+  ); /* Favorit lu: Hijau muda ke putih */
   --sidebar-item-hover: rgba(16, 185, 129, 0.1);
   --active-bg: #10b981;
   --sidebar-border: #d1fae5;
 }
 
 body {
-  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-family: "Plus Jakarta Sans", sans-serif !important;
   color: #1e293b;
   background-color: #f8fafc;
 }
@@ -50,7 +54,7 @@ body {
   transform: scale(1.02);
 }
 
-.sidebar .nav-link i, 
+.sidebar .nav-link i,
 .sidebar .nav-link .nav-icon {
   margin-right: 12px !important;
   font-size: 1.1rem !important;
@@ -110,7 +114,8 @@ body {
   border-color: #ecfdf5 !important;
 }
 
-.bg-emerald-700 { /* Targeting the table head */
+.bg-emerald-700 {
+  /* Targeting the table head */
   background: linear-gradient(135deg, #059669 0%, #10b981 100%) !important;
   border-bottom: 2px solid #d1fae5 !important;
 }
@@ -147,7 +152,7 @@ body {
 }
 
 /* Custom Soft Inputs */
-input[type="text"], 
+input[type="text"],
 input[type="password"],
 select {
   border: 1px solid #e2e8f0 !important;
@@ -223,7 +228,7 @@ select {
   left: 0;
   z-index: 1000;
   background: white;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
   border-radius: 16px;
   margin-top: 10px;
   border: 1px solid #e2e8f0;
@@ -232,8 +237,14 @@ select {
 }
 
 @keyframes slideDown {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .DayPicker {
@@ -241,11 +252,15 @@ select {
   font-size: 0.9rem;
 }
 
-.DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+.DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(
+    .DayPicker-Day--outside
+  ) {
   background-color: #10b981 !important;
 }
 
-.DayPicker-Day:hover:not(.DayPicker-Day--disabled):not(.DayPicker-Day--selected):not(.DayPicker-Day--outside) {
+.DayPicker-Day:hover:not(.DayPicker-Day--disabled):not(
+    .DayPicker-Day--selected
+  ):not(.DayPicker-Day--outside) {
   background-color: #ecfdf5 !important;
   color: #10b981 !important;
 }
@@ -308,19 +323,19 @@ select {
   background: var(--primary-emerald);
 }
 /* --- FORM POLISH & HIGH-CONTRAST (FIX: Dropdown white text) --- */
-.modal-content select, 
-.modal-content input, 
+.modal-content select,
+.modal-content input,
 .modal-content textarea {
-    color: #1f2937 !important; /* gray-800 */
-    background-color: #ffffff !important;
+  color: #1f2937 !important; /* gray-800 */
+  background-color: #ffffff !important;
 }
 
 .modal-content select option {
-    color: #1f2937 !important;
-    background-color: #ffffff !important;
+  color: #1f2937 !important;
+  background-color: #ffffff !important;
 }
 
 .modal-content label {
-    color: #4b5563 !important; /* gray-600 */
-    font-weight: 700 !important;
+  color: #4b5563 !important; /* gray-600 */
+  font-weight: 700 !important;
 }

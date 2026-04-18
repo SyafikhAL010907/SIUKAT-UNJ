@@ -1,8 +1,8 @@
-import { captcha } from '../api'
+import { captcha } from "../api";
 
-export function fetchCaptcha(){
-    return {
-        type: "FETCH_CAPTCHA",
-        payload: captcha.fetchCaptcha()
-    }
+export function fetchCaptcha() {
+  return {
+    type: "FETCH_CAPTCHA",
+    payload: captcha.fetchCaptcha(),
+  };
 }

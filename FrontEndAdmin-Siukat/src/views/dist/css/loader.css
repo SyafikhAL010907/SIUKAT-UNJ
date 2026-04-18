@@ -1,4 +1,4 @@
-.loader{
+.loader {
   background: rgba(255, 255, 255, 0.9);
   width: 100%;
   min-height: 100vh;
@@ -8,13 +8,13 @@
   z-index: 9;
 }
 
-.group{
+.group {
   position: relative;
   display: inline-block;
   line-height: 16px;
 }
-  
-.bigSqr{
+
+.bigSqr {
   position: relative;
   display: inline-block;
   width: 40px;
@@ -23,68 +23,91 @@
   transform-origin: bottom left;
   animation: bigSqrShrink 1s linear infinite;
 }
-  
-.square{
+
+.square {
   position: absolute;
   width: 20px;
   height: 20px;
   background: #006f45;
 }
-  
-.first{
+
+.first {
   left: 0px;
   top: 20px;
-}  
-  
-.second{
+}
+
+.second {
   left: 20px;
   top: 20px;
   animation: drop2 1s linear infinite;
 }
-  
-.third{
+
+.third {
   left: 0px;
   top: 0px;
   animation: drop3 1s linear infinite;
 }
-  
-.fourth{
+
+.fourth {
   left: 20px;
   top: 0px;
   animation: drop4 1s linear infinite;
 }
-  
-.text{
+
+.text {
   line-height: 16px;
-  font-family: "Open Sans","Roboto",Arial , sans-serif;
+  font-family: "Open Sans", "Roboto", Arial, sans-serif;
   font-weight: 400;
   color: #006f45;
   display: block;
   margin: 10px auto;
   padding: 3px;
 }
-  
-@keyframes bigSqrShrink{
-  0% { transform: scale(1) }
-  90% { transform: scale(1) }
-  100% { transform: scale(0.5) }
-}
-  
-@keyframes drop2{
-    0% { transform: translateY(-50px) }
-    25% { transform: translate(0) }
-    100% { transform: translate(0) }
-}
-    
-@keyframes drop3{
-    0% { transform: translateY(-50px) }
-    50% { transform: translate(0) }
-    100% { transform: translate(0) }
-}
- 
-@keyframes drop4{
-  0% { transform: translateY(-50px) }
-  75% { transform: translate(0) }
-  100% { transform: translate(0) }
+
+@keyframes bigSqrShrink {
+  0% {
+    transform: scale(1);
+  }
+  90% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0.5);
+  }
 }
 
+@keyframes drop2 {
+  0% {
+    transform: translateY(-50px);
+  }
+  25% {
+    transform: translate(0);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
+@keyframes drop3 {
+  0% {
+    transform: translateY(-50px);
+  }
+  50% {
+    transform: translate(0);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
+@keyframes drop4 {
+  0% {
+    transform: translateY(-50px);
+  }
+  75% {
+    transform: translate(0);
+  }
+  100% {
+    transform: translate(0);
+  }
+}

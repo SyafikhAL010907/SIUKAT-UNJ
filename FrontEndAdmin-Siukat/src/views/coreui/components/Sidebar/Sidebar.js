@@ -1,20 +1,21 @@
-import React, { Component } from 'react';
-import { NavLink } from 'react-router-dom';
-import { Badge, Nav, NavItem } from 'reactstrap';
-import classNames from 'classnames';
-import nav from './_nav'
-import { connect } from 'react-redux';
-import { filterNavigation } from '../../../../utils/rbac';
+import React, { Component } from "react";
+import { NavLink } from "react-router-dom";
+import { Badge, Nav, NavItem } from "reactstrap";
+import classNames from "classnames";
+import nav from "./_nav";
+import { connect } from "react-redux";
+import { filterNavigation } from "../../../../utils/rbac";
 
 class Sidebar extends Component {
-
   handleClick(e) {
     e.preventDefault();
-    e.currentTarget.parentElement.classList.toggle('open');
+    e.currentTarget.parentElement.classList.toggle("open");
   }
 
   activeRoute(routeName, props) {
-    return props.location.pathname.indexOf(routeName) > -1 ? 'nav-item nav-dropdown open' : 'nav-item nav-dropdown';
+    return props.location.pathname.indexOf(routeName) > -1
+      ? "nav-item nav-dropdown open"
+      : "nav-item nav-dropdown";
   }
 
   render() {
@@ -24,45 +25,79 @@ class Sidebar extends Component {
 
     const badge = (badge) => {
       if (badge) {
-        const classes = classNames("ml-auto px-2 py-0.5 text-[10px] rounded-full", badge.class);
-        return (<Badge className={classes} color={badge.variant}>{badge.text}</Badge>)
+        const classes = classNames(
+          "ml-auto px-2 py-0.5 text-[10px] rounded-full",
+          badge.class,
+        );
+        return (
+          <Badge className={classes} color={badge.variant}>
+            {badge.text}
+          </Badge>
+        );
       }
     };
 
-    const wrapper = item => (!item.wrapper ? item.name : (React.createElement(item.wrapper.element, item.wrapper.attributes, item.name)));
+    const wrapper = (item) =>
+      !item.wrapper
+        ? item.name
+        : React.createElement(
+            item.wrapper.element,
+            item.wrapper.attributes,
+            item.name,
+          );
 
     const title = (title, key) => {
-      const classes = classNames("nav-title px-5 py-3 text-[10px] font-black uppercase text-gray-400 tracking-[0.15em]", title.class);
-      return (<li key={key} className={classes}>{wrapper(title)} </li>);
+      const classes = classNames(
+        "nav-title px-5 py-3 text-[10px] font-black uppercase text-gray-400 tracking-[0.15em]",
+        title.class,
+      );
+      return (
+        <li key={key} className={classes}>
+          {wrapper(title)}{" "}
+        </li>
+      );
     };
 
-    const divider = (divider, key) => (<li key={key} className="divider h-[1px] bg-gray-50 my-1 mx-4"></li>);
+    const divider = (divider, key) => (
+      <li key={key} className="divider h-[1px] bg-gray-50 my-1 mx-4"></li>
+    );
 
     const navItem = (item, key) => {
-      const classes = classNames("nav-link flex items-center px-5 py-3 text-sm transition-all duration-200 hover:bg-white hover:text-green-600", item.class);
+      const classes = classNames(
+        "nav-link flex items-center px-5 py-3 text-sm transition-all duration-200 hover:bg-white hover:text-green-600",
+        item.class,
+      );
       return (
         <NavItem key={key} className="list-none">
-          <NavLink to={item.url} className={classes} activeClassName="bg-green-50 text-green-600  font-bold">
+          <NavLink
+            to={item.url}
+            className={classes}
+            activeClassName="bg-green-50 text-green-600  font-bold"
+          >
             <i className={`${item.icon} mr-3 w-5 text-center text-lg`}></i>
             <span className="flex-1">{item.name}</span>
             {badge(item.badge)}
           </NavLink>
         </NavItem>
-      )
+      );
     };
 
     const navDropdown = (item, key) => {
       const isCalonMahasiswa = item.name === "Calon Mahasiswa";
       return (
         <li key={key} className={`${activeRoute(item.url, props)} list-none`}>
-          <a 
-            className="nav-link nav-dropdown-toggle flex items-center px-5 py-3 text-sm cursor-pointer hover:bg-gray-50/80 transition-colors text-gray-600" 
-            onClick={handleClick.bind(this)} 
+          <a
+            className="nav-link nav-dropdown-toggle flex items-center px-5 py-3 text-sm cursor-pointer hover:bg-gray-50/80 transition-colors text-gray-600"
+            onClick={handleClick.bind(this)}
           >
-            <i className={`${item.icon} mr-3 w-5 text-center text-lg`}></i> 
+            <i className={`${item.icon} mr-3 w-5 text-center text-lg`}></i>
             <span className="flex-1 leading-tight font-medium">
               {isCalonMahasiswa ? (
-                <span>Calon<br/>Mahasiswa</span>
+                <span>
+                  Calon
+                  <br />
+                  Mahasiswa
+                </span>
               ) : (
                 item.name
               )}
@@ -72,13 +107,18 @@ class Sidebar extends Component {
           <ul className="nav-dropdown-items bg-gray-50/30">
             {navList(item.children)}
           </ul>
-        </li>)
+        </li>
+      );
     };
 
     const navLink = (item, idx) =>
-      item.title ? title(item, idx) :
-      item.divider ? divider(item, idx) :
-      item.children ? navDropdown(item, idx) : navItem(item, idx);
+      item.title
+        ? title(item, idx)
+        : item.divider
+          ? divider(item, idx)
+          : item.children
+            ? navDropdown(item, idx)
+            : navItem(item, idx);
 
     const navList = (items) => items.map((item, index) => navLink(item, index));
 
@@ -87,12 +127,12 @@ class Sidebar extends Component {
     return (
       <>
         {/* OVERLAY HANYA UNTUK MOBILE */}
-        <div 
+        <div
           className="fixed inset-0 bg-black/20 z-30 lg:hidden sidebar-overlay transition-opacity"
-          onClick={() => document.body.classList.remove('sidebar-mobile-show')}
+          onClick={() => document.body.classList.remove("sidebar-mobile-show")}
         ></div>
 
-        <div className="sidebar" style={{ width: '250px' }}>
+        <div className="sidebar" style={{ width: "250px" }}>
           <nav className="sidebar-nav h-full overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-thumb-gray-200">
             <Nav className="flex-col italic-none py-2">
               {navList(filteredNavItems)}
@@ -139,10 +179,10 @@ class Sidebar extends Component {
           }
         `}</style>
       </>
-    )
+    );
   }
 }
 
 export default connect((store) => ({
-  user: store.user.user
+  user: store.user.user,
 }))(Sidebar);

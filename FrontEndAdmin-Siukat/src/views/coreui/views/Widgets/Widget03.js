@@ -1,35 +1,41 @@
-import React, {Component} from "react";
-import PropTypes from 'prop-types';
-import classNames from 'classnames';
-import {mapToCssModules} from 'reactstrap/lib/utils';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import classNames from "classnames";
+import { mapToCssModules } from "reactstrap/lib/utils";
 
 const propTypes = {
   className: PropTypes.string,
   cssModule: PropTypes.object,
-  dataBox: PropTypes.func
+  dataBox: PropTypes.func,
 };
 
 const defaultProps = {
-  dataBox: () => ({variant: "facebook", friends: "-", feeds: "-"})
+  dataBox: () => ({ variant: "facebook", friends: "-", feeds: "-" }),
 };
 
 class Widget03 extends Component {
   render() {
-    const {className, cssModule, dataBox} = this.props;
+    const { className, cssModule, dataBox } = this.props;
 
     // demo purposes only
     const data = dataBox();
     const variant = data.variant;
 
-    if (!variant || ['facebook', 'twitter', 'linkedin', 'google-plus'].indexOf(variant) < 0) {
-      return ( null );
+    if (
+      !variant ||
+      ["facebook", "twitter", "linkedin", "google-plus"].indexOf(variant) < 0
+    ) {
+      return null;
     }
 
     const icon = "fa fa-" + variant;
     const keys = Object.keys(data);
     const vals = Object.values(data);
 
-    const classes = mapToCssModules(classNames("social-box", className, variant), cssModule);
+    const classes = mapToCssModules(
+      classNames("social-box", className, variant),
+      cssModule,
+    );
 
     return (
       <div className={classes}>
@@ -45,7 +51,7 @@ class Widget03 extends Component {
           </li>
         </ul>
       </div>
-    )
+    );
   }
 }
 

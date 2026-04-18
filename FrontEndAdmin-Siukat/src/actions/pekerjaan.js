@@ -1,8 +1,8 @@
-import { pekerjaan } from '../api'
+import { pekerjaan } from "../api";
 
-export function fetchPekerjaan(id){
-    return {
-        type: "FETCH_PEKERJAAN",
-        payload: pekerjaan.fetchPekerjaan(id)
-    }
+export function fetchPekerjaan(id) {
+  return {
+    type: "FETCH_PEKERJAAN",
+    payload: pekerjaan.fetchPekerjaan(id),
+  };
 }
