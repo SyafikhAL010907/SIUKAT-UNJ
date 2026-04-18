@@ -75,10 +75,10 @@ let FormDataPribadiSeleksi = (props) => {
     return (
         <Form onSubmit={handleSubmit}>
             <FormGroup row className="mb-4">
-                <Label for="nama_cmahasiswa" md={3}>
+                <Label for="nama_cmahasiswa" col="12" xl="3" className="mb-2 mb-xl-0">
                     Nama Lengkap
                 </Label>
-                <Col md={9}>
+                <Col col="12" xl="9">
                     <Field
                         name="nama_cmahasiswa"
                         component={InputBs}
@@ -89,12 +89,12 @@ let FormDataPribadiSeleksi = (props) => {
                 </Col>
             </FormGroup>
             <FormGroup row className="mb-4">
-                <Label for="gender_cmahasiswa" md={3}>
+                <Label for="gender_cmahasiswa" col="12" xl="3" className="mb-2 mb-xl-0">
                     Jenis Kelamin
                 </Label>
-                <Col md={9}>
+                <Col col="12" xl="9">
                     <Row>
-                        <Col md={3}>
+                        <Col col="6" sm="4" xl="3">
                             <FormGroup check>
                                 <Label check>
                                     <Field
@@ -105,7 +105,7 @@ let FormDataPribadiSeleksi = (props) => {
                                     />{' '}Laki-Laki</Label>
                             </FormGroup>
                         </Col>
-                        <Col md={3}>
+                        <Col col="6" sm="4" xl="3">
                             <FormGroup check>
                                 <Label check>
                                     <Field
@@ -121,13 +121,12 @@ let FormDataPribadiSeleksi = (props) => {
 
             </FormGroup>
             <FormGroup row className="mb-4">
-                <Label md={3} xs={12}>
-                    Tempat &amp;
-                    Tanggal Lahir
+                <Label col="12" xl="3" className="mb-2 mb-xl-0">
+                    Tempat &amp; Tanggal Lahir
                 </Label>
-                <Col md={9} xs={12}>
+                <Col col="12" xl="9">
                     <Row>
-                        <Col md={6} className="mb-2">
+                        <Col col="12" md="6" className="mb-2 mb-md-0">
                             <Field
                                 name="tempat_lahir_cmahasiswa"
                                 component={InputBs}
@@ -135,7 +134,7 @@ let FormDataPribadiSeleksi = (props) => {
                                 placeholder="Tempat Lahir"
                             />{' '}
                         </Col>
-                        <Col md={6}>
+                        <Col col="12" md="6">
                             <Field
                                 name="tanggal_lahir_cmahasiswa"
                                 component={InputDayPicker}
@@ -147,10 +146,10 @@ let FormDataPribadiSeleksi = (props) => {
                 </Col>
             </FormGroup>
             <FormGroup row className="mb-4">
-                <Label for="alamat_cmahasiswa" md={3}>
+                <Label for="alamat_cmahasiswa" col="12" xl="3" className="mb-2 mb-xl-0">
                     Alamat Lengkap
                 </Label>
-                <Col md={9}>
+                <Col col="12" xl="9">
                     <Field
                         name="alamat_cmahasiswa"
                         component={InputBs}
@@ -161,10 +160,10 @@ let FormDataPribadiSeleksi = (props) => {
                 </Col>
             </FormGroup>
             <FormGroup row className="mb-4">
-                <Label for="provinsi_cmahasiswa" md={3}>
+                <Label for="provinsi_cmahasiswa" col="12" xl="3" className="mb-2 mb-xl-0">
                     Provinsi
                 </Label>
-                <Col md={9}>
+                <Col col="12" xl="9">
                     <Field
                         name="provinsi_cmahasiswa"
                         component={InputBs}
@@ -184,10 +183,10 @@ let FormDataPribadiSeleksi = (props) => {
                 </Col>
             </FormGroup>
             <FormGroup row className="mb-4">
-                <Label for="kabkot_cmahasiswa" md={3}>
+                <Label for="kabkot_cmahasiswa" col="12" xl="3" className="mb-2 mb-xl-0">
                     Kab/Kota
                 </Label>
-                <Col md={9}>
+                <Col col="12" xl="9">
                     <Field
                         name="kabkot_cmahasiswa"
                         component={InputBs}
@@ -207,10 +206,10 @@ let FormDataPribadiSeleksi = (props) => {
                 </Col>
             </FormGroup>
             <FormGroup row className="mb-4">
-                <Label for="kecamatan_cmahasiswa" sm={3}>
+                <Label for="kecamatan_cmahasiswa" col="12" xl="3" className="mb-2 mb-xl-0">
                     Kecamatan
                 </Label>
-                <Col sm={9}>
+                <Col col="12" xl="9">
                     <Field name="kecamatan_cmahasiswa" component={InputBs} type="select">
                         {' '}
                         <option value="">-- Pilih Kecamatan --</option>
@@ -225,10 +224,10 @@ let FormDataPribadiSeleksi = (props) => {
                 </Col>
             </FormGroup>
             <FormGroup row className="mb-4">
-                <Label for="telepon_cmahasiswa" md={3}>
+                <Label for="telepon_cmahasiswa" col="12" xl="3" className="mb-2 mb-xl-0">
                     Nomor Telepon
                 </Label>
-                <Col md={9}>
+                <Col col="12" xl="9">
                     <Field
                         name="telepon_cmahasiswa"
                         component={InputBs}
@@ -243,10 +242,10 @@ let FormDataPribadiSeleksi = (props) => {
                 </Col>
             </FormGroup>
             <FormGroup row className="mb-4">
-                <Label for="goldar_cmahasiswa" md={3}>
+                <Label for="goldar_cmahasiswa" col="12" xl="3" className="mb-2 mb-xl-0">
                     Golongan Darah
                 </Label>
-                <Col md={9}>
+                <Col col="12" xl="9">
                     <Field name="goldar_cmahasiswa" component={InputBs} type="select">
                         {' '}
                         <option value="">-- Pilih Golongan Darah --</option>
@@ -258,10 +257,10 @@ let FormDataPribadiSeleksi = (props) => {
                 </Col>
             </FormGroup>
             <FormGroup row className="mb-4">
-                <Label for="sosmed_cmahasiswa" md={3}>
+                <Label for="sosmed_cmahasiswa" col="12" xl="3" className="mb-2 mb-xl-0">
                     Sosial Media
                 </Label>
-                <Col md={9}>
+                <Col col="12" xl="9">
                     <Field
                         name="sosmed_cmahasiswa"
                         component={InputBs}
@@ -272,10 +271,10 @@ let FormDataPribadiSeleksi = (props) => {
                 </Col>
             </FormGroup>
             <FormGroup row className="mb-4">
-                <Label for="penghasilan_cmahasiswa" md={3}>
+                <Label for="penghasilan_cmahasiswa" col="12" xl="3" className="mb-2 mb-xl-0">
                     Penghasilan Pribadi
                 </Label>
-                <Col md={5} xs={12}>
+                <Col col="12" xl="6">
                     <Field
                         type="number"
                         component={InputBs}
@@ -287,17 +286,16 @@ let FormDataPribadiSeleksi = (props) => {
                         validate={[money]}
                     />
                     <FormText color="muted">
-                        <ul className="list-reset">
+                        <ul className="list-reset text-xs sm:text-sm">
                             <li>
                                 Penghasilan <b>per bulan</b>;
                             </li>
-                            {/* <li>Hanya isi dengan angka (0-9).</li> */}
                             <li>Tidak perlu menuliskan titik (.) dan koma (,).</li>
                         </ul>
                     </FormText>
                 </Col>
-                <Col md={4} xs={12}>
-                    <Alert color="success">{rupiah(penghasilan_cmahasiswa)}</Alert>
+                <Col col="12" xl="3" className="mt-2 mt-xl-0">
+                    <Alert color="success" className="mb-0 py-2 text-center text-sm">{rupiah(penghasilan_cmahasiswa)}</Alert>
                 </Col>
             </FormGroup>
             {/* AREA UPLOAD FOTO - REDESIGN PREMIUM (Request USER: Anti-Nabrak & Drag-Drop) */}

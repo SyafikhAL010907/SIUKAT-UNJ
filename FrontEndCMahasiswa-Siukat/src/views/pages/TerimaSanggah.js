@@ -103,17 +103,17 @@ class TerimaSanggah extends React.Component {
                         <Card className="premium-card shadow-lg mt-4 border-0 overflow-hidden">
                             {/* Branded Header Section */}
                             <div className="bg-emerald-soft p-4 p-md-5 text-center text-white position-relative">
-                                <div className="position-absolute" style={{ top: '20px', right: '30px', opacity: 0.1 }}>
+                                <div className="position-absolute d-none d-md-block" style={{ top: '20px', right: '30px', opacity: 0.1 }}>
                                     <i className="fa fa-university fa-5x"></i>
                                 </div>
-                                <i className="fa fa-bullhorn fa-3x mb-3 text-white"></i>
-                                <h2 className="font-weight-bold mb-1 text-white" style={{ letterSpacing: '-0.5px' }}>
+                                <i className="fa fa-bullhorn fa-xl fa-md-3x mb-3 text-white"></i>
+                                <h2 className="font-weight-bold mb-1 text-white text-base sm:text-2xl md:text-3xl" style={{ letterSpacing: '-0.5px', lineHeight: '1.2' }}>
                                     Pengumuman Hasil UKT
                                 </h2>
-                                <p className="mb-0 opacity-80" style={{ fontSize: '1.1rem' }}>
+                                <p className="mb-0 opacity-80 text-xs sm:text-base md:text-lg">
                                     Universitas Negeri Jakarta
                                 </p>
-                                <div className="badge badge-pill mt-3 px-4 py-2" style={{ backgroundColor: '#ffcc00', color: '#0f6d3f', fontWeight: 'bold' }}>
+                                <div className="d-inline-block mt-3 px-3 py-2" style={{ backgroundColor: '#ffcc00', color: '#0f6d3f', fontWeight: 'bold', fontSize: '0.7rem', borderRadius: '50px', maxWidth: '100%', whiteSpace: 'normal', lineHeight: '1.4' }}>
                                     <i className="fa fa-info-circle mr-2"></i>Status: Hasil Verifikasi Tersedia
                                 </div>
                             </div>
@@ -188,18 +188,18 @@ class TerimaSanggah extends React.Component {
                                                         <span className="text-muted small">Status: Menunggu Validasi Lapangan</span>
                                                     </div>
                                                 </div>
-                                                <div className="pl-2 mt-4">
+                                                <div className="pl-0 md:pl-2 mt-4">
                                                     <div className="row">
-                                                        <div className="col-md-6 mb-3">
+                                                        <div className="col-12 col-md-6 mb-3">
                                                             <div className="font-weight-bold text-muted small text-uppercase mb-1">Waktu:</div>
-                                                            <div className="color-emerald font-weight-bold"><i className="fa fa-clock-o mr-2"></i>16 - 17 Mei 2024 | 09:00 WIB</div>
+                                                            <div className="color-emerald font-weight-bold text-sm md:text-base"><i className="fa fa-clock-o mr-2"></i>16 - 17 Mei 2024 | 09:00 WIB</div>
                                                         </div>
-                                                        <div className="col-md-6 mb-3">
+                                                        <div className="col-12 col-md-6 mb-3">
                                                             <div className="font-weight-bold text-muted small text-uppercase mb-1">Tempat:</div>
-                                                            <div className="color-emerald font-weight-bold"><i className="fa fa-map-marker mr-2"></i>AULA Hatta Lantai 2</div>
+                                                            <div className="color-emerald font-weight-bold text-sm md:text-base"><i className="fa fa-map-marker mr-2"></i>AULA Hatta Lantai 2</div>
                                                         </div>
                                                     </div>
-                                                    <Alert color="warning" className="border-0 shadow-sm mt-3 py-2 px-3 rounded-lg" style={{ fontSize: '0.85rem' }}>
+                                                    <Alert color="warning" className="border-0 shadow-sm mt-3 py-2 px-3 rounded-lg text-xs md:text-sm">
                                                         <i className="fa fa-warning mr-2"></i>
                                                         <strong>PENTING:</strong> Camaba dan Orang tua <b>wajib hadir</b> (tidak bisa diwakilkan) dengan membawa dokumen pendukung asli.
                                                     </Alert>

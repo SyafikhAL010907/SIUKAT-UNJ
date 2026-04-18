@@ -11,12 +11,16 @@
     transition: all 0.3s ease;
     overflow: hidden;
     margin-bottom: 24px;
-    /* height: 100%; Removed to allow cards to fit their content naturally */
 }
 
 .premium-card .card-body {
-    padding: 30px 50px !important;
-    /* Premium spaciousness */
+    padding: 1.25rem !important; /* Mobile friendly padding */
+}
+
+@media (min-width: 992px) {
+    .premium-card .card-body {
+        padding: 2.5rem 3rem !important; /* Desktop premium padding */
+    }
 }
 
 .premium-card .card-title {
@@ -225,13 +229,118 @@
     box-shadow: -15px 0 50px rgba(0, 0, 0, 0.2);
 }
 
-.login-side h3 {
+/* MODERN LEGEND STYLING */
+legend {
+    background: #ecfdf5 !important;
+    border-left: 4px solid #10b981 !important;
+    color: #065f46 !important;
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+    border-radius: 8px !important;
+    padding: 12px 20px !important;
+    margin-bottom: 25px !important;
+    display: flex !important;
+    align-items: center !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+}
+
+legend i {
+    font-size: 1.2rem;
+    margin-right: 12px;
+}
+
+/* RESPONSIVE ENHANCEMENTS */
+@media (max-width: 991.98px) {
+    .modern-sidebar-menu {
+        margin-bottom: 30px !important;
+    }
+    
+    .modern-sidebar-menu .list-group-item {
+        padding: 16px 20px !important;
+        font-size: 1rem !important;
+    }
+
+    .premium-card .card-title {
+        font-size: 1.2rem !important;
+        margin-bottom: 20px !important;
+        padding-bottom: 15px !important;
+    }
+
+    .modern-btn-primary {
+        padding: 15px 24px !important;
+        font-size: 1.1rem !important;
+    }
+    
+    .instruction-number {
+        width: 32px !important;
+        height: 32px !important;
+        min-width: 32px !important;
+        font-size: 0.9rem !important;
+    }
+
+    /* Ultra Responsive Labels */
+    label {
+        font-size: 0.9rem !important;
+        margin-bottom: 4px !important;
+    }
+
+    .form-group {
+        margin-bottom: 1.25rem !important;
+    }
+
+    .premium-card {
+        padding: 1.5rem !important;
+    }
+
+    .premium-card .card-title {
+        font-size: 1.1rem !important;
+        padding-bottom: 12px !important;
+        margin-bottom: 15px !important;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .premium-card {
+        padding: 1rem !important;
+    }
+    
+    .card-body {
+        padding: 1rem !important;
+    }
+    
+    .modern-sidebar-menu .list-group-item {
+        padding: 12px 15px !important;
+        font-size: 0.9rem !important;
+    }
+}
+
+/* INSTRUCTION COMPONENTS STYLING */
+.instruction-section {
+    position: relative;
+}
+
+.instruction-number {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    background: #0f6d3f;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-weight: 800;
-    font-size: 2.2rem;
-    margin-bottom: 40px;
-    letter-spacing: -1px;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    text-align: center;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 10px rgba(15, 109, 63, 0.2);
+}
+
+.instruction-content {
+    flex: 1;
+}
+
+.border-dashed {
+    border: 2px dashed #e2e8f0 !important;
 }
 
 .login-side label {
@@ -616,8 +725,11 @@ select.form-control {
 
 .ukt-selection-tile input[type="radio"]:checked+.label-modern {
     background: #f0fdf4;
-    border-color: #0f6d3f;
-    box-shadow: 0 8px 15px rgba(15, 109, 63, 0.12);
+    border-color: #0f6d3f !important;
+    border-width: 3px !important;
+    box-shadow: 0 0 0 4px rgba(15, 109, 63, 0.1), 0 10px 25px rgba(15, 109, 63, 0.2) !important;
+    transform: scale(1.02);
+    z-index: 2;
 }
 
 .ukt-selection-tile .icon-box {
@@ -653,6 +765,24 @@ select.form-control {
     font-weight: 800;
     color: #0f6d3f;
     font-size: 1.3rem;
+}
+
+@media (max-width: 575.98px) {
+    .ukt-selection-tile .label-modern {
+        padding: 20px 10px;
+    }
+    .ukt-selection-tile .icon-box {
+        width: 45px;
+        height: 45px;
+        margin-bottom: 10px;
+        font-size: 18px;
+    }
+    .ukt-selection-tile .group-name {
+        font-size: 0.85rem;
+    }
+    .ukt-selection-tile .price-tag {
+        font-size: 1rem;
+    }
 }
 
 /* INFO CARDS (UKT Page) */

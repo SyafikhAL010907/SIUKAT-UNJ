@@ -57,12 +57,12 @@ let FormWaliSeleksi = (props) => {
     return (
         <Form onSubmit={handleSubmit}>
             <FormGroup row className="mb-4">
-                <Label for="status_wali" md={3}>
+                <Label for="status_wali" col="12" xl="3" className="mb-2 mb-xl-0">
                     Status Wali
                 </Label>
-                <Col md={9}>
+                <Col col="12" xl="9">
                     <Row>
-                        <Col md={3}>
+                        <Col col="6" sm="4" xl="3">
                             <FormGroup check>
                                 <Label check>
                                     <Field
@@ -74,7 +74,7 @@ let FormWaliSeleksi = (props) => {
                             </FormGroup>
                         </Col>
 
-                        <Col md={3}>
+                        <Col col="6" sm="8" xl="9">
                             <Label check>
                                 <Field
                                     name="status_wali"
@@ -90,10 +90,10 @@ let FormWaliSeleksi = (props) => {
             {status_wali === 'ada' && (
                 <div>
                     <FormGroup row className="mb-4">
-                        <Label for="nama_wali" md={3}>
+                        <Label for="nama_wali" col="12" xl="3" className="mb-2 mb-xl-0">
                             Nama Lengkap
                         </Label>
-                        <Col md={9}>
+                        <Col col="12" xl="9">
                             <Field
                                 name="nama_wali"
                                 component={InputBs}
@@ -103,10 +103,10 @@ let FormWaliSeleksi = (props) => {
                         </Col>
                     </FormGroup>
                     <FormGroup row className="mb-4">
-                        <Label for="alamat_wali" md={3}>
+                        <Label for="alamat_wali" col="12" xl="3" className="mb-2 mb-xl-0">
                             Alamat Lengkap
                         </Label>
-                        <Col md={9}>
+                        <Col col="12" xl="9">
                             <Field
                                 name="alamat_wali"
                                 component={InputBs}
@@ -117,10 +117,10 @@ let FormWaliSeleksi = (props) => {
                         </Col>
                     </FormGroup>
                     <FormGroup row className="mb-4">
-                        <Label for="provinsi_wali" md={3}>
+                        <Label for="provinsi_wali" col="12" xl="3" className="mb-2 mb-xl-0">
                             Provinsi
                         </Label>
-                        <Col md={9}>
+                        <Col col="12" xl="9">
                             <Field
                                 name="provinsi_wali"
                                 component={InputBs}
@@ -140,10 +140,10 @@ let FormWaliSeleksi = (props) => {
                         </Col>
                     </FormGroup>
                     <FormGroup row className="mb-4">
-                        <Label for="kabkot_wali" md={3}>
+                        <Label for="kabkot_wali" col="12" xl="3" className="mb-2 mb-xl-0">
                             Kab/Kota
                         </Label>
-                        <Col md={9}>
+                        <Col col="12" xl="9">
                             <Field
                                 name="kabkot_wali"
                                 component={InputBs}
@@ -163,10 +163,10 @@ let FormWaliSeleksi = (props) => {
                         </Col>
                     </FormGroup>
                     <FormGroup row className="mb-4">
-                        <Label for="kecamatan_wali" sm={3}>
+                        <Label for="kecamatan_wali" col="12" xl="3" className="mb-2 mb-xl-0">
                             Kecamatan
                         </Label>
-                        <Col sm={9}>
+                        <Col col="12" xl="9">
                             <Field name="kecamatan_wali" component={InputBs} type="select">
                                 {' '}
                                 <option value="">-- Pilih Kecamatan --</option>
@@ -181,10 +181,10 @@ let FormWaliSeleksi = (props) => {
                         </Col>
                     </FormGroup>
                     <FormGroup row className="mb-4">
-                        <Label for="kesanggupan_wali" md={3}>
+                        <Label for="kesanggupan_wali" col="12" xl="3" className="mb-2 mb-xl-0">
                             Komitmen Pembiayaan
                         </Label>
-                        <Col md={5} xs={12}>
+                        <Col col="12" xl="6">
                             <Field
                                 type="number"
                                 component={InputBs}
@@ -196,22 +196,22 @@ let FormWaliSeleksi = (props) => {
                                 validate={[money]}
                             />
                             <FormText color="muted">
-                                <ul className="list-reset">
+                                <ul className="list-reset text-xs sm:text-sm">
                                     <li>
                                         Komitmen pembiayaan <b>per bulan</b>;
                                     </li>
                                 </ul>
                             </FormText>
                         </Col>
-                        <Col md={4} xs={12}>
-                            <Alert color="success">{rupiah(kesanggupan_wali)}</Alert>
+                        <Col col="12" xl="3" className="mt-2 mt-xl-0">
+                            <Alert color="success" className="mb-0 py-2 text-center text-sm">{rupiah(kesanggupan_wali)}</Alert>
                         </Col>
                     </FormGroup>
                     <FormGroup row className="mb-4">
-                        <Label for="file_scan_wali" md={3}>
+                        <Label for="file_scan_wali" col="12" xl="3" className="mb-2 mb-xl-0">
                             Surat Komitmen Pembiayaan Wali
                         </Label>
-                        <Col md={5}>
+                        <Col col="12" xl="6">
                             <Field
                                 component={InputFileBs}
                                 type="file"
@@ -220,14 +220,14 @@ let FormWaliSeleksi = (props) => {
                                 id="file_scan_wali"
                             />
                             <FormText color="muted">
-                                <ul className="list-reset">
+                                <ul className="list-reset text-xs sm:text-sm">
                                     <li>Ekstensi berkas berupa PDF;</li>
                                     <li>Ukuran berkas tidak lebih dari 500KB.</li>
                                 </ul>
                             </FormText>
                         </Col>
-                        <Col md={4}>
-                            <Button color="primary" size="sm" block onClick={unduhWali}>
+                        <Col col="12" xl="3" className="mt-3 mt-xl-0">
+                            <Button color="primary" size="sm" block onClick={unduhWali} className="py-2">
                                 <i className="fa fa-download"></i> {textUnduhWali}
                             </Button>
                             {props.initialValues.scan_wali && (
@@ -239,7 +239,7 @@ let FormWaliSeleksi = (props) => {
                                     }
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="btn btn-success btn-block btn-sm mt-2"
+                                    className="btn btn-success btn-block btn-sm mt-2 py-2"
                                 >
                                     <i className="fa fa-file"></i> Lihat Surat Komitmen Wali
                                 </a>
@@ -249,10 +249,10 @@ let FormWaliSeleksi = (props) => {
                 </div>
             )}
             <FormGroup row className="mt-5 border-top pt-4 mb-0">
-                <Col md={{ size: 8 }} xs="12">
+                <Col col="12" xl="8">
                     {!props.allow ? <AlertFormBelumLengkap /> : <AlertFormLengkap />}
                 </Col>
-                <Col md={{ size: 4 }} xs="12">
+                <Col col="12" xl="4" className="mt-3 mt-xl-0">
                     <Button
                         type="submit"
                         className="modern-btn-primary w-100 py-3 shadow-sm font-weight-bold"

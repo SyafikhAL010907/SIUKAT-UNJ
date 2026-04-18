@@ -57,23 +57,23 @@ func PendukungRoutes(r *gin.RouterGroup) {
 		var existing models.Pendukung
 		config.DB.Where("no_peserta = ? AND atribut = ?", np, "original").First(&existing)
 
-		// File UKT Tinggi
+		// File UKT Tinggi (Original)
 		fileUkt, errUkt := c.FormFile("file_scan_pernyataan_ukt_tinggi")
 		if errUkt == nil {
 			utils.DeleteOldFile(existing.ScanPernyataanUktTinggi)
-				filename := fmt.Sprintf("Pernyataan_UKT_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
-				newPath, err := utils.HandleDynamicUpload(c, fileUkt, student.NamaCmahasiswa, np, "original", filename)
+			filename := fmt.Sprintf("Pernyataan_UktTinggi_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
+			newPath, err := utils.HandleDynamicUpload(c, fileUkt, student.NamaCmahasiswa, np, "original", filename)
 			if err == nil {
 				req.ScanPernyataanUktTinggi = newPath
 			}
 		}
 
-		// File Kebenaran Data (Surat Pernyataan)
+		// File Kebenaran Data / Surat Pernyataan Seleksi (Original)
 		fileKeb, errKeb := c.FormFile("file_scan_pernyataan_kebenaran")
 		if errKeb == nil {
 			utils.DeleteOldFile(existing.ScanPernyataanKebenaran)
-				filename := fmt.Sprintf("Surat_Pernyataan_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
-				newPath, err := utils.HandleDynamicUpload(c, fileKeb, student.NamaCmahasiswa, np, "original", filename)
+			filename := fmt.Sprintf("Pernyataan_Seleksi_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
+			newPath, err := utils.HandleDynamicUpload(c, fileKeb, student.NamaCmahasiswa, np, "original", filename)
 			if err == nil {
 				req.ScanPernyataanKebenaran = newPath
 			}
@@ -117,21 +117,23 @@ func PendukungRoutes(r *gin.RouterGroup) {
 		var existing models.Pendukung
 		config.DB.Where("no_peserta = ? AND atribut = ?", np, "sanggah").First(&existing)
 
+		// File UKT Tinggi (Sanggah)
 		fileUkt, errUkt := c.FormFile("file_scan_pernyataan_ukt_tinggi")
 		if errUkt == nil {
 			utils.DeleteOldFile(existing.ScanPernyataanUktTinggi)
-				filename := fmt.Sprintf("Pernyataan_UKT_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
-				newPath, err := utils.HandleDynamicUpload(c, fileUkt, student.NamaCmahasiswa, np, "sanggah", filename)
+			filename := fmt.Sprintf("Pernyataan_UktTinggi_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
+			newPath, err := utils.HandleDynamicUpload(c, fileUkt, student.NamaCmahasiswa, np, "sanggah", filename)
 			if err == nil {
 				req.ScanPernyataanUktTinggi = newPath
 			}
 		}
 
+		// File Kebenaran Data / Surat Pernyataan Seleksi (Sanggah)
 		fileKeb, errKeb := c.FormFile("file_scan_pernyataan_kebenaran")
 		if errKeb == nil {
 			utils.DeleteOldFile(existing.ScanPernyataanKebenaran)
-				filename := fmt.Sprintf("Surat_Pernyataan_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
-				newPath, err := utils.HandleDynamicUpload(c, fileKeb, student.NamaCmahasiswa, np, "sanggah", filename)
+			filename := fmt.Sprintf("Pernyataan_Seleksi_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
+			newPath, err := utils.HandleDynamicUpload(c, fileKeb, student.NamaCmahasiswa, np, "sanggah", filename)
 			if err == nil {
 				req.ScanPernyataanKebenaran = newPath
 			}

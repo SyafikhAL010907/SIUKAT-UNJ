@@ -26,10 +26,10 @@ let FormPendukungSeleksi = (props) => {
     return (
         <Form onSubmit={handleSubmit}>
             <FormGroup row className="mb-4">
-                <Label for="tanggungan" md={3}>
+                <Label for="tanggungan" col="12" xl="3" className="mb-2 mb-xl-0">
                     Jumlah Tanggungan
                 </Label>
-                <Col md={9}>
+                <Col col="12" xl="9">
                     <Field
                         component={InputBs}
                         type="text"
@@ -37,14 +37,14 @@ let FormPendukungSeleksi = (props) => {
                         id="tanggungan"
                         placeholder="Jumlah Tanggungan"
                     />
-                    <FormText>Termasuk Kepala Keluarga</FormText>
+                    <FormText color="muted">Termasuk Kepala Keluarga</FormText>
                 </Col>
             </FormGroup>
             <FormGroup row className="mb-4">
-                <Label for="file_scan_kk" md={3}>
+                <Label for="file_scan_kk" col="12" xl="3" className="mb-2 mb-xl-0">
                     Kartu Keluarga
                 </Label>
-                <Col md={5}>
+                <Col col="12" xl="6">
                     <Field
                         component={InputFileBs}
                         type="file"
@@ -53,33 +53,33 @@ let FormPendukungSeleksi = (props) => {
                         id="file_scan_kk"
                     />
                     <FormText color="muted">
-                        <ul className="list-reset">
+                        <ul className="list-reset text-xs sm:text-sm">
                             <li>Ekstensi berkas berupa PDF;</li>
                             <li>Ukuran berkas tidak lebih dari 500KB.</li>
                         </ul>
                     </FormText>
                 </Col>
                 {scan_kk && (
-                    <Col md={4}>
+                    <Col col="12" xl="3" className="mt-2 mt-xl-0">
                         <a
                             href={
                                 storage + '/' + scan_kk
                             }
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="btn btn-success btn-block"
+                            className="btn btn-success btn-block py-2 text-sm"
                         >
-                            <i className="fa fa-file mr-2"></i> Lihat Kartu Keluarga
+                            <i className="fa fa-file mr-2"></i> Lihat KK
                         </a>
                     </Col>
                 )}
             </FormGroup>
 
             <FormGroup row className="mt-5 border-top pt-4 mb-0">
-                <Col md={{ size: 8 }} xs="12">
+                <Col col="12" xl="8">
                     {!props.allow ? <AlertFormBelumLengkap /> : <AlertFormLengkap />}
                 </Col>
-                <Col md={{ size: 4 }} xs="12">
+                <Col col="12" xl="4" className="mt-3 mt-xl-0">
                     <Button
                         type="submit"
                         className="modern-btn-primary w-100 py-3 shadow-sm font-weight-bold"

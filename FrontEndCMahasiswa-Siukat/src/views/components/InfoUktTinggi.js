@@ -15,9 +15,9 @@ class InfoUktTinggi extends React.Component {
             besar_ukt: this.props.ukt[this.props.cmahasiswa.golongan_id]
         }
         return (
-            <div className="bg-emerald-light p-3 rounded-lg border-emerald shadow-sm">
-                <div className="text-emerald font-weight-bold" style={{fontSize: '1.1rem'}}>Kelompok {ukt_now.kategori}</div>
-                <div className="text-dark font-weight-bold mt-1" style={{fontSize: '1.4rem'}}>{rupiah(ukt_now.besar_ukt)}</div>
+            <div className="bg-emerald-light p-2 p-md-3 rounded-xl border-emerald shadow-sm">
+                <div className="text-emerald font-weight-bold text-xs sm:text-sm md:text-base">Kelompok {ukt_now.kategori}</div>
+                <div className="text-dark font-weight-bold mt-1 text-sm sm:text-lg md:text-xl">{rupiah(ukt_now.besar_ukt)}</div>
             </div>
         )
     }
@@ -28,11 +28,11 @@ class InfoUktTinggi extends React.Component {
                     <div className="info-icon mr-2 bg-white rounded-circle d-flex align-items-center justify-content-center shadow-sm" style={{width: '32px', height: '32px'}}>
                         <i className="fa fa-university text-emerald" style={{fontSize: '14px'}}></i>
                     </div>
-                    <span className="font-weight-bold" style={{fontSize: '1rem'}}>Informasi Penetapan UKT</span>
+                    <span className="font-weight-bold text-sm sm:text-base">Informasi UKT</span>
                 </CardTitle>
-                <div className="card-body p-4 text-center">
-                    <p className="text-muted mb-3" style={{fontSize: '0.875rem'}}>Anda telah ditetapkan dalam kelompok:</p>
-                    {(this.props.ukt !== undefined) ? this.renderUktTinggi() : <div className="p-3 text-muted">Memuat data...</div>}
+                <div className="card-body p-3 p-md-4 text-center">
+                    <p className="text-muted mb-3 text-xs sm:text-sm">Anda telah ditetapkan dalam kelompok:</p>
+                    {(this.props.ukt !== undefined) ? this.renderUktTinggi() : <div className="p-3 text-muted text-xs">Memuat data...</div>}
                 </div>
             </Card>
         )

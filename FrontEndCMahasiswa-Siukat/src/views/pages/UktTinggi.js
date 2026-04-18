@@ -100,7 +100,7 @@ class UktTinggi extends React.Component {
         return (
             <div className="margin-top-20">
                 <Row>
-                    <Col md="3" xs="12">
+                    <Col lg="3" md="4" xs="12">
                         <InfoUktTinggi />
                         
                         <ListGroup className="modern-sidebar-menu mb-4 shadow-sm">
@@ -164,7 +164,7 @@ class UktTinggi extends React.Component {
                         <BatalUktTinggi />
                     </Col>
                     
-                    <Col md="9" xs="12">
+                    <Col lg="9" md="8" xs="12">
                         <TabContent activeTab={this.state.activeTab}>
                             <TabPane tabId="1">
                                 <DataPribadi updateVerifikasi={this.updateVerifikasi} allow={verifikasi.cmahasiswa} />

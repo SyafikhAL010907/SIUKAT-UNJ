@@ -19,15 +19,14 @@ class Klarifikasi extends React.Component {
                 <Row className="justify-content-center">
                     <Col md={10} lg={8} xs={12}>
                         <Card className="premium-card shadow-lg mt-4">
-                            <div className="bg-emerald-soft p-4 text-center text-white">
-                                <i className="fa fa-comments-o fa-3x mb-3 text-white"></i>
-                                <h3 className="font-weight-bold mb-0 text-white">
+                            <div className="bg-emerald-soft p-4 p-md-5 text-center text-white position-relative">
+                                <i className="fa fa-comments-o fa-2x fa-md-3x mb-3 text-white"></i>
+                                <h3 className="font-weight-bold mb-0 text-white text-lg sm:text-2xl md:text-3xl" style={{ letterSpacing: '-0.5px' }}>
                                    Klarifikasi Data UKT
                                 </h3>
-                                <Badge color="warning" pill className="px-3 py-2 mt-2">
-                                    <i className="fa fa-clock-o mr-2"></i>
-                                    Status: Menunggu Wawancara
-                                </Badge>
+                                <div className="d-inline-block mt-3 px-3 py-2" style={{ backgroundColor: '#ffcc00', color: '#0f6d3f', fontWeight: 'bold', fontSize: '0.75rem', borderRadius: '50px' }}>
+                                    <i className="fa fa-clock-o mr-2"></i>Status: Menunggu Wawancara
+                                </div>
                             </div>
                             
                             <div className="card-body p-4 p-md-5">

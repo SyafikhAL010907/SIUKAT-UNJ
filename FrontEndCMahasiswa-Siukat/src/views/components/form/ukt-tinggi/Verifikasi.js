@@ -36,19 +36,19 @@ class Verifikasi extends React.Component {
         this.props.dispatch(cmahasiswa.tinggiSelesai(cookies.get(cookieName)))
     }
     renderSection = (title, icon, stateName, Component) => (
-        <div className="mb-3 border rounded-lg overflow-hidden shadow-sm bg-white">
+        <div className="mb-3 border rounded-xl overflow-hidden shadow-sm bg-white">
             <div 
                 className="d-flex align-items-center justify-content-between p-3 cursor-pointer hover-bg-light"
                 onClick={() => this.toggle(stateName, !this.state[stateName])}
-                style={{ cursor: 'pointer', background: this.state[stateName] ? '#f1f5f9' : '#fff' }}
+                style={{ cursor: 'pointer', background: this.state[stateName] ? '#f8fafc' : '#fff' }}
             >
-                <div className="font-weight-bold text-dark">
+                <div className="font-weight-bold text-dark text-sm sm:text-base">
                     <i className={`fa ${icon} mr-3 text-emerald`}></i> {title}
                 </div>
                 <i className={`fa ${this.state[stateName] ? 'fa-chevron-up' : 'fa-chevron-down'} text-muted`}></i>
             </div>
             <Collapse isOpen={this.state[stateName]}>
-                <div className="p-4 p-md-5 border-top bg-white">
+                <div className="p-3 p-sm-4 p-md-5 border-top bg-white">
                     <Component />
                 </div>
             </Collapse>
@@ -60,19 +60,24 @@ class Verifikasi extends React.Component {
             return <Redirect to="/main/ukt/selesai-isi" />
         }
         return (
-            <Card className="premium-card p-4 p-md-5">
-                <CardTitle tag="h4" className="mb-4">Verifikasi & Finalisasi Data</CardTitle>
+            <Card className="premium-card p-3 p-sm-4 p-md-5">
+                <CardTitle tag="h4" className="mb-4 font-weight-bold text-lg sm:text-xl md:text-2xl">
+                    Verifikasi & Finalisasi Data
+                </CardTitle>
                 
                 { (this.props.allow === undefined || this.props.allow === 0) && (
-                    <Alert color="warning" className="rounded-lg shadow-sm border-0 mb-4 px-4 py-3">
-                        <i className="fa fa-info-circle mr-2"></i> Verifikasi dapat dilakukan setelah <strong>seluruh tahapan data</strong> terisi lengkap.
+                    <Alert color="warning" className="rounded-xl shadow-sm border-0 mb-4 px-3 py-3 d-flex align-items-start">
+                        <i className="fa fa-info-circle mr-3 mt-1 text-lg"></i> 
+                        <span className="text-sm sm:text-base">
+                            Verifikasi dapat dilakukan setelah <strong>seluruh tahapan data</strong> terisi lengkap.
+                        </span>
                     </Alert>
                 )}
 
                 { (this.props.allow !== undefined && this.props.allow !== 0) && (
                     <div>
                         <div className="my-4">
-                            <h5 className="mb-4 font-weight-bold text-secondary border-bottom pb-2">
+                            <h5 className="mb-4 font-weight-bold text-secondary border-bottom pb-2 text-base sm:text-lg">
                                 <i className="fa fa-search mr-2"></i> Pratinjau Seluruh Data:
                             </h5>
                             {this.renderSection('Data Pribadi', 'fa-user', 'collapsePribadi', Pribadi)}
@@ -84,22 +89,22 @@ class Verifikasi extends React.Component {
 
                         <div className="mt-5 pt-4 border-top">
                             <Row className="align-items-center">
-                                <Col md="7" xs="12">
-                                    <Alert color="danger" className="rounded-lg border-0 shadow-sm mb-0 px-4 py-3">
+                                <Col lg="8" md="7" xs="12">
+                                    <Alert color="danger" className="rounded-xl border-0 shadow-sm mb-3 mb-md-0 px-3 py-3">
                                         <div className="d-flex align-items-center">
-                                            <i className="fa fa-exclamation-triangle mr-3 fa-lg"></i>
-                                            <div style={{fontSize: '0.9rem'}}>
+                                            <i className="fa fa-exclamation-triangle mr-3 text-lg d-none d-sm-block"></i>
+                                            <div className="text-xs sm:text-sm">
                                                 Dengan ini saya menyatakan bahwa data yang saya masukkan adalah data yang <strong>sebenar-benarnya dan sejujur-jujurnya</strong>.
                                             </div>
                                         </div>
                                     </Alert>
                                 </Col>
-                                <Col md="5" xs="12" className="mt-3 mt-md-0">
+                                <Col lg="4" md="5" xs="12">
                                     <Button 
                                         className="modern-btn-primary w-100 py-3 shadow font-weight-bold"
                                         onClick={this.verify.bind(this)}
                                     >
-                                        <i className="fa fa-check-circle mr-2"></i> Ya, Semua data sudah benar.
+                                        <i className="fa fa-check-circle mr-2"></i> Konfirmasi Selesai
                                     </Button>
                                 </Col>
                             </Row>

@@ -325,16 +325,16 @@ class Terima extends React.Component {
                         <Card className="premium-card shadow-lg mt-4 border-0 overflow-hidden">
                             {!biodataIsBelumLengkap && (
                                 <div className="bg-emerald-soft p-4 p-md-5 text-center text-white position-relative">
-                                    <div className="position-absolute" style={{ top: '20px', right: '30px', opacity: 0.1 }}>
+                                    <div className="position-absolute d-none d-md-block" style={{ top: '20px', right: '30px', opacity: 0.1 }}>
                                         <i className="fa fa-university fa-5x"></i>
                                     </div>
-                                    <div className="d-inline-block p-3 rounded-circle bg-white shadow-sm mb-3">
-                                        <i className="fa fa-check fa-2x text-emerald"></i>
+                                    <div className="d-inline-block p-2 p-sm-3 rounded-circle bg-white shadow-sm mb-3">
+                                        <i className="fa fa-check fa-lg fa-md-2x text-emerald"></i>
                                     </div>
-                                    <h2 className="font-weight-bold mb-1 text-white" style={{ letterSpacing: '-0.5px' }}>
+                                    <h2 className="font-weight-bold mb-1 text-white text-base sm:text-2xl md:text-3xl" style={{ letterSpacing: '-0.5px' }}>
                                         Proses Pengisian UKT Selesai
                                     </h2>
-                                    <p className="mb-0 opacity-80" style={{ fontSize: '1.1rem' }}>
+                                    <p className="mb-0 opacity-80 text-xs sm:text-base md:text-lg">
                                         Selamat! Anda telah menyelesaikan seluruh tahapan penentuan UKT.
                                     </p>
                                 </div>
@@ -352,52 +352,54 @@ class Terima extends React.Component {
                                 </div>
                             )}
 
-                            <div className="card-body p-4 p-md-5">
-                                <div className="mb-5 overflow-hidden rounded-xl border">
+                            <div className="card-body p-3 p-sm-4 p-md-5">
+                                <div className="mb-4 mb-md-5 overflow-hidden rounded-xl border shadow-sm bg-white">
                                     <DataDiri />
                                 </div>
-
+ 
                                 {!biodataIsBelumLengkap && (
                                     <>
-                                        <div className="mb-5 rounded-xl overflow-hidden shadow-sm border" style={{ borderColor: '#10b981' }}>
+                                        <div className="mb-4 mb-md-5 rounded-xl overflow-hidden shadow-sm border" style={{ borderColor: '#10b981' }}>
                                             <div className="bg-light p-3 border-bottom d-flex align-items-center">
-                                                <i className="fa fa-money text-success mr-3 fa-lg"></i>
-                                                <h6 className="mb-0 font-weight-bold color-emerald text-uppercase" style={{ letterSpacing: '1px' }}>Ketetapan Hasil UKT</h6>
+                                                <i className="fa fa-money text-success mr-2 mr-sm-3 fa-lg"></i>
+                                                <h6 className="mb-0 font-weight-bold color-emerald text-uppercase text-[10px] sm:text-xs md:text-sm" style={{ letterSpacing: '1px' }}>Ketetapan Hasil UKT</h6>
                                             </div>
-                                            <NominalUKT />
+                                            <div className="px-2 px-sm-3">
+                                                <NominalUKT />
+                                            </div>
                                         </div>
-
-                                        <div className="bg-light p-4 rounded-xl mb-4 border text-center">
+ 
+                                        <div className="bg-light p-3 p-sm-4 rounded-xl mb-4 border text-center shadow-sm">
                                             <i className="fa fa-info-circle text-primary mb-2 fa-2x"></i>
-                                            <h6 className="font-weight-bold">Tahap Selanjutnya</h6>
-                                            <p className="text-muted small mb-3 mx-auto" style={{ maxWidth: '500px' }}>
+                                            <h6 className="font-weight-bold text-sm sm:text-base">Tahap Selanjutnya</h6>
+                                            <p className="text-muted text-[11px] sm:text-xs md:text-sm mb-3 mx-auto" style={{ maxWidth: '500px', lineHeight: '1.6' }}>
                                                 Silakan unduh slip pembayaran Anda dan lakukan pembayaran melalui bank mitra UNJ untuk mendapatkan Nomor Induk Mahasiswa (NIM).
                                             </p>
                                             <Button 
-                                                className="modern-btn-primary px-4 py-2 shadow-sm" 
+                                                className="modern-btn-primary px-4 py-2 shadow-sm w-100 w-sm-auto" 
                                                 style={{ borderRadius: '50px' }}
                                                 onClick={this.unduhSlipPembayaran}
                                             >
                                                 <i className="fa fa-download mr-2"></i> {this.state.textSlipPembayaran}
                                             </Button>
                                         </div>
-
+ 
                                         <div className="text-center pt-4 border-top">
-                                            <Alert color="success" className="rounded-xl border-0 shadow-sm py-3 mb-0">
+                                            <Alert color="success" className="rounded-xl border-0 shadow-sm py-3 mb-0 text-xs sm:text-sm">
                                                 <i className="fa fa-check-circle mr-2"></i>
                                                 Anda bisa keluar dari sistem ini sekarang. Silakan login kembali secara berkala untuk info terbaru.
                                             </Alert>
                                         </div>
                                     </>
                                 )}
-
+ 
                                 {biodataIsBelumLengkap && (
-                                    <div className="text-center py-4">
-                                        <p className="text-muted mb-4">
+                                    <div className="text-center py-4 px-2">
+                                        <p className="text-muted mb-4 text-xs sm:text-sm">
                                             Silakan lengkapi biodata Anda terlebih dahulu pada menu yang telah disediakan.
                                         </p>
                                         <Button 
-                                            className="modern-btn-primary px-5 py-3 shadow-lg" 
+                                            className="modern-btn-primary px-4 px-sm-5 py-2 py-sm-3 shadow-lg w-100 w-sm-auto" 
                                             style={{ borderRadius: '50px' }}
                                             onClick={this.handleLamanBiodata}
                                         >

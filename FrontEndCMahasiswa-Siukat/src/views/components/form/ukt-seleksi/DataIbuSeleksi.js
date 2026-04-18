@@ -54,10 +54,10 @@ let FormIbuSeleksi = (props) => {
     return (
         <Form onSubmit={handleSubmit}>
             <FormGroup row className="mb-4">
-                <Label for="nama_ibu" md={3}>
+                <Label for="nama_ibu" col="12" xl="3" className="mb-2 mb-xl-0">
                     Nama Lengkap
                 </Label>
-                <Col md={9}>
+                <Col col="12" xl="9">
                     <Field
                         name="nama_ibu"
                         component={InputBs}
@@ -67,10 +67,10 @@ let FormIbuSeleksi = (props) => {
                 </Col>
             </FormGroup>
             <FormGroup row className="mb-4">
-                <Label for="status_ibu" md={3}></Label>
-                <Col md={9}>
+                <Label for="status_ibu" col="12" xl="3" className="mb-0 mb-xl-0"></Label>
+                <Col col="12" xl="9">
                     <Row>
-                        <Col md={3}>
+                        <Col col="6" sm="4" xl="3">
                             <FormGroup check>
                                 <Label check>
                                     <Field
@@ -81,7 +81,7 @@ let FormIbuSeleksi = (props) => {
                                     />{' '}Hidup</Label>
                             </FormGroup>
                         </Col>
-                        <Col md={9}>
+                        <Col col="6" sm="8" xl="9">
                             <FormGroup check>
                                 <Label check>
                                     <Field
@@ -99,10 +99,10 @@ let FormIbuSeleksi = (props) => {
             {status_ibu === 'hidup' && (
                 <div>
                     <FormGroup row className="mb-4">
-                        <Label for="nik_ibu" md={3}>
+                        <Label for="nik_ibu" col="12" xl="3" className="mb-2 mb-xl-0">
                             NIK
                         </Label>
-                        <Col md={9}>
+                        <Col col="12" xl="9">
                             <Field
                                 name="nik_ibu"
                                 component={InputBs}
@@ -112,10 +112,10 @@ let FormIbuSeleksi = (props) => {
                         </Col>
                     </FormGroup>
                     <FormGroup row className="mb-4">
-                        <Label for="file_scan_ktp_ibu" md={3}>
+                        <Label for="file_scan_ktp_ibu" col="12" xl="3" className="mb-2 mb-xl-0">
                             KTP Ibu
                         </Label>
-                        <Col md={5}>
+                        <Col col="12" xl="6">
                             <Field
                                 component={InputFileBs}
                                 type="file"
@@ -123,10 +123,12 @@ let FormIbuSeleksi = (props) => {
                                 id="file_scan_ktp_ibu"
                                 accept="application/pdf"
                             />
-                            <SyaratScan />
+                            <div className="mt-2 small text-muted">
+                                <SyaratScan />
+                            </div>
                         </Col>
                         {props.initialValues.scan_ktp_ibu && (
-                            <Col md={4}>
+                            <Col col="12" xl="3" className="mt-2 mt-xl-0">
                                 <a
                                     href={
                                         storage +
@@ -135,7 +137,7 @@ let FormIbuSeleksi = (props) => {
                                     }
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="btn btn-success btn-block"
+                                    className="btn btn-success btn-block py-2 text-sm"
                                 >
                                     <i className="fa fa-file"></i> Lihat KTP Ibu
                                 </a>
@@ -143,32 +145,35 @@ let FormIbuSeleksi = (props) => {
                         )}
                     </FormGroup>
                     <FormGroup row className="mb-4">
-                        <Label md={3} xs={12}>
-                            Tempat & <br />
-              Tanggal Lahir
+                        <Label col="12" xl="3" className="mb-2 mb-xl-0">
+                            Tempat & Tanggal Lahir
                         </Label>
-                        <Col md={5}>
-                            <Field
-                                name="tempat_lahir_ibu"
-                                component={InputBs}
-                                type="text"
-                                placeholder="Tempat Lahir"
-                            />{' '}
-                        </Col>
-                        <Col md={4} xs={12}>
-                            <Field
-                                name="tanggal_lahir_ibu"
-                                component={InputDayPicker}
-                                startYear={1940}
-                                placeholder="Tanggal Lahir"
-                            />
+                        <Col col="12" xl="9">
+                            <Row>
+                                <Col col="12" md="6" className="mb-2 mb-md-0">
+                                    <Field
+                                        name="tempat_lahir_ibu"
+                                        component={InputBs}
+                                        type="text"
+                                        placeholder="Tempat Lahir"
+                                    />{' '}
+                                </Col>
+                                <Col col="12" md="6">
+                                    <Field
+                                        name="tanggal_lahir_ibu"
+                                        component={InputDayPicker}
+                                        startYear={1940}
+                                        placeholder="Tanggal Lahir"
+                                    />
+                                </Col>
+                            </Row>
                         </Col>
                     </FormGroup>
                     <FormGroup row className="mb-4">
-                        <Label for="alamat_ibu" md={3}>
+                        <Label for="alamat_ibu" col="12" xl="3" className="mb-2 mb-xl-0">
                             Alamat Lengkap
                         </Label>
-                        <Col md={9}>
+                        <Col col="12" xl="9">
                             <Field
                                 name="alamat_ibu"
                                 component={InputBs}
@@ -179,10 +184,10 @@ let FormIbuSeleksi = (props) => {
                         </Col>
                     </FormGroup>
                     <FormGroup row className="mb-4">
-                        <Label for="provinsi_ibu" md={3}>
+                        <Label for="provinsi_ibu" col="12" xl="3" className="mb-2 mb-xl-0">
                             Provinsi
                         </Label>
-                        <Col md={9}>
+                        <Col col="12" xl="9">
                             <Field
                                 name="provinsi_ibu"
                                 component={InputBs}
@@ -202,10 +207,10 @@ let FormIbuSeleksi = (props) => {
                         </Col>
                     </FormGroup>
                     <FormGroup row className="mb-4">
-                        <Label for="kabkot_ibu" md={3}>
+                        <Label for="kabkot_ibu" col="12" xl="3" className="mb-2 mb-xl-0">
                             Kab/Kota
                         </Label>
-                        <Col md={9}>
+                        <Col col="12" xl="9">
                             <Field
                                 name="kabkot_ibu"
                                 component={InputBs}
@@ -225,10 +230,10 @@ let FormIbuSeleksi = (props) => {
                         </Col>
                     </FormGroup>
                     <FormGroup row className="mb-4">
-                        <Label for="kecamatan_ibu" sm={3}>
+                        <Label for="kecamatan_ibu" col="12" xl="3" className="mb-2 mb-xl-0">
                             Kecamatan
                         </Label>
-                        <Col sm={9}>
+                        <Col col="12" xl="9">
                             <Field name="kecamatan_ibu" component={InputBs} type="select">
                                 {' '}
                                 <option value="">-- Pilih Kecamatan --</option>
@@ -243,10 +248,10 @@ let FormIbuSeleksi = (props) => {
                         </Col>
                     </FormGroup>
                     <FormGroup row className="mb-4">
-                        <Label for="pekerjaan_ibu" md={3}>
+                        <Label for="pekerjaan_ibu" col="12" xl="3" className="mb-2 mb-xl-0">
                             Pekerjaan
                         </Label>
-                        <Col md={9}>
+                        <Col col="12" xl="9">
                             <Field
                                 type="select"
                                 component={InputBs}
@@ -267,10 +272,10 @@ let FormIbuSeleksi = (props) => {
                     {/* {pekerjaan_ibu !== "11" && ( */}
                     <div>
                         <FormGroup row className="mb-4">
-                            <Label for="penghasilan_ibu" md={3}>
+                            <Label for="penghasilan_ibu" col="12" xl="3" className="mb-2 mb-xl-0">
                                 Penghasilan
                             </Label>
-                            <Col md={5} xs={12}>
+                            <Col col="12" xl="6">
                                 <Field
                                     type="number"
                                     component={InputBs}
@@ -282,22 +287,22 @@ let FormIbuSeleksi = (props) => {
                                     validate={[money]}
                                 />
                                 <FormText color="muted">
-                                    <ul className="list-reset">
+                                    <ul className="list-reset text-xs sm:text-sm">
                                         <li>
                                             Penghasilan <b>per bulan</b>;
                                         </li>
                                     </ul>
                                 </FormText>
                             </Col>
-                            <Col md={4} xs={12}>
-                                <Alert color="success">{rupiah(penghasilan_ibu)}</Alert>
+                            <Col col="12" xl="3" className="mt-2 mt-xl-0">
+                                <Alert color="success" className="mb-0 py-2 text-center text-sm">{rupiah(penghasilan_ibu)}</Alert>
                             </Col>
                         </FormGroup>
                         <FormGroup row className="mb-4">
-                            <Label for="sampingan_ibu" md={3}>
+                            <Label for="sampingan_ibu" col="12" xl="3" className="mb-2 mb-xl-0">
                                 Sampingan
                             </Label>
-                            <Col md={5} xs={12}>
+                            <Col col="12" xl="6">
                                 <Field
                                     type="number"
                                     component={InputBs}
@@ -308,24 +313,23 @@ let FormIbuSeleksi = (props) => {
                                     placeholder="Penghasilan Sampingan Ibu"
                                 />
                                 <FormText color="muted">
-                                    <ul className="list-reset">
+                                    <ul className="list-reset text-xs sm:text-sm">
                                         <li>
                                             Sampingan <b>per bulan</b>;
                                         </li>
                                     </ul>
                                 </FormText>
                             </Col>
-                            <Col md={4} xs={12}>
-                                <Alert color="success">{rupiah(sampingan_ibu)}</Alert>
+                            <Col col="12" xl="3" className="mt-2 mt-xl-0">
+                                <Alert color="success" className="mb-0 py-2 text-center text-sm">{rupiah(sampingan_ibu)}</Alert>
                             </Col>
                         </FormGroup>
                         <FormGroup row className="mb-4">
-                            <Label for="file_scan_slip_ibu" md={3}>
-                                {/* Slip Gaji / Bukti Penghasilan */}
+                            <Label for="file_scan_slip_ibu" col="12" xl="3" className="mb-2 mb-xl-0">
                                 {pekerjaan_ibu !== '11' && 'Slip Gaji / Bukti Penghasilan'}
                                 {pekerjaan_ibu === '11' && 'Surat Keterangan Tidak Bekerja'}
                             </Label>
-                            <Col md={5}>
+                            <Col col="12" xl="6">
                                 <Field
                                     component={InputFileBs}
                                     type="file"
@@ -333,20 +337,21 @@ let FormIbuSeleksi = (props) => {
                                     id="file_scan_slip_ibu"
                                     accept="application/pdf"
                                 />
-                                {/* <SyaratScan syarat={["Bukti Penghasilan Bulan Terakhir"]} /> */}
-                                {pekerjaan_ibu !== '11' && (
-                                    <SyaratScan syarat={['Bukti Penghasilan Bulan Terakhir']} />
-                                )}
-                                {pekerjaan_ibu === '11' && (
-                                    <SyaratScan
-                                        syarat={[
-                                            'Surat Keterangan Dari RT dan RW untuk orang tua yang tidak bekerja',
-                                        ]}
-                                    />
-                                )}
+                                <div className="mt-2 small text-muted">
+                                    {pekerjaan_ibu !== '11' && (
+                                        <SyaratScan syarat={['Bukti Penghasilan Bulan Terakhir']} />
+                                    )}
+                                    {pekerjaan_ibu === '11' && (
+                                        <SyaratScan
+                                            syarat={[
+                                                'Surat Keterangan Dari RT dan RW untuk orang tua yang tidak bekerja',
+                                            ]}
+                                        />
+                                    )}
+                                </div>
                             </Col>
                             {props.initialValues.scan_slip_ibu && (
-                                <Col md={4}>
+                                <Col col="12" xl="3" className="mt-2 mt-xl-0">
                                     <a
                                         href={
                                             storage +
@@ -355,11 +360,11 @@ let FormIbuSeleksi = (props) => {
                                         }
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="btn btn-success btn-block"
+                                        className="btn btn-success btn-block py-2 text-sm"
                                     >
                                         <i className="fa fa-file"></i>
-                                        {pekerjaan_ibu !== '11' && 'Lihat Slip Gaji Ibu'}
-                                        {pekerjaan_ibu === '11' && 'Lihat Surat Keterangan Ibu'}
+                                        {pekerjaan_ibu !== '11' && ' Lihat Slip Gaji'}
+                                        {pekerjaan_ibu === '11' && ' Lihat Surat Keterangan'}
                                     </a>
                                 </Col>
                             )}
@@ -367,10 +372,10 @@ let FormIbuSeleksi = (props) => {
                     </div>
                     {/* )} */}
                     <FormGroup row className="mb-4">
-                        <Label for="telepon_ibu" md={3}>
+                        <Label for="telepon_ibu" col="12" xl="3" className="mb-2 mb-xl-0">
                             Nomor Telepon
                         </Label>
-                        <Col md={9}>
+                        <Col col="12" xl="9">
                             <Field
                                 name="telepon_ibu"
                                 component={InputBs}
@@ -380,14 +385,14 @@ let FormIbuSeleksi = (props) => {
                                 title="Hanya isi dengan angka 0-9. Maksimal 13 digit."
                             />
                             <FormText color="muted">
-                                <ul className="list-reset">
+                                <ul className="list-reset text-xs sm:text-sm">
                                     <li>Hanya isi dengan angka. Maksimal 13 digit;</li>
                                     <li>
                                         Isi dengan angka{' '}
                                         <i>
                                             <b>nol (0)</b>
                                         </i>{' '}
-                    jika tidak memiliki nomor telepon.
+                                        jika tidak memiliki nomor telepon.
                                     </li>
                                 </ul>
                             </FormText>
@@ -397,10 +402,10 @@ let FormIbuSeleksi = (props) => {
             )}
 
             <FormGroup row className="mt-5 border-top pt-4 mb-0">
-                <Col md={{ size: 8 }} xs="12">
+                <Col col="12" xl="8">
                     {!props.allow ? <AlertFormBelumLengkap /> : <AlertFormLengkap />}
                 </Col>
-                <Col md={{ size: 4 }} xs="12">
+                <Col col="12" xl="4" className="mt-3 mt-xl-0">
                     <Button
                         type="submit"
                         className="modern-btn-primary w-100 py-3 shadow-sm font-weight-bold"

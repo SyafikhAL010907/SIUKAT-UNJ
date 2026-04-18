@@ -115,7 +115,7 @@ class Seleksi extends React.Component {
             <div className="mt-4">
                 <Row className="h-100">
                     {/* --- 2. TAB MENU (Sidebar di Desktop, di atas Form pada Mobile) --- */}
-                    <Col md="3" xs="12" className="order-1 order-md-1">
+                    <Col lg="3" md="4" xs="12" className="order-1 order-lg-1">
                         <ListGroup className="modern-sidebar-menu shadow-sm mb-3">
                             <ListGroupItem
                                 className={classnames({ active: this.state.activeTab === '1' })}
@@ -215,7 +215,7 @@ class Seleksi extends React.Component {
                     </Col>
                     
                     {/* --- 3. FORM CARD (Di bawah Menu pada Mobile) --- */}
-                    <div className="col-md-9 col-12 d-flex flex-column order-2 order-md-2" ref={this.formContainerRef}>
+                    <div className="col-lg-9 col-md-8 col-12 d-flex flex-column order-2 order-lg-2" ref={this.formContainerRef}>
                         <TabContent activeTab={this.state.activeTab} className="h-100">
                             <TabPane tabId="1" className="h-100">
                                 <Card className="premium-card">

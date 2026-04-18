@@ -26,11 +26,11 @@ let FormDataPendukung = (props) => {
 
     return (
         <Form onSubmit={handleSubmit}>
-            <FormGroup row>
-                <Label for="file_scan_pernyataan_ukt_tinggi" md={3}>
+            <FormGroup row className="mb-4">
+                <Label for="file_scan_pernyataan_ukt_tinggi" col="12" xl="3" className="mb-2 mb-xl-0">
                     Surat Pernyataan
                 </Label>
-                <Col md={5}>
+                <Col col="12" xl="5" className="mb-3 mb-xl-0">
                     <Field
                         component={InputFileBs}
                         type="file"
@@ -39,43 +39,41 @@ let FormDataPendukung = (props) => {
                         id="file_scan_pernyataan_ukt_tinggi"
                     />
                     <FormText color="muted">
-                        <ul className="list-reset">
-                            <li>Ekstensi berkas berupa PDF;</li>
-                            <li>Ukuran berkas tidak lebih dari 500KB.</li>
+                        <ul className="list-reset mt-2">
+                            <li>Ekstensi berkas berupa <b>PDF</b>;</li>
+                            <li>Ukuran berkas tidak lebih dari <b>500KB</b>.</li>
                         </ul>
                     </FormText>
                 </Col>
                 {scan_pernyataan_ukt_tinggi && (
-                    <Col md={4}>
+                    <Col col="12" xl="4">
                         <a
                             href={
                                 storage +
-                                '/' +
-                                props.initialValues.no_peserta +
                                 '/' +
                                 scan_pernyataan_ukt_tinggi
                             }
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="btn btn-success btn-block"
+                            className="btn btn-outline-success btn-block py-2"
                         >
-                            <i className="fa fa-file"></i> Lihat Surat Pernyataan UKT Kelompok Atas
+                            <i className="fa fa-file-pdf-o mr-2"></i> Lihat Surat Pernyataan
                         </a>
                     </Col>
                 )}
             </FormGroup>
-            <FormGroup row>
-                <Col md={{ size: 9 }}>
+            
+            <FormGroup row className="mt-5 border-top pt-4">
+                <Col md={{ size: 8 }} xs="12" className="mb-3 mb-md-0">
                     {!props.allow ? <AlertFormBelumLengkap /> : <AlertFormLengkap />}
                 </Col>
-                <Col md={{ size: 3 }}>
+                <Col md={{ size: 4 }} xs="12">
                     <Button
                         type="submit"
-                        color="success"
-                        block
+                        className="modern-btn-primary w-100 py-3 font-weight-bold"
                         disabled={pristine || submitting}
                     >
-                        <i className="fa fa-save"></i> Simpan
+                        <i className="fa fa-save mr-2"></i> Simpan Data
                     </Button>
                 </Col>
             </FormGroup>

@@ -54,10 +54,10 @@ let FormAyahSeleksi = (props) => {
     return (
         <Form onSubmit={handleSubmit}>
             <FormGroup row className="mb-4">
-                <Label for="nama_ayah" md={3}>
+                <Label for="nama_ayah" col="12" xl="3" className="mb-2 mb-xl-0">
                     Nama Lengkap
                 </Label>
-                <Col md={9}>
+                <Col col="12" xl="9">
                     <Field
                         name="nama_ayah"
                         component={InputBs}
@@ -67,10 +67,10 @@ let FormAyahSeleksi = (props) => {
                 </Col>
             </FormGroup>
             <FormGroup row className="mb-4">
-                <Label for="status_ayah" md={3}></Label>
-                <Col md={9}>
+                <Label for="status_ayah" col="12" xl="3" className="mb-0 mb-xl-0"></Label>
+                <Col col="12" xl="9">
                     <Row>
-                        <Col md={3}>
+                        <Col col="6" sm="4" xl="3">
                             <FormGroup check>
                                 <Label check>
                                     <Field
@@ -81,7 +81,7 @@ let FormAyahSeleksi = (props) => {
                                     />{' '}Hidup</Label>
                             </FormGroup>
                         </Col>
-                        <Col md={9}>
+                        <Col col="6" sm="8" xl="9">
                             <FormGroup check>
                                 <Label check>
                                     <Field
@@ -99,10 +99,10 @@ let FormAyahSeleksi = (props) => {
             {status_ayah === 'hidup' && (
                 <div>
                     <FormGroup row className="mb-4">
-                        <Label for="nik_ayah" md={3}>
+                        <Label for="nik_ayah" col="12" xl="3" className="mb-2 mb-xl-0">
                             NIK
                         </Label>
-                        <Col md={9}>
+                        <Col col="12" xl="9">
                             <Field
                                 name="nik_ayah"
                                 component={InputBs}
@@ -112,10 +112,10 @@ let FormAyahSeleksi = (props) => {
                         </Col>
                     </FormGroup>
                     <FormGroup row className="mb-4">
-                        <Label for="file_scan_ktp_ayah" md={3}>
+                        <Label for="file_scan_ktp_ayah" col="12" xl="3" className="mb-2 mb-xl-0">
                             KTP Ayah
                         </Label>
-                        <Col md={5}>
+                        <Col col="12" xl="6">
                             <Field
                                 component={InputFileBs}
                                 type="file"
@@ -124,10 +124,12 @@ let FormAyahSeleksi = (props) => {
                                 id="file_scan_ktp_ayah"
                                 accept="application/pdf"
                             />
-                            <SyaratScan />
+                            <div className="mt-2 small text-muted">
+                                <SyaratScan />
+                            </div>
                         </Col>
                         {props.initialValues.scan_ktp_ayah && (
-                            <Col md={4}>
+                            <Col col="12" xl="3" className="mt-2 mt-xl-0">
                                 <a
                                     href={
                                         storage +
@@ -136,7 +138,7 @@ let FormAyahSeleksi = (props) => {
                                     }
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="btn btn-success btn-block"
+                                    className="btn btn-success btn-block py-2"
                                 >
                                     <i className="fa fa-file"></i> Lihat KTP Ayah
                                 </a>
@@ -144,31 +146,35 @@ let FormAyahSeleksi = (props) => {
                         )}
                     </FormGroup>
                     <FormGroup row className="mb-4">
-                        <Label md={3} xs={12}>
+                        <Label col="12" xl="3" className="mb-2 mb-xl-0">
                             Tempat {'&'} Tanggal Lahir
                         </Label>
-                        <Col md={5}>
-                            <Field
-                                name="tempat_lahir_ayah"
-                                component={InputBs}
-                                type="text"
-                                placeholder="Tempat Lahir"
-                            />{' '}
-                        </Col>
-                        <Col md={4} xs={12}>
-                            <Field
-                                name="tanggal_lahir_ayah"
-                                component={InputDayPicker}
-                                startYear={1940}
-                                placeholder="Tanggal Lahir"
-                            />
+                        <Col col="12" xl="9">
+                            <Row>
+                                <Col col="12" md="6" className="mb-2 mb-md-0">
+                                    <Field
+                                        name="tempat_lahir_ayah"
+                                        component={InputBs}
+                                        type="text"
+                                        placeholder="Tempat Lahir"
+                                    />{' '}
+                                </Col>
+                                <Col col="12" md="6">
+                                    <Field
+                                        name="tanggal_lahir_ayah"
+                                        component={InputDayPicker}
+                                        startYear={1940}
+                                        placeholder="Tanggal Lahir"
+                                    />
+                                </Col>
+                            </Row>
                         </Col>
                     </FormGroup>
                     <FormGroup row className="mb-4">
-                        <Label for="alamat_ayah" md={3}>
+                        <Label for="alamat_ayah" col="12" xl="3" className="mb-2 mb-xl-0">
                             Alamat Lengkap
                         </Label>
-                        <Col md={9}>
+                        <Col col="12" xl="9">
                             <Field
                                 name="alamat_ayah"
                                 component={InputBs}
@@ -179,10 +185,10 @@ let FormAyahSeleksi = (props) => {
                         </Col>
                     </FormGroup>
                     <FormGroup row className="mb-4">
-                        <Label for="provinsi_ayah" md={3}>
+                        <Label for="provinsi_ayah" col="12" xl="3" className="mb-2 mb-xl-0">
                             Provinsi
                         </Label>
-                        <Col md={9}>
+                        <Col col="12" xl="9">
                             <Field
                                 name="provinsi_ayah"
                                 component={InputBs}
@@ -202,10 +208,10 @@ let FormAyahSeleksi = (props) => {
                         </Col>
                     </FormGroup>
                     <FormGroup row className="mb-4">
-                        <Label for="kabkot_ayah" md={3}>
+                        <Label for="kabkot_ayah" col="12" xl="3" className="mb-2 mb-xl-0">
                             Kab/Kota
                         </Label>
-                        <Col md={9}>
+                        <Col col="12" xl="9">
                             <Field
                                 name="kabkot_ayah"
                                 component={InputBs}
@@ -225,10 +231,10 @@ let FormAyahSeleksi = (props) => {
                         </Col>
                     </FormGroup>
                     <FormGroup row className="mb-4">
-                        <Label for="kecamatan_ayah" sm={3}>
+                        <Label for="kecamatan_ayah" col="12" xl="3" className="mb-2 mb-xl-0">
                             Kecamatan
                         </Label>
-                        <Col sm={9}>
+                        <Col col="12" xl="9">
                             <Field name="kecamatan_ayah" component={InputBs} type="select">
                                 {' '}
                                 <option value="">-- Pilih Kecamatan --</option>
@@ -243,10 +249,10 @@ let FormAyahSeleksi = (props) => {
                         </Col>
                     </FormGroup>
                     <FormGroup row className="mb-4">
-                        <Label for="pekerjaan_ayah" md={3}>
+                        <Label for="pekerjaan_ayah" col="12" xl="3" className="mb-2 mb-xl-0">
                             Pekerjaan
                         </Label>
-                        <Col md={9}>
+                        <Col col="12" xl="9">
                             <Field
                                 type="select"
                                 component={InputBs}
@@ -267,10 +273,10 @@ let FormAyahSeleksi = (props) => {
                     {/* {pekerjaan_ayah !== "11" && ( */}
                     <div>
                         <FormGroup row className="mb-4">
-                            <Label for="penghasilan_ayah" md={3}>
+                            <Label for="penghasilan_ayah" col="12" xl="3" className="mb-2 mb-xl-0">
                                 Penghasilan
                             </Label>
-                            <Col md={5} xs={12}>
+                            <Col col="12" xl="6">
                                 <Field
                                     type="number"
                                     component={InputBs}
@@ -282,22 +288,22 @@ let FormAyahSeleksi = (props) => {
                                     validate={[money]}
                                 />
                                 <FormText color="muted">
-                                    <ul className="list-reset">
+                                    <ul className="list-reset text-xs sm:text-sm">
                                         <li>
                                             Penghasilan <b>per bulan</b>;
                                         </li>
                                     </ul>
                                 </FormText>
                             </Col>
-                            <Col md={4} xs={12}>
-                                <Alert color="success">{rupiah(penghasilan_ayah)}</Alert>
+                            <Col col="12" xl="3" className="mt-2 mt-xl-0">
+                                <Alert color="success" className="mb-0 py-2 text-center text-sm">{rupiah(penghasilan_ayah)}</Alert>
                             </Col>
                         </FormGroup>
                         <FormGroup row className="mb-4">
-                            <Label for="sampingan_ayah" md={3}>
+                            <Label for="sampingan_ayah" col="12" xl="3" className="mb-2 mb-xl-0">
                                 Sampingan
                             </Label>
-                            <Col md={5} xs={12}>
+                            <Col col="12" xl="6">
                                 <Field
                                     type="number"
                                     component={InputBs}
@@ -308,23 +314,23 @@ let FormAyahSeleksi = (props) => {
                                     placeholder="Penghasilan Sampingan Ayah"
                                 />
                                 <FormText color="muted">
-                                    <ul className="list-reset">
+                                    <ul className="list-reset text-xs sm:text-sm">
                                         <li>
                                             Sampingan <b>per bulan</b>;
                                         </li>
                                     </ul>
                                 </FormText>
                             </Col>
-                            <Col md={4} xs={12}>
-                                <Alert color="success">{rupiah(sampingan_ayah)}</Alert>
+                            <Col col="12" xl="3" className="mt-2 mt-xl-0">
+                                <Alert color="success" className="mb-0 py-2 text-center text-sm">{rupiah(sampingan_ayah)}</Alert>
                             </Col>
                         </FormGroup>
                         <FormGroup row className="mb-4">
-                            <Label for="file_scan_slip_ayah" md={3}>
+                            <Label for="file_scan_slip_ayah" col="12" xl="3" className="mb-2 mb-xl-0">
                                 {pekerjaan_ayah !== '11' && 'Slip Gaji / Bukti Penghasilan'}
                                 {pekerjaan_ayah === '11' && 'Surat Keterangan Tidak Bekerja'}
                             </Label>
-                            <Col md={5}>
+                            <Col col="12" xl="6">
                                 <Field
                                     component={InputFileBs}
                                     type="file"
@@ -332,19 +338,21 @@ let FormAyahSeleksi = (props) => {
                                     id="file_scan_slip_ayah"
                                     accept="application/pdf"
                                 />
-                                {pekerjaan_ayah !== '11' && (
-                                    <SyaratScan syarat={['Bukti Penghasilan Bulan Terakhir']} />
-                                )}
-                                {pekerjaan_ayah === '11' && (
-                                    <SyaratScan
-                                        syarat={[
-                                            'Surat Keterangan Dari RT dan RW untuk orang tua yang tidak bekerja',
-                                        ]}
-                                    />
-                                )}
+                                <div className="mt-2 small text-muted">
+                                    {pekerjaan_ayah !== '11' && (
+                                        <SyaratScan syarat={['Bukti Penghasilan Bulan Terakhir']} />
+                                    )}
+                                    {pekerjaan_ayah === '11' && (
+                                        <SyaratScan
+                                            syarat={[
+                                                'Surat Keterangan Dari RT dan RW untuk orang tua yang tidak bekerja',
+                                            ]}
+                                        />
+                                    )}
+                                </div>
                             </Col>
                             {props.initialValues.scan_slip_ayah && (
-                                <Col md={4}>
+                                <Col col="12" xl="3" className="mt-2 mt-xl-0">
                                     <a
                                         href={
                                             storage +
@@ -353,11 +361,11 @@ let FormAyahSeleksi = (props) => {
                                         }
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="btn btn-success btn-block"
+                                        className="btn btn-success btn-block py-2 text-sm"
                                     >
                                         <i className="fa fa-file"></i>
-                                        {pekerjaan_ayah !== '11' && 'Lihat Slip Gaji Ayah'}
-                                        {pekerjaan_ayah === '11' && 'Lihat Surat Keterangan Ayah'}
+                                        {pekerjaan_ayah !== '11' && ' Lihat Slip Gaji'}
+                                        {pekerjaan_ayah === '11' && ' Lihat Surat Keterangan'}
                                     </a>
                                 </Col>
                             )}
@@ -365,10 +373,10 @@ let FormAyahSeleksi = (props) => {
                     </div>
                     {/* )} */}
                     <FormGroup row className="mb-4">
-                        <Label for="telepon_ayah" md={3}>
+                        <Label for="telepon_ayah" col="12" xl="3" className="mb-2 mb-xl-0">
                             Nomor Telepon
                         </Label>
-                        <Col md={9}>
+                        <Col col="12" xl="9">
                             <Field
                                 name="telepon_ayah"
                                 component={InputBs}
@@ -378,14 +386,14 @@ let FormAyahSeleksi = (props) => {
                                 title="Hanya isi dengan angka 0-9. Maksimal 13 digit."
                             />
                             <FormText color="muted">
-                                <ul className="list-reset">
+                                <ul className="list-reset text-xs sm:text-sm">
                                     <li>Hanya isi dengan angka. Maksimal 13 digit;</li>
                                     <li>
                                         Isi dengan angka{' '}
                                         <i>
                                             <b>nol (0)</b>
                                         </i>{' '}
-                    jika tidak memiliki nomor telepon.
+                                        jika tidak memiliki nomor telepon.
                                     </li>
                                 </ul>
                             </FormText>
@@ -395,10 +403,10 @@ let FormAyahSeleksi = (props) => {
             )}
 
             <FormGroup row className="mt-5 border-top pt-4 mb-0">
-                <Col md={{ size: 8 }} xs="12">
+                <Col col="12" xl="8">
                     {!props.allow ? <AlertFormBelumLengkap /> : <AlertFormLengkap />}
                 </Col>
-                <Col md={{ size: 4 }} xs="12">
+                <Col col="12" xl="4" className="mt-3 mt-xl-0">
                     <Button
                         type="submit"
                         className="modern-btn-primary w-100 py-3 shadow-sm font-weight-bold"

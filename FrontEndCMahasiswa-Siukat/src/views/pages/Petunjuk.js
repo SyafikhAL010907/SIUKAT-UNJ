@@ -25,61 +25,57 @@ class Petunjuk extends React.Component{
     }
     render() {
         return (
-            <div>
+            <div className="modern-portal-container">
                 <Loading>
                     <UktLoader/>
                 </Loading>
-                <div>
-                    <div className="mt-4">
+                <div className="container-fluid px-0 px-md-3">
+                    <div className="mt-2 mt-md-4">
                         <Row>
-                           <Col md="3" xs="12" className="d-flex flex-column">
-    
-    {/* MENU */}
-    <div className="order-1 order-md-1">
-        <ListGroup className="modern-sidebar-menu shadow-sm mb-3">
-            <ListGroupItem 
-                className={classnames({ active: this.state.activeTab === '1' })} 
-                onClick={(e) => { this.toggle(e, '1'); }}
-            >
-                <i className="fa fa-flash"></i> Memeriksa Tagihan Listrik
-            </ListGroupItem>
-            <ListGroupItem 
-                className={classnames({ active: this.state.activeTab === '2' })} 
-                onClick={(e) => { this.toggle(e, '2'); }}
-            >
-                <i className="fa fa-file"></i> Menggabungkan Hasil Scan
-            </ListGroupItem>
-            <ListGroupItem 
-                className={classnames({ active: this.state.activeTab === '3' })} 
-                onClick={(e) => { this.toggle(e, '3'); }}
-            >
-                <i className="fa fa-image"></i> Mengubah Ukuran Berkas
-            </ListGroupItem>
-        </ListGroup>
-    </div>
+                            <Col lg="3" xs="12" className="d-flex flex-column mb-4 mb-lg-0">
+                                {/* MENU */}
+                                <div className="order-1 order-lg-1">
+                                    <ListGroup className="modern-sidebar-menu shadow-sm mb-3">
+                                        <ListGroupItem 
+                                            className={classnames({ active: this.state.activeTab === '1' }, "py-3 px-4 border-0")} 
+                                            onClick={(e) => { this.toggle(e, '1'); }}
+                                            style={{cursor: 'pointer'}}
+                                        >
+                                            <i className="fa fa-bolt mr-3"></i> Tagihan Listrik
+                                        </ListGroupItem>
+                                        <ListGroupItem 
+                                            className={classnames({ active: this.state.activeTab === '2' }, "py-3 px-4 border-0")} 
+                                            onClick={(e) => { this.toggle(e, '2'); }}
+                                            style={{cursor: 'pointer'}}
+                                        >
+                                            <i className="fa fa-file-pdf-o mr-3"></i> Gabung Berkas
+                                        </ListGroupItem>
+                                        <ListGroupItem 
+                                            className={classnames({ active: this.state.activeTab === '3' }, "py-3 px-4 border-0")} 
+                                            onClick={(e) => { this.toggle(e, '3'); }}
+                                            style={{cursor: 'pointer'}}
+                                        >
+                                            <i className="fa fa-compress mr-3"></i> Ukuran Berkas
+                                        </ListGroupItem>
+                                    </ListGroup>
+                                </div>
 
-    {/* BANTUAN */}
-    <div className="order-3 order-md-2 mt-3 mt-md-0">
-        <Bantuan />
-    </div>
-
-</Col>
-                            <Col md="9" xs="12" className="d-flex flex-column">
+                                {/* BANTUAN */}
+                                <div className="order-3 order-lg-2 mt-2 mt-lg-3">
+                                    <Bantuan />
+                                </div>
+                            </Col>
+                            
+                            <Col lg="9" xs="12" className="d-flex flex-column">
                                 <TabContent activeTab={this.state.activeTab} className="h-100">
                                     <TabPane tabId="1" className="h-100">
-                                        <Card className="premium-card">
-                                            <TagihanListrik/>
-                                        </Card>
+                                        <TagihanListrik/>
                                     </TabPane>
                                     <TabPane tabId="2" className="h-100">
-                                        <Card className="premium-card">
-                                            <GabungBerkas/>
-                                        </Card>
+                                        <GabungBerkas/>
                                     </TabPane>
                                     <TabPane tabId="3" className="h-100">
-                                        <Card className="premium-card">
-                                            <UkuranBerkas/>
-                                        </Card>
+                                        <UkuranBerkas/>
                                     </TabPane>
                                 </TabContent>
                             </Col>

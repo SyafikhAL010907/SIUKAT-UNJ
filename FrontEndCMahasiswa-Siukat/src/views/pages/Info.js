@@ -36,34 +36,36 @@ class Info extends React.Component {
           <TabMenu />
 
           <Row className="mt-4">
-            <Col md="3">
+            <Col lg="3" xs="12" className="mb-4 mb-lg-0">
               <Bantuan />
             </Col>
-            <Col md="9">
-              <Alert className="modern-alert-danger shadow-sm mb-4">
-                <h5 className="mb-3 font-weight-bold"><i className="fa fa-exclamation-triangle mr-2"></i> Perhatian Penting</h5>
-                <ul>
-                  <li>
+            <Col lg="9" xs="12">
+              <Alert className="modern-alert-danger shadow-sm mb-4 p-3 p-md-4">
+                <h5 className="mb-3 font-weight-bold text-sm sm:text-base md:text-lg">
+                  <i className="fa fa-exclamation-triangle mr-2"></i> Perhatian Penting
+                </h5>
+                <ul className="text-xs sm:text-sm pl-3 mb-0">
+                  <li className="mb-2">
                     Calon mahasiswa atau orang tua harus mengisi data dengan
                     jujur and sebenar-benarnya.
                   </li>
-                  <li>
+                  <li className="mb-2">
                     Pihak UNJ dapat melakukan verifikasi data dengan mengecek
                     pada setiap instansi terkait (PLN, Samsat, dll).
                   </li>
-                  <li>
+                  <li className="mb-2">
                     Jika calon mahasiswa belum lengkap atau belum menyelesaikan
                     pengisian data UKT dalam jangka waktu yang telah ditentukan,
                     maka calon mahasiswa akan ditetapkan ke dalam{" "}
                     <b>UKT Kelompok Atas</b>.
                   </li>
-                  <li>
+                  <li className="mb-2">
                     Jika berkas yang diunggah diketahui{" "}
                     <b>tidak valid dan/atau palsu</b>, maka calon mahasiswa akan
                     ditetapkan ke dalam <b>UKT Kelompok Atas</b> atau akan
                     dikenakan sanksi sesuai dengan ketentuan hukum yang berlaku.
                   </li>
-                  <li>
+                  <li className="mb-2">
                     Calon mahasiswa yang tidak mengisi data pada Sistem
                     Informasi UKT ini akan ditetapkan ke dalam{" "}
                     <b>UKT Kelompok Atas</b>.
@@ -78,8 +80,8 @@ class Info extends React.Component {
           </Row>
 
           <Row className="mt-4 mb-5">
-            <Col md="12" className="text-center">
-              <Button className="modern-btn-primary px-5 py-3 mr-4" onClick={this.goToUkt}>
+            <Col md="12" className="text-center px-3">
+              <Button className="modern-btn-primary w-100 w-sm-auto px-5 py-3" onClick={this.goToUkt}>
                 <i className="fa fa-pencil-square-o mr-2"></i> Mulai Pengisian UKT
               </Button>
             </Col>

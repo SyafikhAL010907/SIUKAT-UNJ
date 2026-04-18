@@ -79,7 +79,7 @@ let FormSuratKebenaran = (props) => {
                 <FormGroup className="mb-0">
                     <Label className="font-weight-bold text-secondary small text-uppercase mb-3 d-block">Unggah Surat Pernyataan</Label>
                     <Row className="align-items-center">
-                        <Col md={scan_pernyataan_kebenaran ? 8 : 12}>
+                        <Col col="12" md={scan_pernyataan_kebenaran ? 8 : 12}>
                             <Field
                                 component={InputFileBs}
                                 type="file"
@@ -89,7 +89,7 @@ let FormSuratKebenaran = (props) => {
                             />
                         </Col>
                         {scan_pernyataan_kebenaran && (
-                            <Col md={4} className="mt-3 mt-md-0">
+                            <Col col="12" md={4} className="mt-3 mt-md-0">
                                 <a
                                     href={storage + '/' + scan_pernyataan_kebenaran}
                                     target="_blank"

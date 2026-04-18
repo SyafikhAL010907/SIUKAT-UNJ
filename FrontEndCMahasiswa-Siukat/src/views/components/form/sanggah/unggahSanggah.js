@@ -66,8 +66,11 @@ let FormSanggah = (props) => {
                         color="success"
                         block
                         disabled={props.pristine || props.submitting}
+                        className="py-2.5 font-weight-bold shadow-sm"
+                        style={{ borderRadius: '12px' }}
                     >
-                        <i className="fa fa-save"></i> Simpan
+                        {props.submitting ? <i className="fa fa-spinner fa-spin mr-2"></i> : <i className="fa fa-save mr-2"></i>}
+                        {props.submitting ? "Menyimpan..." : "Simpan Perubahan"}
                     </Button>
                 </Col>
             </FormGroup>

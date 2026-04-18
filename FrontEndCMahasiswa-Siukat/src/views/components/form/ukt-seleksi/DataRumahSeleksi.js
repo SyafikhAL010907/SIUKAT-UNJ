@@ -37,106 +37,110 @@ let FormRumahSeleksi = (props) => {
     } = props;
     return (
         <Form onSubmit={handleSubmit}>
-            <Row className="mb-4">
-                <Label for="status_kepemilikan" md={3} xs={12}>Status Rumah</Label>
-                <FormGroup tag="fieldset" className="col">
-                    <FormGroup check>
-                        <Label check>
-                            <Field
-                                type="radio"
-                                component={InputBs}
-                                name="status_kepemilikan"
-                                value="milik_sendiri"
-                            />{' '}Milik Sendiri</Label>
+            <FormGroup row className="mb-4">
+                <Label for="status_kepemilikan" col="12" xl="3" className="mb-2 mb-xl-0">Status Rumah</Label>
+                <Col col="12" xl="9">
+                    <FormGroup tag="fieldset" className="mb-0">
+                        <FormGroup check inline className="mr-3 mb-2">
+                            <Label check>
+                                <Field
+                                    type="radio"
+                                    component={InputBs}
+                                    name="status_kepemilikan"
+                                    value="milik_sendiri"
+                                />{' '}Milik Sendiri</Label>
+                        </FormGroup>
+                        <FormGroup check inline className="mr-3 mb-2">
+                            <Label check>
+                                <Field
+                                    type="radio"
+                                    component={InputBs}
+                                    name="status_kepemilikan"
+                                    value="bersama_saudara"
+                                />{' '}Bersama Saudara</Label>
+                        </FormGroup>
+                        <FormGroup check inline className="mr-3 mb-2">
+                            <Label check>
+                                <Field
+                                    type="radio"
+                                    component={InputBs}
+                                    name="status_kepemilikan"
+                                    value="kontrak"
+                                />{' '}Kontrak</Label>
+                        </FormGroup>
+                        <FormGroup check inline className="mb-2">
+                            <Label check>
+                                <Field
+                                    type="radio"
+                                    component={InputBs}
+                                    name="status_kepemilikan"
+                                    value="menumpang"
+                                />{' '}Menumpang</Label>
+                        </FormGroup>
                     </FormGroup>
-                    <FormGroup check>
-                        <Label check>
-                            <Field
-                                type="radio"
-                                component={InputBs}
-                                name="status_kepemilikan"
-                                value="bersama_saudara"
-                            />{' '}Tinggal Bersama Saudara</Label>
-                    </FormGroup>
-                    <FormGroup check>
-                        <Label check>
-                            <Field
-                                type="radio"
-                                component={InputBs}
-                                name="status_kepemilikan"
-                                value="kontrak"
-                            />{' '}Kontrak</Label>
-                    </FormGroup>
-                    <FormGroup check>
-                        <Label check>
-                            <Field
-                                type="radio"
-                                component={InputBs}
-                                name="status_kepemilikan"
-                                value="menumpang"
-                            />{' '}Menumpang</Label>
-                    </FormGroup>
-                </FormGroup>
-            </Row>
+                </Col>
+            </FormGroup>
             {status_kepemilikan === 'milik_sendiri' && (
-                <Row className="mb-4">
-                    <Label for="status_sertifikat" md={3}>Status Sertifikat</Label>
-                    <FormGroup tag="fieldset" className="col">
-                        <FormGroup check>
-                            <Label check>
-                                <Field
-                                    type="radio"
-                                    name="status_sertifikat"
-                                    component={InputBs}
-                                    value="hak_milik"
-                                />{' '}Hak Milik</Label>
+                <FormGroup row className="mb-4">
+                    <Label for="status_sertifikat" col="12" xl="3" className="mb-2 mb-xl-0">Status Sertifikat</Label>
+                    <Col col="12" xl="9">
+                        <FormGroup tag="fieldset" className="mb-0">
+                            <FormGroup check inline className="mr-3 mb-2">
+                                <Label check>
+                                    <Field
+                                        type="radio"
+                                        name="status_sertifikat"
+                                        component={InputBs}
+                                        value="hak_milik"
+                                    />{' '}Hak Milik</Label>
+                            </FormGroup>
+                            <FormGroup check inline className="mr-3 mb-2">
+                                <Label check>
+                                    <Field
+                                        type="radio"
+                                        name="status_sertifikat"
+                                        component={InputBs}
+                                        value="hak_guna_bangunan"
+                                    />{' '}Hak Guna Bangunan</Label>
+                            </FormGroup>
+                            <FormGroup check inline className="mr-3 mb-2">
+                                <Label check>
+                                    <Field
+                                        type="radio"
+                                        name="status_sertifikat"
+                                        component={InputBs}
+                                        value="tanpa_sertifikat"
+                                    />{' '}Tanpa Sertifikat</Label>
+                            </FormGroup>
+                            <FormGroup check inline className="mr-3 mb-2">
+                                <Label check>
+                                    <Field
+                                        type="radio"
+                                        name="status_sertifikat"
+                                        component={InputBs}
+                                        value="tanah_girik"
+                                    />{' '}Tanah Girik</Label>
+                            </FormGroup>
+                            <FormGroup check inline className="mb-2">
+                                <Label check>
+                                    <Field
+                                        type="radio"
+                                        name="status_sertifikat"
+                                        component={InputBs}
+                                        value="lainnya"
+                                    />{' '}Lainnya</Label>
+                            </FormGroup>
                         </FormGroup>
-                        <FormGroup check>
-                            <Label check>
-                                <Field
-                                    type="radio"
-                                    name="status_sertifikat"
-                                    component={InputBs}
-                                    value="hak_guna_bangunan"
-                                />{' '}Hak Guna Bangunan</Label>
-                        </FormGroup>
-                        <FormGroup check>
-                            <Label check>
-                                <Field
-                                    type="radio"
-                                    name="status_sertifikat"
-                                    component={InputBs}
-                                    value="tanpa_sertifikat"
-                                />{' '}Tanpa Sertifikat</Label>
-                        </FormGroup>
-                        <FormGroup check>
-                            <Label check>
-                                <Field
-                                    type="radio"
-                                    name="status_sertifikat"
-                                    component={InputBs}
-                                    value="tanah_girik"
-                                />{' '}Tanah Girik</Label>
-                        </FormGroup>
-                        <FormGroup check>
-                            <Label check>
-                                <Field
-                                    type="radio"
-                                    name="status_sertifikat"
-                                    component={InputBs}
-                                    value="lainnya"
-                                />{' '}Lainnya</Label>
-                        </FormGroup>
-                    </FormGroup>
-                </Row>
+                    </Col>
+                </FormGroup>
             )}
 
             {
                 status_kepemilikan === 'bersama_saudara' && (
                     <div>
                         <FormGroup row className="mb-4">
-                            <Label for="jumlah_kepala_keluarga" md={3}>Jumlah Kepala Keluarga</Label>
-                            <Col md={9}>
+                            <Label for="jumlah_kepala_keluarga" col="12" xl="3" className="mb-2 mb-xl-0">Jumlah Kepala Keluarga</Label>
+                            <Col col="12" xl="9">
                                 <Field
                                     type="text"
                                     component={InputBs}
@@ -154,8 +158,8 @@ let FormRumahSeleksi = (props) => {
                 (status_kepemilikan === 'milik_sendiri' || status_kepemilikan === 'bersama_saudara') && (
                     <div>
                         <FormGroup row className="mb-4">
-                            <Label for="luas_tanah" md={3}>Luas Tanah</Label>
-                            <Col md={9}>
+                            <Label for="luas_tanah" col="12" xl="3" className="mb-2 mb-xl-0">Luas Tanah</Label>
+                            <Col col="12" xl="9">
                                 <Field
                                     type="text"
                                     component={InputBs}
@@ -164,7 +168,7 @@ let FormRumahSeleksi = (props) => {
                                     placeholder="Luas Tanah"
                                 />
                                 <FormText color="muted">
-                                    <ul className="list-reset">
+                                    <ul className="list-reset text-xs sm:text-sm">
                                         <li>Luas tanah sesuai PBB;</li>
                                         <li>Dalam satuan m<sup>2</sup>.</li>
                                     </ul>
@@ -172,8 +176,8 @@ let FormRumahSeleksi = (props) => {
                             </Col>
                         </FormGroup>
                         <FormGroup row className="mb-4">
-                            <Label for="luas_bangunan" md={3}>Luas Bangunan</Label>
-                            <Col md={9}>
+                            <Label for="luas_bangunan" col="12" xl="3" className="mb-2 mb-xl-0">Luas Bangunan</Label>
+                            <Col col="12" xl="9">
                                 <Field
                                     type="text"
                                     component={InputBs}
@@ -182,7 +186,7 @@ let FormRumahSeleksi = (props) => {
                                     placeholder="Luas Bangunan"
                                 />
                                 <FormText color="muted">
-                                    <ul className="list-reset">
+                                    <ul className="list-reset text-xs sm:text-sm">
                                         <li>Luas bangunan sesuai PBB;</li>
                                         <li>Dalam satuan m<sup>2</sup>.</li>
                                     </ul>
@@ -190,8 +194,8 @@ let FormRumahSeleksi = (props) => {
                             </Col>
                         </FormGroup>
                         <FormGroup row className="mb-4">
-                            <Label for="biaya_pbb" md={3}>Biaya PBB</Label>
-                            <Col md={5} xs={12}>
+                            <Label for="biaya_pbb" col="12" xl="3" className="mb-2 mb-xl-0">Biaya PBB</Label>
+                            <Col col="12" xl="6">
                                 <Field
                                     type="number"
                                     component={InputBs}
@@ -203,21 +207,19 @@ let FormRumahSeleksi = (props) => {
                                     validate={[money]}
                                 />
                                 <FormText color="muted">
-                                    <ul className="list-reset">
+                                    <ul className="list-reset text-xs sm:text-sm">
                                         <li>Biaya PBB terbaru / tahun terakhir;</li>
-                                        <li>
-                                            Isi dengan angka <b>satu (1)</b> jika biaya PBB sama dengan
-Rp. 0.</li>
+                                        <li>Isi dengan angka <b>satu (1)</b> jika biaya PBB sama dengan Rp. 0.</li>
                                     </ul>
                                 </FormText>
                             </Col>
-                            <Col md={4} xs={12}>
-                                <Alert color="success">{rupiah(biaya_pbb)} </Alert>
+                            <Col col="12" xl="3" className="mt-2 mt-xl-0">
+                                <Alert color="success" className="mb-0 py-2 text-center text-sm">{rupiah(biaya_pbb)} </Alert>
                             </Col>
                         </FormGroup>
                         <FormGroup row className="mb-4">
-                            <Label for="file_scan_pbb" md={3}>Tagihan PBB</Label>
-                            <Col md={5}>
+                            <Label for="file_scan_pbb" col="12" xl="3" className="mb-2 mb-xl-0">Tagihan PBB</Label>
+                            <Col col="12" xl="6">
                                 <Field
                                     component={InputFileBs}
                                     type="file"
@@ -226,14 +228,14 @@ Rp. 0.</li>
                                     id="file_scan_pbb"
                                 />
                                 <FormText color="muted">
-                                    <ul className="list-reset">
+                                    <ul className="list-reset text-xs sm:text-sm">
                                         <li>Ekstensi berkas berupa PDF;</li>
                                         <li>Ukuran berkas tidak lebih dari 500KB.</li>
                                     </ul>
                                 </FormText>
                             </Col>
                             {props.initialValues.scan_pbb && (
-                                <Col md={4}>
+                                <Col col="12" xl="3" className="mt-2 mt-xl-0">
                                     <a
                                         href={
                                             storage +
@@ -242,7 +244,7 @@ Rp. 0.</li>
                                         }
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="btn btn-success btn-block"
+                                        className="btn btn-success btn-block py-2 text-sm"
                                     >
                                         <i className="fa fa-file"></i> Lihat Tagihan PBB</a>
                                 </Col>
@@ -256,8 +258,8 @@ Rp. 0.</li>
                 status_kepemilikan === 'kontrak' && (
                     <div>
                         <FormGroup row className="mb-4">
-                            <Label for="biaya_kontrak" md={3}>Biaya Kontrak</Label>
-                            <Col md={5} xs={12}>
+                            <Label for="biaya_kontrak" col="12" xl="3" className="mb-2 mb-xl-0">Biaya Kontrak</Label>
+                            <Col col="12" xl="6">
                                 <Field
                                     type="number"
                                     component={InputBs}
@@ -269,19 +271,18 @@ Rp. 0.</li>
                                     validate={[money]}
                                 />
                                 <FormText color="muted">
-                                    <ul className="list-reset">
+                                    <ul className="list-reset text-xs sm:text-sm">
                                         <li>Biaya kontrak <b>per tahun</b>;</li>
-                                        {/* <li>Hanya isi dengan angka (0-9).</li> */}
                                     </ul>
                                 </FormText>
                             </Col>
-                            <Col md={4} xs={12}>
-                                <Alert color="success">{rupiah(biaya_kontrak)} </Alert>
+                            <Col col="12" xl="3" className="mt-2 mt-xl-0">
+                                <Alert color="success" className="mb-0 py-2 text-center text-sm">{rupiah(biaya_kontrak)} </Alert>
                             </Col>
                         </FormGroup>
                         <FormGroup row className="mb-4">
-                            <Label for="file_scan_kontrak" md={3}>Surat Perjanjian Kontrak</Label>
-                            <Col md={5}>
+                            <Label for="file_scan_kontrak" col="12" xl="3" className="mb-2 mb-xl-0">Surat Perjanjian Kontrak</Label>
+                            <Col col="12" xl="6">
                                 <Field
                                     component={InputFileBs}
                                     type="file"
@@ -290,14 +291,14 @@ Rp. 0.</li>
                                     id="file_scan_kontrak"
                                 />
                                 <FormText color="muted">
-                                    <ul className="list-reset">
+                                    <ul className="list-reset text-xs sm:text-sm">
                                         <li>Ekstensi berkas berupa PDF;</li>
                                         <li>Ukuran berkas tidak lebih dari 500KB.</li>
                                     </ul>
                                 </FormText>
                             </Col>
-                            <Col md={4}>
-                                <Button color="primary" size="sm" block onClick={unduhKontrak}>
+                            <Col col="12" xl="3" className="mt-3 mt-xl-0">
+                                <Button color="primary" size="sm" block onClick={unduhKontrak} className="py-2">
                                     <i className="fa fa-download"></i> {textUnduhKontrak}
                                 </Button>
                                 {props.initialValues.scan_kontrak && (
@@ -309,9 +310,9 @@ Rp. 0.</li>
                                         }
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="btn btn-success btn-block btn-sm"
+                                        className="btn btn-success btn-block btn-sm mt-2 py-2"
                                     >
-                                        <i className="fa fa-file"></i> Lihat Surat Perjanjian Kontrak
+                                        <i className="fa fa-file"></i> Lihat Surat Kontrak
                                     </a>
                                 )}
                             </Col>
@@ -321,10 +322,10 @@ Rp. 0.</li>
             }
 
             <FormGroup row className="mt-5 border-top pt-4 mb-0">
-                <Col md={{ size: 8 }} xs="12">
+                <Col col="12" xl="8">
                     {!props.allow ? <AlertFormBelumLengkap /> : <AlertFormLengkap />}
                 </Col>
-                <Col md={{ size: 4 }} xs="12">
+                <Col col="12" xl="4" className="mt-3 mt-xl-0">
                     <Button
                         type="submit"
                         className="modern-btn-primary w-100 py-3 shadow-sm font-weight-bold"

@@ -4,6 +4,7 @@ import {
     Button,
     CardTitle,
     Col,
+    Row,
     Alert,
     Form,
     FormGroup,
@@ -33,8 +34,8 @@ let FormListrikSeleksi = (props) => {
     return (
         <Form onSubmit={handleSubmit}>
             <FormGroup row className="mb-4">
-                <Label for="no_pelanggan" md={3}>Nomor Pelanggan</Label>
-                <Col md={9}>
+                <Label for="no_pelanggan" col="12" xl="3" className="mb-2 mb-xl-0">Nomor Pelanggan</Label>
+                <Col col="12" xl="9">
                     <Field
                         type="text"
                         component={InputBs}
@@ -45,34 +46,38 @@ let FormListrikSeleksi = (props) => {
                 </Col>
             </FormGroup>
             <FormGroup row className="mb-4">
-                <Label for="jenis_pemakaian" md={3}>Status Listrik</Label>
-                <Col md={4}>
-                    <FormGroup check>
-                        <Label check>
-                            <Field
-                                type="radio"
-                                component={InputBs}
-                                name="jenis_pemakaian"
-                                value="prabayar"
-                            />{' '}Prabayar (Token)</Label>
-                    </FormGroup>
-                </Col>
-                <Col md={5}>
-                    <FormGroup check>
-                        <Label check>
-                            <Field
-                                type="radio"
-                                component={InputBs}
-                                name="jenis_pemakaian"
-                                value="pascabayar"
-                            />{' '}Pascabayar</Label>
-                    </FormGroup>
+                <Label for="jenis_pemakaian" col="12" xl="3" className="mb-2 mb-xl-0">Status Listrik</Label>
+                <Col col="12" xl="9">
+                    <Row>
+                        <Col col="6" sm="4" xl="3">
+                            <FormGroup check>
+                                <Label check>
+                                    <Field
+                                        type="radio"
+                                        component={InputBs}
+                                        name="jenis_pemakaian"
+                                        value="prabayar"
+                                    />{' '}Prabayar</Label>
+                            </FormGroup>
+                        </Col>
+                        <Col col="6" sm="8" xl="9">
+                            <FormGroup check>
+                                <Label check>
+                                    <Field
+                                        type="radio"
+                                        component={InputBs}
+                                        name="jenis_pemakaian"
+                                        value="pascabayar"
+                                    />{' '}Pascabayar</Label>
+                            </FormGroup>
+                        </Col>
+                    </Row>
                 </Col>
             </FormGroup>
 
             <FormGroup row className="mb-4">
-                <Label md={3} xs={12}>Biaya Listrik</Label>
-                <Col md={5} xs={12}>
+                <Label col="12" xl="3" className="mb-2 mb-xl-0">Biaya Listrik</Label>
+                <Col col="12" xl="6">
                     <Field
                         type="number"
                         component={InputBs}
@@ -84,19 +89,19 @@ let FormListrikSeleksi = (props) => {
                         validate={[money]}
                     />
                     <FormText color="muted">
-                        <ul className="list-reset">
+                        <ul className="list-reset text-xs sm:text-sm">
                             <li>Biaya listrik <b>Total 3 Bulan Terakhir</b>;</li>
                             <li>Isi dengan angka <b>satu (1)</b> jika biaya listrik sama dengan Rp. 0.</li>
                         </ul>
                     </FormText>
                 </Col>
-                <Col md={4} xs={12}>
-                    <Alert color="success">{rupiah(pengeluaran)}</Alert>
+                <Col col="12" xl="3" className="mt-2 mt-xl-0">
+                    <Alert color="success" className="mb-0 py-2 text-center text-sm">{rupiah(pengeluaran)}</Alert>
                 </Col>
             </FormGroup>
             <FormGroup row className="mb-4">
-                <Label for="file_scan_listrik" md={3}>Bukti Tagihan Listrik</Label>
-                <Col md={5}>
+                <Label for="file_scan_listrik" col="12" xl="3" className="mb-2 mb-xl-0">Bukti Tagihan Listrik</Label>
+                <Col col="12" xl="6">
                     <Field
                         component={InputFileBs}
                         type="file"
@@ -105,7 +110,7 @@ let FormListrikSeleksi = (props) => {
                         id="file_scan_listrik"
                     />
                     <FormText color="muted">
-                        <ul className="list-reset">
+                        <ul className="list-reset text-xs sm:text-sm">
                             <li>Bukti tagihan listrik <b>Total 3 Bulan Terakhir</b>;</li>
                             <li>Ekstensi berkas berupa PDF;</li>
                             <li>Ukuran berkas tidak lebih dari 500KB.</li>
@@ -113,7 +118,7 @@ let FormListrikSeleksi = (props) => {
                     </FormText>
                 </Col>
                 {scan_listrik && (
-                    <Col md={4}>
+                    <Col col="12" xl="3" className="mt-2 mt-xl-0">
                         <a
                             href={
                                 storage +
@@ -122,19 +127,19 @@ let FormListrikSeleksi = (props) => {
                             }
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="btn btn-success btn-block"
+                            className="btn btn-success btn-block py-2 text-sm"
                         >
-                            <i className="fa fa-file"></i> Lihat Bukti Tagihan Listrik
+                            <i className="fa fa-file"></i> Lihat Bukti Listrik
                         </a>
                     </Col>
                 )}
             </FormGroup>
 
             <FormGroup row className="mt-5 border-top pt-4 mb-0">
-                <Col md={{ size: 8 }} xs="12">
+                <Col col="12" xl="8">
                     {!props.allow ? <AlertFormBelumLengkap /> : <AlertFormLengkap />}
                 </Col>
-                <Col md={{ size: 4 }} xs="12">
+                <Col col="12" xl="4" className="mt-3 mt-xl-0">
                     <Button
                         type="submit"
                         className="modern-btn-primary w-100 py-3 shadow-sm font-weight-bold"

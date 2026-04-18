@@ -12,7 +12,7 @@ export class SyaratFoto extends React.Component {
                     <li>Rasio 3:4 atau 4:6;</li>
                     <li>Warna latar merah.</li>
                     <li>Ekstensi gambar berupa JPG/JPEG/PNG;</li>
-                    <li>Ukuran gambar tidak lebih dari 500KB.</li>
+                    <li>Ukuran gambar tidak lebih dari 200KB.</li>
                 </ul>
             </FormText>
         );
@@ -31,7 +31,7 @@ export class SyaratScan extends React.Component {
                 <ul className="list-reset">
                     {this.renderSyarat()}
                     <li>Ekstensi berkas berupa PDF;</li>
-                    <li>Ukuran berkas tidak lebih dari 500KB.</li>
+                    <li>Ukuran berkas tidak lebih dari 200KB.</li>
                 </ul>
             </FormText>
         );

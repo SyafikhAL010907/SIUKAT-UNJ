@@ -41,12 +41,12 @@ class NominalUKT extends React.Component {
             besar_ukt: this.props.ukt[this.props.cmahasiswa.golongan_id],
         };
         return (
-            <div className="py-2">
-                <div className="text-uppercase small font-weight-bold text-muted mb-1">Besaran UKT Anda:</div>
-                <div className="h1 font-weight-bold mb-2" style={{ color: '#008d4c', letterSpacing: '-1px' }}>
+            <div className="py-1 sm:py-2">
+                <div className="text-uppercase text-[10px] sm:text-xs font-weight-bold text-muted mb-1">Besaran UKT Anda:</div>
+                <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-weight-bold mb-2" style={{ color: '#008d4c', letterSpacing: '-1px' }}>
                     {rupiah(ukt_now.besar_ukt)}
                 </div>
-                <div className="d-inline-block px-3 py-1 rounded-pill" style={{ backgroundColor: '#ffcc00', color: '#000', fontWeight: '600', fontSize: '0.9rem' }}>
+                <div className="d-inline-block px-3 py-1 rounded-pill" style={{ backgroundColor: '#ffcc00', color: '#000', fontWeight: '600', fontSize: '0.75rem', sm: '0.9rem' }}>
                     Kelompok {ukt_now.kategori}
                 </div>
             </div>
