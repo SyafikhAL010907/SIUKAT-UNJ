@@ -177,6 +177,8 @@ select {
   box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2) !important;
   text-transform: uppercase !important;
   letter-spacing: 0.5px !important;
+  white-space: normal !important;
+  text-align: center !important;
 }
 
 .btn-excel-modern:hover {
@@ -204,6 +206,17 @@ select {
   box-shadow: 0 4px 12px rgba(220, 38, 38, 0.08) !important;
   text-transform: uppercase !important;
   letter-spacing: 0.8px !important;
+  white-space: normal !important;
+  text-align: center !important;
+}
+
+@media (max-width: 640px) {
+  .btn-excel-modern,
+  .btn-pdf-modern {
+    padding: 8px 12px !important;
+    font-size: 0.7rem !important;
+    border-radius: 12px !important;
+  }
 }
 
 .btn-pdf-modern:hover {

@@ -242,16 +242,16 @@ class FormUkt extends React.Component {
             </form>
           </div>
 
-          <div className="flex items-center justify-end p-5 border-t space-x-3 bg-white rounded-b-2xl">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end p-5 border-t gap-3 bg-white rounded-b-2xl">
             <button
               onClick={handleToggleModal}
-              className="px-6 py-2.5 text-sm font-bold text-gray-500 bg-gray-100 rounded-xl"
+              className="px-6 py-2.5 text-sm font-bold text-gray-500 bg-gray-100 rounded-xl hover:bg-gray-200 transition-all"
             >
               Batal
             </button>
             <button
               onClick={this.handleSubmit}
-              className="px-6 py-2.5 text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl shadow-lg flex items-center"
+              className="px-6 py-2.5 text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl shadow-lg flex items-center justify-center transition-all active:scale-95"
             >
               <i className="fa fa-save mr-2"></i> Simpan Data Harga
             </button>
@@ -430,14 +430,14 @@ class RefUkt extends React.Component {
 
   render() {
     return (
-      <div className="p-4 md:p-8 space-y-10">
-        <div className="glass-header flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div>
-            <div className="flex items-center space-x-3 text-white/80 text-xs font-bold uppercase mb-2">
+      <div className="p-2 md:p-8 space-y-6 md:space-y-10">
+        <div className="glass-header flex flex-col md:flex-row md:items-center justify-between gap-6 p-6 md:p-10">
+          <div className="text-center md:text-left">
+            <div className="flex items-center justify-center md:justify-start space-x-3 text-white/80 text-[10px] md:text-xs font-bold uppercase mb-2 tracking-widest">
               <i className="fa fa-university"></i>
               <span>Database Management</span>
             </div>
-            <h2 className="text-3xl font-extrabold text-white tracking-tight">
+            <h2 className="text-2xl md:text-4xl font-extrabold text-white tracking-tight">
               Data Tarif UKT
             </h2>
           </div>
@@ -445,13 +445,13 @@ class RefUkt extends React.Component {
 
         <div className="modern-card">
           <div className="p-1 bg-gradient-to-r from-emerald-400 via-emerald-600 to-yellow-400"></div>
-          <div className="p-6 border-b flex items-center justify-between flex-wrap gap-4 bg-gray-50/50">
-            <div className="flex items-center space-x-4">
-              <label className="text-sm font-bold text-gray-600">
-                Fakultas:
+          <div className="p-4 md:p-6 border-b flex flex-col sm:flex-row items-center justify-between gap-6 bg-gray-50/50">
+            <div className="flex flex-col sm:flex-row items-center gap-2 md:gap-4 w-full sm:w-auto">
+              <label className="text-xs md:text-sm font-bold text-gray-600 whitespace-nowrap">
+                Filter Fakultas:
               </label>
               <select
-                className="px-4 py-2.5 rounded-xl border border-emerald-200 outline-none font-bold text-emerald-800 bg-white"
+                className="w-full sm:w-64 px-4 py-2.5 rounded-xl border border-emerald-200 outline-none font-bold text-emerald-800 bg-white text-xs md:text-sm shadow-sm"
                 value={this.state.filterFakultas}
                 onChange={this.handleFilterFakultas}
               >
@@ -467,7 +467,7 @@ class RefUkt extends React.Component {
             {this.state.filterFakultas !== "all" && (
               <button
                 onClick={this.toggleModal}
-                className="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2.5 rounded-xl font-bold shadow-lg shadow-emerald-200 flex items-center space-x-2 animate-fadeIn"
+                className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-xl font-bold shadow-lg shadow-emerald-200 flex items-center justify-center space-x-2 animate-fadeIn transition-all active:scale-95"
               >
                 <i className="fa fa-plus-circle"></i>
                 <span>Insert Data Baru</span>
@@ -475,7 +475,7 @@ class RefUkt extends React.Component {
             )}
           </div>
 
-          <div className="p-4 sm:p-8 overflow-x-auto">
+          <div className="p-2 sm:p-8 overflow-x-auto">
             <DataTable
               data={this.state.dataUkt}
               columns={{

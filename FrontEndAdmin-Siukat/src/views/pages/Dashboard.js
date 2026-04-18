@@ -22,6 +22,35 @@ const DashboardStyles = () => (
             border: 1px solid rgba(16, 185, 129, 0.1);
             position: relative;
             z-index: 50;
+            transition: all 0.3s ease;
+        }
+
+        /* Responsive Adjustments for Trigger Pill */
+        @media (max-width: 1024px) {
+            .trigger-pill-container {
+                border-radius: 15px;
+            }
+            .select-year-custom, .select-jalur-custom, .select-flag-custom {
+                padding: 10px 15px;
+                font-size: 10px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .trigger-pill-container {
+                width: 100%;
+                border-radius: 12px;
+                padding: 2px;
+            }
+            .select-year-custom, .select-jalur-custom, .select-flag-custom {
+                padding: 8px 5px;
+                font-size: 9px;
+                min-width: 0;
+                flex: 1;
+                text-align: center;
+            }
+            .select-year-custom { border-radius: 10px 0 0 10px; }
+            .select-flag-custom { border-radius: 0 10px 10px 0; }
         }
 
         .select-year-custom {
@@ -237,18 +266,20 @@ class Dashboards extends React.Component {
               </div>
 
               {/* Area Aksi: Ditambahkan ButtonInject di sini */}
-              <div className="flex flex-wrap items-center gap-4">
+              <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-4 w-full lg:w-auto">
                 {/* Tombol Inject Data - Hanya untuk Developer */}
                 {isAllowed(this.props.user?.role, "INJECT_DATA") && (
-                  <ButtonInject />
+                  <div className="w-full lg:w-auto">
+                    <ButtonInject />
+                  </div>
                 )}
 
                 {/* Grouped Trigger: Tahun & Jalur (Premium Layered UI - Clean Mode) - DIPROTEKSI RBAC */}
                 {isAllowed(this.props.user?.role, "GLOBAL_TRIGGER") && (
                   <>
-                    <div className="trigger-pill-container">
+                    <div className="trigger-pill-container w-full lg:w-auto">
                       {/* Wrapper Tahun */}
-                      <div className="relative">
+                      <div className="relative flex-1 lg:flex-none">
                         <select
                           value={this.state.selectedYear}
                           onChange={(e) =>
@@ -257,7 +288,7 @@ class Dashboards extends React.Component {
                               e.target.value,
                             )
                           }
-                          className="select-year-custom"
+                          className="select-year-custom w-full lg:w-[100px]"
                         >
                           <option value="" disabled>
                             Tahun
@@ -271,7 +302,7 @@ class Dashboards extends React.Component {
                       </div>
 
                       {/* Wrapper Jalur */}
-                      <div className="relative">
+                      <div className="relative flex-1 lg:flex-none">
                         <select
                           value={this.state.selectedJalur}
                           onChange={(e) =>
@@ -280,7 +311,7 @@ class Dashboards extends React.Component {
                               e.target.value,
                             )
                           }
-                          className="select-jalur-custom"
+                          className="select-jalur-custom w-full lg:w-auto"
                           disabled={!this.state.selectedYear}
                         >
                           <option value="" disabled>
@@ -308,7 +339,7 @@ class Dashboards extends React.Component {
                       </div>
 
                       {/* Wrapper Flag (Pilihan Status) */}
-                      <div className="relative">
+                      <div className="relative flex-1 lg:flex-none">
                         <select
                           value={this.state.selectedFlag}
                           onChange={(e) =>
@@ -317,7 +348,7 @@ class Dashboards extends React.Component {
                               e.target.value,
                             )
                           }
-                          className="select-flag-custom"
+                          className="select-flag-custom w-full lg:w-auto"
                           disabled={
                             !this.state.selectedYear ||
                             !this.state.selectedJalur
@@ -346,8 +377,8 @@ class Dashboards extends React.Component {
                   </>
                 )}
 
-                <div className="flex items-center space-x-3">
-                  <div className="flex items-center px-4 py-2 bg-emerald-50 rounded-2xl border border-emerald-100 shadow-sm">
+                <div className="flex items-center justify-between lg:justify-start space-x-3 w-full lg:w-auto">
+                  <div className="flex items-center px-4 py-2 bg-emerald-50 rounded-2xl border border-emerald-100 shadow-sm flex-1 lg:flex-none justify-center lg:justify-start">
                     <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse mr-2"></div>
                     <span className="text-[10px] font-extrabold text-emerald-700 uppercase tracking-widest">
                       Sistem Aktif

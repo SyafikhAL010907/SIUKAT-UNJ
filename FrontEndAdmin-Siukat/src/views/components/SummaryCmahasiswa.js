@@ -89,7 +89,7 @@ class SummaryCmahasiswa extends React.Component {
     const flagCount = this.props.flagCount || {};
 
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-10 p-1">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 mb-10 p-1">
         {/* Card 1: Status Pengisian */}
         {this.renderCard(
           "Selesai Mengisi",

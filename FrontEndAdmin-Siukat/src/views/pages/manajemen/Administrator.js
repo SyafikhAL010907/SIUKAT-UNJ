@@ -27,7 +27,7 @@ let FormAdmin = (props) => {
         onClick={handleToggleAdministrator}
       ></div>
 
-      <div className="relative w-full max-w-md mx-auto z-[1060] animate-fadeIn">
+      <div className="relative w-full max-w-md mx-auto z-[1060] animate-fadeIn p-4">
         <div className="bg-white rounded-2xl shadow-2xl border-0 flex flex-col w-full outline-none focus:outline-none">
           {/* Header */}
           <div className="flex items-center justify-between p-5 border-b border-gray-100 rounded-t-2xl bg-emerald-600 text-white">
@@ -93,7 +93,7 @@ let FormAdmin = (props) => {
                   className="w-full px-4 py-2 rounded-xl border border-gray-200 focus:ring-2 focus:ring-emerald-500 outline-none transition-all"
                 />
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">
                     No. Telepon
@@ -234,20 +234,20 @@ class Administrator extends React.Component {
 
   render() {
     return (
-      <div className="p-4 md:p-8 space-y-10">
+      <div className="p-2 md:p-8 space-y-6 md:space-y-10">
         {/* Header Page Premium */}
-        <div className="glass-header flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div>
-            <h2 className="text-3xl font-extrabold text-white tracking-tight">
+        <div className="glass-header flex flex-col md:flex-row md:items-center justify-between gap-6 p-6">
+          <div className="text-center md:text-left">
+            <h2 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
               Manajemen Administrator
             </h2>
-            <p className="text-white text-sm font-medium mt-1">
+            <p className="text-white text-xs md:text-sm font-medium mt-1">
               Kelola hak akses dan data petugas sistem SIUKAT.
             </p>
           </div>
           <button
             onClick={this.toggleAdministrator}
-            className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-2xl font-bold shadow-xl shadow-emerald-200 transition-all flex items-center justify-center space-x-2 active:scale-95 group"
+            className="w-full md:w-auto bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-2xl font-bold shadow-xl shadow-emerald-200 transition-all flex items-center justify-center space-x-2 active:scale-95 group"
           >
             <i className="fa fa-plus group-hover:rotate-90 transition-transform"></i>
             <span>Tambah Admin Baru</span>
@@ -257,7 +257,7 @@ class Administrator extends React.Component {
         {/* Main Table Card Modern */}
         <div className="modern-card">
           <div className="p-1 bg-gradient-to-r from-emerald-400 via-emerald-600 to-yellow-400"></div>
-          <div className="p-8">
+          <div className="p-2 md:p-8 overflow-hidden">
             <DataTable
               data={this.props.admin}
               columns={{

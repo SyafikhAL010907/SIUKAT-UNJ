@@ -139,16 +139,16 @@ class DetailCmahasiswa extends React.Component {
                 <i className="fa fa-money text-yellow-400 text-xl"></i>
               </div>
               <div>
-                <p className="text-xs font-bold text-emerald-800 uppercase tracking-wider">
+                <p className="text-[10px] md:text-xs font-bold text-emerald-800 uppercase tracking-wider">
                   UKT Saat Ini
                 </p>
-                <h4 className="text-xl font-extrabold text-gray-800">
+                <h4 className="text-lg md:text-xl font-extrabold text-gray-800">
                   {rupiah(this.props.ukt[this.props.cmahasiswa.golongan_id])}
                   <span className="ml-2 text-emerald-600">
                     ({this.props.cmahasiswa.golongan_id})
                   </span>
                   {this.props.cmahasiswa.penalty === "1" && (
-                    <span className="ml-2 text-red-500 text-sm font-medium border-l pl-2 border-gray-200 italic">
+                    <span className="ml-1 md:ml-2 text-red-500 text-[10px] md:text-sm font-medium border-l pl-2 border-gray-200 italic">
                       - Penalty
                     </span>
                   )}
@@ -158,38 +158,39 @@ class DetailCmahasiswa extends React.Component {
             {isActionEdit &&
               userRole !== "validator" &&
               this.props.cmahasiswa.flag === "sanggah_ukt" && (
-                <div className="flex space-x-3">
+                <div className="flex w-full md:w-auto space-x-2 sm:space-x-3">
                   <button
                     onClick={this.selesaiKlarifikasi}
-                    className="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-bold transition-all shadow-md active:scale-95"
+                    className="flex-1 md:flex-none px-4 md:px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-[11px] md:text-sm font-bold transition-all shadow-md active:scale-95"
                   >
-                    <i className="fa fa-check mr-2"></i>Selesai Klarifikasi
+                    <i className="fa fa-check mr-1.5 md:mr-2"></i>Selesai
                   </button>
                   <button
                     onClick={this.batalKlarifikasi}
-                    className="px-5 py-2 bg-white border-2 border-red-100 text-red-600 hover:bg-red-50 rounded-xl text-sm font-bold transition-all active:scale-95"
+                    className="flex-1 md:flex-none px-4 md:px-5 py-2.5 bg-white border-2 border-red-100 text-red-600 hover:bg-red-50 rounded-xl text-[11px] md:text-sm font-bold transition-all active:scale-95"
                   >
-                    <i className="fa fa-times mr-2"></i>Batal
+                    <i className="fa fa-times mr-1.5 md:mr-2"></i>Batal
                   </button>
                 </div>
               )}
           </div>
         )}
-        {/* Tab Navigation */}
-        <div className="bg-gray-100/50 p-1 rounded-2xl flex flex-wrap gap-1">
+        {/* Tab Navigation: Wrap on mobile as per user preference */}
+        <div className="bg-gray-100/50 p-1.5 rounded-2xl flex flex-wrap gap-1.5 items-center">
           {[
             { id: "1", label: "Pribadi", icon: "fa-user" },
             { id: "2", label: "Orang Tua/Wali", icon: "fa-users" },
-            { id: "3", label: "Rumah & Listrik", icon: "fa-home" },
-            { id: "4", label: "Kendaraan", icon: "fa-motorcycle" },
-            { id: "5", label: "Pendukung", icon: "fa-file-text" },
-            { id: "6", label: "Simulasi Hitung", icon: "fa-calculator" },
+            { id: "3", label: "Rumah", icon: "fa-home" },
+            { id: "4", label: "Listrik", icon: "fa-bolt" },
+            { id: "5", label: "Kendaraan", icon: "fa-car" },
+            { id: "6", label: "Pendukung", icon: "fa-file-text-o" },
+            { id: "7", label: "Simulasi Hitung", icon: "fa-calculator" },
           ].map((tab) => (
             <button
               key={tab.id}
               onClick={() => this.toggle(tab.id)}
               className={classnames(
-                "flex-1 min-w-[140px] px-4 py-3 rounded-xl text-sm font-bold transition-all flex items-center justify-center space-x-2",
+                "flex-1 min-w-[140px] px-4 py-3 rounded-xl text-[11px] md:text-sm font-bold transition-all flex items-center justify-center space-x-2",
                 activeTab === tab.id
                   ? "bg-white text-emerald-800 shadow-sm border-b-2 border-yellow-400"
                   : "text-gray-500 hover:bg-gray-200/50 hover:text-emerald-700",
@@ -203,7 +204,7 @@ class DetailCmahasiswa extends React.Component {
           ))}
         </div>
         {/* Tab Content Area */}
-        <div className="bg-white rounded-2xl border border-gray-100 p-6 min-h-[400px]">
+        <div className="bg-white rounded-2xl border border-gray-100 p-3 sm:p-6 min-h-[400px]">
           {activeTab === "1" && (
             <div className="animate-fadeIn">
               <Pribadi
@@ -293,21 +294,21 @@ class DetailCmahasiswa extends React.Component {
               <div className="bg-gray-50 rounded-2xl overflow-hidden border border-gray-100">
                 <table className="w-full text-left text-sm">
                   <tbody>
-                    <tr className="border-b border-gray-100">
-                      <th className="px-6 py-4 font-bold text-gray-600 bg-white w-1/2">
+                    <tr className="flex flex-col sm:table-row border-b border-gray-100">
+                      <th className="px-6 py-4 font-bold text-gray-600 bg-white sm:w-1/2 text-xs sm:text-sm uppercase sm:normal-case">
                         UKT yang harusnya didapat
                       </th>
-                      <td className="px-6 py-4 font-extrabold text-emerald-700 italic">
+                      <td className="px-6 py-4 font-extrabold text-emerald-700 italic text-sm sm:text-base">
                         {this.props.hitung && this.props.hitung.choosenUkt
                           ? `${this.props.hitung.choosenUkt} — ${rupiah(this.props.ukt[this.props.hitung.choosenUkt] || 0)}`
                           : "Menghitung..."}
                       </td>
                     </tr>
-                    <tr>
-                      <th className="px-6 py-4 font-bold text-gray-600 bg-white">
+                    <tr className="flex flex-col sm:table-row">
+                      <th className="px-6 py-4 font-bold text-gray-600 bg-white text-xs sm:text-sm uppercase sm:normal-case">
                         Indeks Kemampuan Bayar (IKB)
                       </th>
-                      <td className="px-6 py-4 font-mono font-bold text-gray-800">
+                      <td className="px-6 py-4 font-mono font-bold text-gray-800 text-sm sm:text-base">
                         {this.props.hitung.ikb !== undefined
                           ? rupiah(parseInt(this.props.hitung.ikb, 10))
                           : "Rp. 0"}

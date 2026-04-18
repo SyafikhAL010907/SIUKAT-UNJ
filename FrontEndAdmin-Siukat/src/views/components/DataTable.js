@@ -326,7 +326,7 @@ class DataTable extends React.Component {
 
   render() {
     return (
-      <div className="bg-white rounded-xl shadow-md overflow-hidden border border-emerald-100">
+      <div className="bg-white rounded-lg md:rounded-xl shadow-md overflow-hidden border border-emerald-100">
         <Modal
           isOpen={this.state.modalOpen}
           toggle={() => this.toggleModal()}
@@ -364,19 +364,25 @@ class DataTable extends React.Component {
           </ModalFooter>
         </Modal>
 
-        <div className="p-5 flex flex-col md:flex-row justify-between items-center gap-4 bg-white border-b border-gray-100">
-          <div className="flex items-center space-x-3">
-            <span className="text-sm font-medium text-gray-600">Tampilkan</span>
-            <select
-              value={this.props.perPage}
-              onChange={this.props.handlePerPage}
-              className="block w-20 pl-3 pr-10 py-1.5 text-sm border-emerald-200 rounded-md shadow-sm"
-            >
-              <option value="10">10</option>
-              <option value="25">25</option>
-              <option value="50">50</option>
-            </select>
-            <span className="text-sm font-medium text-gray-600">Entri</span>
+        <div className="p-3 md:p-5 flex flex-col md:flex-row justify-between items-center gap-4 bg-white border-b border-gray-100">
+          <div className="flex items-center justify-between w-full md:w-auto space-x-3">
+            <div className="flex items-center space-x-2">
+              <span className="text-xs md:text-sm font-medium text-gray-600">
+                Tampilkan
+              </span>
+              <select
+                value={this.props.perPage}
+                onChange={this.props.handlePerPage}
+                className="block w-16 md:w-20 pl-2 pr-2 py-1.5 text-xs md:text-sm border-emerald-200 rounded-md shadow-sm outline-none focus:ring-1 focus:ring-emerald-500"
+              >
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+              </select>
+              <span className="text-xs md:text-sm font-medium text-gray-600">
+                Entri
+              </span>
+            </div>
           </div>
 
           <div className="relative w-full md:w-64">
@@ -388,7 +394,7 @@ class DataTable extends React.Component {
               placeholder="Cari data..."
               value={this.props.keyword}
               onChange={this.props.handleSearch}
-              className="block w-full px-4 py-2.5 text-center border border-emerald-200 rounded-xl sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all duration-200 shadow-sm placeholder:text-gray-400 placeholder:text-center"
+              className="block w-full pl-10 pr-4 py-2.5 text-center border border-emerald-200 rounded-xl text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all duration-200 shadow-sm placeholder:text-gray-400 placeholder:text-center"
             />
           </div>
         </div>
@@ -409,7 +415,7 @@ class DataTable extends React.Component {
           </table>
         </div>
 
-        <div className="px-3 py-3 md:px-5 md:py-4 flex flex-col md:flex-row justify-between items-center gap-3 bg-gray-50 border-t border-emerald-100">
+        <div className="p-3 md:p-5 flex flex-col md:flex-row justify-between items-center gap-3 bg-gray-50 border-t border-emerald-100">
           <p className="text-[11px] md:text-sm text-gray-600 order-2 md:order-1">
             Menampilkan{" "}
             <span className="font-bold text-emerald-700">

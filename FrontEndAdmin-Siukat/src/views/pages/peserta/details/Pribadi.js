@@ -55,8 +55,10 @@ let FormMahasiswa = (props) => {
       className="border-none"
     >
       <div className="bg-white rounded-3xl overflow-hidden shadow-2xl">
-        <div className="bg-emerald-600 p-6 flex justify-between items-center text-white">
-          <h3 className="text-xl font-bold">Perbarui Data Profil</h3>
+        <div className="bg-emerald-600 p-4 sm:p-6 flex justify-between items-center text-white">
+          <h3 className="text-lg sm:text-xl font-bold italic uppercase tracking-tight">
+            Perbarui Data Profil
+          </h3>
           <button
             onClick={handleToggleMahasiswa}
             type="button"
@@ -66,29 +68,29 @@ let FormMahasiswa = (props) => {
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <form onSubmit={handleSubmit} className="p-4 sm:p-8 max-h-[80vh] overflow-y-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             <div className="md:col-span-2">
-              <label className="block text-xs font-bold text-gray-500 uppercase mb-2 ml-1">
+              <label className="block text-[10px] sm:text-xs font-bold text-gray-500 uppercase mb-2 ml-1 tracking-wider">
                 Nama Lengkap
               </label>
               <Field
                 name="nama_cmahasiswa"
                 component={InputBs}
                 type="text"
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 text-black"
+                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-black text-sm"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-500 uppercase mb-2 ml-1">
+              <label className="block text-[10px] sm:text-xs font-bold text-gray-500 uppercase mb-2 ml-1 tracking-wider">
                 Jenis Kelamin
               </label>
               <Field
                 name="gender_cmahasiswa"
                 component={InputBs}
                 type="select"
-                className="text-black"
+                className="text-black text-sm"
               >
                 <option value="">Pilih</option>
                 <option value="laki-laki">Laki-Laki</option>
@@ -97,14 +99,14 @@ let FormMahasiswa = (props) => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-500 uppercase mb-2 ml-1">
+              <label className="block text-[10px] sm:text-xs font-bold text-gray-500 uppercase mb-2 ml-1 tracking-wider">
                 Golongan Darah
               </label>
               <Field
                 name="goldar_cmahasiswa"
                 component={InputBs}
                 type="select"
-                className="text-black"
+                className="text-black text-sm"
               >
                 <option value="">Pilih</option>
                 <option value="A">A</option>
@@ -115,38 +117,38 @@ let FormMahasiswa = (props) => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-500 uppercase mb-2 ml-1">
+              <label className="block text-[10px] sm:text-xs font-bold text-gray-500 uppercase mb-2 ml-1 tracking-wider">
                 Tempat Lahir
               </label>
               <Field
                 name="tempat_lahir_cmahasiswa"
                 component={InputBs}
                 type="text"
-                className="text-black"
+                className="text-black text-sm"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-500 uppercase mb-2 ml-1">
+              <label className="block text-[10px] sm:text-xs font-bold text-gray-500 uppercase mb-2 ml-1 tracking-wider">
                 Tanggal Lahir
               </label>
               <Field
                 name="tanggal_lahir_cmahasiswa"
                 component={InputDayPicker}
                 startYear={1990}
-                className="text-black"
+                className="text-black text-sm"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-500 uppercase mb-2 ml-1">
+              <label className="block text-[10px] sm:text-xs font-bold text-gray-500 uppercase mb-2 ml-1 tracking-wider">
                 Provinsi
               </label>
               <Field
                 name="provinsi_cmahasiswa"
                 component={InputBs}
                 type="select"
-                className="text-black"
+                className="text-black text-sm"
                 onChange={handleProvinsi}
               >
                 <option value="">Pilih Provinsi</option>
@@ -159,14 +161,14 @@ let FormMahasiswa = (props) => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-500 uppercase mb-2 ml-1">
+              <label className="block text-[10px] sm:text-xs font-bold text-gray-500 uppercase mb-2 ml-1 tracking-wider">
                 Kabupaten/Kota
               </label>
               <Field
                 name="kabkot_cmahasiswa"
                 component={InputBs}
                 type="select"
-                className="text-black"
+                className="text-black text-sm"
                 onChange={handleKabkot}
               >
                 <option value="">Pilih Kab/Kot</option>
@@ -179,14 +181,14 @@ let FormMahasiswa = (props) => {
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-xs font-bold text-gray-500 uppercase mb-2 ml-1">
+              <label className="block text-[10px] sm:text-xs font-bold text-gray-500 uppercase mb-2 ml-1 tracking-wider">
                 Kecamatan
               </label>
               <Field
                 name="kecamatan_cmahasiswa"
                 component={InputBs}
                 type="select"
-                className="text-black"
+                className="text-black text-sm"
               >
                 <option value="">Pilih Kecamatan</option>
                 {ref_kecamatan.map((v, i) => (
@@ -198,36 +200,38 @@ let FormMahasiswa = (props) => {
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-xs font-bold text-gray-500 uppercase mb-2 ml-1">
+              <label className="block text-[10px] sm:text-xs font-bold text-gray-500 uppercase mb-2 ml-1 tracking-wider">
                 Alamat Lengkap
               </label>
               <Field
                 name="alamat_cmahasiswa"
                 component={InputBs}
                 type="textarea"
-                className="text-black font-bold"
+                rows="3"
+                className="text-black text-sm font-medium"
               />
             </div>
 
-            <div className="md:col-span-2 p-4 bg-emerald-50 rounded-2xl border border-emerald-100">
-              <label className="block text-xs font-bold text-emerald-700 uppercase mb-2">
+            <div className="md:col-span-2 p-4 sm:p-5 bg-emerald-50 rounded-2xl border border-emerald-100">
+              <label className="block text-[10px] sm:text-xs font-bold text-emerald-700 uppercase mb-3 tracking-widest">
                 Penghasilan Per Bulan
               </label>
-              <div className="flex flex-col md:flex-row gap-4 items-center">
+              <div className="flex flex-col sm:flex-row gap-3 items-center">
                 <Field
                   name="penghasilan_cmahasiswa"
                   component={InputBs}
                   type="number"
-                  className="flex-1 text-black"
+                  placeholder="0"
+                  className="w-full text-black text-sm"
                 />
-                <div className="text-lg font-bold text-emerald-800 bg-white px-6 py-2 rounded-full border border-emerald-200">
+                <div className="w-full sm:w-auto text-sm sm:text-base font-bold text-emerald-800 bg-white px-5 py-2 rounded-xl border border-emerald-200 text-center whitespace-nowrap">
                   {rupiah(penghasilan_cmahasiswa || 0)}
                 </div>
               </div>
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-xs font-bold text-gray-500 uppercase mb-2 ml-1">
+              <label className="block text-[10px] sm:text-xs font-bold text-gray-500 uppercase mb-2 ml-1 tracking-wider">
                 Ganti Pas Foto
               </label>
               <Field
@@ -236,24 +240,29 @@ let FormMahasiswa = (props) => {
                 id="file_foto_cmahasiswa"
                 type="file"
                 accept="image/*"
-                className="text-black"
+                className="text-black text-sm"
               />
             </div>
           </div>
 
-          <div className="mt-10 flex justify-end space-x-3 border-t pt-6">
+          <div className="mt-10 flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-3 border-t pt-6">
             <button
               type="button"
               onClick={handleToggleMahasiswa}
-              className="px-6 py-2.5 font-bold text-gray-500"
+              className="px-6 py-2.5 font-bold text-gray-500 hover:text-gray-700 transition order-2 sm:order-1"
             >
               Batal
             </button>
             <button
               type="submit"
               disabled={submitting}
-              className="bg-emerald-600 text-white px-8 py-2.5 rounded-xl font-bold shadow-lg"
+              className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-2.5 rounded-xl font-bold shadow-lg transition transform active:scale-95 order-1 sm:order-2"
             >
+              {submitting ? (
+                <i className="fa fa-spinner fa-spin mr-2"></i>
+              ) : (
+                <i className="fa fa-save mr-2"></i>
+              )}
               {submitting ? "Menyimpan..." : "Simpan Perubahan"}
             </button>
           </div>
@@ -371,7 +380,7 @@ class Pribadi extends React.Component {
                   ? `${storage}/${data.foto_cmahasiswa}?t=${new Date(data.updated_at || Date.now()).getTime()}`
                   : defaultPhoto
               }
-              className="w-48 h-60 object-cover rounded-2xl shadow-lg border-4 border-white"
+              className="w-40 h-52 md:w-48 md:h-60 object-cover rounded-2xl shadow-lg border-4 border-white"
               alt="profil"
               onError={(e) => {
                 e.target.src = defaultPhoto;
@@ -380,12 +389,12 @@ class Pribadi extends React.Component {
           </div>
 
           <div className="flex-1 space-y-6">
-            <div className="flex justify-between items-start border-b border-gray-100 pb-4">
-              <div>
-                <h2 className="text-2xl font-bold text-gray-800 uppercase">
+            <div className="flex flex-col sm:flex-row justify-between items-center sm:items-start border-b border-gray-100 pb-4 gap-4">
+              <div className="text-center sm:text-left">
+                <h2 className="text-xl md:text-2xl font-bold text-gray-800 uppercase">
                   {data.nama_cmahasiswa}
                 </h2>
-                <p className="text-emerald-600 font-semibold">
+                <p className="text-emerald-600 font-semibold text-sm md:text-base">
                   {data.no_peserta}
                 </p>
               </div>
@@ -393,7 +402,7 @@ class Pribadi extends React.Component {
               {isModeSanggah && (
                 <button
                   onClick={this.modalToggle}
-                  className="bg-amber-600 text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-amber-700 shadow-md"
+                  className="w-full sm:w-auto bg-amber-600 text-white px-5 py-2.5 rounded-xl text-xs md:text-sm font-bold hover:bg-amber-700 shadow-md transition-all active:scale-95"
                 >
                   <i className="fa fa-edit mr-2"></i> Perbarui Data
                 </button>

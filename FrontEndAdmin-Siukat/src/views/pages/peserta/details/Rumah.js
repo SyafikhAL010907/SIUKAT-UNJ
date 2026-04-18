@@ -37,8 +37,10 @@ let FormRumah = (props) => {
       <div className="relative w-full max-w-3xl mx-auto my-6 z-50">
         <div className="relative flex flex-col w-full bg-white border-0 rounded-lg shadow-lg outline-none focus:outline-none max-h-[90vh]">
           {/* Header */}
-          <div className="flex items-start justify-between p-6 border-b border-solid border-gray-200 rounded-t bg-emerald-600 text-white">
-            <h3 className="text-xl font-bold">Perbarui Data Rumah</h3>
+          <div className="flex items-start justify-between p-4 sm:p-6 border-b border-solid border-gray-200 rounded-t bg-emerald-600 text-white">
+            <h3 className="text-lg sm:text-xl font-bold italic uppercase tracking-tight">
+              Perbarui Data Rumah
+            </h3>
             <button
               className="p-1 ml-auto bg-transparent border-0 text-white float-right text-3xl leading-none font-semibold outline-none focus:outline-none hover:rotate-90 transition-transform"
               onClick={handleToggleRumah}
@@ -55,11 +57,11 @@ let FormRumah = (props) => {
               className="space-y-6 text-sm text-gray-700"
             >
               {/* Status Rumah */}
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-start border-b pb-4">
-                <label className="font-bold md:pt-2 text-gray-600">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-start border-b pb-6">
+                <label className="font-bold md:pt-2 text-gray-600 text-[11px] uppercase tracking-wider">
                   Status Rumah
                 </label>
-                <div className="md:col-span-3 grid grid-cols-2 gap-3">
+                <div className="md:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {[
                     { label: "Milik Sendiri", value: "milik_sendiri" },
                     { label: "Bersama Saudara", value: "bersama_saudara" },
@@ -68,16 +70,16 @@ let FormRumah = (props) => {
                   ].map((opt) => (
                     <label
                       key={opt.value}
-                      className="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition"
+                      className="flex items-center p-4 border rounded-xl cursor-pointer hover:bg-emerald-50 hover:border-emerald-200 transition"
                     >
                       <Field
                         name="status_kepemilikan"
                         component="input"
                         type="radio"
                         value={opt.value}
-                        className="w-4 h-4 text-green-600 focus:ring-green-500"
+                        className="w-5 h-5 text-emerald-600 focus:ring-emerald-500"
                       />
-                      <span className="ml-2 text-xs font-medium">
+                      <span className="ml-3 text-sm font-medium">
                         {opt.label}
                       </span>
                     </label>
@@ -169,21 +171,22 @@ let FormRumah = (props) => {
                         </div>
                       </div>
 
-                      <div className="flex flex-col md:flex-row gap-2">
+                      <div className="flex flex-col sm:flex-row gap-3">
                         <div className="flex-1">
-                          <label className="block mb-1 font-medium">
+                          <label className="block mb-1 text-[10px] font-bold text-gray-500 uppercase">
                             Biaya PBB Terakhir
                           </label>
                           <Field
                             name="biaya_pbb"
                             component="input"
                             type="number"
+                            placeholder="0"
                             validate={[money]}
-                            className="w-full p-2 border border-gray-300 rounded"
+                            className="w-full p-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none"
                           />
                         </div>
-                        <div className="md:w-1/3 flex items-end">
-                          <div className="w-full p-2 bg-green-100 text-green-800 rounded border border-green-200 text-center font-bold">
+                        <div className="sm:w-1/3 flex items-end">
+                          <div className="w-full p-2.5 bg-emerald-50 text-emerald-800 rounded-xl border border-emerald-100 text-center font-bold text-sm">
                             {rupiah(biaya_pbb)}
                           </div>
                         </div>
@@ -283,24 +286,29 @@ let FormRumah = (props) => {
             </form>
           </div>
 
-          {/* Footer */}
-          <div className="flex items-center justify-end p-4 border-t border-solid border-gray-200 rounded-b bg-gray-50">
+          {/* Footer */}          <div className="flex flex-col sm:flex-row items-center justify-end p-6 border-t border-solid border-gray-200 rounded-b gap-3">
             <button
-              className="px-6 py-2 mr-3 text-sm font-bold text-gray-600 uppercase transition-all hover:text-gray-800 outline-none focus:outline-none"
+              className="w-full sm:w-auto text-gray-500 background-transparent font-bold px-6 py-2.5 text-sm outline-none focus:outline-none hover:text-gray-700 transition order-2 sm:order-1"
               type="button"
               onClick={handleToggleRumah}
             >
               Batal
             </button>
             <button
-              className="px-10 py-3 text-sm font-bold text-white uppercase bg-emerald-600 rounded-xl shadow-lg hover:shadow-xl outline-none focus:outline-none transition-all duration-150 disabled:opacity-50"
+              className="w-full sm:w-auto bg-emerald-600 text-white active:bg-emerald-700 font-bold px-8 py-3 rounded-xl shadow hover:shadow-lg outline-none focus:outline-none transition transform active:scale-95 order-1 sm:order-2"
               type="submit"
               form="form-rumah"
-              disabled={pristine || submitting}
+              disabled={submitting}
             >
-              <i className="fa fa-save mr-2"></i> Simpan Perubahan
+              {submitting ? (
+                <i className="fa fa-spinner fa-spin mr-2"></i>
+              ) : (
+                <i className="fa fa-save mr-2"></i>
+              )}
+              {submitting ? "Menyimpan..." : "Simpan Perubahan"}
             </button>
           </div>
+
         </div>
       </div>
     </div>
@@ -439,12 +447,12 @@ class Rumah extends React.Component {
           <table className="w-full text-sm text-left border-collapse">
             <tbody className="divide-y divide-gray-100">
               {/* Baris Status */}
-              <tr className="hover:bg-gray-50 transition">
-                <td className="px-6 py-4 font-bold text-gray-600 bg-gray-50/50 w-1/3 uppercase text-[11px] tracking-widest">
+              <tr className="flex flex-col sm:table-row hover:bg-gray-50 transition">
+                <td className="px-6 py-4 font-bold text-gray-600 bg-gray-50/50 w-full sm:w-1/3 uppercase text-[10px] sm:text-[11px] tracking-widest">
                   Status Rumah
                 </td>
-                <td className="px-6 py-4 text-gray-800 font-medium capitalize border-l border-gray-100">
-                  <span className="px-2 py-1 bg-blue-50 text-blue-700 rounded text-xs font-bold border border-blue-100">
+                <td className="px-6 py-4 text-gray-800 font-medium capitalize sm:border-l border-gray-100 text-sm sm:text-base">
+                  <span className="px-2 py-1 bg-blue-50 text-blue-700 rounded text-[10px] sm:text-xs font-bold border border-blue-100">
                     {rumah.status_kepemilikan?.replace("_", " ")}
                   </span>
                 </td>
@@ -452,15 +460,15 @@ class Rumah extends React.Component {
 
               {/* Jumlah KK */}
               {rumah.status_kepemilikan !== "menumpang" && (
-                <tr className="hover:bg-gray-50 transition">
-                  <td className="px-6 py-4 font-bold text-gray-600 bg-gray-50/50 uppercase text-[11px] tracking-widest">
+                <tr className="flex flex-col sm:table-row hover:bg-gray-50 transition">
+                  <td className="px-6 py-4 font-bold text-gray-600 bg-gray-50/50 w-full sm:w-1/3 uppercase text-[10px] sm:text-[11px] tracking-widest">
                     Jumlah Kepala Keluarga
                   </td>
-                  <td className="px-6 py-4 text-gray-800 border-l border-gray-100">
+                  <td className="px-6 py-4 text-gray-800 sm:border-l border-gray-100 text-sm sm:text-base">
                     <b className="text-lg text-green-700">
                       {rumah.jumlah_kepala_keluarga}
                     </b>{" "}
-                    <span className="text-gray-500">
+                    <span className="text-gray-500 block sm:inline text-xs mt-1 sm:mt-0">
                       Kepala Keluarga dalam 1 rumah
                     </span>
                   </td>
@@ -469,11 +477,11 @@ class Rumah extends React.Component {
 
               {/* Status Sertifikat */}
               {rumah.status_kepemilikan === "milik_sendiri" && (
-                <tr className="hover:bg-gray-50 transition">
-                  <td className="px-6 py-4 font-bold text-gray-600 bg-gray-50/50 uppercase text-[11px] tracking-widest">
+                <tr className="flex flex-col sm:table-row hover:bg-gray-50 transition">
+                  <td className="px-6 py-4 font-bold text-gray-600 bg-gray-50/50 w-full sm:w-1/3 uppercase text-[10px] sm:text-[11px] tracking-widest">
                     Status Sertifikat
                   </td>
-                  <td className="px-6 py-4 text-gray-800 capitalize border-l border-gray-100 font-medium">
+                  <td className="px-6 py-4 text-gray-800 capitalize sm:border-l border-gray-100 font-medium text-sm sm:text-base">
                     {rumah.status_sertifikat?.replace(/_/g, " ")}
                   </td>
                 </tr>
@@ -483,11 +491,11 @@ class Rumah extends React.Component {
               {(rumah.status_kepemilikan === "milik_sendiri" ||
                 rumah.status_kepemilikan === "bersama_saudara") && (
                 <>
-                  <tr className="hover:bg-gray-50 transition">
-                    <td className="px-6 py-4 font-bold text-gray-600 bg-gray-50/50 uppercase text-[11px] tracking-widest">
+                  <tr className="flex flex-col sm:table-row hover:bg-gray-50 transition">
+                    <td className="px-6 py-4 font-bold text-gray-600 bg-gray-50/50 w-full sm:w-1/3 uppercase text-[10px] sm:text-[11px] tracking-widest">
                       Luas Tanah / Bangunan
                     </td>
-                    <td className="px-6 py-4 text-gray-800 border-l border-gray-100">
+                    <td className="px-6 py-4 text-gray-800 sm:border-l border-gray-100 text-sm sm:text-base">
                       <span className="font-semibold">{rumah.luas_tanah}</span>{" "}
                       m² /{" "}
                       <span className="font-semibold">
@@ -496,31 +504,31 @@ class Rumah extends React.Component {
                       m²
                     </td>
                   </tr>
-                  <tr className="hover:bg-gray-50 transition">
-                    <td className="px-6 py-4 font-bold text-gray-600 bg-gray-50/50 uppercase text-[11px] tracking-widest">
+                  <tr className="flex flex-col sm:table-row hover:bg-gray-50 transition">
+                    <td className="px-6 py-4 font-bold text-gray-600 bg-gray-50/50 w-full sm:w-1/3 uppercase text-[10px] sm:text-[11px] tracking-widest">
                       Biaya PBB / Tahun
                     </td>
-                    <td className="px-6 py-4 text-green-700 font-bold border-l border-gray-100">
+                    <td className="px-6 py-4 text-green-700 font-bold sm:border-l border-gray-100 text-sm sm:text-base">
                       {rupiah(rumah.biaya_pbb)}
                     </td>
                   </tr>
-                  <tr className="hover:bg-gray-50 transition">
-                    <td className="px-6 py-4 font-bold text-gray-600 bg-gray-50/50 uppercase text-[11px] tracking-widest">
+                  <tr className="flex flex-col sm:table-row hover:bg-gray-50 transition">
+                    <td className="px-6 py-4 font-bold text-gray-600 bg-gray-50/50 w-full sm:w-1/3 uppercase text-[10px] sm:text-[11px] tracking-widest">
                       Bukti Tagihan PBB
                     </td>
-                    <td className="px-6 py-4 border-l border-gray-100">
+                    <td className="px-6 py-4 sm:border-l border-gray-100">
                       {rumah.scan_pbb ? (
                         <a
                           href={`${storage}/${rumah.scan_pbb}`}
                           target="_blank"
                           rel="noreferrer"
-                          className="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white text-xs font-bold rounded shadow hover:bg-blue-700 transition"
+                          className="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white text-[10px] sm:text-xs font-bold rounded shadow hover:bg-blue-700 transition w-full sm:w-auto justify-center"
                         >
                           <i className="fa fa-download mr-2"></i> LIHAT DOKUMEN
                           PBB
                         </a>
                       ) : (
-                        <span className="text-red-400 italic text-xs font-medium">
+                        <span className="text-red-400 italic text-[10px] sm:text-xs font-medium">
                           Belum diunggah
                         </span>
                       )}
@@ -532,30 +540,30 @@ class Rumah extends React.Component {
               {/* Info Kontrak */}
               {rumah.status_kepemilikan === "kontrak" && (
                 <>
-                  <tr className="hover:bg-gray-50 transition">
-                    <td className="px-6 py-4 font-bold text-gray-600 bg-gray-50/50 uppercase text-[11px] tracking-widest">
+                  <tr className="flex flex-col sm:table-row hover:bg-gray-50 transition">
+                    <td className="px-6 py-4 font-bold text-gray-600 bg-gray-50/50 w-full sm:w-1/3 uppercase text-[10px] sm:text-[11px] tracking-widest">
                       Biaya Kontrak / Tahun
                     </td>
-                    <td className="px-6 py-4 text-green-700 font-bold border-l border-gray-100 italic">
+                    <td className="px-6 py-4 text-green-700 font-bold sm:border-l border-gray-100 italic text-sm sm:text-base">
                       {rupiah(rumah.biaya_kontrak)}
                     </td>
                   </tr>
-                  <tr className="hover:bg-gray-50 transition">
-                    <td className="px-6 py-4 font-bold text-gray-600 bg-gray-50/50 uppercase text-[11px] tracking-widest">
+                  <tr className="flex flex-col sm:table-row hover:bg-gray-50 transition">
+                    <td className="px-6 py-4 font-bold text-gray-600 bg-gray-50/50 w-full sm:w-1/3 uppercase text-[10px] sm:text-[11px] tracking-widest">
                       Surat Perjanjian
                     </td>
-                    <td className="px-6 py-4 border-l border-gray-100">
+                    <td className="px-6 py-4 sm:border-l border-gray-100">
                       {rumah.scan_kontrak ? (
                         <a
                           href={`${storage}/${rumah.scan_kontrak}`}
                           target="_blank"
                           rel="noreferrer"
-                          className="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white text-xs font-bold rounded shadow hover:bg-blue-700 transition"
+                          className="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white text-[10px] sm:text-xs font-bold rounded shadow hover:bg-blue-700 transition w-full sm:w-auto justify-center"
                         >
                           <i className="fa fa-file mr-2"></i> SURAT KONTRAK
                         </a>
                       ) : (
-                        <span className="text-red-400 italic text-xs font-medium">
+                        <span className="text-red-400 italic text-[10px] sm:text-xs font-medium">
                           Belum diunggah
                         </span>
                       )}

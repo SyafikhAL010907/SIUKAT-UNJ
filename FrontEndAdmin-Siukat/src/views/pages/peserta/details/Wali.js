@@ -51,8 +51,10 @@ let FormWali = (props) => {
       className="border-none"
     >
       <div className="bg-white rounded-3xl overflow-hidden shadow-2xl">
-        <div className="bg-emerald-600 p-6 flex justify-between items-center text-white">
-          <h3 className="text-xl font-bold">Perbarui Data Wali</h3>
+        <div className="bg-emerald-600 p-4 sm:p-6 flex justify-between items-center text-white">
+          <h3 className="text-lg sm:text-xl font-bold italic uppercase tracking-tight">
+            Perbarui Data Wali
+          </h3>
           <button
             type="button"
             onClick={handleToggleWali}
@@ -67,50 +69,51 @@ let FormWali = (props) => {
           className="p-8 max-h-[75vh] overflow-y-auto"
         >
           <FormGroup row className="items-center">
-            <Label for="status_wali" md={3} className="font-bold">
+            <Label for="status_wali" md={3} xs={12} className="font-bold text-gray-600 text-[11px] uppercase tracking-wider">
               Status Wali
             </Label>
-            <Col md={3}>
-              <Label check className="cursor-pointer">
+            <Col md={3} xs={6}>
+              <Label check className="flex items-center space-x-2 cursor-pointer">
                 <Field
                   name="status_wali"
                   component={InputBs}
                   type="radio"
                   value="ada"
                 />{" "}
-                Ada
+                <span className="text-sm font-medium">Ada</span>
               </Label>
             </Col>
-            <Col md={3}>
-              <Label check className="cursor-pointer">
+            <Col md={3} xs={6}>
+              <Label check className="flex items-center space-x-2 cursor-pointer">
                 <Field
                   name="status_wali"
                   component={InputBs}
                   type="radio"
                   value="tidak"
                 />{" "}
-                Tidak Ada
+                <span className="text-sm font-medium">Tidak Ada</span>
               </Label>
             </Col>
           </FormGroup>
 
           {status_wali === "ada" && (
             <div className="space-y-4 mt-4 border-t pt-4">
-              <FormGroup row>
-                <Label md={3}>Nama Lengkap</Label>
-                <Col md={9}>
-                  <Field name="nama_wali" component={InputBs} type="text" />
+              <FormGroup row className="items-center">
+                <Label md={3} xs={12} className="font-bold text-gray-600 text-[11px] uppercase tracking-wider">Nama Lengkap</Label>
+                <Col md={9} xs={12}>
+                  <Field name="nama_wali" component={InputBs} type="text" placeholder="Nama Lengkap Wali" />
                 </Col>
               </FormGroup>
 
               <FormGroup row>
-                <Label md={3}>Alamat Lengkap</Label>
-                <Col md={9}>
+                <Label md={3} xs={12} className="font-bold text-gray-600 text-[11px] uppercase tracking-wider">Alamat</Label>
+                <Col md={9} xs={12}>
                   <Field
                     name="alamat_wali"
                     component={InputBs}
                     type="textarea"
                     rows="2"
+                    placeholder="Alamat Lengkap"
                   />
                 </Col>
               </FormGroup>
@@ -171,44 +174,43 @@ let FormWali = (props) => {
                 </Col>
               </FormGroup>
 
-              <FormGroup row>
-                <Label md={3}>Komitmen Biaya</Label>
-                <Col md={5}>
+              <FormGroup row className="items-center">
+                <Label md={3} xs={12} className="font-bold text-gray-600 text-[11px] uppercase tracking-wider">Komitmen Biaya</Label>
+                <Col md={5} xs={12}>
                   <Field
                     type="number"
                     component={InputBs}
                     name="kesanggupan_wali"
+                    placeholder="0"
                     validate={[money]}
                   />
-                  <FormText color="muted">Jumlah per bulan.</FormText>
                 </Col>
-                <Col md={4}>
-                  <div className="bg-emerald-50 text-emerald-700 p-2 rounded text-center font-bold border border-emerald-100">
+                <Col md={4} xs={12} className="mt-2 md:mt-0">
+                  <div className="bg-emerald-50 text-emerald-700 px-4 py-2 rounded-xl border border-emerald-100 font-bold text-center text-sm">
                     {rupiah(kesanggupan_wali || 0)}
                   </div>
                 </Col>
               </FormGroup>
 
-              <FormGroup row>
-                <Label md={3}>Scan Surat Komitmen</Label>
-                <Col md={5}>
+              <FormGroup row className="items-center">
+                <Label md={3} xs={12} className="font-bold text-gray-600 text-[11px] uppercase tracking-wider">Surat Komitmen</Label>
+                <Col md={5} xs={12} className="mb-2 md:mb-0">
                   <Field
                     component={InputFileBs}
                     type="file"
                     name="file_scan_wali"
                     id="file_scan_wali"
                   />
-                  <FormText color="muted">PDF/JPG (Maks. 500KB).</FormText>
                 </Col>
-                <Col md={4} className="flex flex-col gap-2">
+                <Col md={4} xs={12}>
                   {props.initialValues?.scan_wali && (
                     <a
                       href={`${storage}/${props.initialValues.scan_wali}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="btn btn-info btn-sm text-white"
+                      className="btn btn-info btn-block text-white text-[10px] font-bold uppercase"
                     >
-                      <i className="fa fa-file-text mr-1"></i> Lihat Berkas
+                      <i className="fa fa-file-text mr-2"></i> Lihat Berkas
                     </a>
                   )}
                 </Col>
@@ -216,19 +218,24 @@ let FormWali = (props) => {
             </div>
           )}
 
-          <div className="mt-8 flex justify-end space-x-3 border-t pt-6">
+          <div className="mt-10 flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-3 border-t pt-6">
             <button
               type="button"
               onClick={handleToggleWali}
-              className="px-6 py-2.5 font-bold text-gray-500"
+              className="px-6 py-2.5 font-bold text-gray-500 hover:text-gray-700 transition order-2 sm:order-1"
             >
               Batal
             </button>
             <button
               type="submit"
               disabled={submitting}
-              className="bg-emerald-600 text-white px-8 py-2.5 rounded-xl font-bold shadow-lg hover:bg-emerald-700 transition-all"
+              className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-2.5 rounded-xl font-bold shadow-lg transition transform active:scale-95 order-1 sm:order-2"
             >
+              {submitting ? (
+                <i className="fa fa-spinner fa-spin mr-2"></i>
+              ) : (
+                <i className="fa fa-save mr-2"></i>
+              )}
               {submitting ? "Menyimpan..." : "Simpan Perubahan"}
             </button>
           </div>
@@ -384,13 +391,13 @@ class Wali extends React.Component {
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
           <table className="w-full text-sm">
             <tbody className="divide-y divide-gray-100">
-              <tr>
-                <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 w-1/3 text-xs uppercase">
+              <tr className="flex flex-col sm:table-row">
+                <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 w-full sm:w-1/3 text-[10px] sm:text-xs uppercase">
                   Status
                 </td>
                 <td className="p-4">
                   <span
-                    className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase ${w.status_wali === "ada" ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-500"}`}
+                    className={`px-3 py-1.5 rounded-full text-[10px] font-bold uppercase ${w.status_wali === "ada" ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-500"}`}
                   >
                     {w.status_wali === "ada" ? "Ada" : "Tidak Ada"}
                   </span>
@@ -398,19 +405,19 @@ class Wali extends React.Component {
               </tr>
               {w.status_wali === "ada" && (
                 <>
-                  <tr>
-                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">
+                  <tr className="flex flex-col sm:table-row">
+                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 w-full sm:w-1/3 text-[10px] sm:text-xs uppercase">
                       Nama Lengkap
                     </td>
-                    <td className="p-4 font-medium text-gray-800">
+                    <td className="p-4 font-medium text-gray-800 text-sm sm:text-base">
                       {w.nama_wali || "-"}
                     </td>
                   </tr>
-                  <tr>
-                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">
+                  <tr className="flex flex-col sm:table-row">
+                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 w-full sm:w-1/3 text-[10px] sm:text-xs uppercase">
                       Alamat
                     </td>
-                    <td className="p-4 text-gray-700">
+                    <td className="p-4 text-gray-700 text-xs sm:text-sm leading-relaxed">
                       {w.alamat_wali || "-"}
                       {w.kecamatan?.kecam_nama && `, ${w.kecamatan.kecam_nama}`}
                       {w.kabkot?.kab_nama && `, ${w.kabkot.kab_nama}`}
@@ -418,11 +425,11 @@ class Wali extends React.Component {
                         `, ${w.provinsi.provinsi_nama}`}
                     </td>
                   </tr>
-                  <tr>
-                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">
+                  <tr className="flex flex-col sm:table-row">
+                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 w-full sm:w-1/3 text-[10px] sm:text-xs uppercase">
                       Komitmen Biaya
                     </td>
-                    <td className="p-4 font-bold text-emerald-700">
+                    <td className="p-4 font-bold text-emerald-700 text-sm sm:text-base">
                       {rupiah(w.kesanggupan_wali || 0)}
                     </td>
                   </tr>

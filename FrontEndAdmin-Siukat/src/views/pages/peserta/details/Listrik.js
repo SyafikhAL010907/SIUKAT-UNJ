@@ -34,13 +34,12 @@ let FormListrik = (props) => {
 
       <div className="relative w-full max-w-2xl mx-auto z-50">
         <div className="relative flex flex-col w-full bg-white border-0 rounded-xl shadow-2xl outline-none focus:outline-none">
-          <div className="flex items-center justify-between p-4 border-b bg-green-600 rounded-t-xl text-white">
-            <h3 className="text-lg font-bold italic flex items-center">
-              <i className="fa fa-bolt mr-2 text-yellow-300"></i> Form Data
-              Listrik
+          <div className="flex items-center justify-between p-4 border-b bg-emerald-600 rounded-t-xl text-white">
+            <h3 className="text-lg font-bold italic uppercase tracking-tight flex items-center">
+              <i className="fa fa-bolt mr-3 text-yellow-300"></i> Perbarui Data Listrik
             </h3>
             <button
-              className="text-white hover:text-gray-200 text-2xl font-bold transition"
+              className="text-white hover:rotate-90 text-2xl font-bold transition-transform"
               onClick={handleToggleListrik}
             >
               ×
@@ -69,31 +68,31 @@ let FormListrik = (props) => {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4 items-start">
-                <label className="text-sm font-semibold text-gray-700 pt-2">
+                <label className="text-[10px] font-bold text-gray-500 uppercase tracking-wider pt-2">
                   Status Listrik
                 </label>
-                <div className="md:col-span-2 grid grid-cols-2 gap-3">
-                  <label className="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition">
+                <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <label className="flex items-center p-3 border rounded-xl cursor-pointer hover:bg-emerald-50 hover:border-emerald-200 transition">
                     <Field
                       name="jenis_pemakaian"
                       component="input"
                       type="radio"
                       value="prabayar"
-                      className="w-4 h-4 text-green-600"
+                      className="w-5 h-5 text-emerald-600 focus:ring-emerald-500"
                     />
-                    <span className="ml-3 text-sm font-medium text-gray-600">
+                    <span className="ml-3 text-sm font-medium text-gray-700">
                       Prabayar
                     </span>
                   </label>
-                  <label className="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition">
+                  <label className="flex items-center p-3 border rounded-xl cursor-pointer hover:bg-emerald-50 hover:border-emerald-200 transition">
                     <Field
                       name="jenis_pemakaian"
                       component="input"
                       type="radio"
                       value="pascabayar"
-                      className="w-4 h-4 text-green-600"
+                      className="w-5 h-5 text-emerald-600 focus:ring-emerald-500"
                     />
-                    <span className="ml-3 text-sm font-medium text-gray-600">
+                    <span className="ml-3 text-sm font-medium text-gray-700">
                       Pascabayar
                     </span>
                   </label>
@@ -152,10 +151,10 @@ let FormListrik = (props) => {
             </form>
           </div>
 
-          <div className="flex items-center justify-end p-4 border-t bg-gray-50 rounded-b-xl">
+          <div className="flex flex-col sm:flex-row items-center justify-end p-6 border-t bg-gray-50 rounded-b-xl gap-3">
             <button
               onClick={handleToggleListrik}
-              className="px-6 py-2 text-sm font-bold text-gray-500 hover:text-gray-700 mr-4 uppercase"
+              className="w-full sm:w-auto px-6 py-2.5 text-sm font-bold text-gray-500 hover:text-gray-700 transition order-2 sm:order-1"
             >
               Batal
             </button>
@@ -163,9 +162,14 @@ let FormListrik = (props) => {
               type="submit"
               form="form-listrik"
               disabled={pristine || submitting}
-              className="px-8 py-2.5 bg-green-600 hover:bg-green-700 text-white text-sm font-bold rounded-lg shadow-md transition disabled:opacity-50"
+              className="w-full sm:w-auto px-8 py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold rounded-xl shadow-md transition transform active:scale-95 order-1 sm:order-2"
             >
-              <i className="fa fa-save mr-2"></i> SIMPAN
+              {submitting ? (
+                <i className="fa fa-spinner fa-spin mr-2"></i>
+              ) : (
+                <i className="fa fa-save mr-2"></i>
+              )}
+              SIMPAN PERUBAHAN
             </button>
           </div>
         </div>
@@ -290,51 +294,51 @@ class Listrik extends React.Component {
         <div className="overflow-x-auto">
           <table className="w-full text-sm text-left">
             <tbody className="divide-y divide-gray-100">
-              <tr>
-                <td className="px-6 py-4 font-bold text-gray-500 bg-gray-50/30 w-1/3 uppercase text-[10px]">
+              <tr className="flex flex-col sm:table-row">
+                <td className="px-6 py-4 font-bold text-gray-500 bg-gray-50/30 w-full sm:w-1/3 uppercase text-[10px]">
                   Nomor Pelanggan
                 </td>
-                <td className="px-6 py-4 text-gray-800 border-l border-gray-50 font-mono italic">
+                <td className="px-6 py-4 text-gray-800 sm:border-l border-gray-50 font-mono italic text-sm sm:text-base">
                   {listrik.no_pelanggan || "-"}
                 </td>
               </tr>
-              <tr>
-                <td className="px-6 py-4 font-bold text-gray-500 bg-gray-50/30 uppercase text-[10px]">
+              <tr className="flex flex-col sm:table-row">
+                <td className="px-6 py-4 font-bold text-gray-500 bg-gray-50/30 w-full sm:w-1/3 uppercase text-[10px]">
                   Jenis Pemakaian
                 </td>
-                <td className="px-6 py-4 text-gray-800 border-l border-gray-50">
+                <td className="px-6 py-4 text-gray-800 sm:border-l border-gray-50">
                   <span className="px-2 py-1 bg-blue-50 text-blue-700 rounded text-[11px] font-bold uppercase">
                     {listrik.jenis_pemakaian || "-"}
                   </span>
                 </td>
               </tr>
-              <tr>
-                <td className="px-6 py-4 font-bold text-gray-500 bg-gray-50/30 uppercase text-[10px]">
+              <tr className="flex flex-col sm:table-row">
+                <td className="px-6 py-4 font-bold text-gray-500 bg-gray-50/30 w-full sm:w-1/3 uppercase text-[10px]">
                   Biaya Listrik
                 </td>
-                <td className="px-6 py-4 text-green-700 font-bold border-l border-gray-50">
+                <td className="px-6 py-4 text-green-700 font-bold sm:border-l border-gray-50 text-sm sm:text-base">
                   {rupiah(listrik.pengeluaran)}{" "}
                   <span className="text-gray-400 font-normal text-xs">
                     / 3 bln
                   </span>
                 </td>
               </tr>
-              <tr>
-                <td className="px-6 py-4 font-bold text-gray-500 bg-gray-50/30 uppercase text-[10px]">
+              <tr className="flex flex-col sm:table-row">
+                <td className="px-6 py-4 font-bold text-gray-500 bg-gray-50/30 w-full sm:w-1/3 uppercase text-[10px]">
                   Dokumen
                 </td>
-                <td className="px-6 py-4 border-l border-gray-50">
+                <td className="px-6 py-4 sm:border-l border-gray-50">
                   {listrik.scan_listrik ? (
                     <a
                       href={`${storage}/${listrik.scan_listrik}`}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white text-[11px] font-bold rounded"
+                      className="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white text-[10px] sm:text-[11px] font-bold rounded w-full sm:w-auto justify-center"
                     >
                       <i className="fa fa-file-pdf-o mr-2"></i> LIHAT STRUK
                     </a>
                   ) : (
-                    <span className="text-red-400 italic text-xs">
+                    <span className="text-red-400 italic text-[10px] sm:text-xs">
                       Belum ada berkas
                     </span>
                   )}

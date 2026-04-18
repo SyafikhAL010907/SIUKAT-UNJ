@@ -36,13 +36,12 @@ let FormPendukung = (props) => {
       <div className="relative w-full max-w-2xl mx-auto z-50">
         <div className="relative flex flex-col w-full bg-white border-0 rounded-xl shadow-2xl outline-none focus:outline-none">
           {/* Header */}
-          <div className="flex items-center justify-between p-4 border-b bg-green-600 rounded-t-xl text-white">
-            <h3 className="text-lg font-bold italic flex items-center">
-              <i className="fa fa-users mr-3 text-yellow-300"></i> Form Data
-              Pendukung
+          <div className="flex items-center justify-between p-4 border-b bg-emerald-600 rounded-t-xl text-white">
+            <h3 className="text-lg font-bold italic uppercase tracking-tight flex items-center">
+              <i className="fa fa-users mr-3 text-yellow-300"></i> Perbarui Berkas Pendukung
             </h3>
             <button
-              className="text-white hover:text-gray-200 text-2xl font-bold transition"
+              className="text-white hover:rotate-90 text-2xl font-bold transition-transform"
               onClick={handleTogglePendukung}
             >
               ×
@@ -117,20 +116,25 @@ let FormPendukung = (props) => {
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-end p-4 border-t bg-gray-50 rounded-b-xl">
+          <div className="flex flex-col sm:flex-row items-center justify-end p-6 border-t bg-gray-50 rounded-b-xl gap-3">
             <button
               onClick={handleTogglePendukung}
-              className="px-6 py-2 text-sm font-bold text-gray-500 hover:text-gray-700 mr-4 transition uppercase"
+              className="w-full sm:w-auto px-6 py-2.5 text-sm font-bold text-gray-500 hover:text-gray-700 transition order-2 sm:order-1"
             >
-              Batal
+              BATAL
             </button>
             <button
               type="submit"
               form="form-pendukung"
               disabled={pristine || submitting}
-              className="px-8 py-2.5 bg-green-600 hover:bg-green-700 text-white text-sm font-bold rounded-lg shadow-md transition transform hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50"
+              className="w-full sm:w-auto px-8 py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold rounded-xl shadow-md transition transform active:scale-95 order-1 sm:order-2"
             >
-              <i className="fa fa-save mr-2"></i> SIMPAN DATA
+              {submitting ? (
+                <i className="fa fa-spinner fa-spin mr-2"></i>
+              ) : (
+                <i className="fa fa-save mr-2"></i>
+              )}
+              SIMPAN PERUBAHAN
             </button>
           </div>
         </div>
@@ -256,11 +260,11 @@ class Pendukung extends React.Component {
         <div className="overflow-x-auto">
           <table className="w-full text-sm text-left border-collapse">
             <tbody className="divide-y divide-gray-100">
-              <tr className="hover:bg-gray-50 transition">
-                <td className="px-6 py-4 font-bold text-gray-500 bg-gray-50/30 w-1/3 uppercase text-[10px] tracking-widest">
+              <tr className="flex flex-col sm:table-row hover:bg-gray-50 transition">
+                <td className="px-6 py-4 font-bold text-gray-500 bg-gray-50/30 w-full sm:w-1/3 uppercase text-[10px] tracking-widest">
                   Jumlah Tanggungan
                 </td>
-                <td className="px-6 py-4 text-gray-800 border-l border-gray-50">
+                <td className="px-6 py-4 text-gray-800 sm:border-l border-gray-50 text-sm sm:text-base">
                   <span className="text-lg font-bold text-green-700">
                     {pendukung.tanggungan || 0}
                   </span>
@@ -269,22 +273,22 @@ class Pendukung extends React.Component {
                   </span>
                 </td>
               </tr>
-              <tr className="hover:bg-gray-50 transition">
-                <td className="px-6 py-4 font-bold text-gray-500 bg-gray-50/30 uppercase text-[10px] tracking-widest">
+              <tr className="flex flex-col sm:table-row hover:bg-gray-50 transition">
+                <td className="px-6 py-4 font-bold text-gray-500 bg-gray-50/30 w-full sm:w-1/3 uppercase text-[10px] tracking-widest">
                   Kartu Keluarga
                 </td>
-                <td className="px-6 py-4 border-l border-gray-50">
+                <td className="px-6 py-4 sm:border-l border-gray-50">
                   {pendukung.scan_kk ? (
                     <a
                       href={`${storage}/${pendukung.scan_kk}`}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-bold rounded-lg shadow transition"
+                      className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-[10px] sm:text-[11px] font-bold rounded-lg shadow transition w-full sm:w-auto justify-center"
                     >
                       <i className="fa fa-download mr-2"></i> UNDUH / LIHAT KK
                     </a>
                   ) : (
-                    <div className="flex items-center text-red-500 text-xs font-bold italic bg-red-50 px-3 py-1 rounded-full w-fit">
+                    <div className="flex items-center text-red-500 text-[10px] sm:text-xs font-bold italic bg-red-50 px-3 py-1 rounded-full w-fit">
                       <i className="fa fa-warning mr-2"></i> Belum ada dokumen
                     </div>
                   )}

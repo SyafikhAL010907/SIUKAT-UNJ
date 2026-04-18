@@ -11,7 +11,7 @@ let FormJadwalUkt = (props) => {
   const { handleSubmit, pristine, submitting, canEdit } = props;
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10">
         {/* Kolom Kiri: Pengaturan Akses Login (Wadah Baru) */}
         <div className="space-y-6">
           <div className="flex items-center space-x-2 pb-2 border-b border-gray-100">
@@ -206,10 +206,10 @@ let FormJadwalUkt = (props) => {
             <button
               type="submit"
               disabled={pristine || submitting}
-              className="w-full bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 text-white font-black py-4 px-8 rounded-2xl shadow-xl shadow-emerald-200 transition-all flex items-center justify-center space-x-3 active:scale-[0.95] disabled:opacity-50 disabled:cursor-not-allowed group"
+              className="w-full bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 text-white font-black py-4 px-6 md:px-8 rounded-2xl shadow-xl shadow-emerald-200 transition-all flex items-center justify-center space-x-3 active:scale-[0.95] disabled:opacity-50 disabled:cursor-not-allowed group"
             >
-              <i className="fa fa-save text-xl group-hover:rotate-12 transition-transform"></i>
-              <span className="uppercase tracking-widest">
+              <i className="fa fa-save text-lg md:text-xl group-hover:rotate-12 transition-transform"></i>
+              <span className="uppercase tracking-widest text-[10px] md:text-xs">
                 Simpan Perubahan Jadwal
               </span>
             </button>
@@ -287,34 +287,34 @@ class JadwalUkt extends React.Component {
     };
 
     return (
-      <div className="p-4 md:p-8 space-y-10">
+      <div className="p-2 md:p-8 space-y-6 md:space-y-10">
         <div className="modern-card">
           {/* Header Page Premium dengan Glass Effect */}
-          <div className="glass-header flex flex-col md:flex-row md:items-center justify-between gap-6 border-none rounded-none">
-            <div className="flex items-center space-x-5 text-emerald-900">
-              <div className="p-4 bg-white/40 rounded-2xl backdrop-blur-md shadow-inner border border-white/50">
-                <i className="fa fa-calendar-check-o text-3xl text-emerald-600"></i>
+          <div className="glass-header flex flex-col md:flex-row md:items-center justify-between gap-6 border-none rounded-none p-6 md:p-10">
+            <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-5 text-emerald-900 w-full md:w-auto">
+              <div className="p-3 md:p-4 bg-white/40 rounded-2xl backdrop-blur-md shadow-inner border border-white/50">
+                <i className="fa fa-calendar-check-o text-2xl md:text-3xl text-emerald-600"></i>
               </div>
-              <div>
-                <h2 className="text-2xl font-black tracking-tight">
+              <div className="text-center sm:text-left">
+                <h2 className="text-xl md:text-2xl font-black tracking-tight">
                   Pengaturan Jadwal UKT
                 </h2>
-                <p className="text-emerald-700/70 text-sm font-medium">
+                <p className="text-emerald-700/70 text-[10px] md:text-sm font-medium">
                   Kelola periode pengisian, klarifikasi, dan pembayaran
                 </p>
               </div>
             </div>
 
             {/* Dropdown Jalur Sejajar Header - Premium Style */}
-            <div className="flex items-center space-x-4 bg-white/30 p-2.5 rounded-2xl backdrop-blur-xl border border-white/50 shadow-sm">
-              <span className="text-emerald-900 text-[10px] font-black uppercase ml-2 hidden sm:inline tracking-widest">
+            <div className="flex items-center space-x-4 bg-white/30 p-2 rounded-2xl backdrop-blur-xl border border-white/50 shadow-sm w-full md:w-auto">
+              <span className="text-emerald-900 text-[10px] font-black uppercase ml-2 hidden sm:inline tracking-[0.2em]">
                 Pilih Jalur:
               </span>
               <select
                 value={this.state.selectedKode}
                 onChange={this.handleStageChange}
                 disabled={!canEdit}
-                className="bg-white text-emerald-800 text-sm font-bold px-6 py-2 rounded-xl outline-none border-none focus:ring-2 focus:ring-yellow-400 transition-all cursor-pointer shadow-md disabled:bg-gray-100 disabled:cursor-not-allowed disabled:text-gray-400"
+                className="bg-white text-emerald-800 text-xs md:text-sm font-bold px-5 py-2.5 rounded-xl outline-none border-none focus:ring-2 focus:ring-yellow-400 transition-all cursor-pointer shadow-md disabled:bg-gray-100 disabled:cursor-not-allowed disabled:text-gray-400 w-full md:w-auto"
               >
                 <option value="1">SNBP</option>
                 <option value="2">SNBT</option>
@@ -323,7 +323,7 @@ class JadwalUkt extends React.Component {
             </div>
           </div>
 
-          <div className="p-10">
+          <div className="p-5 md:p-10">
             <FormJadwalUkt
               canEdit={isAllowed(this.props.user?.role, "EDIT_DATA")}
               onSubmit={this.submitForm}

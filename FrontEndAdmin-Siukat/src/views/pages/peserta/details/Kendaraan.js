@@ -62,13 +62,13 @@ let FormKendaraan = (props) => {
 
       <div className="relative w-full max-w-3xl mx-auto z-50">
         <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border-0 max-h-[90vh] flex flex-col">
-          <div className="bg-emerald-600 px-8 py-5 flex justify-between items-center text-white">
-            <h3 className="text-xl font-black italic uppercase tracking-tight flex items-center gap-3">
-              <i className="fas fa-car-side"></i> Update Data Kendaraan
+          <div className="bg-emerald-600 px-4 sm:px-8 py-4 sm:py-5 flex justify-between items-center text-white">
+            <h3 className="text-lg sm:text-xl font-black italic uppercase tracking-tight flex items-center gap-2 sm:gap-3">
+              <i className="fas fa-car-side"></i> Perbarui Kendaraan
             </h3>
             <button
               onClick={handleToggleKendaraan}
-              className="hover:rotate-90 transition-transform duration-300 text-3xl"
+              className="hover:rotate-90 transition-transform duration-300 text-2xl sm:text-3xl"
             >
               &times;
             </button>
@@ -89,15 +89,15 @@ let FormKendaraan = (props) => {
                 <div className="h-px flex-grow bg-gray-100"></div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-                <label className="md:col-span-4 font-bold text-gray-600 text-sm uppercase">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-start md:items-center">
+                <label className="md:col-span-4 font-bold text-gray-600 text-[10px] uppercase tracking-wider">
                   Kepemilikan Motor
                 </label>
-                <div className="md:col-span-8 flex gap-4">
+                <div className="md:col-span-8 grid grid-cols-2 gap-3">
                   {["ada", "tidak"].map((opt) => (
                     <label
                       key={opt}
-                      className={`flex-1 flex items-center justify-center p-3 border-2 rounded-xl cursor-pointer transition-all ${status_motor === opt ? "border-emerald-500 bg-emerald-50 text-emerald-700" : "border-gray-100 text-gray-400"}`}
+                      className={`flex items-center justify-center p-3 border-2 rounded-xl cursor-pointer transition-all ${status_motor === opt ? "border-emerald-500 bg-emerald-50 text-emerald-700 font-bold" : "border-gray-100 text-gray-400"}`}
                     >
                       <Field
                         name="status_motor"
@@ -109,7 +109,7 @@ let FormKendaraan = (props) => {
                         }
                         className="hidden"
                       />
-                      <span className="text-xs font-black uppercase">
+                      <span className="text-[10px] sm:text-xs uppercase">
                         {opt === "ada" ? "Ya, Ada" : "Tidak Ada"}
                       </span>
                     </label>
@@ -173,15 +173,15 @@ let FormKendaraan = (props) => {
                 <div className="h-px flex-grow bg-gray-100"></div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-                <label className="md:col-span-4 font-bold text-gray-600 text-sm uppercase">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-start md:items-center">
+                <label className="md:col-span-4 font-bold text-gray-600 text-[10px] uppercase tracking-wider">
                   Kepemilikan Mobil
                 </label>
-                <div className="md:col-span-8 flex gap-4">
+                <div className="md:col-span-8 grid grid-cols-2 gap-3">
                   {["ada", "tidak"].map((opt) => (
                     <label
                       key={opt}
-                      className={`flex-1 flex items-center justify-center p-3 border-2 rounded-xl cursor-pointer transition-all ${status_mobil === opt ? "border-blue-500 bg-blue-50 text-blue-700" : "border-gray-100 text-gray-400"}`}
+                      className={`flex items-center justify-center p-3 border-2 rounded-xl cursor-pointer transition-all ${status_mobil === opt ? "border-blue-500 bg-blue-50 text-blue-700 font-bold" : "border-gray-100 text-gray-400"}`}
                     >
                       <Field
                         name="status_mobil"
@@ -193,7 +193,7 @@ let FormKendaraan = (props) => {
                         }
                         className="hidden"
                       />
-                      <span className="text-xs font-black uppercase">
+                      <span className="text-[10px] sm:text-xs uppercase">
                         {opt === "ada" ? "Ya, Ada" : "Tidak Ada"}
                       </span>
                     </label>
@@ -245,26 +245,26 @@ let FormKendaraan = (props) => {
             </div>
           </form>
 
-          <div className="p-6 bg-gray-50 flex justify-end gap-4 border-t border-gray-100">
+          <div className="p-6 bg-gray-50 flex flex-col sm:flex-row justify-end gap-3 border-t border-gray-100">
             <button
               type="button"
               onClick={handleToggleKendaraan}
-              className="px-6 py-3 text-xs font-black text-gray-400 uppercase tracking-widest"
+              className="w-full sm:w-auto px-6 py-2.5 font-black text-gray-400 hover:text-gray-600 transition order-2 sm:order-1"
             >
-              Batal
+              BATAL
             </button>
             <button
               type="submit"
               form="form-kendaraan"
               disabled={pristine || submitting}
-              className="px-10 py-3 rounded-2xl bg-emerald-600 text-white hover:bg-emerald-700 font-black text-xs uppercase tracking-widest shadow-xl disabled:opacity-50 transition-all"
+              className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-xl font-black shadow-lg transition transform active:scale-95 order-1 sm:order-2"
             >
               {submitting ? (
                 <i className="fa fa-spinner fa-spin mr-2"></i>
               ) : (
                 <i className="fa fa-save mr-2"></i>
               )}
-              Simpan Data
+              SIMPAN PERUBAHAN
             </button>
           </div>
         </div>
@@ -374,38 +374,40 @@ class Kendaraan extends React.Component {
             <tbody className="divide-y divide-gray-50">
               {status === "ada" ? (
                 <>
-                  <tr>
-                    <td className="py-3 text-gray-400 font-bold uppercase w-1/2">
+                  <tr className="flex flex-col sm:table-row">
+                    <td className="py-3 text-gray-400 font-bold uppercase w-full sm:w-1/2">
                       Jumlah Unit
                     </td>
-                    <td className="py-3 text-right font-black text-gray-700">
+                    <td className="py-2 sm:py-3 text-left sm:text-right font-black text-gray-700 text-sm sm:text-xs">
                       {jumlah} Unit
                     </td>
                   </tr>
-                  <tr>
-                    <td className="py-3 text-gray-400 font-bold uppercase">
+                  <tr className="flex flex-col sm:table-row">
+                    <td className="py-3 text-gray-400 font-bold uppercase w-full sm:w-1/2">
                       Pajak / Thn
                     </td>
-                    <td className="py-3 text-right font-black text-emerald-600">
+                    <td className="py-2 sm:py-3 text-left sm:text-right font-black text-emerald-600 text-sm sm:text-xs">
                       {rupiah(pajak)}
                     </td>
                   </tr>
-                  <tr>
-                    <td className="py-3 text-gray-400 font-bold uppercase">
+                  <tr className="flex flex-col sm:table-row">
+                    <td className="py-3 text-gray-400 font-bold uppercase w-full sm:w-1/2">
                       Dokumen STNK
                     </td>
-                    <td className="py-3 text-right">
+                    <td className="py-2 sm:py-3 text-left sm:text-right">
                       {scan ? (
                         <a
                           href={`${storage}/${scan}`}
                           target="_blank"
                           rel="noreferrer"
-                          className="text-blue-600 font-black hover:underline"
+                          className="text-blue-600 font-black hover:underline text-xs"
                         >
                           LIHAT PDF
                         </a>
                       ) : (
-                        <span className="text-gray-300 italic">Kosong</span>
+                        <span className="text-gray-300 italic text-[10px]">
+                          Kosong
+                        </span>
                       )}
                     </td>
                   </tr>

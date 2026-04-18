@@ -81,8 +81,10 @@ let FormAyah = (props) => {
       className="border-none"
     >
       <div className="bg-white rounded-3xl overflow-hidden shadow-2xl">
-        <div className="bg-emerald-600 p-6 flex justify-between items-center text-white">
-          <h3 className="text-xl font-bold">Perbarui Data Ayah</h3>
+        <div className="bg-emerald-600 p-4 sm:p-6 flex justify-between items-center text-white">
+          <h3 className="text-lg sm:text-xl font-bold italic uppercase tracking-tight">
+            Perbarui Data Ayah
+          </h3>
           <button
             onClick={handleToggleAyah}
             className="hover:rotate-90 transition-transform text-2xl"
@@ -95,65 +97,67 @@ let FormAyah = (props) => {
           onSubmit={handleSubmit}
           className="p-8 max-h-[70vh] overflow-y-auto"
         >
-          <FormGroup row>
-            <Label for="nama_ayah" md={3}>
+          <FormGroup row className="items-center">
+            <Label for="nama_ayah" md={3} xs={12} className="font-bold text-gray-600 text-[11px] uppercase tracking-wider">
               Nama Lengkap
             </Label>
-            <Col md={9}>
+            <Col md={9} xs={12}>
               <Field
                 name="nama_ayah"
                 component={InputBs}
                 type="text"
-                placeholder="Nama Lengkap"
+                placeholder="Nama Lengkap Sesuai Dokumen"
               />
             </Col>
           </FormGroup>
-          <FormGroup row>
-            <Label for="status_ayah" md={3}></Label>
-            <Col md={4}>
-              <Label check>
+          <FormGroup row className="items-center">
+            <Label for="status_ayah" md={3} xs={12} className="font-bold text-gray-600 text-[11px] uppercase tracking-wider">
+              Status Ayah
+            </Label>
+            <Col md={4} xs={6}>
+              <Label check className="flex items-center space-x-2 cursor-pointer">
                 <Field
                   name="status_ayah"
                   component={InputBs}
                   type="radio"
                   value="hidup"
                 />{" "}
-                Hidup
+                <span className="text-sm font-medium">Hidup</span>
               </Label>
             </Col>
-            <Col md={5}>
-              <Label check>
+            <Col md={5} xs={6}>
+              <Label check className="flex items-center space-x-2 cursor-pointer">
                 <Field
                   name="status_ayah"
                   component={InputBs}
                   type="radio"
                   value="wafat"
                 />{" "}
-                Wafat
+                <span className="text-sm font-medium">Wafat</span>
               </Label>
             </Col>
           </FormGroup>
 
           {status_ayah === "hidup" && (
             <div>
-              <FormGroup row>
-                <Label for="nik_ayah" md={3}>
+              <FormGroup row className="items-center">
+                <Label for="nik_ayah" md={3} xs={12} className="font-bold text-gray-600 text-[11px] uppercase tracking-wider">
                   NIK
                 </Label>
-                <Col md={9}>
+                <Col md={9} xs={12}>
                   <Field
                     name="nik_ayah"
                     component={InputBs}
                     type="text"
-                    placeholder="NIK Ayah"
+                    placeholder="Nomor Induk Kependudukan"
                   />
                 </Col>
               </FormGroup>
-              <FormGroup row>
-                <Label for="file_scan_ktp_ayah" md={3}>
+              <FormGroup row className="items-center">
+                <Label for="file_scan_ktp_ayah" md={3} xs={12} className="font-bold text-gray-600 text-[11px] uppercase tracking-wider">
                   KTP Ayah
                 </Label>
-                <Col md={5}>
+                <Col md={5} xs={12} className="mb-2 md:mb-0">
                   <Field
                     component={InputFileBs}
                     type="file"
@@ -163,24 +167,23 @@ let FormAyah = (props) => {
                   />
                 </Col>
                 {props.initialValues && props.initialValues.scan_ktp_ayah && (
-                  <Col md={4}>
+                  <Col md={4} xs={12}>
                     <a
                       href={storage + "/" + props.initialValues.scan_ktp_ayah}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="btn btn-success btn-block"
+                      className="btn btn-success btn-block text-[10px] font-bold uppercase"
                     >
-                      <i className="fa fa-file"></i> Lihat KTP Ayah
+                      <i className="fa fa-file mr-2"></i> Lihat KTP Ayah
                     </a>
                   </Col>
                 )}
               </FormGroup>
-              <FormGroup row>
-                <Label md={3} xs={12}>
-                  Tempat & <br />
-                  Tanggal Lahir
+              <FormGroup row className="items-center">
+                <Label md={3} xs={12} className="font-bold text-gray-600 text-[11px] uppercase tracking-wider">
+                  Lahir
                 </Label>
-                <Col md={5}>
+                <Col md={5} xs={12} className="mb-2 md:mb-0">
                   <Field
                     name="tempat_lahir_ayah"
                     component={InputBs}
@@ -198,16 +201,16 @@ let FormAyah = (props) => {
                 </Col>
               </FormGroup>
               <FormGroup row>
-                <Label for="alamat_ayah" md={3}>
-                  Alamat Lengkap
+                <Label for="alamat_ayah" md={3} xs={12} className="font-bold text-gray-600 text-[11px] uppercase tracking-wider">
+                  Alamat
                 </Label>
-                <Col md={9}>
+                <Col md={9} xs={12}>
                   <Field
                     name="alamat_ayah"
                     component={InputBs}
                     type="textarea"
                     rows="3"
-                    placeholder="Alamat Lengkap"
+                    placeholder="Alamat Lengkap Sesuai KTP"
                   />{" "}
                 </Col>
               </FormGroup>
@@ -294,8 +297,8 @@ let FormAyah = (props) => {
                   </Field>
                 </Col>
               </FormGroup>
-              <FormGroup row>
-                <Label for="penghasilan_ayah" md={3}>
+              <FormGroup row className="items-center">
+                <Label for="penghasilan_ayah" md={3} xs={12} className="font-bold text-gray-600 text-[11px] uppercase tracking-wider">
                   Penghasilan
                 </Label>
                 <Col md={5} xs={12}>
@@ -304,20 +307,14 @@ let FormAyah = (props) => {
                     component={InputBs}
                     name="penghasilan_ayah"
                     id="penghasilan_ayah"
-                    placeholder="Penghasilan Ayah"
+                    placeholder="0"
                     validate={[money]}
                   />
-                  <FormText color="muted">
-                    <ul className="list-reset">
-                      <li>
-                        Penghasilan <b>per bulan</b>;
-                      </li>
-                      <li>Hanya isi dengan angka (0-9).</li>
-                    </ul>
-                  </FormText>
                 </Col>
-                <Col md={4} xs={12}>
-                  <Alert color="success">{rupiah(penghasilan_ayah)}</Alert>
+                <Col md={4} xs={12} className="mt-2 md:mt-0">
+                  <div className="bg-emerald-50 text-emerald-700 px-4 py-2 rounded-xl border border-emerald-100 font-bold text-center text-sm">
+                    {rupiah(penghasilan_ayah)}
+                  </div>
                 </Col>
               </FormGroup>
               <FormGroup row>
@@ -345,11 +342,11 @@ let FormAyah = (props) => {
                   <Alert color="success">{rupiah(sampingan_ayah)}</Alert>
                 </Col>
               </FormGroup>
-              <FormGroup row>
-                <Label for="file_scan_slip_ayah" md={3}>
-                  Slip Gaji / Bukti Penghasilan
+              <FormGroup row className="items-center">
+                <Label for="file_scan_slip_ayah" md={3} xs={12} className="font-bold text-gray-600 text-[11px] uppercase tracking-wider">
+                  Slip Gaji
                 </Label>
-                <Col md={5}>
+                <Col md={5} xs={12} className="mb-2 md:mb-0">
                   <Field
                     component={InputFileBs}
                     type="file"
@@ -358,14 +355,14 @@ let FormAyah = (props) => {
                   />
                 </Col>
                 {props.initialValues && props.initialValues.scan_slip_ayah && (
-                  <Col md={4}>
+                  <Col md={4} xs={12}>
                     <a
                       href={storage + "/" + props.initialValues.scan_slip_ayah}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="btn btn-success btn-block"
+                      className="btn btn-success btn-block text-[10px] font-bold uppercase"
                     >
-                      <i className="fa fa-file"></i> Lihat Slip Gaji Ayah
+                      <i className="fa fa-file mr-2"></i> Lihat Slip Gaji
                     </a>
                   </Col>
                 )}
@@ -389,18 +386,18 @@ let FormAyah = (props) => {
                 </Col>
               </FormGroup>
 
-              <div className="mt-10 flex justify-end space-x-3 border-t pt-6">
+              <div className="mt-10 flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-3 border-t pt-6">
                 <button
                   type="button"
                   onClick={handleToggleAyah}
-                  className="px-6 py-2.5 font-bold text-gray-500"
+                  className="px-6 py-2.5 font-bold text-gray-500 hover:text-gray-700 transition order-2 sm:order-1"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
                   disabled={pristine || submitting}
-                  className="bg-emerald-600 text-white px-8 py-2.5 rounded-xl font-bold shadow-lg"
+                  className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-2.5 rounded-xl font-bold shadow-lg transition transform active:scale-95 order-1 sm:order-2"
                 >
                   <i className="fa fa-save mr-2"></i> Simpan Perubahan
                 </button>
@@ -409,18 +406,18 @@ let FormAyah = (props) => {
           )}
 
           {status_ayah === "wafat" && (
-            <div className="mt-10 flex justify-end space-x-3 border-t pt-6">
+            <div className="mt-10 flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-3 border-t pt-6">
               <button
                 type="button"
                 onClick={handleToggleAyah}
-                className="px-6 py-2.5 font-bold text-gray-500"
+                className="px-6 py-2.5 font-bold text-gray-500 hover:text-gray-700 transition order-2 sm:order-1"
               >
                 Batal
               </button>
               <button
                 type="submit"
                 disabled={pristine || submitting}
-                className="bg-emerald-600 text-white px-8 py-2.5 rounded-xl font-bold shadow-lg"
+                className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-2.5 rounded-xl font-bold shadow-lg transition transform active:scale-95 order-1 sm:order-2"
               >
                 <i className="fa fa-save mr-2"></i> Simpan Perubahan
               </button>
@@ -557,27 +554,27 @@ class Ayah extends React.Component {
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
           <div className="p-4 border-b bg-emerald-50 flex items-center gap-2 font-bold">
             <i className="fa fa-user text-emerald-700"></i>
-            <span className="uppercase text-gray-700 tracking-wider text-sm">
+            <span className="uppercase text-gray-700 tracking-wider text-xs md:text-sm">
               Informasi Ayah
             </span>
           </div>
           <table className="w-full text-sm">
             <tbody className="divide-y divide-gray-100">
-              <tr>
-                <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 w-1/3 text-xs uppercase">
+              <tr className="flex flex-col sm:table-row">
+                <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 w-full sm:w-1/3 text-[10px] sm:text-xs uppercase">
                   Nama Lengkap
                 </td>
-                <td className="p-4 font-medium text-gray-800">
+                <td className="p-4 font-medium text-gray-800 text-sm sm:text-base">
                   {data.nama_ayah || "-"}
                 </td>
               </tr>
-              <tr>
-                <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">
+              <tr className="flex flex-col sm:table-row">
+                <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 w-full sm:w-1/3 text-[10px] sm:text-xs uppercase">
                   Status
                 </td>
                 <td className="p-4">
                   <span
-                    className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase ${data.status_ayah === "hidup" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}
+                    className={`px-3 py-1.5 rounded-full text-[10px] font-bold uppercase ${data.status_ayah === "hidup" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}
                   >
                     {data.status_ayah || "Belum diisi"}
                   </span>
@@ -586,16 +583,16 @@ class Ayah extends React.Component {
 
               {data.status_ayah === "hidup" && (
                 <>
-                  <tr>
-                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">
+                  <tr className="flex flex-col sm:table-row">
+                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 w-full sm:w-1/3 text-[10px] sm:text-xs uppercase">
                       NIK
                     </td>
-                    <td className="p-4 font-mono text-gray-700">
+                    <td className="p-4 font-mono text-gray-700 text-sm sm:text-base">
                       {data.nik_ayah || "-"}
                     </td>
                   </tr>
-                  <tr>
-                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">
+                  <tr className="flex flex-col sm:table-row">
+                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 w-full sm:w-1/3 text-[10px] sm:text-xs uppercase">
                       KTP
                     </td>
                     <td className="p-4">
@@ -615,11 +612,11 @@ class Ayah extends React.Component {
                       )}
                     </td>
                   </tr>
-                  <tr>
-                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">
+                  <tr className="flex flex-col sm:table-row">
+                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 w-full sm:w-1/3 text-[10px] sm:text-xs uppercase">
                       Tempat, Tgl Lahir
                     </td>
-                    <td className="p-4 text-gray-700">
+                    <td className="p-4 text-gray-700 text-sm sm:text-base">
                       {data.tempat_lahir_ayah || data.tanggal_lahir_ayah ? (
                         <>
                           {data.tempat_lahir_ayah || "-"},{" "}
@@ -630,48 +627,48 @@ class Ayah extends React.Component {
                       )}
                     </td>
                   </tr>
-                  <tr>
-                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">
+                  <tr className="flex flex-col sm:table-row">
+                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 w-full sm:w-1/3 text-[10px] sm:text-xs uppercase">
                       Alamat
                     </td>
-                    <td className="p-4 text-gray-700">
+                    <td className="p-4 text-gray-700 text-xs sm:text-sm leading-relaxed">
                       {data.provinsi
                         ? `${data.alamat_ayah || ""}, ${data.kecamatan ? data.kecamatan.kecam_nama : ""}, ${data.kabkot ? data.kabkot.kab_nama : ""}, ${data.provinsi.provinsi_nama}`
                         : data.alamat_ayah || "-"}
                     </td>
                   </tr>
-                  <tr>
-                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">
+                  <tr className="flex flex-col sm:table-row">
+                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 w-full sm:w-1/3 text-[10px] sm:text-xs uppercase">
                       Pekerjaan
                     </td>
-                    <td className="p-4 text-gray-700">
+                    <td className="p-4 text-gray-700 text-sm sm:text-base">
                       {data.pekerjaan?.nama || "-"}
                     </td>
                   </tr>
-                  <tr>
-                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">
+                  <tr className="flex flex-col sm:table-row">
+                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 w-full sm:w-1/3 text-[10px] sm:text-xs uppercase">
                       Penghasilan
                     </td>
-                    <td className="p-4 font-bold text-emerald-700">
+                    <td className="p-4 font-bold text-emerald-700 text-sm sm:text-base">
                       {rupiah(data.penghasilan_ayah)}{" "}
                       <span className="text-gray-400 font-normal text-xs">
                         / bulan
                       </span>
                     </td>
                   </tr>
-                  <tr>
-                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">
+                  <tr className="flex flex-col sm:table-row">
+                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 w-full sm:w-1/3 text-[10px] sm:text-xs uppercase">
                       Penghasilan Sampingan
                     </td>
-                    <td className="p-4 font-bold text-emerald-700">
+                    <td className="p-4 font-bold text-emerald-700 text-sm sm:text-base">
                       {rupiah(data.sampingan_ayah)}{" "}
                       <span className="text-gray-400 font-normal text-xs">
                         / bulan
                       </span>
                     </td>
                   </tr>
-                  <tr>
-                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">
+                  <tr className="flex flex-col sm:table-row">
+                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 w-full sm:w-1/3 text-[10px] sm:text-xs uppercase">
                       Bukti Penghasilan
                     </td>
                     <td className="p-4">
@@ -691,11 +688,11 @@ class Ayah extends React.Component {
                       )}
                     </td>
                   </tr>
-                  <tr>
-                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 text-xs uppercase">
+                  <tr className="flex flex-col sm:table-row">
+                    <td className="p-4 font-semibold text-gray-500 bg-gray-50/50 w-full sm:w-1/3 text-[10px] sm:text-xs uppercase">
                       Nomor Telepon
                     </td>
-                    <td className="p-4 font-mono text-gray-700">
+                    <td className="p-4 font-mono text-gray-700 text-sm sm:text-base">
                       {data.telepon_ayah || "-"}
                     </td>
                   </tr>

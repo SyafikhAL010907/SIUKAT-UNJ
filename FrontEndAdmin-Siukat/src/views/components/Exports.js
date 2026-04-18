@@ -48,7 +48,7 @@ class Exports extends Component {
 
   render() {
     return (
-      <div className="inline-block">
+      <div className="block sm:inline-block">
         <Button
           className={
             this.props.className ||

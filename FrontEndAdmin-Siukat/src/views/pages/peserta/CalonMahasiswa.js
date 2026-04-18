@@ -82,7 +82,7 @@ class CalonMahasiswa extends React.Component {
 
   render() {
     return (
-      <div className="p-4 md:p-8 space-y-8 bg-gray-50 min-h-screen">
+      <div className="p-2 md:p-8 space-y-6 md:space-y-8 bg-gray-50 min-h-screen">
         {/* Section Summary / Statistik Teratas */}
         <div className="animate-fadeIn">
           <SummaryCmahasiswa />
@@ -91,26 +91,23 @@ class CalonMahasiswa extends React.Component {
         {/* Main Card Container */}
         <div className="modern-card bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
           {/* Header: Judul & Actions */}
-          <div className="glass-header p-6 border-b border-gray-50 flex flex-col md:flex-row md:items-center justify-between gap-6">
-            <div className="flex items-center space-x-4">
-              <div className="w-2 h-10 bg-gradient-to-b from-emerald-600 to-teal-400 rounded-full shadow-lg shadow-emerald-200"></div>
-              <div>
-                <h2 className="text-2xl font-black text-white tracking-tight">
+          <div className="glass-header p-5 md:p-8 border-b border-gray-50 flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div className="flex items-center justify-center md:justify-start space-x-4">
+              <div className="hidden sm:block w-2 h-10 bg-gradient-to-b from-emerald-600 to-teal-400 rounded-full shadow-lg shadow-emerald-200"></div>
+              <div className="text-center md:text-left">
+                <h2 className="text-xl md:text-3xl font-extrabold text-white tracking-tight">
                   Data Master
                 </h2>
-                <p className="text-[10px] text-white font-black uppercase tracking-[0.2em] opacity-70">
+                <p className="text-[10px] text-white font-black uppercase tracking-[0.2em] opacity-80">
                   CALON MAHASISWA BARU
                 </p>
               </div>
             </div>
 
-            <div className="flex flex-wrap items-center gap-2">
-              {/* Tombol PDF Master - Restored to original UI state */}
-              {/* Tombol PDF Master - Restored to original UI state */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto">
               <button
                 onClick={() => {
                   const token = cookies.get(cookieName);
-                  // Gunakan konstanta service langsung dari global.js
                   const url =
                     (service.startsWith("http")
                       ? service
@@ -119,23 +116,22 @@ class CalonMahasiswa extends React.Component {
                     token;
                   window.open(url);
                 }}
-                className="btn-pdf-modern"
+                className="btn-pdf-modern w-full sm:w-auto justify-center"
               >
                 <i className="fa fa-file-pdf-o"></i>
                 <span>PDF Master</span>
               </button>
 
-              {/* Komponen Exports */}
               <Exports
                 count={this.props.count}
                 title="Data Master"
-                className="btn-excel-modern"
+                className="btn-excel-modern w-full sm:w-auto justify-center"
               />
             </div>
           </div>
 
           {/* Table Section */}
-          <div className="p-4 sm:p-6">
+          <div className="p-2 sm:p-6">
             <div className="bg-white rounded-2xl overflow-hidden border border-gray-50">
               <DataTable
                 data={this.props.cmahasiswa}

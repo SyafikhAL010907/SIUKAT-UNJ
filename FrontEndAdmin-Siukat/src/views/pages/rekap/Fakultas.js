@@ -114,22 +114,22 @@ class Fakultas extends React.Component {
 
     return (
       <div className="min-h-screen pb-20 bg-slate-50 font-['Inter']">
-        <Container fluid className="px-4 md:px-12 pt-10">
+        <Container fluid className="px-2 md:px-12 pt-5 md:pt-10">
           {/* Header Section */}
-          <div className="bg-gradient-to-br from-emerald-500 to-emerald-400 rounded-[24px] p-10 text-white shadow-[0_20px_40px_-10px_rgba(16,185,129,0.2)] mb-[-40px] relative z-10">
+          <div className="bg-gradient-to-br from-emerald-500 to-emerald-400 rounded-[20px] md:rounded-[24px] p-6 md:p-10 text-white shadow-[0_20px_40px_-10px_rgba(16,185,129,0.2)] mb-6 md:mb-[-40px] relative z-10">
             <Row className="align-items-center">
               <Col lg="6" md="12" className="mb-4 mb-lg-0">
                 <div className="d-flex align-items-center">
-                  <div className="bg-white/20 p-4 rounded-3xl backdrop-blur-md mr-5 shadow-inner">
-                    <i className="fa fa-university text-4xl text-white"></i>
+                  <div className="bg-white/20 p-3 md:p-4 rounded-3xl backdrop-blur-md mr-3 md:mr-5 shadow-inner hidden sm:block">
+                    <i className="fa fa-university text-2xl md:text-4xl text-white"></i>
                   </div>
-                  <div>
-                    <h1 className="text-3xl md:text-4xl font-black mb-1 tracking-tighter italic uppercase">
+                  <div className="text-center sm:text-left w-full">
+                    <h1 className="text-xl md:text-4xl font-black mb-1 tracking-tighter italic uppercase">
                       REKAPITULASI FAKULTAS
                     </h1>
-                    <div className="d-flex align-items-center gap-3">
-                      <div className="h-1 w-20 bg-yellow-400 rounded-full"></div>
-                      <span className="text-[10px] font-black uppercase tracking-[0.3em] opacity-70">
+                    <div className="flex items-center justify-center sm:justify-start gap-3">
+                      <div className="h-1 w-10 md:w-20 bg-yellow-400 rounded-full"></div>
+                      <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] opacity-70">
                         Official Data Report — SIUKAT UNJ
                       </span>
                     </div>
@@ -138,15 +138,15 @@ class Fakultas extends React.Component {
               </Col>
 
               <Col lg="7" md="12" className="mt-4 lg:mt-0">
-                <div className="flex flex-col md:flex-row gap-4 items-center justify-end font-['Montserrat']">
+                <div className="flex flex-col lg:flex-row gap-4 items-center justify-center lg:justify-end font-['Montserrat'] w-full">
                   {/* --- 1. Dual Filter (Pill Style) --- */}
-                  <div className="flex w-full md:w-auto bg-white rounded-2xl shadow-lg border border-emerald-50 p-1">
+                  <div className="flex flex-col sm:flex-row w-full lg:w-auto bg-white rounded-2xl shadow-lg border border-emerald-50 p-1.5 sm:p-1 gap-1 sm:gap-0">
                     <select
                       value={this.state.selectedYear}
                       onChange={(e) =>
                         this.handleFilterChange("selectedYear", e.target.value)
                       }
-                      className="flex-1 md:w-28 bg-transparent text-emerald-900 text-[11px] font-black uppercase tracking-tight h-[42px] px-3 border-0 outline-none cursor-pointer hover:bg-emerald-50 rounded-xl transition-all"
+                      className="w-full sm:w-28 bg-transparent text-emerald-900 text-[10px] sm:text-[11px] font-black uppercase tracking-tight h-[42px] px-3 border-0 outline-none cursor-pointer hover:bg-emerald-50 rounded-xl transition-all"
                     >
                       <option value="" disabled>
                         Tahun
@@ -156,7 +156,7 @@ class Fakultas extends React.Component {
                       <option value="2028">2028</option>
                     </select>
 
-                    <div className="w-[1px] h-6 bg-emerald-100 self-center"></div>
+                    <div className="hidden sm:block w-[1px] h-6 bg-emerald-100 self-center"></div>
 
                     <select
                       value={this.state.selectedJalur}
@@ -164,7 +164,7 @@ class Fakultas extends React.Component {
                         this.handleFilterChange("selectedJalur", e.target.value)
                       }
                       disabled={!this.state.selectedYear}
-                      className="flex-1 md:w-32 bg-transparent text-emerald-900 text-[11px] font-black uppercase tracking-tight h-[42px] px-3 border-0 outline-none cursor-pointer disabled:opacity-30 hover:bg-emerald-50 rounded-xl transition-all"
+                      className="w-full sm:w-32 bg-transparent text-emerald-900 text-[10px] sm:text-[11px] font-black uppercase tracking-tight h-[42px] px-3 border-0 outline-none cursor-pointer disabled:opacity-30 hover:bg-emerald-50 rounded-xl transition-all"
                     >
                       <option value="">Semua Jalur</option>
                       <option value="1">SNBP</option>
@@ -175,14 +175,14 @@ class Fakultas extends React.Component {
 
                   {/* --- 2. Export Button --- */}
                   <Button
-                    className="w-full md:w-auto !h-[50px] px-8 bg-yellow-400 hover:bg-yellow-300 text-emerald-950 border-0 !rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] shadow-lg hover:-translate-y-1 transition-all active:scale-95"
+                    className="w-full lg:w-auto !h-[50px] px-8 bg-yellow-400 hover:bg-yellow-300 text-emerald-950 border-0 !rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] shadow-lg hover:-translate-y-1 transition-all active:scale-95"
                     onClick={this.handleExport}
                   >
                     <i className="fa fa-file-excel-o mr-2"></i> Export
                   </Button>
 
                   {/* --- 3. Search Bar (Sekarang di Paling Kanan) --- */}
-                  <div className="relative w-full md:w-64 group">
+                  <div className="relative w-full lg:w-64 group">
                     {/* Ikon Search dengan pointer-events-none agar input tetap bisa diklik dengan lancar */}
                     <div className="absolute right-4 top-1/2 -translate-y-1/2 text-emerald-500 z-10 pointer-events-none transition-transform group-focus-within:scale-110">
                       <i className="fa fa-search"></i>
@@ -200,7 +200,7 @@ class Fakultas extends React.Component {
           </div>
 
           {/* Table Section */}
-          <div className="bg-white/70 backdrop-blur-2xl border border-emerald-500/10 rounded-[32px] shadow-[0_25px_50px_-12px_rgba(16,185,129,0.08)] overflow-hidden pt-[50px]">
+          <div className="bg-white border border-emerald-500/10 rounded-[20px] md:rounded-[32px] shadow-lg overflow-hidden pt-6 md:pt-[50px]">
             <Table
               responsive
               hover
@@ -211,7 +211,7 @@ class Fakultas extends React.Component {
                 <tr className="bg-emerald-500">
                   <th
                     rowSpan="2"
-                    className="sticky left-0 z-20 bg-emerald-500 text-white font-[900] uppercase text-[10.5px] tracking-[0.12em] py-2 px-[15px] border-none shadow-[0_2px_4px_rgba(0,0,0,0.1)] text-center border-r-[0.5px] border-white/10"
+                    className="md:sticky md:left-0 z-20 bg-emerald-500 text-white font-[900] uppercase text-[10.5px] tracking-[0.12em] py-2 px-[15px] border-none shadow-[0_2px_4px_rgba(0,0,0,0.1)] text-center border-r-[0.5px] border-white/10"
                   >
                     Fakultas
                   </th>
@@ -241,7 +241,7 @@ class Fakultas extends React.Component {
                   </th>
                   <th
                     rowSpan="2"
-                    className="bg-emerald-500 text-white font-[900] uppercase text-[10.5px] tracking-[0.12em] py-2 px-[15px] border-none shadow-[0_2px_4px_rgba(0,0,0,0.1)] text-center"
+                    className="bg-emerald-500 text-white font-[900] uppercase text-[10.5px] tracking-[0.12em] py-2 px-[15px] border-none shadow-[0_2px_4px_rgba(0,0,0,0.1)] text-center min-w-[150px]"
                   >
                     Total Nominal UKT
                   </th>
@@ -264,7 +264,7 @@ class Fakultas extends React.Component {
                       key={idx}
                       className="transition-all duration-300 border-b border-slate-100 hover:bg-emerald-500/5 hover:scale-[0.998]"
                     >
-                      <td className="sticky left-0 z-20 bg-white shadow-[5px_0_15px_-5px_rgba(0,0,0,0.02)] text-center font-black text-emerald-950 px-6 py-5 min-w-[300px] uppercase italic tracking-tight border-r border-slate-50">
+                      <td className="md:sticky md:left-0 z-20 bg-white md:shadow-[5px_0_15px_-5px_rgba(0,0,0,0.02)] text-center font-black text-emerald-950 px-6 py-5 min-w-[200px] md:min-w-[300px] uppercase italic tracking-tight border-r border-slate-50">
                         {item.fakultas}
                       </td>
                       <td className="text-center py-5">
@@ -286,8 +286,8 @@ class Fakultas extends React.Component {
                       <td className="text-center py-5 font-black text-amber-600 italic underline decoration-amber-400 decoration-2">
                         {item.subtotal || 0}
                       </td>
-                      <td className="text-center py-5">
-                        <span className="bg-[#10b981] text-white px-4 py-2.5 rounded-[14px] font-black shadow-[0_4px_10px_rgba(16,185,129,0.15)] font-mono border border-white/20 text-[11px]">
+                      <td className="text-center py-5 min-w-[150px]">
+                        <span className="bg-[#10b981] text-white px-4 py-2.5 rounded-[14px] font-black shadow-[0_4px_10px_rgba(16,185,129,0.15)] font-mono border border-white/20 text-[11px] whitespace-nowrap">
                           {rupiah(item.total_ukt || 0)}
                         </span>
                       </td>
@@ -306,7 +306,7 @@ class Fakultas extends React.Component {
               </tbody>
               <tfoot>
                 <tr className="bg-emerald-600 text-white border-none">
-                  <td className="sticky left-0 z-20 bg-emerald-600 text-white font-[900] uppercase text-[11px] p-[25px_15px] border-none text-center shadow-2xl">
+                  <td className="md:sticky md:left-0 z-20 bg-emerald-600 text-white font-[900] uppercase text-[11px] p-[25px_15px] border-none text-center shadow-2xl min-w-[200px] md:min-w-[300px]">
                     GRAND TOTAL
                   </td>
                   <td className="text-center p-[25px_15px] font-[900] uppercase text-[11px] border-none">
@@ -325,8 +325,8 @@ class Fakultas extends React.Component {
                   <td className="text-center text-amber-300">
                     {this.calculateTotal("subtotal")}
                   </td>
-                  <td className="text-center">
-                    <div className="text-xl font-black text-yellow-300 drop-shadow-sm">
+                  <td className="text-center min-w-[150px]">
+                    <div className="text-xl font-black text-yellow-300 drop-shadow-sm whitespace-nowrap">
                       {rupiah(this.calculateTotal("total_ukt"))}
                     </div>
                   </td>
