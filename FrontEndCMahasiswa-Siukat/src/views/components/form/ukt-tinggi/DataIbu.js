@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import {
     Card, Button, CardTitle,
     Col, Alert, Row,
@@ -170,9 +171,16 @@ class DataIbu extends React.Component {
             : values;
 
         Object.keys(submissionValues).forEach(key => {
-            if (submissionValues[key] !== null && submissionValues[key] !== undefined) {
-                formData.append(key, submissionValues[key]);
+            let val = submissionValues[key];
+            if (val === null || val === undefined) return;
+            if (val instanceof Date || moment.isMoment(val)) {
+                val = moment(val).format('YYYY-MM-DD');
+            } else if (val && typeof val === 'object' && !Array.isArray(val)) {
+                if (val.input || val.meta || (val.name && val.onChange)) {
+                    val = '';
+                }
             }
+            formData.append(key, val || '');
         });
 
         this.props.dispatch(ibu.updateData(cookies.get(cookieName), formData))

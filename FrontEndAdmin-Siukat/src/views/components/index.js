@@ -47,7 +47,6 @@ const InputFileBs = (props) => {
       fieldName.includes("foto") ||
       fieldName.includes("profile") ||
       fieldName.includes("gambar") ||
-      fieldName.includes("scan_ktp") ||
       fieldName.includes("foto_cmahasiswa");
 
     const allowedImageExts = ["jpg", "jpeg", "png"];

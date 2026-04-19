@@ -70,6 +70,39 @@ func UktRoutes(r *gin.RouterGroup) {
 
 		c.JSON(http.StatusOK, gin.H{"message": "Data berhasil dikonfirmasi!", "calc_data": data})
 	})
+
+	// PUT /ukt/tinggi-selesai
+	// Finalisasi untuk mahasiswa jalur UKT Tinggi (golongan sudah dipilih manual, tidak perlu komputasi IKB)
+	uktGroup.PUT("/tinggi-selesai", func(c *gin.Context) {
+		noPeserta, _ := c.Get("no_peserta")
+		np := noPeserta.(string)
+
+		// Validasi: pastikan mahasiswa memang jalur UKT Tinggi
+		var mhs models.CMahasiswa
+		if err := config.DB.Where("no_peserta = ? AND atribut = ?", np, "original").First(&mhs).Error; err != nil {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Data mahasiswa tidak ditemukan"})
+			return
+		}
+
+		// Ambil Info untuk menentukan flag hasil (selesai_isi / pengumuman)
+		var info models.Info
+		config.DB.First(&info)
+
+		flagResult := "selesai_isi"
+		if info.Stage == "" {
+			flagResult = "pengumuman"
+		}
+
+		// Update flag di tb_cmahasiswa (atribut='original')
+		if err := config.DB.Model(&models.CMahasiswa{}).
+			Where("no_peserta = ? AND atribut = ?", np, "original").
+			Update("flag", flagResult).Error; err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal memperbarui flag: " + err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"message": "Data UKT Tinggi berhasil difinalisasi!"})
+	})
 	
 	// GET /ukt/just-compute/:no_peserta
 	uktGroup.GET("/just-compute/:no_peserta", func(c *gin.Context) {

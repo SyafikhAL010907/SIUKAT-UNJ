@@ -18,6 +18,7 @@ class Verifikasi extends React.Component {
             collapseIbu: false,
             collapseWali: false,
             collapseSurat: false,
+            checked: false,
         }
 
         this.toggle = this.toggle.bind(this)
@@ -88,21 +89,34 @@ class Verifikasi extends React.Component {
                         </div>
 
                         <div className="mt-5 pt-4 border-top">
+                            <Alert color="danger" className="rounded-xl border-0 shadow-sm mb-4">
+                                <div className="d-flex align-items-start">
+                                    <i className="fa fa-exclamation-triangle mr-3 mt-1 text-lg d-none d-sm-block"></i>
+                                    <div className="text-xs sm:text-sm">
+                                        <strong>Perhatian!</strong> Pastikan seluruh data di atas sudah benar. Setelah finalisasi, data <strong>tidak dapat diubah kembali</strong>.
+                                    </div>
+                                </div>
+                            </Alert>
+
+                            <div className="custom-control custom-checkbox my-4 p-3 rounded bg-light" style={{border: '1px dashed #ccc'}}>
+                                <input
+                                    type="checkbox"
+                                    className="custom-control-input"
+                                    id="checkSetujuTinggi"
+                                    onChange={(e) => this.setState({ checked: e.target.checked })}
+                                />
+                                <label className="custom-control-label font-weight-bold text-dark cursor-pointer" htmlFor="checkSetujuTinggi" style={{fontSize: '0.95rem'}}>
+                                    Saya menyatakan bahwa seluruh data yang saya isi adalah <strong>BENAR dan JUJUR</strong>.
+                                </label>
+                            </div>
+
                             <Row className="align-items-center">
-                                <Col lg="8" md="7" xs="12">
-                                    <Alert color="danger" className="rounded-xl border-0 shadow-sm mb-3 mb-md-0 px-3 py-3">
-                                        <div className="d-flex align-items-center">
-                                            <i className="fa fa-exclamation-triangle mr-3 text-lg d-none d-sm-block"></i>
-                                            <div className="text-xs sm:text-sm">
-                                                Dengan ini saya menyatakan bahwa data yang saya masukkan adalah data yang <strong>sebenar-benarnya dan sejujur-jujurnya</strong>.
-                                            </div>
-                                        </div>
-                                    </Alert>
-                                </Col>
+                                <Col lg="8" md="7" xs="12"></Col>
                                 <Col lg="4" md="5" xs="12">
                                     <Button 
                                         className="modern-btn-primary w-100 py-3 shadow font-weight-bold"
                                         onClick={this.verify.bind(this)}
+                                        disabled={!this.state.checked}
                                     >
                                         <i className="fa fa-check-circle mr-2"></i> Konfirmasi Selesai
                                     </Button>

@@ -85,9 +85,8 @@ func AyahRoutes(r *gin.RouterGroup) {
 			data["kabkot_ayah"] = c.PostForm("kabkot_ayah")
 			data["kecamatan_ayah"] = c.PostForm("kecamatan_ayah")
 			
-			// SURGICAL FIX: Ensure 0 instead of skipping if empty string provided
-			pkj, _ := strconv.Atoi(c.PostForm("pekerjaan_ayah"))
-			data["pekerjaan_ayah"] = pkj
+			// Simpan sebagai string sesuai tipe kolom char(2) di DB (parity dengan ibu.go)
+			data["pekerjaan_ayah"] = c.PostForm("pekerjaan_ayah")
 			
 			pen, _ := strconv.Atoi(c.PostForm("penghasilan_ayah"))
 			data["penghasilan_ayah"] = pen
@@ -201,9 +200,8 @@ func AyahRoutes(r *gin.RouterGroup) {
 			data["kabkot_ayah"] = c.PostForm("kabkot_ayah")
 			data["kecamatan_ayah"] = c.PostForm("kecamatan_ayah")
 			
-			// SURGICAL FIX: Ensure 0 instead of skipping if empty string provided
-			pkj, _ := strconv.Atoi(c.PostForm("pekerjaan_ayah"))
-			data["pekerjaan_ayah"] = pkj
+			// Simpan sebagai string sesuai tipe kolom char(2) di DB (parity dengan ibu.go)
+			data["pekerjaan_ayah"] = c.PostForm("pekerjaan_ayah")
 			
 			pen, _ := strconv.Atoi(c.PostForm("penghasilan_ayah"))
 			data["penghasilan_ayah"] = pen

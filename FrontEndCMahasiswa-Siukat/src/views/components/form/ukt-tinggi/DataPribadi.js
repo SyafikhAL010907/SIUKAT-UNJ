@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 // import SampleFoto from '../../../dist/img/pas_foto.jpg'
 import SampleFoto from '../../../dist/img/PasPhoto.jpg';
 import {
@@ -294,17 +295,33 @@ class DataPribadi extends React.Component {
         var formData = new FormData();
         for (var key in values) {
             if (key === 'file_foto_cmahasiswa') {
-                formData.append(key, values[key][0]);
-                document.getElementById('file_foto_cmahasiswa').value = null;
+                if (values[key] && values[key][0]) {
+                    formData.append(key, values[key][0]);
+                    document.getElementById('file_foto_cmahasiswa').value = null;
+                }
             } else {
-                formData.append(key, values[key]);
+                let val = values[key];
+                if (val instanceof Date || moment.isMoment(val)) {
+                    val = moment(val).format('YYYY-MM-DD');
+                } else if (val && typeof val === 'object' && !Array.isArray(val)) {
+                    if (val.input || val.meta || (val.name && val.onChange)) {
+                        val = '';
+                    } else {
+                        val = val.kode || val.id || val.provinsi_id || val.kab_id || val.kecam_id || '';
+                    }
+                }
+                formData.append(key, val || '');
             }
         }
         this.props.dispatch(
             cmahasiswa.updateData(cookies.get(cookieName), formData)
-        );
-        this.props.dispatch(reset('DataPribadi'));
-        this.props.updateVerifikasi();
+        ).then(() => {
+            if (this.props.updateVerifikasi) {
+                this.props.updateVerifikasi();
+            }
+        }).catch(err => {
+            console.error('Gagal menyimpan data pribadi:', err);
+        });
     }
     render() {
         return (

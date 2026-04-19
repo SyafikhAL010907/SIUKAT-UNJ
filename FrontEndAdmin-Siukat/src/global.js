@@ -109,7 +109,13 @@ const dateConverter = (date) => {
     date === "0001-01-01T00:00:00Z"
   )
     return "-";
-  const birthdate = moment(date);
+
+  let dateStr = date;
+  if (typeof date === "string" && date.includes("T")) {
+    dateStr = date.split("T")[0];
+  }
+
+  const birthdate = moment(dateStr, "YYYY-MM-DD");
   return birthdate.isValid() ? birthdate.format("DD MMMM YYYY") : "-";
 };
 

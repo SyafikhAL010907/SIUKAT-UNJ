@@ -111,8 +111,15 @@ const rupiah = (angka) => {
 
 const dateConverter = (date) => {
     if (!date || date === "0000-00-00" || date === "" || date === "0001-01-01T00:00:00Z") return "-"
-    const birthdate = moment(date)
-    return birthdate.isValid() ? birthdate.format("DD MMMM YYYY") : "-"
+    
+    // Extract only YYYY-MM-DD to avoid timezone shifting (e.g., falling back a day)
+    let dateStr = date;
+    if (typeof date === 'string' && date.includes('T')) {
+        dateStr = date.split('T')[0];
+    }
+    
+    const birthdate = moment(dateStr, "YYYY-MM-DD");
+    return birthdate.isValid() ? birthdate.format("DD MMMM YYYY") : "-";
 };
 
 const getToken = () => {

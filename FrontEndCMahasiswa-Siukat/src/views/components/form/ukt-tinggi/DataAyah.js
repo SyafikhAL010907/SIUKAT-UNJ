@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import {
     Card, Button, CardTitle,
     Col, Alert, Row,
@@ -149,11 +150,31 @@ class DataAyah extends React.Component {
     submitForm = (values) => {
         var formData = new FormData();
         for (var key in values) {
-            formData.append(key, values[key]);
+            if (key.startsWith('file_scan')) {
+                if (values[key] && values[key].length > 0) {
+                    formData.append(key, values[key][0]);
+                    const el = document.getElementById(key);
+                    if (el) el.value = null;
+                }
+            } else {
+                let val = values[key];
+                if (val instanceof Date || moment.isMoment(val)) {
+                    val = moment(val).format('YYYY-MM-DD');
+                } else if (val && typeof val === 'object' && !Array.isArray(val)) {
+                    if (val.input || val.meta || (val.name && val.onChange)) {
+                        val = '';
+                    }
+                }
+                formData.append(key, val || '');
+            }
         }
-        this.props.dispatch(ayah.updateData(cookies.get(cookieName), formData));
-        this.props.dispatch(reset('DataAyah'));
-        this.props.updateVerifikasi();
+        this.props.dispatch(ayah.updateData(cookies.get(cookieName), formData)).then(() => {
+            if (this.props.updateVerifikasi) {
+                this.props.updateVerifikasi();
+            }
+        }).catch(err => {
+            console.error('Gagal menyimpan data ayah:', err);
+        });
     }
     render() {
         return (

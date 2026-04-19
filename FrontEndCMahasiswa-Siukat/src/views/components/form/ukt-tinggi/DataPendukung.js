@@ -94,17 +94,23 @@ class DataPendukung extends React.Component {
         var formData = new FormData();
         for (var key in values) {
             if (key === 'file_scan_pernyataan_ukt_tinggi') {
-                formData.append(key, values[key][0]);
-                document.getElementById('file_scan_pernyataan_ukt_tinggi').value = null;
+                if (values[key] && values[key][0]) {
+                    formData.append(key, values[key][0]);
+                    document.getElementById('file_scan_pernyataan_ukt_tinggi').value = null;
+                }
             } else {
-                formData.append(key, values[key]);
+                formData.append(key, values[key] || '');
             }
         }
         this.props.dispatch(
             pendukung.updateData(cookies.get(cookieName), formData)
-        );
-        this.props.dispatch(reset('DataPendukung'));
-        this.props.updateVerifikasi();
+        ).then(() => {
+            if (this.props.updateVerifikasi) {
+                this.props.updateVerifikasi();
+            }
+        }).catch(err => {
+            console.error('Gagal menyimpan surat pernyataan:', err);
+        });
     }
     unduhSuratPernyataan = () => {
         this.setState({

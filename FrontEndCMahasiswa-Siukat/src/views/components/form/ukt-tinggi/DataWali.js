@@ -112,11 +112,21 @@ class DataWali extends React.Component {
     submitForm = (values) => {
         var formData = new FormData();
         for (var key in values) {
-            formData.append(key, values[key]);
+            let val = values[key];
+            if (val && typeof val === 'object' && !Array.isArray(val)) {
+                if (val.input || val.meta || (val.name && val.onChange)) {
+                    val = '';
+                }
+            }
+            formData.append(key, val || '');
         }
-        this.props.dispatch(wali.updateData(cookies.get(cookieName), formData));
-        this.props.dispatch(reset('DataWali'));
-        this.props.updateVerifikasi();
+        this.props.dispatch(wali.updateData(cookies.get(cookieName), formData)).then(() => {
+            if (this.props.updateVerifikasi) {
+                this.props.updateVerifikasi();
+            }
+        }).catch(err => {
+            console.error('Gagal menyimpan data wali:', err);
+        });
     }
     render() {
         return (
