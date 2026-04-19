@@ -247,7 +247,11 @@ func (s *CMahasiswaService) FlagBatalKlarifikasi(noPeserta string) error {
 }
 
 func (s *CMahasiswaService) FlagSelesaiKlarifikasi(noPeserta string) error {
-	return config.DB.Model(&models.CMahasiswa{}).Where("no_peserta = ?", noPeserta).Update("flag", "selesai_sanggah").Error
+	now := time.Now()
+	return config.DB.Model(&models.CMahasiswa{}).Where("no_peserta = ?", noPeserta).Updates(map[string]interface{}{
+		"flag":          "selesai_sanggah",
+		"waktu_selesai": now,
+	}).Error
 }
 
 func (s *CMahasiswaService) GetCmahasiswa(noPeserta string) (models.CMahasiswa, error) {

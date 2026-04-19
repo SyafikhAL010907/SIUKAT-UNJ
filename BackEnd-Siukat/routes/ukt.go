@@ -6,6 +6,7 @@ import (
 	"BackEnd-Siukat/models"
 	"BackEnd-Siukat/services"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -62,7 +63,10 @@ func UktRoutes(r *gin.RouterGroup) {
 		if stageSource == "" { // Ilustrasi mock logic selesaiIsi
 			flagResult = "pengumuman"
 		}
-		config.DB.Model(&models.CMahasiswa{}).Where("no_peserta = ?", np).Update("flag", flagResult)
+		config.DB.Model(&models.CMahasiswa{}).Where("no_peserta = ?", np).Updates(map[string]interface{}{
+			"flag":          flagResult,
+			"waktu_selesai": time.Now(),
+		})
 
 		// Cmahasiswa & Value Logging di-call sesuai timestamp (Sama seperti NodeJS Promise)
 		// value.addLog(response) & cmahasiswa.addLog(response)
@@ -96,7 +100,10 @@ func UktRoutes(r *gin.RouterGroup) {
 		// Update flag di tb_cmahasiswa (atribut='original')
 		if err := config.DB.Model(&models.CMahasiswa{}).
 			Where("no_peserta = ? AND atribut = ?", np, "original").
-			Update("flag", flagResult).Error; err != nil {
+			Updates(map[string]interface{}{
+				"flag":          flagResult,
+				"waktu_selesai": time.Now(),
+			}).Error; err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal memperbarui flag: " + err.Error()})
 			return
 		}
