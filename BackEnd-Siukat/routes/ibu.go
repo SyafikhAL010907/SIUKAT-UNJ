@@ -220,6 +220,11 @@ func IbuRoutes(r *gin.RouterGroup) {
 			data["tempat_lahir_ibu"] = c.PostForm("tempat_lahir_ibu")
 			if tgl, errTgl := time.Parse("2006-01-02", c.PostForm("tanggal_lahir_ibu")); errTgl == nil {
 				data["tanggal_lahir_ibu"] = &tgl
+			} else {
+				if c.PostForm("tanggal_lahir_ibu") != "" {
+					fmt.Printf("[WARNING] Admin FAILED to parse tanggal_lahir_ibu: '%s'. Error: %v\n", c.PostForm("tanggal_lahir_ibu"), errTgl)
+					delete(data, "tanggal_lahir_ibu")
+				}
 			}
 
 			data["provinsi_ibu"] = c.PostForm("provinsi_ibu")
@@ -267,6 +272,7 @@ func IbuRoutes(r *gin.RouterGroup) {
 		// 2. Jalankan Update/Upsert
 		res, err := ibuService.Edit(data, np, "sanggah")
 		if err != nil {
+			fmt.Printf("❌ ADMIN UPDATE IBU ERROR [%s]: %v\n", np, err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal simpan sanggah: " + err.Error()})
 			return
 		}

@@ -196,19 +196,18 @@ func SyncStudentFolder(oldName, oldNP, newName, newNP string) error {
 			oldSub := filepath.Join(oldPath, entry.Name())
 			newSub := filepath.Join(newPath, entry.Name())
 			
-			// Jika subfolder (Original/Sanggah) sudah ada di tujuan, merge isinya
 			if entry.IsDir() {
-				os.MkdirAll(newSub, 0755)
+				if err := os.MkdirAll(newSub, 0755); err != nil { return err }
 				files, _ := os.ReadDir(oldSub)
 				for _, f := range files {
-					os.Rename(filepath.Join(oldSub, f.Name()), filepath.Join(newSub, f.Name()))
+					if err := os.Rename(filepath.Join(oldSub, f.Name()), filepath.Join(newSub, f.Name())); err != nil { return err }
 				}
-				os.Remove(oldSub)
+				if err := os.Remove(oldSub); err != nil { return err }
 			} else {
-				os.Rename(oldSub, newSub)
+				if err := os.Rename(oldSub, newSub); err != nil { return err }
 			}
 		}
-		os.Remove(oldPath)
+		if err := os.Remove(oldPath); err != nil { return err }
 	} else {
 		fmt.Printf("🚚 STORAGE SYNC: Renaming folder [%s] -> [%s]\n", oldPath, newPath)
 		return os.Rename(oldPath, newPath)

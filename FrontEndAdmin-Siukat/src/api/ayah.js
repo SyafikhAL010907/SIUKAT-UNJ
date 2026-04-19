@@ -12,9 +12,6 @@ export function getById(token, id, atribut = "") {
         },
       })
       .then((response) => {
-        response.data.tanggal_lahir_ayah = dateConverter(
-          response.data.tanggal_lahir_ayah,
-        );
         resolve(response.data);
       })
       .catch((err) => {

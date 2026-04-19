@@ -216,6 +216,7 @@ func AyahRoutes(r *gin.RouterGroup) {
 					fmt.Printf("[DEBUG] Admin Parsed tanggal_lahir_ayah: %v\n", tgl)
 				} else {
 					fmt.Printf("[WARNING] Admin FAILED to parse tanggal_lahir_ayah: '%s'. Error: %v\n", tglStr, err)
+					delete(data, "tanggal_lahir_ayah")
 				}
 			}
 
@@ -243,7 +244,7 @@ func AyahRoutes(r *gin.RouterGroup) {
 				filename := fmt.Sprintf("Slip_Ayah_%s_%s", utils.SanitizeString(student.NamaCmahasiswa), np)
 				newPath, err := utils.HandleDynamicUpload(c, fileSlip, student.NamaCmahasiswa, np, "sanggah", filename)
 				if err == nil {
-					data["scan_slip_ibu"] = newPath
+					data["scan_slip_ayah"] = newPath
 				}
 			}
 		}
@@ -255,7 +256,8 @@ func AyahRoutes(r *gin.RouterGroup) {
 		// 2. Jalankan Update/Upsert
 		res, err := ayahService.Edit(data, np, "sanggah")
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal simgah data: " + err.Error()})
+			fmt.Printf("❌ ADMIN UPDATE AYAH ERROR [%s]: %v\n", np, err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal simpan sanggah: " + err.Error()})
 			return
 		}
 

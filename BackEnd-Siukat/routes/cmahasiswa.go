@@ -975,6 +975,7 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 				fmt.Printf("[DEBUG] Admin Parsed tanggal_lahir_cmahasiswa: %v\n", tgl)
 			} else {
 				fmt.Printf("[WARNING] Admin FAILED to parse tanggal_lahir_cmahasiswa: '%s'. Error: %v\n", tglStr, err)
+				delete(filteredData, "tanggal_lahir_cmahasiswa")
 			}
 		}
 
@@ -988,6 +989,7 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 		if newName != student.NamaCmahasiswa || newNP != np {
 			errSync := cmahasiswaService.UpdateIdentity(student.NamaCmahasiswa, np, newName, newNP)
 			if errSync != nil {
+				fmt.Printf("❌ IDENTITY SYNC ERROR [%s]: %v\n", np, errSync)
 				c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal sinkronisasi identitas: " + errSync.Error()})
 				return
 			}
@@ -997,7 +999,8 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 		// 5. Save Changes to DB
 		res, err := cmahasiswaService.Edit(filteredData, np, student.Atribut)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			fmt.Printf("❌ ADMIN UPDATE ERROR [%s]: %v\n", np, err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal update data: " + err.Error()})
 			return
 		}
 
