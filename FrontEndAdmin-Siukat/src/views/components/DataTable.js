@@ -150,7 +150,7 @@ class DataTable extends React.Component {
                       dangerMode: true,
                     });
                     if (willDelete) {
-                      this.props.handleHapus(e, id);
+                      this.props.delete(e, id);
                     }
                   }}
                   className="inline-flex items-center px-3 py-1.5 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white border border-red-200 text-[10px] font-black uppercase tracking-wider rounded-lg transition-all shadow-sm active:scale-95"

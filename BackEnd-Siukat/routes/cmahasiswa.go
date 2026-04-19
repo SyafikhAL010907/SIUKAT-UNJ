@@ -851,6 +851,7 @@ func CmahasiswaRoutes(r *gin.RouterGroup) {
 				fmt.Printf("[DEBUG] Parsed tanggal_lahir_cmahasiswa: %v\n", tgl)
 			} else {
 				fmt.Printf("[WARNING] FAILED to parse tanggal_lahir_cmahasiswa: '%s'. Error: %v\n", tglStr, err)
+				delete(filteredData, "tanggal_lahir_cmahasiswa")
 			}
 		}
 

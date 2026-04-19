@@ -48,16 +48,16 @@ func (s *UsersService) GetUser(noPeserta string) (interface{}, error) {
 	found := false
 
 	// Attempt 1: Search by 'sanggah' (Priority)
-	if err := config.DB.Preload("Fakultas").Preload("Prodi").
+	if err := config.DB.Preload("Fakultas").Preload("Prodi").Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
 		Where("no_peserta = ? AND atribut = ?", cleanNoPeserta, "sanggah").First(&mhs).Error; err == nil {
 		log.Printf("DEBUG [GetUser]: Record found with [sanggah] attribute for [%s]", cleanNoPeserta)
 		found = true
-	} else if err := config.DB.Preload("Fakultas").Preload("Prodi").
+	} else if err := config.DB.Preload("Fakultas").Preload("Prodi").Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
 		Where("no_peserta = ? AND atribut = ?", cleanNoPeserta, "original").First(&mhs).Error; err == nil {
 		// Attempt 2: Search by 'original'
 		log.Printf("DEBUG [GetUser]: Record found with [original] attribute for [%s]", cleanNoPeserta)
 		found = true
-	} else if err := config.DB.Preload("Fakultas").Preload("Prodi").
+	} else if err := config.DB.Preload("Fakultas").Preload("Prodi").Preload("Provinsi").Preload("Kabkot").Preload("Kecamatan").
 		Where("no_peserta = ?", cleanNoPeserta).First(&mhs).Error; err == nil {
 		// Attempt 3: SEARCH BY ID ONLY (The ultimate fallback)
 		log.Printf("DEBUG [GetUser]: Record found with FALLBACK (no attribute filter) for [%s]", cleanNoPeserta)
