@@ -62,7 +62,7 @@ class DataDiri extends React.Component {
                             )}
                         </div>
                     </Col>
-                    <Col md={8} xs={12} className="px-4 px-md-3">
+                    <Col md={8} xs={12} className="px-0 px-md-3">
                         <div className="table-responsive-sm">
                             <Table className="modern-table-premium mb-0 border-0">
                                 <tbody>

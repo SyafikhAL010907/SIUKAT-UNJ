@@ -82,10 +82,22 @@ class Klarifikasi extends React.Component {
           <SummaryCmahasiswa />
           <Card className="card-accent-success">
             <CardHeader>
+               <div className="glass-header p-5 md:p-8 border-b border-gray-50 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                    <div className="flex items-center justify-center md:justify-start space-x-4">
+                      <div className="hidden sm:block w-2 h-10 bg-gradient-to-b from-emerald-600 to-teal-400 rounded-full shadow-lg shadow-emerald-200"></div>
+                      <div className="text-center md:text-left">
+                        <h2 className="text-xl md:text-3xl font-extrabold text-white tracking-tight">
+                          Data Klarifikasi
+                        </h2>
+                        <p className="text-[10px] text-white font-black uppercase tracking-[0.2em] opacity-80">
+                          CALON MAHASISWA BARU
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto">
+                    </div>
+                  </div>
               <Row>
-                <Col md="6">
-                  <span>Data Klarifikasi</span>
-                </Col>
                 <Col md="6" className="text-right">
                   {/* <Button className="btn btn-sm btn-success margin-left-10"><i className="fa fa-file-pdf-o"></i> PDF Bidik Misi</Button>
                                     <Button className="btn btn-sm btn-danger margin-left-10 margin-top-10"><i className="fa fa-file-excel-o"></i> Excel Bidik Misi</Button> */}

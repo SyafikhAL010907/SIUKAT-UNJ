@@ -55,7 +55,7 @@ let FormPendukungSeleksi = (props) => {
                     <FormText color="muted">
                         <ul className="list-reset text-xs sm:text-sm">
                             <li>Ekstensi berkas berupa PDF;</li>
-                            <li>Ukuran berkas tidak lebih dari 500KB.</li>
+                            <li>Ukuran berkas tidak lebih dari 200KB.</li>
                         </ul>
                     </FormText>
                 </Col>

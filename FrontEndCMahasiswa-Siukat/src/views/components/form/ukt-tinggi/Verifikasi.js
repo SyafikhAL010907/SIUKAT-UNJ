@@ -82,9 +82,9 @@ class Verifikasi extends React.Component {
                             </h5>
                             {this.renderSection('Data Pribadi', 'fa-user', 'collapsePribadi', Pribadi)}
                             {this.renderSection('Data Ayah', 'fa-user', 'collapseAyah', Ayah)}
-                            {this.renderSection('Data Ibu', 'fa-user-o', 'collapseIbu', Ibu)}
+                            {this.renderSection('Data Ibu', 'fa-user', 'collapseIbu', Ibu)}
                             {this.renderSection('Data Wali', 'fa-users', 'collapseWali', Wali)}
-                            {this.renderSection('Surat Pernyataan', 'fa-file-text-o', 'collapseSurat', Pendukung)}
+                            {this.renderSection('Surat Pernyataan', 'fa-file-text', 'collapseSurat', Pendukung)}
                         </div>
 
                         <div className="mt-5 pt-4 border-top">
