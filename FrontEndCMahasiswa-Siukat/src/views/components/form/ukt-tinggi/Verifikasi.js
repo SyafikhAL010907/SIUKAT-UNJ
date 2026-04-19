@@ -8,6 +8,7 @@ import { cookies, cookieName } from '../../../../global'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import { cmahasiswa } from '../../../../actions'
+import swal from 'sweetalert';
 
 class Verifikasi extends React.Component {
     constructor(props) {
@@ -115,10 +116,22 @@ class Verifikasi extends React.Component {
                                 <Col lg="4" md="5" xs="12">
                                     <Button 
                                         className="modern-btn-primary w-100 py-3 shadow font-weight-bold"
-                                        onClick={this.verify.bind(this)}
+                                        onClick={async () => {
+                                            const confirmSelesai = await swal({
+                                                title: "Konfirmasi Selesai?",
+                                                text: "Pastikan semua data sudah diperiksa. Setelah dikonfirmasi, Anda tidak dapat mengubah data ini lagi.",
+                                                icon: "info",
+                                                buttons: ["Batal", "Ya, Konfirmasi"],
+                                            });
+
+                                            if (confirmSelesai) {
+                                                // Memanggil fungsi verify yang sudah di-bind secara otomatis oleh arrow function
+                                                this.verify(); 
+                                            }
+                                        }}
                                         disabled={!this.state.checked}
                                     >
-                                        <i className="fa fa-check-circle mr-2"></i> Konfirmasi Selesai
+                                        <i className="fa fa-check-circle mr-2"></i> Finalisasi Data
                                     </Button>
                                 </Col>
                             </Row>

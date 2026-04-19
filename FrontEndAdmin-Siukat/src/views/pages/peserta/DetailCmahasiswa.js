@@ -236,13 +236,8 @@ class DetailCmahasiswa extends React.Component {
             </div>
           )}
           {activeTab === "3" && (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-fadeIn">
+            <div className="animate-fadeIn">
               <Rumah
-                noPeserta={this.props.match.params.no_peserta}
-                editable={canEdit}
-                atribut={fetchAtribut}
-              />
-              <Listrik
                 noPeserta={this.props.match.params.no_peserta}
                 editable={canEdit}
                 atribut={fetchAtribut}
@@ -251,7 +246,7 @@ class DetailCmahasiswa extends React.Component {
           )}
           {activeTab === "4" && (
             <div className="animate-fadeIn">
-              <Kendaraan
+              <Listrik
                 noPeserta={this.props.match.params.no_peserta}
                 editable={canEdit}
                 atribut={fetchAtribut}
@@ -260,7 +255,7 @@ class DetailCmahasiswa extends React.Component {
           )}
           {activeTab === "5" && (
             <div className="animate-fadeIn">
-              <Pendukung
+              <Kendaraan
                 noPeserta={this.props.match.params.no_peserta}
                 editable={canEdit}
                 atribut={fetchAtribut}
@@ -268,6 +263,15 @@ class DetailCmahasiswa extends React.Component {
             </div>
           )}
           {activeTab === "6" && (
+            <div className="animate-fadeIn">
+              <Pendukung
+                noPeserta={this.props.match.params.no_peserta}
+                editable={canEdit}
+                atribut={fetchAtribut}
+              />
+            </div>
+          )}
+          {activeTab === "7" && (
             <div className="animate-fadeIn max-w-2xl mx-auto">
               <div className="text-center mb-8">
                 <div className="inline-block p-4 bg-yellow-50 rounded-full mb-4">

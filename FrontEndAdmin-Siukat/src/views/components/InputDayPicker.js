@@ -73,8 +73,11 @@ class InputDayPicker extends React.Component {
   };
 
   render() {
-    const { value } = this.props.input;
-    const formattedValue = value ? moment(value).format("YYYY-MM-DD") : "";
+    let { value } = this.props.input;
+    if (typeof value === "string" && value.includes("T")) {
+      value = value.split("T")[0];
+    }
+    const formattedValue = value ? moment(value, "YYYY-MM-DD").format("YYYY-MM-DD") : "";
 
     return (
       <div

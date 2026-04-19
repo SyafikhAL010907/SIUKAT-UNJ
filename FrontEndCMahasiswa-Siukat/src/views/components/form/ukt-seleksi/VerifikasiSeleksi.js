@@ -30,6 +30,8 @@ import {
     Wali,
 } from './details';
 
+import swal from 'sweetalert';
+
 let FormSuratKebenaran = (props) => {
     const {
         handleSubmit,
@@ -266,9 +268,22 @@ class VerifikasiSeleksi extends React.Component {
                                     <i className="fa fa-exclamation-triangle mr-2"></i>
                                     Pastikan seluruh data di atas sudah benar. Setelah finalisasi, data <strong>tidak dapat diubah kembali</strong>.
                                 </Alert>
-                                <Button
+                               <Button
                                     className="modern-btn-primary w-100 py-3 shadow font-weight-bold"
-                                    onClick={this.verify}
+                                    onClick={async () => {
+                                        const willVerify = await swal({
+                                            title: "Konfirmasi Finalisasi",
+                                            text: "Apakah Anda yakin data yang diisi sudah benar? Data yang sudah difinalisasi tidak dapat diubah kembali!",
+                                            icon: "warning",
+                                            buttons: ["Batal", "Ya, Saya Yakin!"],
+                                            dangerMode: false, // Gunakan false karena ini aksi positif (verifikasi)
+                                        });
+
+                                        if (willVerify) {
+                                            // Panggil fungsi verifikasi asli milikmu
+                                            this.verify(); 
+                                        }
+                                    }}
                                     disabled={!this.props.pendukung.scan_pernyataan_kebenaran}
                                 >
                                     <i className="fa fa-check-circle mr-2"></i> Ya, Saya Yakin & Finalisasi Data
