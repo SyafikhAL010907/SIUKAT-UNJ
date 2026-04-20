@@ -99,7 +99,7 @@ let FormWali = (props) => {
                     {!props.allow ? <AlertFormBelumLengkap /> : <AlertFormLengkap />}
                 </Col>
                 <Col md={{ size: 4 }} xs="12">
-                    <Button type="submit" className="modern-btn-primary w-100 py-3 font-weight-bold" disabled={pristine || submitting}><i className="fa fa-save mr-2"></i> Simpan Data</Button>
+                    <Button type="submit" className="modern-btn-primary w-100 py-3 font-weight-bold" disabled={submitting}><i className="fa fa-save mr-2"></i> Simpan Data</Button>
                 </Col>
             </FormGroup>
         </Form>

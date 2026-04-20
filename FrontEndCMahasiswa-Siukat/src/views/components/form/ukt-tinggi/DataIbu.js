@@ -81,12 +81,12 @@ let FormIbu = (props) => {
                 </Col>
             </FormGroup>
 
-            <FormGroup row className="mb-4">
+            {/* <FormGroup row className="mb-4">
                 <Label for="pekerjaan_ibu" col="12" xl="3" className="mb-2 mb-xl-0">Pekerjaan</Label>
                 <Col col="12" xl="9">
                     <Field name="pekerjaan_ibu" component={InputBs} type="text" placeholder="Pekerjaan Ibu" />
                 </Col>
-            </FormGroup>
+            </FormGroup> */}
 
             {status_ibu === 'hidup' && (
                 <div className="animate-fade-in">
