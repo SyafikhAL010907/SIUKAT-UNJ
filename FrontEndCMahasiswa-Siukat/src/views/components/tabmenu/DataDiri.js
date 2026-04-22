@@ -98,13 +98,22 @@ class DataDiri extends React.Component {
                         <Row className="justify-content-center px-2">
                             <Col xl={5} lg={6} md={12} xs={12} className="px-1 mb-3">
                                 <div className="verification-card-premium text-center h-100 p-3 sm:p-4">
-                                    <div className={`icon-wrapper-soft mx-auto mb-2 ${safeVerifikasi.result_akademik === 'lolos' ? 'bg-success text-white' : 'bg-warning text-white'}`}
+                                    <div className={`icon-wrapper-soft mx-auto mb-2 ${
+                                            safeVerifikasi.result_akademik === 'lolos' ? 'bg-success text-white' : 
+                                            safeVerifikasi.result_akademik === 'tidak_lolos' ? 'bg-danger text-white' : 'bg-warning text-white'
+                                         }`}
                                          style={{ width: '45px', height: '45px', lineHeight: '45px', fontSize: '1rem' }}>
-                                        <i className={safeVerifikasi.result_akademik === 'lolos' ? 'fa fa-check' : 'fa fa-info'}></i>
+                                        <i className={
+                                            safeVerifikasi.result_akademik === 'lolos' ? 'fa fa-check' : 
+                                            safeVerifikasi.result_akademik === 'tidak_lolos' ? 'fa fa-times' : 'fa fa-info'
+                                        }></i>
                                     </div>
                                     <div className="text-muted text-[10px] sm:text-xs text-uppercase font-weight-bold" style={{ letterSpacing: '0.5px' }}>Akademik</div>
                                     <div className="mt-1">
-                                        <span className={`badge ${safeVerifikasi.result_akademik === 'lolos' ? 'badge-success' : 'badge-warning'} text-[10px] sm:text-xs text-wrap px-2`}>
+                                        <span className={`badge ${
+                                            safeVerifikasi.result_akademik === 'lolos' ? 'badge-success' : 
+                                            safeVerifikasi.result_akademik === 'tidak_lolos' ? 'badge-danger' : 'badge-warning'
+                                        } text-[10px] sm:text-xs text-wrap px-2`}>
                                             {
                                                 safeVerifikasi.result_akademik === 'lolos' ? 'Lolos' :
                                                 safeVerifikasi.result_akademik === 'tidak_lolos' ? 'Tidak Lolos' :
@@ -117,13 +126,25 @@ class DataDiri extends React.Component {
                             </Col>
                             <Col xl={5} lg={6} md={12} xs={12} className="px-1 mb-3">
                                 <div className="verification-card-premium text-center h-100 p-3 sm:p-4">
-                                    <div className={`icon-wrapper-soft mx-auto mb-2 ${safeVerifikasi.result_kipk === 'lolos' ? 'bg-success text-white' : 'bg-danger text-white'}`}
+                                    <div className={`icon-wrapper-soft mx-auto mb-2 ${
+                                            safeVerifikasi.result_kipk === 'lolos' ? 'bg-success text-white' : 
+                                            (safeVerifikasi.result_kipk === 'tidak_lolos' || safeVerifikasi.result_kipk === 'non_eligible') ? 'bg-danger text-white' : 
+                                            'bg-warning text-white'
+                                         }`}
                                          style={{ width: '45px', height: '45px', lineHeight: '45px', fontSize: '1rem' }}>
-                                        <i className={safeVerifikasi.result_kipk === 'lolos' ? 'fa fa-graduation-cap' : 'fa fa-times'}></i>
+                                        <i className={
+                                            safeVerifikasi.result_kipk === 'lolos' ? 'fa fa-graduation-cap' : 
+                                            (safeVerifikasi.result_kipk === 'tidak_lolos' || safeVerifikasi.result_kipk === 'non_eligible') ? 'fa fa-times' : 
+                                            safeVerifikasi.result_kipk === 'verifikasi_lanjutan' ? 'fa fa-exclamation' : 'fa fa-info'
+                                        }></i>
                                     </div>
                                     <div className="text-muted text-[10px] sm:text-xs text-uppercase font-weight-bold" style={{ letterSpacing: '0.5px' }}>Status KIPK</div>
                                     <div className="mt-1">
-                                        <span className={`badge ${safeVerifikasi.result_kipk === 'lolos' ? 'badge-success' : 'badge-danger'} text-[10px] sm:text-xs text-wrap px-2`}>
+                                        <span className={`badge ${
+                                            safeVerifikasi.result_kipk === 'lolos' ? 'badge-success' : 
+                                            (safeVerifikasi.result_kipk === 'tidak_lolos' || safeVerifikasi.result_kipk === 'non_eligible') ? 'badge-danger' : 
+                                            'badge-warning'
+                                        } text-[10px] sm:text-xs text-wrap px-2`}>
                                             {
                                                 !safeVerifikasi.result_kipk ? 'TIDAK TERDAFTAR' :
                                                 safeVerifikasi.result_kipk === 'lolos' ? 'Lolos' :

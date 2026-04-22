@@ -110,6 +110,21 @@ func AuthRoutes(r *gin.RouterGroup) {
 			return
 		}
 
+		// --- VALIDASI OTOMATIS: CEK STATUS VERIFIKASI AKADEMIK ---
+		if isStudent {
+			var verifikasi models.Verifikasi
+			if err := config.DB.Where("no_peserta = ?", finalID).First(&verifikasi).Error; err == nil {
+				if verifikasi.VerAkademik == "tidak_lolos" {
+					log.Printf("DEBUG LOGIN: Mahasiswa %s DIBLOCK karena Tidak Lolos Akademik", noPeserta)
+					c.JSON(http.StatusForbidden, gin.H{
+						"message": "Maaf, akses ditutup karena Anda dinyatakan TIDAK LOLOS verifikasi akademik.",
+					})
+					return
+				}
+			}
+		}
+		// ---------------------------------------------------------
+
 		// Captcha Verification Logic Parity
 		var captcha models.Captcha
 		if err := config.DB.Where("kode = ?", kodeInt).First(&captcha).Error; err != nil {
