@@ -9,7 +9,7 @@ class Bantuan extends React.Component {
     render() {
         return (
             <div className="premium-card shadow-sm border-0 p-0 overflow-hidden">
-                <div className="bg-emerald-soft p-3 text-white font-weight-bold d-flex align-items-center">
+                {/* <div className="bg-emerald-soft p-3 text-white font-weight-bold d-flex align-items-center">
                     <i className="fa fa-phone-square mr-2"></i> Pusat Bantuan
                 </div>
                 <div className="p-4 bg-white">
@@ -44,7 +44,7 @@ class Bantuan extends React.Component {
                             <div className="text-muted small">Tidak Tersedia Untuk Sementara</div>
                         </div>
                     </div>
-                </div>
+                </div> */}
             </div>  
         );
     }

@@ -310,19 +310,35 @@ class Login extends Component {
 
                                 <Col md={{ size: 4 }} xs={{ size: 12 }}>
                                     <div className="mb-4">
-                                        <div className="rounded-xl overflow-hidden shadow-sm" style={{ background: '#fff1f2', borderLeft: '5px solid #ef4444' }}>
+                                        {/* Card Perhatian dengan sentuhan premium */}
+                                        <div className="rounded-xl overflow-hidden shadow-md" 
+                                             style={{ 
+                                                background: 'linear-gradient(135deg, #fff5f5 0%, #fff1f2 100%)', 
+                                                borderLeft: '6px solid #ef4444',
+                                                borderRight: '1px solid rgba(239, 68, 68, 0.1)',
+                                                borderBottom: '1px solid rgba(239, 68, 68, 0.1)'
+                                             }}>
                                             <div className="p-4">
-                                                <div className="d-flex align-items-center mb-2">
-                                                    <div className="bg-danger rounded-circle mr-2 d-flex align-items-center justify-content-center shadow-sm" style={{ width: '24px', height: '24px' }}>
-                                                        <i className="fa fa-exclamation text-white" style={{ fontSize: '12px' }}></i>
+                                                <div className="d-flex align-items-center mb-3 justify-content-center justify-content-md-start">
+                                                    <div className="bg-danger rounded-circle mr-3 d-flex align-items-center justify-content-center shadow-sm" 
+                                                         style={{ width: '32px', height: '32px', minWidth: '32px' }}>
+                                                        <i className="fa fa-exclamation-triangle text-white" style={{ fontSize: '14px' }}></i>
                                                     </div>
-                                                    <h6 className="mb-0 font-weight-bold text-danger">Perhatian!</h6>
+                                                    <h6 className="mb-0 font-weight-bold text-danger text-uppercase" style={{ letterSpacing: '1px', fontSize: '0.9rem' }}>
+                                                        Perhatian Penting!
+                                                    </h6>
                                                 </div>
-                                                <p className="text-secondary font-weight-bold mb-0" style={{ fontSize: '0.85rem', lineHeight: '1.6' }}>
-                                                    Isilah seluruh form isian dengan benar. Kesalahan
-                                                    pengisian data akan mempengaruhi besarnya UKT yang
-                                                    akan keluar.
-                                                </p>
+                                                <div className="text-center text-md-left px-1">
+                                                    <p className="text-secondary font-weight-bold mb-0" 
+                                                       style={{ 
+                                                            fontSize: '0.9rem', 
+                                                            lineHeight: '1.7',
+                                                            color: '#475569'
+                                                       }}>
+                                                        Mohon isilah seluruh formulir dengan data yang <span className="text-danger">sebenar-benarnya</span>. 
+                                                        Setiap informasi yang Anda masukkan akan menentukan besaran UKT yang ditetapkan.
+                                                    </p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -332,7 +348,7 @@ class Login extends Component {
 
                             <hr className="my-5" />
                             <div className="text-center text-muted small">
-                                Siukat FullStack © 2026 - {new Date().getFullYear()} Universitas Negeri Jakarta. All Rights Reserved.
+                                Siukat © 2026 - {new Date().getFullYear()} Universitas Negeri Jakarta. All Rights Reserved.
                             </div>
                         </div>
                     </Col>
@@ -405,7 +421,7 @@ class Login extends Component {
                             </div>
 
                             <div className="mt-auto pt-5 text-center" style={{ opacity: 0.6, fontSize: '0.8rem', color: '#fff' }}>
-                                Siukat Fullstack © {new Date().getFullYear()} Universitas Negeri Jakarta.<br />All Rights Reserved.
+                                Siukat  © {new Date().getFullYear()} Universitas Negeri Jakarta.<br />All Rights Reserved.
                             </div>
                         </div>
                     </Col>
