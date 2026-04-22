@@ -62,7 +62,7 @@ func VerifikasiRoutes(r *gin.RouterGroup) {
 		}
 
 		switch info.Stage {
-		case "snmptn":
+		case "snbp":
 			fakultasStr := strconv.Itoa(cmahasiswa.FakultasCmahasiswa)
 			if fakultasStr == "16" || cmahasiswa.ProdiCmahasiswa == "12076" || cmahasiswa.ProdiCmahasiswa == "12086" || cmahasiswa.ProdiCmahasiswa == "12066" {
 				if verifikasi.VerAkademik == "lolos" && verifikasi.VerKeterampilan == "lolos" {
@@ -78,7 +78,7 @@ func VerifikasiRoutes(r *gin.RouterGroup) {
 				data["result_kipk"] = verifikasi.VerKipk
 				data["result_kjmu"] = verifikasi.VerKjmu
 			}
-		case "sbmptn":
+		case "snbt":
 			data["result_akademik"] = "lolos"
 		default:
 			// Mandiri

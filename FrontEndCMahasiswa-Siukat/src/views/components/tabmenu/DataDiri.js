@@ -105,7 +105,12 @@ class DataDiri extends React.Component {
                                     <div className="text-muted text-[10px] sm:text-xs text-uppercase font-weight-bold" style={{ letterSpacing: '0.5px' }}>Akademik</div>
                                     <div className="mt-1">
                                         <span className={`badge ${safeVerifikasi.result_akademik === 'lolos' ? 'badge-success' : 'badge-warning'} text-[10px] sm:text-xs text-wrap px-2`}>
-                                            {safeVerifikasi.result_akademik || 'PROSES'}
+                                            {
+                                                safeVerifikasi.result_akademik === 'lolos' ? 'Lolos' :
+                                                safeVerifikasi.result_akademik === 'tidak_lolos' ? 'Tidak Lolos' :
+                                                safeVerifikasi.result_akademik === 'belum_verifikasi' ? 'Belum Verifikasi' :
+                                                safeVerifikasi.result_akademik || 'PROSES'
+                                            }
                                         </span>
                                     </div>
                                 </div>
@@ -119,7 +124,15 @@ class DataDiri extends React.Component {
                                     <div className="text-muted text-[10px] sm:text-xs text-uppercase font-weight-bold" style={{ letterSpacing: '0.5px' }}>Status KIPK</div>
                                     <div className="mt-1">
                                         <span className={`badge ${safeVerifikasi.result_kipk === 'lolos' ? 'badge-success' : 'badge-danger'} text-[10px] sm:text-xs text-wrap px-2`}>
-                                            {!safeVerifikasi.result_kipk ? 'TIDAK TERDAFTAR' : safeVerifikasi.result_kipk}
+                                            {
+                                                !safeVerifikasi.result_kipk ? 'TIDAK TERDAFTAR' :
+                                                safeVerifikasi.result_kipk === 'lolos' ? 'Lolos' :
+                                                safeVerifikasi.result_kipk === 'tidak_lolos' ? 'Tidak Lolos' :
+                                                safeVerifikasi.result_kipk === 'belum_verifikasi' ? 'Belum Verifikasi' :
+                                                safeVerifikasi.result_kipk === 'non_eligible' ? 'Non Eligible' :
+                                                safeVerifikasi.result_kipk === 'verifikasi_lanjutan' ? 'Verifikasi Lanjutan' :
+                                                safeVerifikasi.result_kipk
+                                            }
                                         </span>
                                     </div>
                                 </div>

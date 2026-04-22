@@ -36,7 +36,7 @@ let FormIbu = (props) => {
                     <Field name="nama_ibu" component={InputBs} type="text" placeholder="Nama Lengkap" />
                 </Col>
             </FormGroup>
-            
+
             <FormGroup row className="mb-4">
                 <Label for="status_ibu" col="12" xl="3" className="mb-2 mb-xl-0">Status Ibu</Label>
                 <Col col="12" xl="9">
@@ -164,9 +164,9 @@ class DataIbu extends React.Component {
 
     submitForm = (values) => {
         const formData = new FormData();
-        
+
         // Logika: Jika wafat, hapus data alamat/telepon agar tidak konflik di database backend
-        const submissionValues = values.status_ibu === 'wafat' 
+        const submissionValues = values.status_ibu === 'wafat'
             ? { ...values, alamat_ibu: '-', telepon_ibu: '-', provinsi_ibu: '', kabkot_ibu: '', kecamatan_ibu: '' }
             : values;
 
@@ -216,8 +216,8 @@ FormIbu = reduxForm({
     form: 'DataIbu',
     enableReinitialize: true,
     // Menghindari field yang di-unmount terhapus dari state sebelum submit
-    destroyOnUnmount: false, 
-    forceUnregisterOnUnmount: true, 
+    destroyOnUnmount: false,
+    forceUnregisterOnUnmount: true,
 })(FormIbu);
 
 const selector = formValueSelector('DataIbu');
