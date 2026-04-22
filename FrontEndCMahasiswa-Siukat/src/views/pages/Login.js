@@ -290,7 +290,7 @@ class Login extends Component {
                                     </div>
 
                                     {/* VIDEO PANDUAN */}
-                                    <div className="lux-card-schedule">
+                                    {/* <div className="lux-card-schedule">
                                         <div className="lux-card-header-gold">
                                             <i className="fa fa-play-circle"></i>
                                             Panduan Pembayaran UKT
@@ -305,7 +305,7 @@ class Login extends Component {
                                                 />
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> */}
                                 </Col>
 
                                 <Col md={{ size: 4 }} xs={{ size: 12 }}>
