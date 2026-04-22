@@ -167,7 +167,7 @@ func AuthRoutes(r *gin.RouterGroup) {
 			config.DB.Where("kode = ?", jalurMasuk).First(&information)
 		}
 
-		// LOGIK AKSES JADWAL (Hanya untuk cmahasiswa)
+		// LOGIK AKSES JADWAL (Hanya untuk cmahasiswa)llll
 		if isStudent && role == "cmahasiswa" && jalurMasuk != "" && jalurMasuk != "0" {
 			wib := time.FixedZone("WIB", 7*3600) // GMT+7
 			now := time.Now().In(wib)
