@@ -281,7 +281,7 @@ class DataWaliSeleksi extends React.Component {
 
     unduhWali = () => {
         this.setState({ textUnduhWali: 'Sedang mengunduh...' });
-        files.unduhWali()
+        files.unduhWali(cookies.get(cookieName))
             .then(() => {
                 this.setState({ textUnduhWali: 'Unduh Contoh Surat Komitmen Wali' });
             })
