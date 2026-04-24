@@ -81,7 +81,7 @@ class Rumah extends React.Component {
                                     </div>
                                     <div className="details-value">
                                         {rumah.scan_pbb ? (
-                                            <a href={storage + '/' + rumah.scan_pbb} target="_blank" rel="noopener noreferrer" className="btn details-btn-view">
+                                            <a href={storage + '/' + rumah.scan_pbb + '?t=' + new Date(rumah?.updated_at || 1).getTime()} target="_blank" rel="noopener noreferrer" className="btn details-btn-view">
                                                 <i className="fa fa-eye mr-2"></i> Lihat Bukti PBB
                                             </a>
                                         ) : '-'}
@@ -106,7 +106,7 @@ class Rumah extends React.Component {
                                     </div>
                                     <div className="details-value">
                                         {rumah.scan_kontrak ? (
-                                            <a href={storage + '/' + rumah.scan_kontrak} target="_blank" rel="noopener noreferrer" className="btn details-btn-view">
+                                            <a href={storage + '/' + rumah.scan_kontrak + '?t=' + new Date(rumah?.updated_at || 1).getTime()} target="_blank" rel="noopener noreferrer" className="btn details-btn-view">
                                                 <i className="fa fa-eye mr-2"></i> Lihat Surat Kontrak
                                             </a>
                                         ) : '-'}

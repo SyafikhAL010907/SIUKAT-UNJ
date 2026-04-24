@@ -49,10 +49,7 @@ let FormDataPendukung = (props) => {
                     <Col col="12" xl="4">
                         <a
                             href={
-                                storage +
-                                '/' +
-                                scan_pernyataan_ukt_tinggi
-                            }
+                                storage + '/' + scan_pernyataan_ukt_tinggi + '?t=' + new Date(scan_pernyataan_ukt_tinggi?.updated_at || 1).getTime()}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="btn btn-outline-success btn-block py-2"

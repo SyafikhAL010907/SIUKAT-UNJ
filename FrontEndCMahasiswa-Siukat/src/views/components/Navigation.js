@@ -44,7 +44,7 @@ class Navigation extends React.Component {
         const student = studentData || {};
         
         /* const photoUrl = student.foto_cmahasiswa 
-            ? (student.foto_cmahasiswa.startsWith('http') ? student.foto_cmahasiswa : storage + '/' + student.foto_cmahasiswa)
+            ? (student.foto_cmahasiswa.startsWith('http') ? student.foto_cmahasiswa : storage + '/' + student.foto_cmahasiswa + '?t=' + new Date(student?.updated_at || 1).getTime())
             : `https://ui-avatars.com/api/?name=${encodeURIComponent(student.nama_cmahasiswa || 'User')}&background=0f6d3f&color=fff`; */
 
         return (

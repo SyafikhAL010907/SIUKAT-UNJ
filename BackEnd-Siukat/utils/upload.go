@@ -70,6 +70,8 @@ func HandleDynamicUpload(c *gin.Context, file *multipart.FileHeader, namaMahasis
 	if err := os.MkdirAll(targetDir, 0755); err != nil {
 		return "", fmt.Errorf("failed to create directory: %v", err)
 	}
+	// Paksa izin 0755 secara eksplisit buat jaga-jaga kalau server umask-nya rewel
+	os.Chmod(targetDir, 0755)
 
 	// 4. Sanitize Filename (keep extension)
 	var finalFilename string
@@ -130,6 +132,7 @@ func CopyStudentFiles(namaMahasiswa, noPeserta string, fromAtribut, toAtribut st
 	if err := os.MkdirAll(dstDir, 0755); err != nil {
 		return err
 	}
+	os.Chmod(dstDir, 0755)
 
 	// 3. Baca semua file di folder sumber & copy ke tujuan
 	entries, err := os.ReadDir(srcDir)

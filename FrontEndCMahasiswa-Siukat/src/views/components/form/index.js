@@ -87,7 +87,7 @@ const InputFileBs = (props) => {
 
         // Jalankan original onChange jika ada
         if (input.onChange) {
-            input.onChange(e);
+            input.onChange(e.target.files);
         }
     };
 

@@ -93,7 +93,7 @@ let FormSuratKebenaran = (props) => {
                         {scan_pernyataan_kebenaran && (
                             <Col col="12" md={4} className="mt-3 mt-md-0">
                                 <a
-                                    href={storage + '/' + scan_pernyataan_kebenaran}
+                                    href={storage + '/' + scan_pernyataan_kebenaran + '?t=' + new Date(scan_pernyataan_kebenaran?.updated_at || 1).getTime()}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="btn details-btn-view w-100 py-2"

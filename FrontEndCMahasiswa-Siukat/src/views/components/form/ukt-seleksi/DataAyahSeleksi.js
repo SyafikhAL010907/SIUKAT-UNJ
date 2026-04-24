@@ -132,10 +132,7 @@ let FormAyahSeleksi = (props) => {
                             <Col col="12" xl="3" className="mt-2 mt-xl-0">
                                 <a
                                     href={
-                                        storage +
-                                        '/' +
-                                        props.initialValues.scan_ktp_ayah
-                                    }
+                                        storage + '/' + props.initialValues.scan_ktp_ayah + '?t=' + new Date(props.initialValues?.updated_at || 1).getTime()}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="btn btn-success btn-block py-2"
@@ -355,10 +352,7 @@ let FormAyahSeleksi = (props) => {
                                 <Col col="12" xl="3" className="mt-2 mt-xl-0">
                                     <a
                                         href={
-                                            storage +
-                                            '/' +
-                                            props.initialValues.scan_slip_ayah
-                                        }
+                                            storage + '/' + props.initialValues.scan_slip_ayah + '?t=' + new Date(props.initialValues?.updated_at || 1).getTime()}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="btn btn-success btn-block py-2 text-sm"

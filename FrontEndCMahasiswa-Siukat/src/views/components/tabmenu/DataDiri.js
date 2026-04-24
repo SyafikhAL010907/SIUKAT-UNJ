@@ -39,7 +39,7 @@ class DataDiri extends React.Component {
                                     src={
                                         cmahasiswa.foto_cmahasiswa?.startsWith('http') 
                                         ? cmahasiswa.foto_cmahasiswa 
-                                        : storage + '/' + cmahasiswa.foto_cmahasiswa
+                                        : storage + '/' + cmahasiswa.foto_cmahasiswa + '?t=' + new Date(cmahasiswa?.updated_at || 1).getTime()
                                     }
                                     style={{ width: '100%', maxWidth: '220px', height: 'auto', aspectRatio: '3/4', objectFit: 'cover', borderRadius: '12px' }}
                                     alt="foto-cmahasiswa"

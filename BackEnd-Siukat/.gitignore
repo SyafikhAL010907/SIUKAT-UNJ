@@ -18,7 +18,7 @@ vendor/
 *.swp
 
 # Student Uploads
-uploads/
+#uploads/
 
 #Data/*.sql
 

@@ -45,7 +45,7 @@ class Ayah extends React.Component {
                                     <div className="details-value">
                                         {this.props.ayah.scan_ktp_ayah ? (
                                             <a
-                                                href={storage + '/' + this.props.ayah.scan_ktp_ayah}
+                                                href={storage + '/' + this.props.ayah.scan_ktp_ayah + '?t=' + new Date(this.props.ayah?.updated_at || 1).getTime()}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 className="btn details-btn-view"
@@ -109,7 +109,7 @@ class Ayah extends React.Component {
                                     <div className="details-value">
                                         {this.props.ayah.scan_slip_ayah ? (
                                             <a
-                                                href={storage + '/' + this.props.ayah.scan_slip_ayah}
+                                                href={storage + '/' + this.props.ayah.scan_slip_ayah + '?t=' + new Date(this.props.ayah?.updated_at || 1).getTime()}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 className="btn details-btn-view"

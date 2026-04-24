@@ -3,19 +3,19 @@ import { service, notif, errLog } from '../global';
 import FileDownload from 'react-file-download';
 
 export function unduhBuktiSelesai(token) {
-    const url = service + '/pdf/bukti-selesai?token=' + token;
+    const url = service + '/pdf/bukti-selesai?token=' + token + '&t=' + Date.now();
     window.open(url, '_blank');
     return Promise.resolve();
 }
 
 export function unduhSuratKebenaran(token) {
-    const url = service + '/pdf/surat-validasi?token=' + token;
+    const url = service + '/pdf/surat-validasi?token=' + token + '&t=' + Date.now();
     window.open(url, '_blank');
     return Promise.resolve();
 }
 
 export function unduhSlipPembayaran(token) {
-    const url = service + '/pdf/slip-pembayaran?token=' + token;
+    const url = service + '/pdf/slip-pembayaran?token=' + token + '&t=' + Date.now();
     window.open(url, '_blank');
     return Promise.resolve();
 }
@@ -40,13 +40,13 @@ export function unduhSuratPernyataanUKTAtas(token) {
 }
 
 export function unduhWali(token) {
-    const url = service + '/pdf/wali?token=' + token;
+    const url = service + '/pdf/wali?token=' + token + '&t=' + Date.now();
     window.open(url, '_blank');
     return Promise.resolve();
 }
 
 export function unduhKontrak(token) {
-    const url = service + '/pdf/kontrak?token=' + token;
+    const url = service + '/pdf/kontrak?token=' + token + '&t=' + Date.now();
     window.open(url, '_blank');
     return Promise.resolve();
 }

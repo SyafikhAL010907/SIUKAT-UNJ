@@ -45,7 +45,7 @@ class Ibu extends React.Component {
                                     <div className="details-value">
                                         {this.props.ibu.scan_ktp_ibu ? (
                                             <a
-                                                href={storage + '/' + this.props.ibu.scan_ktp_ibu}
+                                                href={storage + '/' + this.props.ibu.scan_ktp_ibu + '?t=' + new Date(this.props.ibu?.updated_at || 1).getTime()}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 className="btn details-btn-view"
@@ -109,7 +109,7 @@ class Ibu extends React.Component {
                                     <div className="details-value">
                                         {this.props.ibu.scan_slip_ibu ? (
                                             <a
-                                                href={storage + '/' + this.props.ibu.scan_slip_ibu}
+                                                href={storage + '/' + this.props.ibu.scan_slip_ibu + '?t=' + new Date(this.props.ibu?.updated_at || 1).getTime()}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 className="btn details-btn-view"

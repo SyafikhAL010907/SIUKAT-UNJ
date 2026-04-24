@@ -121,10 +121,7 @@ let FormListrikSeleksi = (props) => {
                     <Col col="12" xl="3" className="mt-2 mt-xl-0">
                         <a
                             href={
-                                storage +
-                                '/' +
-                                scan_listrik
-                            }
+                                storage + '/' + scan_listrik + '?t=' + new Date(scan_listrik?.updated_at || 1).getTime()}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="btn btn-success btn-block py-2 text-sm"

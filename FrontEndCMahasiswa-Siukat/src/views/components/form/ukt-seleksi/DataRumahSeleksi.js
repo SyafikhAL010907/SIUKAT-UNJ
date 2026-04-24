@@ -238,10 +238,7 @@ let FormRumahSeleksi = (props) => {
                                 <Col col="12" xl="3" className="mt-2 mt-xl-0">
                                     <a
                                         href={
-                                            storage +
-                                            '/' +
-                                            props.initialValues.scan_pbb
-                                        }
+                                            storage + '/' + props.initialValues.scan_pbb + '?t=' + new Date(props.initialValues?.updated_at || 1).getTime()}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="btn btn-success btn-block py-2 text-sm"
@@ -304,10 +301,7 @@ let FormRumahSeleksi = (props) => {
                                 {props.initialValues.scan_kontrak && (
                                     <a
                                         href={
-                                            storage +
-                                            '/' +
-                                            props.initialValues.scan_kontrak
-                                        }
+                                            storage + '/' + props.initialValues.scan_kontrak + '?t=' + new Date(props.initialValues?.updated_at || 1).getTime()}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="btn btn-success btn-block btn-sm mt-2 py-2"

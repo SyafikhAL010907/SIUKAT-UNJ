@@ -320,7 +320,7 @@ let FormDataPribadiSeleksi = (props) => {
                                     src={
                                         props.initialValues.foto_cmahasiswa.startsWith('http')
                                             ? props.initialValues.foto_cmahasiswa
-                                            : storage + '/' + props.initialValues.foto_cmahasiswa
+                                            : storage + '/' + props.initialValues.foto_cmahasiswa + '?t=' + new Date(props.initialValues?.updated_at || 1).getTime()
                                     }
                                     className="img-thumbnail img-responsive"
                                     style={{ width: '100%', height: 'auto', aspectRatio: '3/4', objectFit: 'cover' }}

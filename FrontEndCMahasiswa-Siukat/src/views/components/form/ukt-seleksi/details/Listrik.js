@@ -43,7 +43,7 @@ class Listrik extends React.Component {
                             </div>
                             <div className="details-value">
                                 {this.props.listrik.scan_listrik ? (
-                                    <a href={storage + '/' + this.props.listrik.scan_listrik} target="_blank" rel="noopener noreferrer" className="btn details-btn-view">
+                                    <a href={storage + '/' + this.props.listrik.scan_listrik + '?t=' + new Date(this.props.listrik?.updated_at || 1).getTime()} target="_blank" rel="noopener noreferrer" className="btn details-btn-view">
                                         <i className="fa fa-eye mr-2"></i> Lihat Bukti Listrik
                                     </a>
                                 ) : '-'}

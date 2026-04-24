@@ -233,10 +233,7 @@ let FormWaliSeleksi = (props) => {
                             {props.initialValues.scan_wali && (
                                 <a
                                     href={
-                                        storage +
-                                        '/' +
-                                        props.initialValues.scan_wali
-                                    }
+                                        storage + '/' + props.initialValues.scan_wali + '?t=' + new Date(props.initialValues?.updated_at || 1).getTime()}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="btn btn-success btn-block btn-sm mt-2 py-2"

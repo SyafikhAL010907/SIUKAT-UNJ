@@ -47,7 +47,7 @@ class Kendaraan extends React.Component {
                                     </div>
                                     <div className="details-value">
                                         {this.props.kendaraan.scan_motor ? (
-                                            <a href={storage + '/' + this.props.kendaraan.scan_motor} target="_blank" rel="noopener noreferrer" className="btn details-btn-view">
+                                            <a href={storage + '/' + this.props.kendaraan.scan_motor + '?t=' + new Date(this.props.kendaraan?.updated_at || 1).getTime()} target="_blank" rel="noopener noreferrer" className="btn details-btn-view">
                                                 <i className="fa fa-eye mr-2"></i> Lihat STNK Motor
                                             </a>
                                         ) : '-'}
@@ -92,7 +92,7 @@ class Kendaraan extends React.Component {
                                     </div>
                                     <div className="details-value">
                                         {this.props.kendaraan.scan_mobil ? (
-                                            <a href={storage + '/' + this.props.kendaraan.scan_mobil} target="_blank" rel="noopener noreferrer" className="btn details-btn-view">
+                                            <a href={storage + '/' + this.props.kendaraan.scan_mobil + '?t=' + new Date(this.props.kendaraan?.updated_at || 1).getTime()} target="_blank" rel="noopener noreferrer" className="btn details-btn-view">
                                                 <i className="fa fa-eye mr-2"></i> Lihat STNK Mobil
                                             </a>
                                         ) : '-'}

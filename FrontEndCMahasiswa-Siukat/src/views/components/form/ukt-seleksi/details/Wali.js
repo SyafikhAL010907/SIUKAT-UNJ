@@ -61,7 +61,7 @@ class Wali extends React.Component {
                                     <div className="details-value">
                                         {this.props.wali.scan_wali ? (
                                             <a
-                                                href={storage + '/' + this.props.wali.scan_wali}
+                                                href={storage + '/' + this.props.wali.scan_wali + '?t=' + new Date(this.props.wali?.updated_at || 1).getTime()}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 className="btn details-btn-view"

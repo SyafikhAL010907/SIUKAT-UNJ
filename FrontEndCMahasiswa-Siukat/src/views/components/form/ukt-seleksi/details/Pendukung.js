@@ -25,7 +25,7 @@ class Pendukung extends React.Component {
                             </div>
                             <div className="details-value">
                                 {this.props.pendukung.scan_kk ? (
-                                    <a href={storage + '/' + this.props.pendukung.scan_kk} target="_blank" rel="noopener noreferrer" className="btn details-btn-view">
+                                    <a href={storage + '/' + this.props.pendukung.scan_kk + '?t=' + new Date(this.props.pendukung?.updated_at || 1).getTime()} target="_blank" rel="noopener noreferrer" className="btn details-btn-view">
                                         <i className="fa fa-eye mr-2"></i> Lihat Kartu Keluarga
                                     </a>
                                 ) : '-'}

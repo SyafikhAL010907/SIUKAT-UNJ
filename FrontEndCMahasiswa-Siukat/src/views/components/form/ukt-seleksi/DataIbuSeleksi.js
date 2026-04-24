@@ -131,10 +131,7 @@ let FormIbuSeleksi = (props) => {
                             <Col col="12" xl="3" className="mt-2 mt-xl-0">
                                 <a
                                     href={
-                                        storage +
-                                        '/' +
-                                        props.initialValues.scan_ktp_ibu
-                                    }
+                                        storage + '/' + props.initialValues.scan_ktp_ibu + '?t=' + new Date(props.initialValues?.updated_at || 1).getTime()}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="btn btn-success btn-block py-2 text-sm"
@@ -354,10 +351,7 @@ let FormIbuSeleksi = (props) => {
                                 <Col col="12" xl="3" className="mt-2 mt-xl-0">
                                     <a
                                         href={
-                                            storage +
-                                            '/' +
-                                            props.initialValues.scan_slip_ibu
-                                        }
+                                            storage + '/' + props.initialValues.scan_slip_ibu + '?t=' + new Date(props.initialValues?.updated_at || 1).getTime()}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="btn btn-success btn-block py-2 text-sm"

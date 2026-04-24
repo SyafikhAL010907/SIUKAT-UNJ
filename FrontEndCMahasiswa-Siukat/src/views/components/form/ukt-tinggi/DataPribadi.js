@@ -231,7 +231,7 @@ let FormDataPribadi = (props) => {
                                     src={
                                         props.initialValues.foto_cmahasiswa?.startsWith('http') 
                                         ? props.initialValues.foto_cmahasiswa 
-                                        : storage + '/' + props.initialValues.foto_cmahasiswa
+                                        : storage + '/' + props.initialValues.foto_cmahasiswa + '?t=' + new Date(props.initialValues?.updated_at || 1).getTime()
                                     }
                                     className="img-thumbnail img-responsive shadow-sm"
                                     alt="foto-cmahasiswa"
